@@ -17,23 +17,23 @@
         </div> --}}
     </div>
     <div class="card mb-4">
-        {{-- <header class="card-header">
+        <header class="card-header">
+            <h4 class="mb-2">Search Transactions:-</h4>
             <div class="row gx-3 customer_live_search">
-                <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Customer name..." class="form-control" name="customer_name"
-                        id="customer_name">
+                <div class="col-lg-4 col-md-6 ">
+                    <input type="text" placeholder="Type Order Number" class="form-control" name="orderId"
+                        id="orderId">
                 </div>
-                <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Customer mobile number..." class="form-control" name="customer_phone"
-                        id="customer_phone">
+                <div class="col-lg-4 col-md-6 ">
+                    <input type="text" placeholder="Type a Customer name..." class="form-control" name="customer"
+                        id="customer">
                 </div>
-                <div class="col-lg-4 col-md-6 me-auto">
+                {{-- <div class="col-lg-4 col-md-6 me-auto">
                     <input type="email" placeholder="Customer email..." class="form-control" name="customer_email"
                         id="customer_email">
-                </div>
-
+                </div> --}}
             </div>
-        </header> <!-- card-header end// --> --}}
+        </header> <!-- card-header end// -->
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" id="datatable">
@@ -50,7 +50,7 @@
                             <th>Transaction Date</th>
                         </tr>
                     </thead>
-                    <tbody id="CustomerTable">
+                    <tbody id="transactionTable">
                         @foreach ($data as $key => $list)
                             <tr>
                                 <td> Order ID: {{ $list->order->id }}</td>
@@ -62,7 +62,7 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td>{{ date('j F y',strtotime($list->order->created_at)) }}</td>
+                                <td>{{$list->order->created_at->format('d-m-Y') }}</td>
                                 <td>{{ $list->order->total }}</td>
                                 <td>{{ $list->order->total_paid }}</td>
                                 <td>{{ $list->order->total_due }}</td>
@@ -95,13 +95,15 @@
                                        </span>
                                     @endif
                                 </td>
-                                <td>{{ $list->created_at->format('d-m-Y') }}</td>
+                                <td>{{ $list->updated_at->format('d-m-Y') }}</td>
 
                             </tr>
                         @endforeach
 
-
                     </tbody>
+                    <tr id="loading-indicator" class="d-none">
+                        <td>Loading...</td>
+                    </tr>
                 </table> <!-- table-responsive.// -->
             </div>
         </div> <!-- card-body end// -->
@@ -253,5 +255,98 @@
                 }
             })
         });
+
+        $(document).ready(function() {
+
+            function searchHandler() {
+                var loadingIndicator = $('#loading-indicator');
+                var orderId = $('#orderId').val().trim();
+                var customerName = $('#customer').val().trim();
+
+                // Show loading indicator
+                loadingIndicator.show();
+
+                $.ajax({
+                    url: "{{ route('transaction.search') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        orderNo: orderId,
+                        customerName: customerName
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        var tbody = $('#transactionTable');
+                        tbody.empty();
+
+                        if (data.transactions.length === 0) {
+                            tbody.append('<tr><td colspan="9">No products found</td></tr>');
+                        } else {
+                            $.each(data.transactions, function(index, transaction) {
+
+                                var createdDate = new Date(transaction.order.created_at);
+                                var transactionDate = new Date(transaction.updated_at);
+
+                                // Define formatting options
+                                var options = {
+                                    day: '2-digit',   // numeric day with leading zeros
+                                    month: '2-digit', // numeric month with leading zeros
+                                    year: 'numeric'   // full numeric year
+                                };
+
+                                // Format the date
+                                var orderDate = createdDate.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+                                var transDate = transactionDate.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+                                // console.log(formattedDate);
+
+                                if(transaction.status == 'unpaid')
+                                {
+                                    var status = '<span class="badge rounded-pill alert-danger">' + transaction.status + '</span>'+
+                                    '<a class="badge rounded-pill bg-success ml-2 pay" data-bs-toggle="modal" data-bs-target="#makepament" data-trans_id="'+transaction.id+'"> Pay Now</a>';
+                                }else {
+                                    status = '<span class="badge rounded-pill alert-success">' + transaction.status + '</span>';
+                                }
+
+                                var tr = $('<tr>' +
+                                    '<td> Order ID: ' + transaction.order.id + '</td>' +
+                                    '<td>' +
+                                    '<a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">' +
+                                    '<div class="info pl-3">' +
+                                    '<h6 class="mb-0 title">' + transaction.customer.firstName + ' ' + transaction.customer.lastName + '</h6>' +
+                                    '<small class="text-muted">Customer ID: #' + transaction.customer.id + '</small>' +
+                                    '</div>' +
+                                    '</a>' +
+                                    '</td>' +
+                                    '<td>' + orderDate + '</td>' +
+                                    '<td>' + transaction.order.total + '</td>' +
+                                    '<td>' + transaction.order.total_paid + '</td>' +
+                                    '<td>' + transaction.order.total_due + '</td>' +
+                                    '<td><span class="badge rounded-pill alert-success">' + transaction.mode + '</span></td>' +
+                                    '<td>'+ status +
+                                    '</td>' +
+                                    '<td>' + transDate + '</td>' +
+                                    '</tr>');
+
+                                tbody.append(tr);
+                            });
+                        }
+
+                        // Hide loading indicator after displaying results
+                        loadingIndicator.hide();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching product suggestions:', error);
+                        // Hide loading indicator on error
+                        loadingIndicator.hide();
+                    }
+                });
+            }
+
+            // Call the function for each search input
+            $('#orderId, #customer').on('keyup', function(event) {
+                searchHandler();
+            });
+        });
+
     </script>
 @endpush

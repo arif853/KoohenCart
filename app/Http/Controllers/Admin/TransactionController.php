@@ -72,6 +72,24 @@ class TransactionController extends Controller
         return response()->json(['status'=> 200]);
     }
 
+
+    public function transactionSearch( Request $request)
+    {
+        $orderNo = $request->input('orderNo');
+        $customerName = $request->input('customerName');
+
+        $transactions = transactions::with(['customer', 'order'])
+        ->where('order_id', 'like', '%' . $orderNo . '%')
+        ->whereHas('customer', function ($query) use ($customerName) {
+            $query->where('firstName', 'like', '%' . $customerName . '%')
+                ->orWhere('lastName', 'like', '%' . $customerName . '%');
+        })->limit(10)
+        ->get();
+
+        // Return the response as JSON
+        return response()->json(['transactions' => $transactions]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

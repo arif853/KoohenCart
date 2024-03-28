@@ -374,6 +374,7 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/dashboard/transaction', 'index')->name('transaction.index');
         Route::get('/dashboard/transaction/payment-info', 'paymentInfo')->name('payment.info');
         Route::post('/dashboard/transaction/payment-update', 'paymentUpdate')->name('payment.update');
+        Route::get('/dashboard/transaction/search', 'transactionSearch')->name('transaction.search');
 
     //  Route::get('/dashboard/product_feature/edit', 'edit')->name('product_feature.edit');
     //  Route::post('/dashboard/product_feature/update', 'update')->name('product_feature.update');

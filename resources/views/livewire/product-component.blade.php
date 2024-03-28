@@ -87,13 +87,13 @@
                         <span> Brands: <a
                                 href="shop-grid-right.html">{{$product->brand->brand_name}}</a></span>
                     </div>
-                    <div class="product-rate-cover text-end">
+                    {{-- <div class="product-rate-cover text-end">
                         <div class="product-rate d-inline-block">
                             <div class="product-rating" style="width:90%">
                             </div>
                         </div>
                         <span class="font-small ml-5 text-muted"> (25 reviews)</span>
-                    </div>
+                    </div> --}}
                 </div>
                 @php
                     // $inStock = $product->product_stocks->inStock;
@@ -205,9 +205,15 @@
                     </div>
                     <div class="col-lg-6">
                         <ul class="product-meta">
+                            <li class="">
+                                <strong>Tags:</strong>
+                                @foreach ($product->tags as $tag)
+                                <a  href="#">{{$tag->tag}}</a>,
+                                @endforeach
+                            </li>
                             @if ($product->product_extra)
                             <li class=""><i class="fi-rs-crown mr-5"></i> {{$product->product_extra->warranty_type}}</li>
-                            <li class=""><i class="fi-rs-refresh mr-5"></i> {{$product->product_extra->return_policy}} </li>
+                            <li class=""><i class="fi-rs-refresh mr-5"></i> {{$product->product_tags->tag}} </li>
                             <li><i class="fi-rs-credit-card mr-5"></i> {{$product->product_extra->delivery_type}}</li>
                             @endif
                         </ul>
@@ -215,10 +221,16 @@
                 </div>
                 <div class="social-icons single-share">
                     <ul class="text-grey-5 d-inline-block mt-20">
+                        @php
+                            $productUrl = url('product/'.$product->slug)
+                        @endphp
                         <li><strong class="mr-10">Share this:</strong></li>
-                        <li class="social-facebook"><a href="#"><img
-                                    src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-facebook.svg"
-                                    alt=""></a></li>
+                        <li class="social-facebook">
+
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={!!$productUrl!!}" target="_blank">
+                                <img src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-facebook.svg" alt="">
+                            </a>
+                        </li>
                         <li class="social-twitter"> <a href="#"><img
                                     src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-twitter.svg"
                                     alt=""></a></li>
