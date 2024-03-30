@@ -72,17 +72,18 @@
                 </div>
                 <!-- card-header end// -->
                 <div class="card-body">
-                    <div class="">
+                    <div class="table-responsive">
                         <table class="table table-hover" id="datatable">
                             <thead>
                                 <tr>
                                     <td><input type="checkbox" id="select-all-checkbox"></td>
                                     <th>ID</th>
-                                    <th>Customer name</th>
-                                    <th>Customer Phone</th>
+                                    <th>Order No</th>
+                                    <th>Customer </th>
+                                    <th>Product Info</th>
                                     <th>Price</th>
+                                    <th>Due</th>
                                     <th>Status</th>
-                                    <th>Order Date</th>
                                     <th class="text-end"> Action </th>
                                 </tr>
                             </thead>
@@ -92,18 +93,32 @@
                                     <td><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td>
                                     <td>{{$key+1}}</td>
                                     <td>
-                                        <a href="{{route('customer.profile', ['id' => $order->customer->id])}}" class="itemside">
-                                        <div class="info pl-3">
-                                            <h6 class="mb-0 title">{{$order->customer->firstName}} {{$order->customer->lastName}}</h6>
-                                            <small class="text-muted">Order ID: #{{$order->id}}</small>
-                                            {{-- <small class="text-muted">Track ID: #{{$order->order_track_id}}</small> --}}
-                                        </div>
-                                        </a>
+                                        <small >Order No.: #{{$order->id}}</small><br>
+                                        Date: <small >{{ $order->created_at->format('d-m-Y') }}</small>
                                     </td>
                                     <td>
-                                        <a href="tel:{{$order->customer->phone}}">{{$order->customer->phone}}</a>
+                                        <a href="{{route('customer.profile', ['id' => $order->customer->id])}}" class="">
+                                            <div class="info pl-3">
+                                                <h6 class="mb-0 title">{{$order->customer->firstName}} {{$order->customer->lastName}}</h6>
+                                                <a class="text-muted" href="tel:{{$order->customer->phone}}">{{$order->customer->phone}}</a><br>
+                                                <small class="text-muted" style="width:200px">{{$order->customer->billing_address}}</small>
+                                            </div>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        @foreach ($order->order_item as $key => $item   )
+                                            {{$key+1}} .
+                                            <span class="text-brand">{{$item->product->product_name}}</span>,
+                                            <span > Size: {{$item->product_sizes->size_name}}</span>,
+                                            @if($item->product_colors)
+                                            <span> Color: {{$item->product_colors->color_name}}</span>,
+                                            @endif
+                                            <span>Quantiy: {{$item->quantity}}</span><br>
+                                        @endforeach
                                     </td>
                                     <td>৳{{$order->total}}</td>
+                                    <td>৳<span>{{ $order->total_due }}</span></td>
                                     <td>
                                         @if($order->is_pos !=1 )
                                         <div class="status-container">
@@ -128,7 +143,7 @@
                                         </div>
                                         @endif
                                     </td>
-                                    <td>{{ $order->created_at->format('d-m-Y') }}</td>
+
                                     <td class="text-end">
                                         <a href="{{route('order.details', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Detail</a>
                                         @if($order->is_pos == 0 )
@@ -140,23 +155,8 @@
                                         @else
                                         <a href="{{ url('/orders/invoice/'.$order->id) }}" target="__blank" class="btn btn-facebook rounded font-sm">Invoice</a>
                                         @endif
-                                        {{-- <div class="dropdown">
-                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item text-primary" href="{{route('order.details', ['id' => $order->id])}}">Return</a>
-                                                <a class="dropdown-item" href="#">Edit info</a>
-                                                <a class="dropdown-item text-danger" href="#">Delete</a>
-                                            </div>
-                                        </td>
-                                        <td>{{ $order->created_at->format('d-m-Y') }}</td>
-                                        <td class="text-end">
-                                            <a href="{{ route('order.details', ['id' => $order->id]) }}"
-                                                class="btn btn-md rounded font-sm">Detail</a>
-                                            <a class="btn btn-md rounded font-sm"
-                                                href="{{ route('order.track', ['id' => $order->id]) }}">Track me</a>
-
-                                        </td> --}}
-                                    </tr>
+                                    </td>
+                                </tr>
                                 @endforeach
 
                             </tbody>

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Campaign;
+use DB;
 use App\Models\Order;
+use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Products;
 use App\Models\order_items;
-use App\Models\Product_stock;
 use Illuminate\Http\Request;
+use App\Models\Product_stock;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
@@ -26,9 +27,34 @@ class DashboardController extends Controller
 
         $orders = Order::where('status','pending')->latest()->get();
         $sales = Order::where('status','completed')->sum('total');
-        $subtotal = Order::where('status','completed')->sum('subtotal');
+        $subtotal = Order::where('status','completed')->sum('subtotal') - Order::where('status','completed')->sum('discount');
         $productInStock = Product_stock::sum('inStock') - Product_stock::sum('outStock');
 
-        return view('admin.index',compact('orders','total_orders','sales','products','category','customers','pending_order','completed_order','campaign','subtotal','productInStock'));
+        $topOrderedProducts = order_items::with('product')
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'completed');
+            })
+            ->select('product_id', \DB::raw('SUM(quantity) as total_quantity'))
+            ->groupBy('product_id')
+            ->orderByDesc('total_quantity')
+            ->take(10) // Adjust the number of top products as needed
+            ->get();
+
+
+
+        return view('admin.index',compact(
+            'orders',
+            'total_orders',
+            'sales',
+            'products',
+            'category',
+            'customers',
+            'pending_order',
+            'completed_order',
+            'campaign',
+            'subtotal',
+            'productInStock',
+            'topOrderedProducts'
+        ));
     }
 }
