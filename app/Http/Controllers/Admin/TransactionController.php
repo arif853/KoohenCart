@@ -21,35 +21,6 @@ class TransactionController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function transactionFilter(Request $request)
-    {
-        if($request->ajax()) {
-            $orderNo = $request->orderNo;
-            $customerName = $request->customerName;
-            
-            $query = transactions::with('order', 'customer')->orderBy('created_at', 'desc');
-            
-            if($orderNo){
-                $query->whereHas('order', function ($query) use ($orderNo) {
-                    $query->where('id', $orderNo);
-                });
-            }
-            
-            if ($customerName) {
-                $query->whereHas('customer', function ($query) use ($customerName) {
-                    $query->where('firstName', 'LIKE', '%' . $customerName . '%')
-                          ->orWhere('lastName', 'LIKE', '%' . $customerName . '%');
-                });
-            }
-            
-            $transactions = $query->get();
-         
-            return response()->json($transactions);
-        }
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -92,6 +63,24 @@ class TransactionController extends Controller
         Session::flash('success','Payment Successful');
 
         return response()->json(['status'=> 200]);
+    }
+
+
+    public function transactionSearch( Request $request)
+    {
+        $orderNo = $request->input('orderNo');
+        $customerName = $request->input('customerName');
+
+        $transactions = transactions::with(['customer', 'order'])
+        ->where('order_id', 'like', '%' . $orderNo . '%')
+        ->whereHas('customer', function ($query) use ($customerName) {
+            $query->where('firstName', 'like', '%' . $customerName . '%')
+                ->orWhere('lastName', 'like', '%' . $customerName . '%');
+        })->limit(10)
+        ->get();
+
+        // Return the response as JSON
+        return response()->json(['transactions' => $transactions]);
     }
 
     /**

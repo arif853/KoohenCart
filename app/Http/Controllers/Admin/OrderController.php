@@ -110,6 +110,8 @@ class OrderController extends Controller
         // $customer = $order->customer;
         return view('admin.order.order_details', compact('order', 'orderProducts', 'district', 'postOffice'));
     }
+
+
     public function OrderFilter(Request $request)
     {
         if($request->ajax()) {
@@ -139,10 +141,6 @@ class OrderController extends Controller
             return response()->json($orders);
         }
     }
-
-
-
-
 
     public function order_return()
     {
@@ -180,9 +178,10 @@ class OrderController extends Controller
 
             if($selectedStatus == 'completed')
             {
-                $transaction = transactions::where('order', $order->id);
-                $transaction->status = 'paid';
-                $transaction->save();
+                $transaction = transactions::where('order_id', $order->id);
+                $transaction->update([
+                    'status' => 'paid',
+                ]);
             }
 
             if($selectedStatus == 'confirmed')
@@ -226,41 +225,66 @@ class OrderController extends Controller
         // Save the current order status
         $previousStatus = $order->status;
 
-        // Update the order status
-        $order->status = $newStatus;
-        $order->save();
 
         // Update the OrderStatus table
         $statusColumn = $newStatus . '_date_time';
+        
         Orderstatus::updateOrCreate(['order_id' => $orderId], ['status' => $newStatus, $statusColumn => Carbon::now()]);
 
 
         if($newStatus == 'completed')
-            {
-                $transaction = transactions::where('order', $order->id);
-                $transaction->status = 'paid';
-                $transaction->save();
-            }
+        {
+            $transaction = transactions::where('order_id', $order->id);
+            $transaction->update([
+                'status' => 'paid',
+            ]);
+        }
 
-            if($newStatus == 'confirmed')
-            {
-                foreach ($order->order_item as $item) {
+        if($newStatus == 'confirmed')
+        {
+            foreach ($order->order_item as $item) {
 
-                    if($item && $item->size_id){
-                        Product_stock::updateOrCreate(
-                            [
-                                'product_id' => $item->product_id,
-                                'size_id' => $item->size_id,
-                            ],
-                            [
-                                // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                                'outStock' => \DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
-                            ]
-                        );
-                        Session::flash('warning','Product count on inventory.');
-                    }
+                if($item && $item->size_id){
+                    Product_stock::updateOrCreate(
+                        [
+                            'product_id' => $item->product_id,
+                            'size_id' => $item->size_id,
+                        ],
+                        [
+                            // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
+                            'outStock' => \DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
+                        ]
+                    );
+                    Session::flash('warning','Product count on inventory.');
                 }
             }
+        }
+
+        if($newStatus == 'returned' && $order->is_pos == 1){
+
+            foreach($order->order_item as $item){
+
+                if($item && $item->size_id){
+                    Product_stock::updateOrCreate(
+                        [
+                            'product_id' => $item->product_id,
+                            'size_id' => $item->size_id,
+                        ],
+                        [
+                            // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
+                            'outStock' => \DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
+                        ]
+                    );
+
+                }
+            }
+            $order->return_confirm = 1;
+            Session::flash('warning','Order has been returned successfully.');
+        }
+
+        // Update the order status
+        $order->status = $newStatus;
+        $order->save();
 
         return response()->json([
             'success' => true,
@@ -297,6 +321,7 @@ class OrderController extends Controller
         if (!$order) {
             return response()->json(['success' => false, 'message' => 'Order not found']);
         }
+
 
         // Update the order status
         $order->return_confirm = 1;

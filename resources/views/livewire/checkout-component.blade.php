@@ -1,12 +1,14 @@
 
-<style>
-    .form-select-size
-    {
-        width: 40px;
-        height: 20px;
-    }
-</style>
+
 <div>
+    <style>
+        .form-select-size
+        {
+            width: 40px;
+            height: 20px;
+        }
+    </style>
+    {{-- Delivery Charge: {{ $deliveryCharge }} --}}
     @if(Cart::instance('cart')->count() > 0  )
     <div class="table-responsive order_table text-center">
         <table class="table">
@@ -22,10 +24,8 @@
                 $total = 0;
                 $discount = 0;
                 @endphp
-
                 {{-- cart item --}}
                 @foreach (Cart::instance('cart')->content() as $item)
-
                 <tr>
                     <td class="image product-thumbnail">
 
@@ -117,13 +117,14 @@
                 <!-- Delivery charge row -->
                 <tr>
                     <th class="text-end">Delivery Charge</th>
-                    @if( $deliveryCharge)
+                    {{-- @if( $deliveryCharge)
                         <td colspan="3"><em>৳{{ $deliveryCharge }}</em></td>
                         <input type="hidden" name="shipping_cost" id="shipping_cost" value="{{ $deliveryCharge }}">
-                    @else
-                    <td colspan="3"><em>৳{{$delivery_charge}}</em></td>
-                    <input type="hidden" name="shipping_cost" id="shipping_cost" value="{{$delivery_charge}}">
-                    @endif
+                    @else --}}
+                    <td colspan="3"><em>৳{{$deliveryCharge}}</em></td>
+
+                    <input type="hidden" name="shipping_cost" id="shipping_cost" value="{{$deliveryCharge}}">
+                    {{-- @endif --}}
 
                 </tr>
                  <!-- Discount row -->
@@ -147,7 +148,7 @@
                     @else
                     <td colspan="3" class="product-subtotal">
                         @php
-                        $total =  $total - $discount + $delivery_charge ;
+                        $total =  $total - $discount + $deliveryCharge ;
                     @endphp
                         <span id="totalAmount" class="font-xl text-brand fw-900">৳{{$total}}</span>
                             <input type="hidden" name="total_amount" id="t_amount" value="{{$total}}">

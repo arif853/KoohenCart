@@ -32,15 +32,4 @@
             </select>
         </div>
     </div>
-     {{-- <div class="col-lg-6">
-        <div class="">
-            <label for="shipping_zipcode" class="form-label">Postcode / ZIP <span>*</span></label>
-            <select name="shipping_zipcode" id="shipping_zipcode" class="form-control mb-2" wire:model="selectedPostOffice">
-                <option value="0">Select Postcode / ZIP</option>
-                @foreach($postOffices as $postOffice)
-                <option value="{{ $postOffice->postCode }}">{{ $postOffice->postCode }}</option>
-            @endforeach
-            </select>
-        </div>
-    </div> --}}
 </div>

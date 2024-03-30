@@ -33,7 +33,7 @@
     {{-- Notification --}}
     <link href="{{asset('admin/assets/vendors/notifications/notification.css')}}" rel="stylesheet" />
 
-
+@livewireStyles()
 
 </head>
 
@@ -294,6 +294,8 @@
             </script>
         @endforeach
     @endif
+
+    @livewireScripts()
 </body>
 
 </html>

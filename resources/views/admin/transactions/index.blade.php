@@ -18,21 +18,22 @@
     </div>
     <div class="card mb-4">
         <header class="card-header">
-            <div class="row gx-3 " id="transaction_live_search">
-                <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="number" placeholder="Order no..." class="form-control" id="order_no">
+            <h4 class="mb-2">Search Transactions:-</h4>
+            <div class="row gx-3 customer_live_search">
+                <div class="col-lg-4 col-md-6 ">
+                    <input type="text" placeholder="Type Order Number" class="form-control" name="orderId"
+                        id="orderId">
                 </div>
-                <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Customer name..." class="form-control" id="customer_name">
+                <div class="col-lg-4 col-md-6 ">
+                    <input type="text" placeholder="Type a Customer name..." class="form-control" name="customer"
+                        id="customer">
                 </div>
-                <div class="col-lg-4 col-md-6 me-auto">
-                    {{-- <input type="email" placeholder="Customer email..." class="form-control" name="customer_email"
-                        id="customer_email"> --}}
-                </div>
+                {{-- <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="email" placeholder="Customer email..." class="form-control" name="customer_email"
+                        id="customer_email">
+                </div> --}}
             </div>
-        </header>
-
-        <!-- card-header end// -->
+        </header> <!-- card-header end// -->
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" id="datatable">
@@ -49,7 +50,7 @@
                             <th>Transaction Date</th>
                         </tr>
                     </thead>
-                    <tbody id="transactionTableBody">
+                    <tbody id="transactionTable">
                         @foreach ($data as $key => $list)
                             <tr>
                                 <td> Order ID: {{ $list->order->id }}</td>
@@ -63,7 +64,7 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td>{{ date('j F y', strtotime($list->order->created_at)) }}</td>
+                                <td>{{$list->order->created_at->format('d-m-Y') }}</td>
                                 <td>{{ $list->order->total }}</td>
                                 <td>{{ $list->order->total_paid }}</td>
                                 <td>{{ $list->order->total_due }}</td>
@@ -95,13 +96,15 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td>{{ $list->created_at->format('d-m-Y') }}</td>
+                                <td>{{ $list->updated_at->format('d-m-Y') }}</td>
 
                             </tr>
                         @endforeach
 
-
                     </tbody>
+                    <tr id="loading-indicator" class="d-none">
+                        <td>Loading...</td>
+                    </tr>
                 </table> <!-- table-responsive.// -->
             </div>
         </div> <!-- card-body end// -->
@@ -253,92 +256,98 @@
                 }
             })
         });
-        
-        $('#transaction_live_search input').on('keyup', function() {
-            let orderNo = $('#order_no').val();
-            let customerName = $('#customer_name').val();
 
-            $.ajax({
-                url: "{{ route('transaction.filter') }}",
-                method: "GET",
-                data: {
-                    orderNo: orderNo,
-                    customerName: customerName
-                },
-                success: function(response) {
-                    let transactionTableBody = $('#transactionTableBody');
-                    transactionTableBody.empty();
+        $(document).ready(function() {
 
-                        response.forEach(function(transaction) {
-                        let row = $('<tr>');
+            function searchHandler() {
+                var loadingIndicator = $('#loading-indicator');
+                var orderId = $('#orderId').val().trim();
+                var customerName = $('#customer').val().trim();
 
-                        row.append($('<td>').text('Order ID: ' + transaction.order.id));
+                // Show loading indicator
+                loadingIndicator.show();
 
-                        let customerLink = $('<a>').addClass('itemside').append(
-                            $('<div>').addClass('info pl-3').append(
-                                $('<h6>').addClass('mb-0 title').text(transaction.customer
-                                    .firstName + ' ' + transaction.customer.lastName),
-                                $('<small>').addClass('text-muted').text('Customer ID: #' +
-                                    transaction.customer.id)
-                            )
-                        );
-                        row.append($('<td>').append(customerLink));
-                        let createdAtOrderDate = new Date(transaction.order.created_at);
-                        let OrderFormattedDate = ("0" + createdAtOrderDate.getDate()).slice(-
-                            2) + '-' + (
-                                "0" + (createdAtOrderDate.getMonth() + 1)).slice(-2) + '-' +
-                            createdAtOrderDate.getFullYear();
+                $.ajax({
+                    url: "{{ route('transaction.search') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        orderNo: orderId,
+                        customerName: customerName
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        var tbody = $('#transactionTable');
+                        tbody.empty();
 
-                        // Create the created_at cell with formatted date
-                        row.append($('<td>').text(OrderFormattedDate));
-
-                        row.append($('<td>').text(transaction.order
-                        .total)); // Assuming you want to display the total amount of the order
-                        // Display payment mode with Bootstrap badge
-                        let modeBadge = $('<span>').addClass('badge rounded-pill');
-                        if (transaction.mode == 'online') {
-                            modeBadge.addClass('alert-success').text('Online');
-                        } else if (transaction.mode == 'card') {
-                            modeBadge.addClass('alert-info').text('Bank Card');
-                        } else if (transaction.mode == 'cod') {
-                            modeBadge.addClass('alert-warning').text('Cash On Delivery');
+                        if (data.transactions.length === 0) {
+                            tbody.append('<tr><td colspan="9">No products found</td></tr>');
                         } else {
-                            modeBadge.addClass('alert-danger').text('Not Found');
+                            $.each(data.transactions, function(index, transaction) {
+
+                                var createdDate = new Date(transaction.order.created_at);
+                                var transactionDate = new Date(transaction.updated_at);
+
+                                // Define formatting options
+                                var options = {
+                                    day: '2-digit',   // numeric day with leading zeros
+                                    month: '2-digit', // numeric month with leading zeros
+                                    year: 'numeric'   // full numeric year
+                                };
+
+                                // Format the date
+                                var orderDate = createdDate.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+                                var transDate = transactionDate.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+                                // console.log(formattedDate);
+
+                                if(transaction.status == 'unpaid')
+                                {
+                                    var status = '<span class="badge rounded-pill alert-danger">' + transaction.status + '</span>'+
+                                    '<a class="badge rounded-pill bg-success ml-2 pay" data-bs-toggle="modal" data-bs-target="#makepament" data-trans_id="'+transaction.id+'"> Pay Now</a>';
+                                }else {
+                                    status = '<span class="badge rounded-pill alert-success">' + transaction.status + '</span>';
+                                }
+
+                                var tr = $('<tr>' +
+                                    '<td> Order ID: ' + transaction.order.id + '</td>' +
+                                    '<td>' +
+                                    '<a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">' +
+                                    '<div class="info pl-3">' +
+                                    '<h6 class="mb-0 title">' + transaction.customer.firstName + ' ' + transaction.customer.lastName + '</h6>' +
+                                    '<small class="text-muted">Customer ID: #' + transaction.customer.id + '</small>' +
+                                    '</div>' +
+                                    '</a>' +
+                                    '</td>' +
+                                    '<td>' + orderDate + '</td>' +
+                                    '<td>' + transaction.order.total + '</td>' +
+                                    '<td>' + transaction.order.total_paid + '</td>' +
+                                    '<td>' + transaction.order.total_due + '</td>' +
+                                    '<td><span class="badge rounded-pill alert-success">' + transaction.mode + '</span></td>' +
+                                    '<td>'+ status +
+                                    '</td>' +
+                                    '<td>' + transDate + '</td>' +
+                                    '</tr>');
+
+                                tbody.append(tr);
+                            });
                         }
-                        row.append($('<td>').append(modeBadge));
 
-                        // Display transaction status with Bootstrap badge
-                        let statusBadge = $('<span>').addClass('badge rounded-pill');
-                        if (transaction.status == 'approved') {
-                            statusBadge.addClass('alert-success').text('Approved');
-                        } else if (transaction.status == 'declined') {
-                            statusBadge.addClass('alert-info').text('Declined');
-                        } else if (transaction.status == 'refunded') {
-                            statusBadge.addClass('alert-danger').text('Refunded');
-                        } else if (transaction.status == 'pending') {
-                            statusBadge.addClass('alert-warning').text('Pending');
-                        } else {
-                            statusBadge.addClass('alert-danger').text('Not Found');
-                        }
-                        row.append($('<td>').append(statusBadge));
-                        let createdAtDate = new Date(transaction.created_at);
-                        let formattedDate = ("0" + createdAtDate.getDate()).slice(-2) + '-' + (
-                                "0" + (createdAtDate.getMonth() + 1)).slice(-2) + '-' +
-                            createdAtDate.getFullYear();
+                        // Hide loading indicator after displaying results
+                        loadingIndicator.hide();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching product suggestions:', error);
+                        // Hide loading indicator on error
+                        loadingIndicator.hide();
+                    }
+                });
+            }
 
-                        // Create the created_at cell with formatted date
-                        row.append($('<td>').text(formattedDate));
-                        // Assuming you want to display the creation date of the transaction
-
-                        transactionTableBody.append(row);
-                    });
-
-
-                },
-                error: function(error) {
-                    console.error(error);
-                }
+            // Call the function for each search input
+            $('#orderId, #customer').on('keyup', function(event) {
+                searchHandler();
             });
         });
+
     </script>
 @endpush

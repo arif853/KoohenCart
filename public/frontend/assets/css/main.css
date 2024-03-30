@@ -4596,13 +4596,14 @@ table .product-thumbnail img {
 }
 
 .detail-gallery .slick-slider {
-  background-color: #000;
+  background-color: transparent;
   margin-bottom: 30px;
   border-radius: 10px;
 }
 
 .detail-gallery .slick-slider img {
   opacity: 0.96;
+  border-radius: 10px;
 }
 
 .detail-gallery .slick-slider.slider-nav-thumbnails {
@@ -5245,6 +5246,9 @@ h6.post-title {
 .header-top-ptb-1 #news-flash li {
   min-height: 14px;
 }
+.header-top-ptb-1 #news-flash li a:hover{
+    color: #ff8d13d7;
+  }
 
 .header-top-ptb-1 #news-flash i {
   line-height: 6px;
@@ -5863,7 +5867,7 @@ h6.post-title {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 99999;
   left: 0;
   -webkit-transition: all .3s ease 0s;
   transition: all .3s ease 0s;
