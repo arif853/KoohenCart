@@ -64,7 +64,7 @@ class AboutusController extends Controller
 
         $data->update([
             'title' => $request->aboutusTitle,
-            'description' =>$request->description
+            'about_desc' =>$request->description
         ]);
 
         return response()->json(['status' => 200]);
