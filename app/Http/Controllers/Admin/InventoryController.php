@@ -12,13 +12,16 @@ use Illuminate\Support\Facades\Session;
 class InventoryController extends Controller
 {
 
-    public function index()
+    public function itemWise()
     {
         $products = Products::get();
 
         foreach ($products as $product) {
             $stock = $product->product_stocks;
+            foreach($product->product_stocks as $data){
 
+                $product->purchase_date = $data->purchase_date;
+            }
             $inStock = $stock->sum('inStock');
             $soldQuantity = $stock->sum('outStock');
 
@@ -30,6 +33,30 @@ class InventoryController extends Controller
         }
         // dd($products);
         return view('admin.inventory.index',compact('products'));
+    }
+
+    public function SizeWise()
+    {
+        $products = Products::with(['sizes', 'product_stocks'])->get();
+
+        foreach ($products as $product) {
+            foreach ($product->sizes as $size) {
+                // Find the product stock for the current size
+                $stock = $product->product_stocks->firstWhere('size_id', $size->id);
+
+                // Calculate in-stock, out-of-stock, and balance quantities
+                $inStock = $stock ? $stock->inStock : 0;
+                $outStock = $stock ? $stock->outStock : 0;
+                $balance = $inStock - $outStock;
+
+                // Assign calculated quantities to the size object
+                $size->inStock = $inStock;
+                $size->outStock = $outStock;
+                $size->balance = $balance;
+            }
+        }
+
+        return view('admin.inventory.sizewise',['products' => $products]);
     }
 
 

@@ -40,7 +40,8 @@ class DashboardController extends Controller
             ->take(10) // Adjust the number of top products as needed
             ->get();
 
-
+        // Calculate total profit
+        $totalProfit = $this->calculateTotalProfit();
 
         return view('admin.index',compact(
             'orders',
@@ -54,7 +55,38 @@ class DashboardController extends Controller
             'campaign',
             'subtotal',
             'productInStock',
-            'topOrderedProducts'
+            'topOrderedProducts',
+            'totalProfit'
         ));
+    }
+
+
+    private function calculateTotalProfit()
+    {
+        $orders = Order::where('status', 'completed')->get();
+
+        $totalProfit = 0;
+
+        foreach ($orders as $order) {
+            // Get the total amount of the order
+            $totalAmount = $order->total;
+
+            // Initialize total raw price for products in this order
+            $totalRawPrice = 0;
+
+            // Calculate the total raw price of products in the order
+            foreach ($order->order_item as $orderItem) {
+                // Assuming 'raw_price' is the column name in the product table for the raw price
+                $totalRawPrice += $orderItem->product->raw_price * $orderItem->quantity;
+            }
+
+            // Calculate profit for this order
+            $profit = $totalAmount - $totalRawPrice;
+
+            // Accumulate profit
+            $totalProfit += $profit;
+        }
+
+        return $totalProfit;
     }
 }

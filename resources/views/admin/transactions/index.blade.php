@@ -310,7 +310,7 @@
                                 var tr = $('<tr>' +
                                     '<td> Order ID: ' + transaction.order.id + '</td>' +
                                     '<td>' +
-                                    '<a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">' +
+                                    '<a href="{{ route('customer.profile', ['id' => ''])}}'+transaction.customer_id+'" class="itemside">' +
                                     '<div class="info pl-3">' +
                                     '<h6 class="mb-0 title">' + transaction.customer.firstName + ' ' + transaction.customer.lastName + '</h6>' +
                                     '<small class="text-muted">Customer ID: #' + transaction.customer.id + '</small>' +

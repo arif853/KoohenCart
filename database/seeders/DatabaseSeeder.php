@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UpazillaSeeder::class);
         $this->call(PostcodeSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(AboutusSeeder::class);
 
     }
 }

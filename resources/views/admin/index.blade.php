@@ -18,7 +18,7 @@
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Sales </h6> <span>৳{{ $sales }}</span>
+                    <h6 class="mb-1 card-title">Total Sales </h6> <span>৳ {{ number_format($sales, 2 ) }}</span>
 
                 </div>
             </article>
@@ -29,7 +29,7 @@
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Sale W/O delivery Charge</h6> <span>৳{{ $subtotal }}</span>
+                    <h6 class="mb-1 card-title">Total Sale W/O delivery Charge</h6> <span>৳ {{number_format($subtotal, 2)  }}</span>
 
                 </div>
             </article>
@@ -116,6 +116,17 @@
                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Active Campaign</h6> <span>{{ $campaign }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card card-body mb-4">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Profit</h6>
+                    <span>৳ {{ number_format($totalProfit, 2 ) }}</span>
                 </div>
             </article>
         </div>

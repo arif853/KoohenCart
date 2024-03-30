@@ -88,10 +88,18 @@
                 </div>
             </li>
 
-            <li class="menu-item {{ request()->is('dashboard/inventory') ? 'active' : '' }}">
-                <a class="menu-link" href="{{route('inventory')}}">
+            <li class="menu-item has-submenu {{ request()->is('dashboard/inventory/*') ? 'active' : '' }}">
+                <a class="menu-link" href="#">
                     <i class="icon material-icons md-store"></i>
-                    <span class="text">Inventory</span> </a>
+                    <span class="text">Inventory</span>
+                </a>
+                <div class="submenu">
+                    <a href="{{ route('inventory.item') }}">Item Wise</a>
+
+                    <a href="{{route('inventory.size')}}">
+                        <span class="text">Size Wise</span>
+                    </a>
+                </div>
             </li>
             <li class="menu-item {{ request()->is('dashboard/campaign') ? 'active' : '' }}">
                 <a class="menu-link" href="{{route('campaign')}}"> <i class="icon material-icons md-campaign"></i>
@@ -120,23 +128,24 @@
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('slider')}}">
-                    <i class="icon material-icons md-slideshow"></i><span class="text">Manage Slider</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('ads')}}">
-                    <i class="icon material-icons md-beenhere"></i><span class="text">Manage Ads</span>
-                </a>
-            </li>
+
             <li class="menu-item has-submenu">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                    <span class="text">Settings</span>
+                    <span class="text">Web Settings</span>
                 </a>
                 <div class="submenu">
-                    <a href="{{ route('settings.index') }}">Website Settings</a>
-                    {{-- <a href="#">Contact Info</a> --}}
+                    <a href="{{ route('settings.index') }}">WebInfo</a>
+
+                    <a href="{{route('slider')}}">
+                        <span class="text">Manage Slider</span>
+                    </a>
+
+                    <a href="{{route('ads')}}">
+                        <span class="text">Manage Ads</span>
+                    </a>
+                    <a href="{{url('/dashboard/aboutus')}}">
+                        <span class="text">Manage About us</span>
+                    </a>
                 </div>
             </li>
 
@@ -171,15 +180,24 @@
         </ul>
         <hr>
         <ul class="menu-aside">
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('slider')}}">
-                    <i class="icon material-icons md-slideshow"></i><span class="text">Manage Slider</span>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Web Settings</span>
                 </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('ads')}}">
-                    <i class="icon material-icons md-beenhere"></i><span class="text">Manage Ads</span>
-                </a>
+                <div class="submenu">
+                    <a href="{{ route('settings.index') }}">WebInfo</a>
+
+                    <a href="{{route('slider')}}">
+                        <span class="text">Manage Slider</span>
+                    </a>
+
+                    <a href="{{route('ads')}}">
+                        <span class="text">Manage Ads</span>
+                    </a>
+                    <a href="{{url('/dashboard/aboutus')}}">
+                        <span class="text">Manage About us</span>
+                    </a>
+                </div>
             </li>
 
         </ul>

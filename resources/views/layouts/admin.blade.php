@@ -250,14 +250,18 @@
             });
 
 
-            $('#summernote').summernote({
-            placeholder: 'Your Product Specification Here...',
+        $('#summernote').summernote({
+            placeholder: 'Your About us Description Here...',
             tabsize: 2,
-            height: 150,
+            height: 250,
+            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'],
+            fontSizeUnits: ['px', 'pt'],
             toolbar: [
             ['style', ['style']],
             ['font', ['bold', 'underline', 'clear']],
-            ['color', ['color']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            // ['color', ['color']],
             ['para', ['ul', 'ol', 'paragraph']],
             ['table', ['table']],
             ['insert', ['link', 'picture', 'video']],

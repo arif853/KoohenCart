@@ -38,7 +38,7 @@
                                         <th width=5%>ID</th>
                                         <th>Product</th>
                                         <th>Supplier</th>
-                                        <th>Last Update</th>
+                                        <th>Purchase Date</th>
                                         <th>In </th>
                                         <th>Out</th>
                                         <th>Balance</th>
@@ -63,7 +63,7 @@
                                             <td>No Supplier. </td>
                                             @endif
 
-                                            <td>{{$product->updated_at}}</td>
+                                            <td>{{$product->purchase_date}}</td>
                                             <td>{{$product->inStock}}</td>
                                             <td>{{ $product->soldQuantity }}</td>
                                             @php
@@ -115,13 +115,14 @@
                 id: product,
             },
             success: function (response) {
-                console.log(response.stock);
+                console.log(response.stock.purchase_date);
 
                 // Update other fields
                 $('#product_id').val(response.product.id);
                 $('#old_stock').val(response.stock ? response.stock.inStock : 0);
                 $('#product_name').val(response.product.product_name);
                 $('#supplier').val(response.product.supplier.supplier_name);
+                $('#purchase_date').val(response.stock.purchase_date);
 
 
                 // Create and append input fields for each size
@@ -138,7 +139,7 @@
                         if (stock.size_id === size.id) {
                             // Calculate balance quantity
                             balanceQuantity = stock.inStock - stock.outStock;
-                            console.log(balanceQuantity);
+                            // console.log(balanceQuantity);
                         }
                     });
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutusController;
 use App\Livewire\OfferComponent;
 use App\Models\Products;
 use Illuminate\Routing\Router;
@@ -260,7 +261,11 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
     //Order
     Route::controller(OrderController::class)->middleware(['role:Super Admin|Admin|User'])->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
+
         Route::get('/dashboard/orders/filter', 'OrderFilter')->name('order.filters');
+        Route::get('/dashboard/orders/pendingfilters', 'pendingfilters')->name('order.pendingfilters');
+        Route::get('/dashboard/orders/completedfilters', 'completedfilters')->name('order.completedfilters');
+
         Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');
@@ -415,7 +420,8 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
 
     //Inventory route
     Route::controller(InventoryController::class)->middleware(['role:Super Admin|Admin|Manager'])->group(function () {
-        Route::get('/dashboard/inventory', 'index')->name('inventory');
+        Route::get('/dashboard/inventory/itemwise', 'itemWise')->name('inventory.item');
+        Route::get('/dashboard/inventory/sizewise', 'SizeWise')->name('inventory.size');
         Route::get('/dashboard/inventory/create', 'create')->name('inventory.create');
 
         //add new stock
@@ -451,7 +457,7 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/dashboard/report/sale_search', 'searchSale')->name('search.sale');
     });
 
-    // User Managment
+    // User
     Route::controller(UserController::class)->group(function(){
         Route::get('/dashboard/users/index', 'index')->name('users.index');
         Route::post('/dashboard/users/store', 'store')->name('users.store');
@@ -465,6 +471,12 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
     Route::post('/dashboard/roles/{role}', [RoleController::class, 'update']);
     Route::delete('/dashboard/roles/{userId}/delete', [RoleController::class, 'destroy']);
 
+    // About us
+    Route::controller(AboutusController::class)->group(function(){
+        Route::get('/dashboard/aboutus/', 'index')->name('users.index');
+        Route::get('/dashboard/aboutus/edit', 'edit')->name('aboutus.edit');
+        Route::post('/dashboard/aboutus/update', 'update')->name('aboutus.update');
+    });
 });
 
 // <========================= Backend Route End ========================>
