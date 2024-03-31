@@ -59,11 +59,15 @@ class TransactionController extends Controller
         // Update transaction status
         if ($newTotalDue == 0) {
             $transaction->update([
-                'status' => 'paid'
+                'mode' => $request->paymentMode,
+                'status' => 'paid',
+                'transaction_no' => $request->trans_ref
             ]);
         } else {
             $transaction->update([
-                'status' => 'unpaid'
+                'mode' => $request->paymentMode,
+                'status' => 'unpaid',
+                'transaction_no' => $request->trans_ref
             ]);
         }
 

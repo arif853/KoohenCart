@@ -9,6 +9,7 @@ use App\Models\Postcode;
 use App\Models\shipping;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 
 class CustomerController extends Controller
@@ -165,5 +166,54 @@ class CustomerController extends Controller
             // Log the exception or handle it in a way that makes sense for your application
             return redirect()->back()->with('danger', 'This Customer can not be deleted .');
         }
+    }
+
+    public function export()
+    {
+        $customers = Customer::all();
+
+        $csvFileName = 'CustomerList.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'COntent-Disposition' => 'attachment; filename = "'.$csvFileName.'"',
+        ];
+
+        $handle = fopen('php://output','w');
+        fputcsv($handle,['First Name', 'Last Name', 'Phone', 'Email','Register Date']);
+
+        foreach($customers as $customer)
+        {
+            // $customerName = $customer->firstName .' '. $customer->lastName;
+            $registerdate = $customer->created_at->format('d M Y');
+            fputcsv($handle,[$customer->firstName , $customer->lastName, $customer->phone, $customer->email, $registerdate]);
+        }
+
+        fclose($handle);
+
+        return Response::make('',200,$headers);
+    }
+
+    public function import(Request $request)
+    {
+        if($request->hasFile('file')){
+            $file = $request->file('file');
+            $filecontent = file($file->getPathname());
+
+        }
+
+        foreach($filecontent as $content)
+        {
+            $data = str_getcsv($content);
+            Customer::create([
+                'firstName' => $data[0],
+                'lastName' => $data[1],
+                'phone' => $data[2],
+                'email' => $data[3],
+            ]);
+            // dd($data[2]);
+        }
+        Session::flash('success','Customer store from csv successfully');
+        return redirect()->back();
     }
 }

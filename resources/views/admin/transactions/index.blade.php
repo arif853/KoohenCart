@@ -39,6 +39,7 @@
                 <table class="table table-hover" id="datatable">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Order No</th>
                             <th>Customer Name</th>
                             <th>Order Date</th>
@@ -53,7 +54,11 @@
                     <tbody id="transactionTable">
                         @foreach ($data as $key => $list)
                             <tr>
-                                <td> Order ID: {{ $list->order->id }}</td>
+                                <td>{{$key+1}}</td>
+                                <td>
+                                    <span>Order ID: {{ $list->order->id }}</span> <br>
+                                    Invoice no: <a href="{{route('order.details', ['id' => $list->order->id])}}" class="font-sm">{{$list->order->invoice_no}}</a>
+                                </td>
                                 <td>
                                     <a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">
                                         <div class="info pl-3">
@@ -73,8 +78,13 @@
                                         <span class="badge rounded-pill alert-info">Cash</span>
                                     @elseif($list->mode =='cod')
                                         <span class="badge rounded-pill alert-success">Cash On Delivery</span>
-                                    @else
-                                       <span class="badge rounded-pill alert-success">Other</span>
+                                    @elseif($list->mode =='bkash')
+                                       <span class="badge rounded-pill alert-bkash">Bkash</span>
+                                    @elseif($list->mode =='nagad')
+                                    <span class="badge rounded-pill alert-nagad">Nagad</span>
+                                    @elseif($list->mode =='rocket')
+                                    <span class="badge rounded-pill alert-success">Rocket</span>
+
                                     @endif
                                 </td>
                                 <td>
@@ -147,19 +157,28 @@
                             <input type="text" class="form-control" id="due" name="due" readonly>
                         </div>
 
-                          <div class="col-md-4">
-                            {{-- <label for="total" class="form-label">Total</label>
-                            <input type="text" class="form-control" id="total" name="total" readonly> --}}
+                        <div class="col-md-4">
+                            <label for="total" class="form-label">Payment Method</label>
+                            <select name="paymentMode" id="paymentMode" class="form-control">
+
+                                <option value="cash">Cash</option>
+                                <option value="cod">Cash On Delivery</option>
+                                <option value="bkash">Bkash</option>
+                                <option value="nagad">Nagad</option>
+                                <option value="rocket">Rocket</option>
+                                <option value="online">Online</option>
+                                <option value="card">Card</option>
+                            </select>
                         </div>
                         <div class="col-md-4">
-                            {{-- <label for="paid" class="form-label">Paid</label>
-                            <input type="text" class="form-control" id="paid" name="paid" readonly> --}}
+                            <label for="trans_ref" class="form-label">Transaction Ref</label>
+                            <input type="text" class="form-control" id="trans_ref" name="trans_ref" placeholder="Transaction Reference">
                         </div>
                         <div class="col-md-4">
                             <label for="payment" class="form-label">
                                 Payment:
-                                <input type="text" class="form-control" id="payment" name="payment" value="0">
                             </label>
+                            <input type="text" class="form-control" id="payment" name="payment" value="0">
                         </div>
                     </div>
                 </div>
@@ -234,7 +253,8 @@
         $("#paymentForm").submit(function(e) {
             e.preventDefault();
             const data = new FormData(this);
-                console.log(data);
+            console.log(data);
+
             $.ajax({
                 url: '{{url('/dashboard/transaction/payment-update')}}',
                 method: 'post',
@@ -308,7 +328,11 @@
                                 }
 
                                 var tr = $('<tr>' +
-                                    '<td> Order ID: ' + transaction.order.id + '</td>' +
+                                    '<td>'+(index+1)+'</td>'+
+                                    '<td>'+
+                                        '<span>Order ID: '+transaction.order.id+'</span> <br>'+
+                                    'Invoice no: <a href="{{route('order.details', ['id' => ''])}}'+transaction.order.id+'" class="font-sm">'+transaction.order.invoice_no+'</a>'+
+                                    '</td>' +
                                     '<td>' +
                                     '<a href="{{ route('customer.profile', ['id' => ''])}}'+transaction.customer_id+'" class="itemside">' +
                                     '<div class="info pl-3">' +

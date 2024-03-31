@@ -5357,3 +5357,47 @@ footer.main-footer {
     color: #ee9c55;
     color: #80d190;
 }
+.alert-bkash{
+    color: #d41f53;
+    background-color: #e2136d49;
+    border-color: #e2136d7c;
+}
+
+.alert-nagad{
+    color: #ec1c24;
+    background-color: #f6911e8e;
+    border-color: #f6921e;
+}
+
+.order-btn{
+    background: transparent;
+    border: none;
+    border-radius: 0.25rem;
+    color: #000;
+    font-size: 10px;
+    padding: 6px 8px ;
+}
+.order-btn:hover{
+    color: #fff;
+    background-color: #088178;
+}
+.order-btn.btn-delete{
+    border: none;
+    color: #ec1c24;
+    transition: all .5s;
+}
+.order-btn.btn-delete:hover{
+    /* border: 1px solid #ec1c24; */
+    color: #fff;
+    background-color: #ec1c24;
+}
+.order-btn.btn-edit{
+    border: none;
+    color: #088178;
+    transition: all .5s;
+}
+.order-btn.btn-edit:hover{
+    /* border: 1px solid #088178; */
+    color: #fff;
+    background-color: #088178;
+}

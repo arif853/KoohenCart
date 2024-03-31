@@ -289,6 +289,8 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/dashboard/customer/edit','edit')->name('customer.edit');
         Route::post('/dashboard/customer/update','update')->name('customer.update');
         Route::delete('/dashboard/customer/destroy', 'destroy')->name('customer.destroy');
+        Route::get('/dashboard/customers/csvExport', 'export')->name('customerExport');
+        Route::post('/dashboard/customers/csvimport', 'import')->name('customerimport');
     });
 
     //offers
