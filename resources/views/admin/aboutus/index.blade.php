@@ -38,7 +38,7 @@
                         <tr >
                             <td >{{$key+1}}</td>
                             <td>{{$about->title}}</td>
-                            <td>{!!$about->description!!}</td>
+                            <td>{!!$about->about_desc!!}</td>
                             <td>
                                 <a href="#"  class="btn btn-sm font-sm rounded btn-warning edit"
                                         data-bs-toggle="modal" data-bs-target="#aboutus" data-aboutus-id="{{ $about->id}}">
@@ -79,7 +79,6 @@
                     <div class="col-md-12 mb-2">
                         <label for="summernote" class="form-label">Description<span class="text-danger">*</span></label>
                         <textarea placeholder="Type here" class="form-control" id="summernote" rows="15" name="description"></textarea>
-                        {{-- <input type="text" class="form-control" id="ads_title" name="ads_title" placeholder="Ads Title" required> --}}
                     </div>
                     <div class="col-12 d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">Save</button>
@@ -118,7 +117,7 @@
                 console.log(response);
                 $('#aboutId').val(response.id);
                 $('#aboutusTitle').val(response.title);
-                $('#summernote').val(response.description);
+                $('#summernote').text(response.about_desc);
             }
         });
     });
