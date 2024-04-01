@@ -217,6 +217,22 @@ class OrderController extends Controller
         return view('admin.order.order_return.index',compact('order_return'));
     }
 
+    public function return_confirm(string $id)
+    {
+        $order = Order::find($id);
+
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Order not found']);
+        }
+
+
+        // Update the order status
+        $order->return_confirm = 1;
+        $order->save();
+
+        Session::flash('success', ' Order return confirmation done.');
+        return redirect()->back();
+    }
     // OrderController.php
     public function updateOrderStatus(Request $request)
     {
@@ -383,22 +399,7 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function return_confirm(string $id)
-    {
-        $order = Order::find($id);
 
-        if (!$order) {
-            return response()->json(['success' => false, 'message' => 'Order not found']);
-        }
-
-
-        // Update the order status
-        $order->return_confirm = 1;
-        $order->save();
-
-        Session::flash('success', ' Order return confirmation done.');
-        return redirect()->back();
-    }
 
     public function orderInvoice($id)
     {
@@ -421,6 +422,81 @@ class OrderController extends Controller
     {
         $order = Order::with('customer', 'order_item', 'order_item.product', 'order_item.product_sizes')->where('id', $id)->first();
         return view('admin.order.print-invoice', compact('order'));
+    }
+
+    public function getColorOptions()
+    {
+        $colors = Color::all();
+        return response()->json($colors);
+    }
+
+    public function getSizeOptions()
+    {
+        $sizes = Size::all();
+        return response()->json($sizes);
+    }
+
+    public function orderUpdate(Request $request)
+    {
+        $orderId = $request->orderId;
+        $itemId = $request->productId;
+        $sizeId = $request->sizeId;
+        $colorId = $request->colorId;
+
+        $orderItem = order_items::where('product_id', $itemId)
+            ->where('order_id', $orderId)
+            ->first(); // Use first() to get a single result
+
+            // dd($orderItem);
+        if (!$orderItem) {
+            return response()->json(['error' => 'Order item not found'], 404);
+        }
+        else{
+            $stocks = Product_stock::where('product_id', $itemId)->get();
+
+            if ($stocks->isEmpty()) {
+                return response()->json(['error' => 'Stock not found'], 404);
+            }
+            else
+            {
+                foreach($stocks as $stock){
+                    // Update stock based on quantity change
+                    if($stock->size_id == $orderItem->size_id){
+                        $quantityDifference = $request->quantity - $orderItem->quantity;
+                        $stock->update([
+                            'outStock' => $stock->outStock + $quantityDifference
+                        ]);
+                    }elseif($stock->size_id == $sizeId){
+                        $stock->update([
+                            'outStock' => $stock->outStock + $request->quantity
+                        ]);
+                    }
+                }
+            }
+
+            // Update order item
+            $orderItem->update([
+                'color_id' => $colorId,
+                'size_id' => $sizeId,
+                'price' => $request->price,
+                'quantity' => $request->quantity,
+            ]);
+
+            $order = Order::find($orderId);
+
+            $order->update([
+                'subtotal' => $request->subtotal,
+                'discount' => $request->discount,
+                'total' => $request->grandTotal,
+                'total_paid' => $request->totalPaid,
+                'total_due' => $request->totalDue,
+                'delivery_charge' => $request->deliveryCharge,
+            ]);
+            Session::flash('success','Order updated successfully');
+
+            return response()->json(['message' => 'Order item updated successfully'], 200);
+        }
+
     }
 
 

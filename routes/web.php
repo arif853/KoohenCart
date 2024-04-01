@@ -276,6 +276,13 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/orders/invoice/{id}', 'orderInvoice')->name('order.invoice');
         Route::get('/orders/invoice-page/{id}', 'invoicePage')->name('invoice');
         Route::get('/dashboard/order/{id}', 'return_confirm')->name('return.confirm');
+
+        Route::get('/get-color-options', 'getColorOptions');
+        Route::get('/get-size-options', 'getSizeOptions');
+
+        //Update order
+        Route::post('/dashboard/orders/order_update', 'orderUpdate')->name('order.update');
+        
     });
 
     //Customer
