@@ -19,9 +19,9 @@
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Total Sales </h6> <span>৳ {{ number_format($sales, 2 ) }}</span>
-
                 </div>
             </article>
+
         </div>
     </div>
     <div class="col-lg-3">

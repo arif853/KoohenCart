@@ -176,7 +176,7 @@
 
                                                     <br>
                                                     @if ($product->color)
-                                                    <span class="product-color">{{$product->color->color_name}},</span>
+                                                    <span class="product-color">{{$product->color->color_name}}</span>
                                                     @endif
                                                 <br>
                                                     @if($product->size)

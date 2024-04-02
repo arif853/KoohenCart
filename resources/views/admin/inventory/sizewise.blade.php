@@ -38,6 +38,12 @@
                         border: 1px solid #ccc;
                         border-radius: 5px;
                     }
+                    .size-stock-balance {
+                        width: 150px;
+                        padding: 10px;
+                        margin: 5px;
+                        border: none;
+                    }
 
                     .size-name {
                         font-weight: bold;
@@ -112,6 +118,22 @@
                                                 </div>
 
                                                 @endforeach
+                                                <div class="size-stock-balance">
+                                                    <div class="size-name">Total</div>
+                                                    <div class="stock-info">
+                                                        <div class="stock-label">=</div>
+                                                        <div class="stock-value">{{$product->totalInStock}} <sub style="font-size: 9px">Pcs</sub></div>
+                                                    </div>
+                                                    <div class="stock-info">
+                                                        <div class="stock-label">=</div>
+                                                        <div class="stock-value">{{$product->totalOutStock}} <sub style="font-size: 9px">Pcs</sub></div>
+                                                    </div>
+                                                    <div class="stock-info">
+                                                        <div class="stock-label">=</div>
+                                                        <div class="stock-value">{{$product->totalBalance}} <sub style="font-size: 9px">Pcs</sub></div>
+
+                                                    </div>
+                                                </div>
                                             </td>
 
                                         </tr>

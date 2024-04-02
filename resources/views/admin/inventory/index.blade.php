@@ -39,9 +39,12 @@
                                         <th>Product</th>
                                         <th>Supplier</th>
                                         <th>Purchase Date</th>
+                                        <th>Purchase Price</th>
+                                        <th>Purchase Total</th>
                                         <th>In </th>
                                         <th>Out</th>
                                         <th>Balance</th>
+                                        <th>Purchase Balance</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -64,11 +67,15 @@
                                             @endif
 
                                             <td>{{$product->purchase_date}}</td>
+
+                                            <td>৳{{$product->raw_price}}</td>
+                                            <td>৳{{$product->purchasePrice}}</td>
+
                                             <td>{{$product->inStock}}</td>
-                                            <td>{{ $product->soldQuantity }}</td>
-                                            @php
+                                            <td>{{$product->soldQuantity }}</td>
+                                            {{-- @php
                                                 $stock_balance = $product->inStock - $product->soldQuantity;
-                                            @endphp
+                                            @endphp --}}
                                             <td>
                                                 @if ($product->balance > 0 )
                                                 {{$product->balance}}
@@ -76,6 +83,7 @@
                                                 <span class="text-danger"> Out of Stock</span>
                                                 @endif
                                             </td>
+                                            <td>৳{{$product->purchaseBalance}}</td>
                                             <td>
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#NewStockModal" data-product-id="{{ $product->id}}" class="btn btn-brand btn-sm add-stock">Add Stock</a>
                                             </td>

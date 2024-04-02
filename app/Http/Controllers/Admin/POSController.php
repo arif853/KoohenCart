@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Notifications\LowStockNotification;
 
 class POSController extends Controller
 {
@@ -248,6 +249,13 @@ class POSController extends Controller
                     'outStock' => \DB::raw("outStock + $cartItem->qty"), // Assuming outStock starts at 0
                 ]
             );
+
+            $product = Products::find($cartItem->id);
+            $stock = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
+            if ($stock < 5) {
+                // Trigger the low stock notification
+                $product->notify(new LowStockNotification($product));
+            }
         }
 
         $transaction_data = [
@@ -266,6 +274,8 @@ class POSController extends Controller
                 'status' => 'unpaid'
             ];
         }
+
+
 
         transactions::create($transaction_data);
 

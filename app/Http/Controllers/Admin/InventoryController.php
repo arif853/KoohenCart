@@ -27,6 +27,8 @@ class InventoryController extends Controller
 
             $product->inStock = $inStock;
             $product->balance =  $inStock - $soldQuantity;
+            $product->purchasePrice = $inStock * $product->raw_price;
+            $product->purchaseBalance = $product->balance * $product->raw_price;
 
             $product->soldQuantity = ($soldQuantity > 0) ? $soldQuantity : 0;
 
@@ -53,7 +55,13 @@ class InventoryController extends Controller
                 $size->inStock = $inStock;
                 $size->outStock = $outStock;
                 $size->balance = $balance;
+
+
             }
+            $product->totalInStock = $product->product_stocks->sum('inStock');
+            $product->totalOutStock = $product->product_stocks->sum('outStock');
+            $product->totalBalance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
+
         }
 
         return view('admin.inventory.sizewise',['products' => $products]);

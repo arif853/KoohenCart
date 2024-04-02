@@ -186,6 +186,7 @@ Route::controller(TrackorderController::class)->group(function () {
 
 //dashboard
 Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth','verified','role:Super Admin|Admin|Manager|User'])->name('dashboard');
+Route::post('/dashboard/mark-notification-as-read', [DashboardController::class,'markNotificationAsRead'])->middleware(['auth','verified','role:Super Admin|Admin|Manager|User'])->name('markNotificationAsRead');
 
 Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(function(){
 
@@ -282,7 +283,7 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
 
         //Update order
         Route::post('/dashboard/orders/order_update', 'orderUpdate')->name('order.update');
-        
+
     });
 
     //Customer

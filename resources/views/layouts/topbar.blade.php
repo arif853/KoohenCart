@@ -32,12 +32,56 @@
                    Cache
                 </a>
             </li>
-            {{-- <li class="nav-item">
-                <a class="nav-link btn-icon" href="#">
+            @php
+                $user = Auth::user();
+                $orderNotify = $user->unreadNotifications;
+                $notifyCount = $orderNotify->count();
+
+                $stockNotify = DB::table('notifications')->where('type', 'App\Notifications\LowStockNotification')->whereNull('read_at')->get();
+                $stockNotifyCount = $stockNotify->count();
+
+            @endphp
+            <li class="nav-item notify-tab">
+                <a class="nav-link btn-icon notify-counter" id="notify-counter" href="#">
                     <i class="material-icons md-notifications animation-shake"></i>
-                    <span class="badge rounded-pill">3</span>
+                    <span class="badge rounded-pill">{{$stockNotifyCount + $notifyCount}}</span>
                 </a>
-            </li> --}}
+
+                @if ($notifyCount > 0 || $stockNotifyCount > 0)
+                    <div class="notify-nav" style="display: none">
+                        <h5>You have {{$notifyCount + $stockNotifyCount}} new notifications.</h5>
+                        <ul>
+                            @if ($notifyCount > 0)
+                                @foreach($orderNotify as $notification)
+                                    <li class="notification-item" data-notification-id="{{ $notification->id }}">
+                                        <a href="{{route('order.details', ['id' => $notification->data['order_id'] ])}}">
+                                            <span class="font-700">{{ $notification->data['message'] }}</span><br>
+                                            <span>Order No: #{{ $notification->data['order_id'] }} </span><br>
+                                            <span>{{ $notification->data['order_details']['customer_name'] }} </span>
+                                            <span class="pull-right"> {{ $notification->data['order_details']['total_amount'] }}</span><br>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+                            @if ($stockNotifyCount > 0)
+                                @foreach($stockNotify as $notification)
+                                    @php
+                                        $notificationData = json_decode($notification->data);
+                                    @endphp
+                                        <li class="notification-item" data-notification-id="{{ $notification->id }}">
+                                            <a href="#">
+                                                <span>{{ $notificationData->message }}</span><br>
+                                                <span>{{ $notificationData->product_id }}</span>
+                                                <span>{{ $notificationData->product_name }}</span>
+                                            </a>
+                                        </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
+                @endif
+
+            </li>
             @if(auth()->user()->hasRole(['Super Admin','Admin','User']))
             <li class="nav-item">
                 <a class="nav-link btn-icon pos" href="{{route('pos')}}">

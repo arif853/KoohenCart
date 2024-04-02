@@ -12,6 +12,7 @@ use App\Models\order_items;
 use Illuminate\Http\Request;
 use App\Models\Product_stock;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -43,6 +44,9 @@ class DashboardController extends Controller
         // Calculate total profit
         $totalProfit = $this->calculateTotalProfit();
 
+        // Retrieve the count of unread notifications for low stock products
+
+
         return view('admin.index',compact(
             'orders',
             'total_orders',
@@ -56,8 +60,9 @@ class DashboardController extends Controller
             'subtotal',
             'productInStock',
             'topOrderedProducts',
-            'totalProfit'
+            'totalProfit',
         ));
+        // dd($unreadNotifications);
     }
 
 
@@ -88,5 +93,24 @@ class DashboardController extends Controller
         }
 
         return $totalProfit;
+    }
+
+
+    public function markNotificationAsRead(Request $request)
+    {
+        // Find the notification by its ID
+        $notification = Auth::user()->notifications()->find($request->id);
+        $stockNotify = \DB::table('notifications')->where('type', 'App\Notifications\LowStockNotification')->find($request->id);
+        // If the notification exists and belongs to the authenticated user
+        if ($notification) {
+            // Mark the notification as read
+            $notification->markAsRead();
+        }elseif($stockNotify)
+        {
+            $stockNotify->markAsRead();
+        }
+
+        // Redirect the user back to the previous page or to a specific route
+        return response()->json(200);
     }
 }

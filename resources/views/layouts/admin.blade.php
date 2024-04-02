@@ -135,11 +135,65 @@
     @stack('transaction')
 
     <script>
-         $(document).ready(function() {
-                $('.menu-item.has-submenu').click(function() {
-                    $(this).toggleClass('active');
+        $(document).ready(function() {
+
+            $('#notify-counter').click(function(e) {
+                e.preventDefault();
+                $('.notify-nav').slideToggle('slow');
+                e.stopPropagation(); // Prevent event from bubbling up to the document
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.notify-counter').length && !$(e.target).closest('.notify-nav').length) {
+                    $('.notify-nav').slideUp('slow'); // Slide up if clicked outside the notification area
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all notification items
+            var notificationItems = document.querySelectorAll('.notification-item');
+
+            // Add click event listener to each notification item
+            notificationItems.forEach(function(item) {
+                item.addEventListener('click', function(event) {
+                    // event.preventDefault();
+
+                    // Get the notification ID
+                    var notificationId = item.getAttribute('data-notification-id');
+
+                    // Send AJAX request to mark notification as read
+                    markNotificationAsRead(notificationId);
                 });
             });
+
+            // Function to mark notification as read via AJAX
+            function markNotificationAsRead(notificationId) {
+                // Send AJAX request to mark notification as read
+                $.ajax({
+                    url: '{{route('markNotificationAsRead')}}', // Replace with your route URL
+                    type: 'POST',
+                    data: {
+                        id: notificationId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        // Update UI or perform any other actions
+                        console.log('Notification marked as read');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+         $(document).ready(function() {
+            $('.menu-item.has-submenu').click(function() {
+                $(this).toggleClass('active');
+            });
+        });
 
         $(document).ready(function() {
 
@@ -276,6 +330,7 @@
         });
 
     </script>
+
     @if(Session::has('success'))
         <script>
             $.Notification.autoHideNotify('success', 'top right', 'Success', '{{ Session::get('success') }}');

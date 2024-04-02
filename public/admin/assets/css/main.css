@@ -5401,3 +5401,42 @@ footer.main-footer {
     color: #fff;
     background-color: #088178;
 }
+.notify-tab {
+    position: relative;
+}
+
+.notify-nav {
+    position: absolute;
+    top: 55px;
+    left: -120px;
+    width: 320px;
+    max-height: 280px; /* Adjusted max-height for better scrolling */
+    border: 1px solid #E3E3E3;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #F4F4F4;
+    z-index: 9999;
+    overflow-y: auto; /* Changed to auto for scrollbar only when needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+}
+
+.notify-nav h5 {
+    margin-bottom: 10px; /* Increased margin */
+    padding-bottom: 8px; /* Added padding for separation */
+    border-bottom: 2px solid #088178; /* Changed border color */
+    color: #046963; /* Changed text color */
+}
+
+.notify-nav ul {
+    list-style: none; /* Removed default list styles */
+    padding: 0;
+}
+
+.notify-nav ul li {
+    padding: 10px 0; /* Increased padding */
+}
+
+.notify-nav ul li:hover {
+    background-color: #e6f7f6; /* Lighter background on hover */
+    border-radius: 8px;
+}
