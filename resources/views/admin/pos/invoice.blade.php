@@ -140,22 +140,24 @@ footer{
     <h3 class="tera" style="margin-bottom:0%;text-transform:uppercase;">Ship To:-</h3>
     <div class="customer" style="display: flex; justify-content: space-between; align-items: center;">
         @if ($order->customer->shipping->isNotEmpty())
-            <p style="margin-top:4px;"> <strong>Customer Name :</strong>
-                {{ $order->customer->shipping[0]->first_name.' '.$order->customer->shipping[0]->last_name }}
-            </p>
-            <p style="margin-top:4px;"> <strong>Phone :</strong>
-                {{ $order->customer->shipping[0]->s_phone }}
-            </p>
-            <p style="margin-top:4px;"> <strong>Address :</strong>
-                {{ $order->customer->shipping[0]->shipping_add }}
-            </p>
-        @else
-        <p style="margin-top:4px;"> <strong>Customer Name :</strong>{{ $order->customer->firstName.' '.$order->customer->lastName }}</p>
+        <p style="margin-top:4px;"> <strong>Customer Name :</strong>
+            <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->shipping[0]->first_name.' '.$order->customer->shipping[0]->last_name }}</span>
+        </p>
         <p style="margin-top:4px;"> <strong>Phone :</strong>
-            No need
+            <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->shipping[0]->s_phone }}</span>
+        </p>
+        <p style="margin-top:4px; "> <strong>Address :</strong>
+            <span style="margin-top:4px; font-family: 'nikosh'; font-size:12px">{{ $order->customer->shipping[0]->shipping_add }}</span>
+        </p>
+        @else
+        <p style="margin-top:4px; "> <strong>Customer Name :</strong>
+            <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->firstName.' '.$order->customer->lastName }}</span>
+        </p>
+        <p style="margin-top:4px; "> <strong>Phone :</strong>
+        <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->phone}}</span>
         </p>
         <p style="margin-top:4px;"> <strong>Address :</strong>
-        No need
+            <span style="font-family: 'nikosh'; font-size:12px">{{ $order->customer->billing_address}}</span>
         </p>
         @endif
 

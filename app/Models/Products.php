@@ -6,10 +6,11 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class Products extends Model
 {
-    use HasFactory;
+    use HasFactory,Notifiable;
 
     protected $fillable =
     [

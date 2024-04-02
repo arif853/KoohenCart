@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Termwind\Components\Raw;
 use App\Models\Feature_category;
 use App\Http\Controllers\Controller;
+use App\Models\Aboutus;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -68,7 +69,8 @@ class HomeController extends Controller
      */
     public function aboutus()
     {
-        return view('frontend.about-us');
+        $aboutus = Aboutus::first();
+        return view('frontend.about-us', ['aboutus' => $aboutus]);
     }
 
     /**

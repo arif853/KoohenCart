@@ -31,7 +31,10 @@
                     <input type="email" placeholder="Customer email..." class="form-control"
                         id="customer_email">
                 </div>
-
+                <div class="col-lg-4">
+                    <a href="{{route('customerExport')}}" class="btn btn-brand font-sm  mt-4">CSV</a>
+                    <a href="#" class="btn btn-brand font-sm mt-4" data-bs-toggle="modal" data-bs-target="#customerModal">Import Customer</a>
+                </div>
             </div>
         </header> <!-- card-header end// -->
         <div class="card-body">
@@ -140,6 +143,37 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="customerModalLabel">Update Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" enctype="multipart/form-data" action="{{route('customerimport')}}">
+                    @csrf
+                    @method('post')
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="file" class="form-label">Add CSV file <span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" id="file" name="file" required>
+                            </div>
+
+                            {{-- <div class="col-12 d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div> --}}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Upload</button>
                     </div>
                 </form>
             </div>

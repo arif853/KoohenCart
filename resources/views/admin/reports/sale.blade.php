@@ -275,32 +275,32 @@
     });
 
     function printTable() {
-    var printWindow = window.open('', '_blank');
+        var printWindow = window.open('', '_blank');
 
-    // Copy the content of the table to the new window
-    printWindow.document.write('<html><head><title>Sale Report</title>');
+        // Copy the content of the table to the new window
+        printWindow.document.write('<html><head><title>Sale Report</title>');
 
-    // Include custom CSS styles for the printed table
-    printWindow.document.write('<style>');
-    printWindow.document.write('body { font-family: Arial, sans-serif; }');
-    printWindow.document.write('h2 { color: #333; }');
-    printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
-    printWindow.document.write('table, th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }');
-    printWindow.document.write('th { background-color: #f2f2f2; }');
-    printWindow.document.write('a { text-decoration: none; color:#000; }');
-    printWindow.document.write('</style>');
+        // Include custom CSS styles for the printed table
+        printWindow.document.write('<style>');
+        printWindow.document.write('body { font-family: Arial, sans-serif; }');
+        printWindow.document.write('h2 { color: #333; }');
+        printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
+        printWindow.document.write('table, th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }');
+        printWindow.document.write('th { background-color: #f2f2f2; }');
+        printWindow.document.write('a { text-decoration: none; color:#000; }');
+        printWindow.document.write('</style>');
 
-    printWindow.document.write('</head><body>');
-    printWindow.document.write('<h2>Sales Report</h2>');
-    printWindow.document.write('<table>' + $('#myTable').html() + '</table>');
-    printWindow.document.write('</body></html>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write('<h2>Sales Report</h2>');
+        printWindow.document.write('<table>' + $('#myTable').html() + '</table>');
+        printWindow.document.write('</body></html>');
 
-    // Close the document stream
-    printWindow.document.close();
+        // Close the document stream
+        printWindow.document.close();
 
-    // Print the new window
-    printWindow.print();
-}
+        // Print the new window
+        printWindow.print();
+    }
 
 
     // Print button click event

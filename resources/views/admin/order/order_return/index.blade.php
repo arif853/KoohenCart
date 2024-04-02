@@ -12,11 +12,7 @@
                 </ol>
             </nav>
         </div>
-        {{-- <div>
-            <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#returnModal">
-                 Return Order
-            </button>
-        </div> --}}
+
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -46,7 +42,9 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Customer name</th>
+                                    <th>Order No</th>
+                                    <th>Customer </th>
+                                    <th>Product Info</th>
                                     <th>Price</th>
                                     <th>Status</th>
                                     <th>Return Date</th>
@@ -56,16 +54,40 @@
                             </thead>
                             <tbody>
                                 @if ($order_return->isNotEmpty())
-                                    @foreach ($order_return as $key => $value)
+                                    @foreach ($order_return as $key => $order)
                                     <tr>
                                         <td>{{ $key+1 }}</td>
-                                        <td><b>{{ $value->customer->firstName.' '.$value->customer->lastName }}</b></td>
-                                        <td> {{ $value->total }} &#2547;</td>
-                                        <td><span class="badge rounded-pill alert-success">{{ $value->status }}</span></td>
-                                        <td>{{ $value->created_at->format('d/m/Y') }}</td>
                                         <td>
-                                            @if($value->return_confirm == 0)
-                                            <a href="{{url('dashboard/order',$value->id)}}" class="btn btn-warning btn-sm">Confirm Return</a>
+                                            <small >Order No.: #{{$order->id}}</small><br>
+                                            Date: <small >{{ $order->created_at->format('d-m-Y') }}</small>
+                                        </td>
+                                        <td>
+                                            <a href="{{route('customer.profile', ['id' => $order->customer->id])}}" class="">
+                                                <div class="info pl-3">
+                                                    <h6 class="mb-0 title">{{$order->customer->firstName}} {{$order->customer->lastName}}</h6>
+                                                    <a class="text-muted" href="tel:{{$order->customer->phone}}">{{$order->customer->phone}}</a><br>
+                                                    <small class="text-muted" style="width:200px">{{$order->customer->billing_address}}</small>
+                                                </div>
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            @foreach ($order->order_item as $key => $item   )
+                                                {{$key+1}} .
+                                                <span class="text-brand">{{$item->product->product_name}}</span>,
+                                                <span > Size: {{$item->product_sizes->size_name}}</span>,
+                                                @if($item->product_colors)
+                                                <span> Color: {{$item->product_colors->color_name}}</span>,
+                                                @endif
+                                                <span>Quantiy: {{$item->quantity}}</span><br>
+                                            @endforeach
+                                        </td>
+                                        <td>৳{{$order->total}}</td>
+                                        <td><span class="badge rounded-pill alert-success">{{ $order->status }}</span></td>
+                                        <td>{{ $order->updated_at->format('d-m-Y') }}</td>
+                                        <td>
+                                            @if($order->return_confirm == 0)
+                                            <a href="{{url('dashboard/order',$order->id)}}" class="btn btn-warning btn-sm">Confirm Return</a>
 
                                             @else
                                             <a href="#" class="text-danger">Order has been returned.</a>

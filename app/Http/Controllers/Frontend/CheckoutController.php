@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Notifications\NewPendingOrderNotification;
 
 class CheckoutController extends Controller
 {
@@ -144,6 +145,8 @@ class CheckoutController extends Controller
                     // Session::flash('success', 'You have already used this coupon.');
                 }
             }
+
+            auth()->user()->notify(new NewPendingOrderNotification($order));
 
             $customer = Customer::find($customer_id);
 
@@ -326,7 +329,10 @@ class CheckoutController extends Controller
             }
             // Mail::to( $customer->email)->send( new customerMail($order));
 
+            auth()->user()->notify(new NewPendingOrderNotification($order));
         }
+
+
         // Clear the cart after saving to the order item table
         // Mail::to('qbittech.dev1@gmail.com')->send( new AdminMail($order));
 

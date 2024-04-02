@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutusController;
 use App\Livewire\OfferComponent;
 use App\Models\Products;
 use Illuminate\Routing\Router;
@@ -185,6 +186,7 @@ Route::controller(TrackorderController::class)->group(function () {
 
 //dashboard
 Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth','verified','role:Super Admin|Admin|Manager|User'])->name('dashboard');
+Route::post('/dashboard/mark-notification-as-read', [DashboardController::class,'markNotificationAsRead'])->middleware(['auth','verified','role:Super Admin|Admin|Manager|User'])->name('markNotificationAsRead');
 
 Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(function(){
 
@@ -260,7 +262,11 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
     //Order
     Route::controller(OrderController::class)->middleware(['role:Super Admin|Admin|User'])->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
+
         Route::get('/dashboard/orders/filter', 'OrderFilter')->name('order.filters');
+        Route::get('/dashboard/orders/pendingfilters', 'pendingfilters')->name('order.pendingfilters');
+        Route::get('/dashboard/orders/completedfilters', 'completedfilters')->name('order.completedfilters');
+
         Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');
@@ -271,6 +277,13 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/orders/invoice/{id}', 'orderInvoice')->name('order.invoice');
         Route::get('/orders/invoice-page/{id}', 'invoicePage')->name('invoice');
         Route::get('/dashboard/order/{id}', 'return_confirm')->name('return.confirm');
+
+        Route::get('/get-color-options', 'getColorOptions');
+        Route::get('/get-size-options', 'getSizeOptions');
+
+        //Update order
+        Route::post('/dashboard/orders/order_update', 'orderUpdate')->name('order.update');
+
     });
 
     //Customer
@@ -284,6 +297,8 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/dashboard/customer/edit','edit')->name('customer.edit');
         Route::post('/dashboard/customer/update','update')->name('customer.update');
         Route::delete('/dashboard/customer/destroy', 'destroy')->name('customer.destroy');
+        Route::get('/dashboard/customers/csvExport', 'export')->name('customerExport');
+        Route::post('/dashboard/customers/csvimport', 'import')->name('customerimport');
     });
 
     //offers
@@ -412,7 +427,8 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
 
     //Inventory route
     Route::controller(InventoryController::class)->middleware(['role:Super Admin|Admin|Manager'])->group(function () {
-        Route::get('/dashboard/inventory', 'index')->name('inventory');
+        Route::get('/dashboard/inventory/itemwise', 'itemWise')->name('inventory.item');
+        Route::get('/dashboard/inventory/sizewise', 'SizeWise')->name('inventory.size');
         Route::get('/dashboard/inventory/create', 'create')->name('inventory.create');
 
         //add new stock
@@ -448,7 +464,7 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/dashboard/report/sale_search', 'searchSale')->name('search.sale');
     });
 
-    // User Managment
+    // User
     Route::controller(UserController::class)->group(function(){
         Route::get('/dashboard/users/index', 'index')->name('users.index');
         Route::post('/dashboard/users/store', 'store')->name('users.store');
@@ -463,6 +479,13 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
     Route::delete('/dashboard/roles/{userId}/delete', [RoleController::class, 'destroy']);
    // Route::get('/dashboard/roles/{roleId}/give-permissions', [RoleController::class, 'addPermissionToRole']);
    // Route::put('/dashboard/roles/{roleId}/give-permissions', [RoleController::class, 'givePermissionToRole']);
+
+    // About us
+    Route::controller(AboutusController::class)->group(function(){
+        Route::get('/dashboard/aboutus/', 'index')->name('users.index');
+        Route::get('/dashboard/aboutus/edit', 'edit')->name('aboutus.edit');
+        Route::post('/dashboard/aboutus/update', 'update')->name('aboutus.update');
+    });
 });
 
 // <========================= Backend Route End ========================>

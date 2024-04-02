@@ -5357,3 +5357,86 @@ footer.main-footer {
     color: #ee9c55;
     color: #80d190;
 }
+.alert-bkash{
+    color: #d41f53;
+    background-color: #e2136d49;
+    border-color: #e2136d7c;
+}
+
+.alert-nagad{
+    color: #ec1c24;
+    background-color: #f6911e8e;
+    border-color: #f6921e;
+}
+
+.order-btn{
+    background: transparent;
+    border: none;
+    border-radius: 0.25rem;
+    color: #000;
+    font-size: 10px;
+    padding: 6px 8px ;
+}
+.order-btn:hover{
+    color: #fff;
+    background-color: #088178;
+}
+.order-btn.btn-delete{
+    border: none;
+    color: #ec1c24;
+    transition: all .5s;
+}
+.order-btn.btn-delete:hover{
+    /* border: 1px solid #ec1c24; */
+    color: #fff;
+    background-color: #ec1c24;
+}
+.order-btn.btn-edit{
+    border: none;
+    color: #088178;
+    transition: all .5s;
+}
+.order-btn.btn-edit:hover{
+    /* border: 1px solid #088178; */
+    color: #fff;
+    background-color: #088178;
+}
+.notify-tab {
+    position: relative;
+}
+
+.notify-nav {
+    position: absolute;
+    top: 55px;
+    left: -120px;
+    width: 320px;
+    max-height: 280px; /* Adjusted max-height for better scrolling */
+    border: 1px solid #E3E3E3;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #F4F4F4;
+    z-index: 9999;
+    overflow-y: auto; /* Changed to auto for scrollbar only when needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+}
+
+.notify-nav h5 {
+    margin-bottom: 10px; /* Increased margin */
+    padding-bottom: 8px; /* Added padding for separation */
+    border-bottom: 2px solid #088178; /* Changed border color */
+    color: #046963; /* Changed text color */
+}
+
+.notify-nav ul {
+    list-style: none; /* Removed default list styles */
+    padding: 0;
+}
+
+.notify-nav ul li {
+    padding: 10px 0; /* Increased padding */
+}
+
+.notify-nav ul li:hover {
+    background-color: #e6f7f6; /* Lighter background on hover */
+    border-radius: 8px;
+}
