@@ -41,52 +41,58 @@
                 $stockNotifyCount = $stockNotify->count();
 
             @endphp
+
+            @if ($notifyCount > 0 || $stockNotifyCount > 0)
             <li class="nav-item notify-tab">
                 <a class="nav-link btn-icon notify-counter" id="notify-counter" href="#">
                     <i class="material-icons md-notifications animation-shake"></i>
                     <span class="badge rounded-pill">{{$stockNotifyCount + $notifyCount}}</span>
                 </a>
 
-                @if ($notifyCount > 0 || $stockNotifyCount > 0)
-                    <div class="notify-nav" style="display: none">
-                        <h5>You have {{$notifyCount + $stockNotifyCount}} new notifications.</h5>
-                        <ul>
-                            @if ($notifyCount > 0)
-                                @foreach($orderNotify as $notification)
+                <div class="notify-nav" style="display: none">
+                    <h5>You have {{$notifyCount + $stockNotifyCount}} new notifications.</h5>
+                    <ul>
+                        @if ($notifyCount > 0)
+                            @foreach($orderNotify as $notification)
+                                <li class="notification-item" data-notification-id="{{ $notification->id }}">
+                                    <a href="{{route('order.details', ['id' => $notification->data['order_id'] ])}}">
+
+                                        <p>
+                                            <span class="text-success">{{ $notification->data['message'] }}</span>
+                                            <span class="pull-right">{{$notifydate = \Illuminate\Support\Carbon::parse($notification->data['date'])->setTimezone('Asia/Dhaka')->format('d F, H:i A');}}</span>
+                                        </p>
+                                        <span>Order No: #{{ $notification->data['order_id'] }} </span><br>
+                                        <span>{{ $notification->data['order_details']['customer_name'] }} </span>
+                                        <span class="pull-right"> {{ $notification->data['order_details']['total_amount'] }}</span><br>
+                                    </a>
+                                </li>
+                            @endforeach
+                        @endif
+                        @if ($stockNotifyCount > 0)
+                            @foreach($stockNotify as $notification)
+                                @php
+                                    $notificationData = json_decode($notification->data);
+                                    // Set the timezone to Asia/Dhaka
+                                    $notifydate = \Illuminate\Support\Carbon::parse($notificationData->date)->setTimezone('Asia/Dhaka')->format('d F, H:i A');
+                                @endphp
                                     <li class="notification-item" data-notification-id="{{ $notification->id }}">
-                                        <a href="{{route('order.details', ['id' => $notification->data['order_id'] ])}}">
-                                            <span class="font-700">{{ $notification->data['message'] }}</span><br>
-                                            <span>Order No: #{{ $notification->data['order_id'] }} </span><br>
-                                            <span>{{ $notification->data['order_details']['customer_name'] }} </span>
-                                            <span class="pull-right"> {{ $notification->data['order_details']['total_amount'] }}</span><br>
+                                        <a href="{{route('inventory.item')}}">
+                                            <p><span class="text-danger">{{ $notificationData->message }}</span> <span class="pull-right">{{ $notifydate}}</span></p>
+                                            <span style="margin: 0px 0;">
+                                                <span>{{ $notificationData->product_id }}</span>.
+                                                {{ $notificationData->product_name }} - {{$notificationData->current_stock}} Pcs
+                                            </span><br>
                                         </a>
                                     </li>
-                                @endforeach
-                            @endif
-                            @if ($stockNotifyCount > 0)
-                                @foreach($stockNotify as $notification)
-                                    @php
-                                        $notificationData = json_decode($notification->data);
-                                    @endphp
-                                        <li class="notification-item" data-notification-id="{{ $notification->id }}">
-                                            <a href="#">
-                                                <span>{{ $notificationData->message }}</span><br>
-                                                <span>{{ $notificationData->product_id }}</span>
-                                                <span>{{ $notificationData->product_name }}</span>
-                                            </a>
-                                        </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </div>
-                @endif
-
+                            @endforeach
+                        @endif
+                    </ul>
+                </div>
             </li>
+            @endif
             @if(auth()->user()->hasRole(['Super Admin','Admin','User']))
             <li class="nav-item">
-                <a class="nav-link btn-icon pos" href="{{route('pos')}}">
-                    POS
-                </a>
+                <a class="nav-link btn-icon pos" href="{{route('pos')}}">POS</a>
             </li>
             @endif
 

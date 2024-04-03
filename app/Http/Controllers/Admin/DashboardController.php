@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\Product_stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 
 class DashboardController extends Controller
 {
@@ -43,6 +44,13 @@ class DashboardController extends Controller
 
         // Calculate total profit
         $totalProfit = $this->calculateTotalProfit();
+        $totalLoss = $this->calculateTotalLoss();
+        $totalPurchase = 0;
+            foreach(Products::all() as $product)
+            {
+                $totalPurchase += $product->raw_price * $product->product_stocks->sum('inStock');
+            }
+
 
         // Retrieve the count of unread notifications for low stock products
 
@@ -61,6 +69,8 @@ class DashboardController extends Controller
             'productInStock',
             'topOrderedProducts',
             'totalProfit',
+            'totalLoss',
+            'totalPurchase'
         ));
         // dd($unreadNotifications);
     }
@@ -95,21 +105,56 @@ class DashboardController extends Controller
         return $totalProfit;
     }
 
+    private function calculateTotalLoss()
+    {
+        $orders = Order::where('status', 'completed')->get();
+
+        $totalLoss = 0;
+
+        foreach ($orders as $order) {
+            // Get the total amount of the order
+            $totalAmount = $order->total;
+
+            // Initialize total raw price for products in this order
+            $totalRawPrice = 0;
+
+            // Calculate the total raw price of products in the order
+            foreach ($order->order_item as $orderItem) {
+                // Assuming 'raw_price' is the column name in the product table for the raw price
+                $totalRawPrice += $orderItem->product->raw_price * $orderItem->quantity;
+            }
+
+            if($totalRawPrice > $totalAmount){
+
+                // Calculate profit for this order
+                $loss = $totalRawPrice - $totalAmount ;
+
+                // Accumulate profit
+                $totalLoss += $loss;
+
+            }
+        }
+        return $totalLoss;
+    }
+
 
     public function markNotificationAsRead(Request $request)
     {
         // Find the notification by its ID
         $notification = Auth::user()->notifications()->find($request->id);
-        $stockNotify = \DB::table('notifications')->where('type', 'App\Notifications\LowStockNotification')->find($request->id);
+        $stockNotify = \DB::table('notifications')->where('type', 'App\Notifications\LowStockNotification')->where('id', $request->id)->first();
+
         // If the notification exists and belongs to the authenticated user
         if ($notification) {
             // Mark the notification as read
             $notification->markAsRead();
-        }elseif($stockNotify)
-        {
-            $stockNotify->markAsRead();
-        }
 
+        } elseif ($stockNotify) {
+
+            \DB::table('notifications')->where('id', $request->id)->update(['read_at' => now()]);
+
+        }
+            // dd($stockNotify);
         // Redirect the user back to the previous page or to a specific route
         return response()->json(200);
     }

@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="utf-8">
+
     <title>@yield('title') - Koohen</title>
+
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -179,6 +181,7 @@
                     },
                     success: function(response) {
                         // Update UI or perform any other actions
+                        location.reload();
                         console.log('Notification marked as read');
                     },
                     error: function(xhr, status, error) {

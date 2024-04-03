@@ -131,6 +131,29 @@
             </article>
         </div>
     </div>
+    <div class="col-lg-3">
+        <div class="card card-body mb-4">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Loss</h6>
+                    <span>৳ {{ number_format($totalLoss, 2 ) }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card card-body mb-4">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Purchase</h6>
+                    <span>৳ {{ number_format($totalPurchase, 2 ) }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+
 </div>
 <div class="row">
     <div class="col-lg-8 col-md-8">

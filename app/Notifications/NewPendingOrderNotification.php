@@ -50,11 +50,13 @@ class NewPendingOrderNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $customerName = $this->order->customer->firstName . ' '. $this->order->customer->lastName;
         return [
             'message' => 'You have a new pending order!',
+            'date' => now(),
             'order_id' => $this->order->id,
             'order_details' => [ // Include additional details for better visualization
-                'customer_name' => $this->order->customer->firstName, // Assuming user relationship
+                'customer_name' => $customerName, // Assuming user relationship
                 // 'product' => $this->order->order_item->products->product_name, // Assuming total_amount field
                 'total_amount' => $this->order->total, // Assuming total_amount field
             ],

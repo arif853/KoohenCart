@@ -148,9 +148,9 @@ class CheckoutController extends Controller
 
             auth()->user()->notify(new NewPendingOrderNotification($order));
 
-            $customer = Customer::find($customer_id);
-
             Session::flash('warning','Check your order in dashboard.');
+
+            $customer = Customer::find($customer_id);
             // Mail::to($customer->email)->send( new customerMail($order));
 
         }

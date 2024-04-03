@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Products extends Model
 {
-    use HasFactory,Notifiable;
+    use HasFactory, Notifiable;
 
     protected $fillable =
     [

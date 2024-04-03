@@ -29,7 +29,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <table class="table table-border" style="width:100%">
+                <table class="table table-border" id="colorTable" style="width:100%">
                     <thead>
                         <tr>
                             <th>#SN</th>
@@ -80,7 +80,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $colors->links() }}
+                {{-- {{ $colors->links() }} --}}
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div>
@@ -88,12 +88,15 @@
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between">
                 <h4>Size Varient Table</h4>
-                <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#sizeModal">
-                    Add Size
-                </button>
+                <div>
+
+                    <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#sizeModal">
+                        Add Size
+                    </button>
+                </div>
             </div>
             <div class="card-body">
-                <table class="table table-border" style="width:100%">
+                <table class="table table-border" id="sizeTable" style="width:100%">
                     <thead>
                         <tr>
                             <th>#SN</th>
@@ -130,7 +133,56 @@
 
                     </tbody>
                 </table>
-                {{ $sizes->links() }}
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+    </div>
+    <div class="col-lg-12 col-md-12">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between">
+                <h4>Size Chart Table</h4>
+                <div>
+                    <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#sizeChartModal">
+                        Size Chart
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-border" id="sizeChartTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#SN</th>
+                            <th>Size</th>
+                            <th>Chest</th>
+                            <th>Length</th>
+                            <th>Shoulder</th>
+                            <th>Sleeve</th>
+                            {{-- <th>Action</th> --}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($sizecharts as $key => $chart)
+                        <tr>
+                            <td>{{$key+1}}</td>
+                            <td>{{$chart->sizes->size_name}}</td>
+                            <td>{{$chart->chest}}</td>
+                            <td>{{$chart->length}}</td>
+                            <td>{{$chart->shoulder}}</td>
+                            <td>{{$chart->sleeve}}</td>
+                            {{-- <td>
+                                <a href="#" class="btn font-sm rounded btn-brand mb-2 size-edit" data-bs-toggle="modal" data-bs-target="#" data-chart-id="{{ $chart->id }}">
+                                    <i class="material-icons md-edit"></i> Edit
+                                </a>
+                                <a href="{{route('size.destroy',$size->id)}}" class="btn btn-sm font-sm btn-light rounded mb-2" onclick="confirmDelete(event)">
+                                    <i class="material-icons md-delete_forever"></i> Delete
+                                </a>
+                            </td> --}}
+                        </tr>
+                        @endforeach
+
+
+                    </tbody>
+                </table>
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div>
@@ -141,11 +193,23 @@
 @include('admin.products.varient.colors')
 @include('admin.products.varient.size')
 
+@include('admin.products.varient.sizeChart')
+
 @endsection
 @push('varient')
 
 <script>
     $(document).ready(function () {
+
+        $('#colorTable').DataTable( {
+            pageLength : 5,
+            lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'All']]
+        } )
+
+        $('#sizeTable').DataTable( {
+            pageLength : 5,
+            lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'All']]
+        } )
         // Edit Color
         $(document).on('click', '.edit-color', function (e) {
             e.preventDefault();
@@ -200,7 +264,6 @@
             })
         });
 
-
         //Size Edit
         $(document).on('click', '.size-edit', function (e) {
             e.preventDefault();
@@ -231,6 +294,7 @@
 
         //Update size
         $("#sizeEditForm").submit(function (e) {
+
             e.preventDefault();
             const data = new FormData(this);
             console.log(data);
@@ -255,6 +319,42 @@
                 }
             })
         });
+
+        //Update sizeChart
+        $("#sizeChartForm").submit(function (e) {
+            e.preventDefault();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            const formData = $(this).serializeArray();
+
+            $.ajax({
+                url: '{{ route('sizechart.update') }}',
+                method: 'post',
+                data: formData,
+                success: function (res) {
+                    if (res.status == 200) {
+                        $("#sizeChartModal").modal('hide');
+                        $.Notification.autoHideNotify('success', 'top right', 'Success', 'Size chart updated successfully!');
+                        // Optionally update specific parts of the page instead of reloading
+                        // For example, update a table listing the size charts
+                        location.reload('#sizeChartTable');
+                    } else {
+                        $.Notification.autoHideNotify('danger', 'top right', 'Danger', 'Failed to update size chart. Please try again'+res.message+'.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(status);
+                    console.error(error);
+                    $.Notification.autoHideNotify('danger', 'top right', 'Error', 'An error occurred while processing your request. Please try again later.');
+                }
+            });
+        });
+
     });
 </script>
 

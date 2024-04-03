@@ -176,8 +176,6 @@ Route::controller(TrackorderController::class)->group(function () {
 
 });
 
-
-
 // Frontend Route End
 
 // =================================++++++++++++++++++++++++++++++++++++++++++++++++++++++++===================================== //
@@ -192,12 +190,14 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
 
     //Brands
     Route::controller(BrandController::class)->middleware(['role:Super Admin|Admin|Manager'])->group(function () {
+
         Route::get('/dashboard/products/brands', 'index')->name('brands.index');
         Route::get('/dashboard/products/brands/create', 'create')->name('brands.create');
         Route::post('/dashboard/products/brands/store', 'store')->name('brands.store');
         Route::get('/dashboard/products/brands/edit', 'edit')->name('brands.edit');
         Route::post('/dashboard/products/brands/update', 'update')->name('brands.update');
         Route::delete('/dashboard/products/brands/destroy/{id}', 'destroy')->name('brands.destroy');
+
     });
 
     //Category
@@ -237,6 +237,9 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
         Route::get('/dashboard/products/varient/size_edit', 'size_edit')->name('size.edit');
         Route::post('/dashboard/products/varient/size_update', 'size_update')->name('size.update');
         Route::delete('/dashboard/products/varient/size_destroy/{id}', 'size_destroy')->name('size.destroy');
+
+        //sizeChart
+        Route::post('/dashboard/products/varient/sizeChart', 'sizeChartUpdate')->name('sizechart.update');
 
     });
 

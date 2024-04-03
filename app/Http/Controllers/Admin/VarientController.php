@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Size;
+use App\Models\SizeChart;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,9 +20,10 @@ class VarientController extends Controller
     public function index()
     {
 
-        $colors = Color::paginate(5);
-        $sizes = Size::paginate(5);
-        return view('admin.products.varient.index',compact('colors','sizes'));
+        $colors = Color::all();
+        $sizes = Size::all();
+        $sizecharts = SizeChart::all();
+        return view('admin.products.varient.index',compact('colors','sizes','sizecharts'));
     }
 
     /**
@@ -82,7 +84,7 @@ class VarientController extends Controller
     public function size_store(Request $request)
     {
         $rules = [
-            'size_name' => ['required', Rule::unique('colors', 'color_name')],
+            'size_name' => ['required', Rule::unique('sizes', 'size')],
             'size_value' => 'required',
         ];
 
@@ -256,4 +258,48 @@ class VarientController extends Controller
             return redirect()->route('varient.index')->with('error', 'Error deleting color.');
         }
     }
+
+
+    public function sizeChartUpdate(Request $request)
+    {
+        $rules = [
+            'sizes.*.id' => 'required',
+            'sizes.*.chest' => 'required|numeric|min:0|max:99',
+            'sizes.*.length' => 'required|numeric|min:0|max:99',
+            'sizes.*.shoulder' => 'required|numeric|min:0|max:99',
+            'sizes.*.sleeve' => 'required|numeric|min:0|max:99',
+        ];
+
+        $customMessages = [
+            'sizes.*.id.required' => 'The size ID is required.',
+            // 'sizes.*.id.exists' => 'The selected size is invalid.',
+            'sizes.*.chest.required' => 'The chest measurement is required.',
+            'sizes.*.chest.numeric' => 'The chest measurement must be a number.',
+            // Add similar messages for other fields...
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $customMessages);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 400, 'message' => $validator->errors()->first()]);
+        }
+
+        foreach ($request->sizes as $size) {
+            // Update or create size chart record based on size ID
+            SizeChart::updateOrCreate(
+                ['size_id' => $size['id']],
+                [
+                    'chest' => $size['chest'],
+                    'length' => $size['length'],
+                    'shoulder' => $size['shoulder'],
+                    'sleeve' => $size['sleeve'],
+                    // Add other fields as needed
+                    'status' => $request->has('status') ? 1 : 0,
+                ]
+            );
+        }
+
+        return response()->json(['status' => 200]);
+    }
+
 }
