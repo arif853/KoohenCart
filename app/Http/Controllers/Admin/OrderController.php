@@ -90,6 +90,7 @@ class OrderController extends Controller
 
         foreach ($orderItems as $orderItem) {
             $product = $orderItem->product; // Get the product details for the order item
+            $product->itemId = $orderItem->id;
             $product->load('product_images');
 
             // Add price and quantity properties to the product
@@ -107,8 +108,9 @@ class OrderController extends Controller
 
             $orderProducts->push($product);
         }
+        $items = Products::with(['sizes','colors'])->get();
         // $customer = $order->customer;
-        return view('admin.order.order_details', compact('order', 'orderProducts', 'district', 'postOffice'));
+        return view('admin.order.order_details', compact('order', 'orderProducts', 'district', 'postOffice','items'));
     }
 
 
@@ -436,6 +438,90 @@ class OrderController extends Controller
         return response()->json($sizes);
     }
 
+    public function newProductDetails(Request $request){
+
+        $productId = $request->input('id');
+
+        $product = Products::findOrFail($productId);
+
+        // Load all sizes and colors for the product
+        $product->load('sizes', 'colors');
+
+        // Filter sizes with positive balance
+        $sizesWithPositiveBalance = $product->sizes->filter(function ($size) use ($product) {
+            // Get the total inStock and outStock for the size
+            $productStock = $product->product_stocks->where('size_id', $size->id)->first();
+            $inStock = $productStock ? $productStock->inStock : 0;
+            $outStock = $productStock ? $productStock->outStock : 0;
+
+            // Calculate the balance
+            $balance = $inStock - $outStock;
+
+            // Return true if the balance is positive
+            return $balance > 0;
+        });
+
+        // dd($sizesWithPositiveBalance);
+        $responseData = [
+            'sizes' => $sizesWithPositiveBalance,
+            'colors' => $product->colors,
+            'price' => $product->regular_price,
+        ];
+
+        return response()->json($responseData);
+    }
+
+    public function newProductStore(Request $request)
+    {
+        // Extract data from the form
+        $orderId = $request->input('newItemOrderId');
+        $productId = $request->input('newProduct');
+        $sizeId = $request->input('size');
+        $colorId = $request->input('color');
+        $price = $request->input('newprice');
+        $newQty = $request->input('newqty');
+        $newsub = $request->input('newSubtotal');
+
+        // Find the existing order item
+        $orderItem = new order_items; // Replace $orderId with the actual order item ID
+
+        // Update the order item with the new product details
+        $orderItem->product_id = $productId;
+        $orderItem->order_id = $orderId;
+        $orderItem->size_id = $sizeId;
+        $orderItem->color_id = $colorId;
+        $orderItem->price = $price;
+        $orderItem->quantity = $newQty;
+        $orderItem->save();
+
+        // Recalculate subtotal and total of the order
+        $order = Order::findOrfail($orderId);
+        $subtotal = $order->subtotal + $newsub;
+        $total = $order->total + $newsub;
+        $due = $total - $order->total_paid;
+
+        $order->update([
+            'subtotal' => $subtotal,
+            'total' => $total,
+            'total_due' => $due
+        ]);
+        // You can also update other fields like total, taxes, etc. here
+
+        // Update product stock
+        $productStock = Product_stock::where('product_id', $productId)
+                                    ->where('size_id', $sizeId)
+                                    ->first();
+        if ($productStock) {
+            $productStock->outStock += $newQty;
+            $productStock->save();
+        }
+
+        Session::flash('success','New item added successfully.');
+        // Return a response indicating success or failure
+        return response()->json(['status' => 'success', 'message' => 'Product added successfully']);
+        // dd($request);
+    }
+
     public function orderUpdate(Request $request)
     {
         $orderId = $request->orderId;
@@ -499,5 +585,56 @@ class OrderController extends Controller
 
     }
 
+    public function deleteOrderItem(Request $request)
+    {
+        // Retrieve the order item ID from the request
+        $orderId = $request->input('order_id');
+        $orderItemId = $request->input('order_item_id');
+
+        $order = Order::find($orderId);
+        $orderItem = order_items::find($orderItemId);
+
+        if(!$order)
+        {
+            return response()->json(['status' => 'error','message' => 'Order not found!']);
+        }
+        else{
+            if(!$orderItem)
+            {
+                return response()->json(['status' => 'error','message' => 'Order item not found!']);
+            }
+            else{
+
+                $itemTotal = $orderItem->price * $orderItem->quantity;
+                $subtotal = $order->subtotal - $itemTotal;
+                $total = $order->total - $itemTotal;
+                $totalDue =  $total - $order->total_paid;
+
+                $stock = Product_stock::where('product_id',$orderItem->product_id)->where('size_id', $orderItem->size_id)->first();
+                $itemQty = $stock->outStock - $orderItem->quantity;
+
+                $stock->update([
+                    'outStock' => $itemQty,
+                ]);
+
+                $order->update([
+                    'subtotal' => $subtotal,
+                    'total' => $total,
+                    'total_due' => $totalDue
+                ]);
+
+                // Delete the order item from the database
+                $deleted = $orderItem->delete();
+
+                // Return response indicating success or failure
+                if ($deleted) {
+                    Session::flash('success','Item deleted successfully, Stock update!');
+                    return response()->json(['status' => 'success']);
+                } else {
+                    return response()->json(['status' => 'error']);
+                }
+            }
+        }
+    }
 
 }

@@ -286,6 +286,9 @@ Route::middleware(['auth','role:Super Admin|Admin|Manager|User'])->group(functio
 
         //Update order
         Route::post('/dashboard/orders/order_update', 'orderUpdate')->name('order.update');
+        Route::post('/dashboard/orders/orderitem_delete', 'deleteOrderItem')->name('orderItem.delete');
+        Route::get('/dashboard/orders/newProductDetails', 'newProductDetails')->name('newproduct.details');
+        Route::post('/dashboard/orders/newProductStore', 'newProductStore')->name('newProduct.store');
 
     });
 
