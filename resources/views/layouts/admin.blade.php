@@ -262,48 +262,23 @@
 
             // $('.multiple-select2').select2();
             $('.colorpicker').minicolors({
-                // animation speed
-            animationSpeed: 50,
-
-            // easing function
-            animationEasing: 'swing',
-
-            // defers the change event from firing while the user makes a selection
-            changeDelay: 0,
-
-            // hue, brightness, saturation, or wheel
-            control: 'hue',
-
-            // default color
-            defaultValue: '',
-
-            // hex or rgb
-            format: 'rgb',
-
-            // show/hide speed
-            showSpeed: 100,
-            hideSpeed: 100,
-
-            // is inline mode?
-            inline: false,
-
-            // a comma-separated list of keywords that the control should accept (e.g. inherit, transparent, initial).
-            keywords: '',
-
-            // uppercase or lowercase
-            letterCase: 'lowercase',
-
-            // enables opacity slider
-            opacity: true,
-
-            // custom position
-            // position: 'bottom left',
-
-            // additional theme class
-            theme: 'default',
-
-            // an array of colors that will show up under the main color <a href="https://www.jqueryscript.net/tags.php?/grid/">grid</a>
-            swatches: []
+                animationSpeed: 50,
+                animationEasing: 'swing',
+                changeDelay: 0,
+                control: 'hue',
+                defaultValue: '',
+                format: 'rgb',
+                showSpeed: 100,
+                hideSpeed: 100,
+                inline: false,
+                keywords: '',
+                letterCase: 'lowercase',
+                opacity: true,
+                // position: 'bottom left',
+                // additional theme class
+                theme: 'default',
+                // an array of colors that will show up under the main color <a href="https://www.jqueryscript.net/tags.php?/grid/">grid</a>
+                swatches: []
             });
 
 
@@ -327,8 +302,6 @@
         });
 
         $('#datatable').DataTable();
-
-
 
         });
 

@@ -217,68 +217,9 @@
                 }
             });
 
-            $('.all_order_status').change(function() {
-                var selectedStatus = $(this).val();
-                var selectedOrders = $('.order-checkbox:checked').map(function() {
-                    return $(this).val();
-                }).get();
-                // console.log(selectedOrders);
-                // Perform an AJAX request to update the status of selected orders
-                $.ajax({
-                    type: 'POST',
-                    url: '/update-order-status',
-                    data: {
-                        status: selectedStatus,
-                        orders: selectedOrders
-                    },
-                    success: function(response) {
-                        // Handle success, if needed
-                        location.reload();
-                        if (response.success) {
-                            $.Notification.autoHideNotify('success', 'top right', 'Success',
-                                response.message);
-                        }
-                        // console.log(response);
-                    },
-                    error: function(error) {
-                        // Handle error, if needed
-                        location.reload();
-                        console.error(error);
-                    }
-                });
-            });
-
-            $('.order_status').change(function() {
-                var orderId = $(this).data('order-id');
-                var newStatus = $(this).val();
-                console.log(newStatus);
-                console.log(orderId);
-                // Perform an AJAX request to update the status of selected orders
-                $.ajax({
-                    type: 'POST',
-                    url: '/update-one-order-status', // Update with your route
-                    data: {
-                        orderId: orderId,
-                        newStatus: newStatus,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        // Handle success, if needed
-                        location.reload();
-                        if (response.success) {
-                            $.Notification.autoHideNotify('success', 'top right', 'Success',
-                                response.message);
-                        }
-                        // console.log(response);
-                    },
-                    error: function(error) {
-                        // Handle error, if needed
-                        console.error(error);
-                    }
-                });
-            });
 
             $('#orderFilterForm input, #orderFilterForm select').on('keyup change', function() {
+
                 // Capture form input values
                 var orderId = $('#order_id').val();
                 // console.log(orderId);
@@ -287,7 +228,7 @@
                 var status = $('#orderStatus').val();
                 // console.log(status);
                 var customerPhone = $('#customerPhone').val();
-                console.log(customerPhone);
+                // console.log(customerPhone);
 
                 $.ajax({
                     url: "{{ route('order.filters') }}",
@@ -301,7 +242,7 @@
                     },
                     success: function(response) {
                         // Handle success, if needed
-                        // console.log(response);
+                        console.log(response);
 
                         var tableBody = $('#orderTableBody');
                         tableBody.empty(); // Clear existing table rows
@@ -337,7 +278,7 @@
                                     </div>
                                 `;
                             }
-
+                            console.log(statusOption);
                             // Initialize a variable to store the HTML for order items
                             var orderItemsHtml = '';
 
@@ -400,6 +341,36 @@
                             // Append more columns as needed
                             tableBody.append(row);
                         });
+
+                        $('.order_status').change(function() {
+                            var orderId = $(this).data('order-id');
+                            var newStatus = $(this).val();
+                            console.log(newStatus);
+                            console.log(orderId);
+                            // Perform an AJAX request to update the status of selected orders
+                            $.ajax({
+                                type: 'POST',
+                                url: '{{url('/update-one-order-status')}}', // Update with your route
+                                data: {
+                                    orderId: orderId,
+                                    newStatus: newStatus,
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function(response) {
+                                    // Handle success, if needed
+                                    // location.reload();
+                                    if (response.success) {
+                                        $.Notification.autoHideNotify('success', 'top right', 'Success',
+                                            response.message);
+                                    }
+                                    // console.log(response);
+                                },
+                                error: function(error) {
+                                    // Handle error, if needed
+                                    console.error(error);
+                                }
+                            });
+                        });
                     },
                     error: function(error) {
                         // Handle error, if needed
@@ -408,7 +379,66 @@
                 })
             });
 
+            $('.all_order_status').change(function() {
+                var selectedStatus = $(this).val();
+                var selectedOrders = $('.order-checkbox:checked').map(function() {
+                    return $(this).val();
+                }).get();
+                // console.log(selectedOrders);
+                // Perform an AJAX request to update the status of selected orders
+                $.ajax({
+                    type: 'POST',
+                    url: '{{url('/update-order-status')}}',
+                    data: {
+                        status: selectedStatus,
+                        orders: selectedOrders
+                    },
+                    success: function(response) {
+                        // Handle success, if needed
+                        location.reload();
+                        if (response.success) {
+                            $.Notification.autoHideNotify('success', 'top right', 'Success',
+                                response.message);
+                        }
+                        // console.log(response);
+                    },
+                    error: function(error) {
+                        // Handle error, if needed
+                        location.reload();
+                        console.error(error);
+                    }
+                });
+            });
 
+            $('.order_status').change(function() {
+                var orderId = $(this).data('order-id');
+                var newStatus = $(this).val();
+                console.log(newStatus);
+                console.log(orderId);
+                // Perform an AJAX request to update the status of selected orders
+                $.ajax({
+                    type: 'POST',
+                    url: '{{url('/update-one-order-status')}}', // Update with your route
+                    data: {
+                        orderId: orderId,
+                        newStatus: newStatus,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        // Handle success, if needed
+                        location.reload();
+                        if (response.success) {
+                            $.Notification.autoHideNotify('success', 'top right', 'Success',
+                                response.message);
+                        }
+                        // console.log(response);
+                    },
+                    error: function(error) {
+                        // Handle error, if needed
+                        console.error(error);
+                    }
+                });
+            });
 
         });
     </script>

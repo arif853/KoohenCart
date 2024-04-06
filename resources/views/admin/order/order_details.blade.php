@@ -184,8 +184,7 @@
                                                     <span class="product-size">{{$product->size->size_name}}</span>
                                                     @endif
                                                 </div>
-                                                </div>
-                                            </a>
+                                            </span>
                                         </td>
                                         <td>৳{{$product->price}} </td>
                                         <td> {{$product->quantity}} </td>
@@ -262,9 +261,7 @@
             </div>
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
-@php
-    $products = DB::table('products')->get();
-@endphp
+
 <!--New item add Modal -->
 <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="newItemModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -327,6 +324,8 @@
 @push('order_status')
 <script>
 $(document).ready(function() {
+
+    $('.select-me').select2();
     // Define a variable to store original values
     var originalValues = {};
 
@@ -393,8 +392,8 @@ $(document).ready(function() {
             }
         });
 
-        $row.find('td:nth-child(3)').html($('<input>').addClass('form-control price').attr('type', 'text').val(originalValues.price));
-        $row.find('td:nth-child(4)').html($('<input>').addClass('form-control quantity').attr('type', 'number').attr('min',1).val(originalValues.quantity));
+        //$row.find('td:nth-child(3)').html($('<input>').addClass('form-control price').attr('type', 'text').val(originalValues.price));
+        //$row.find('td:nth-child(4)').html($('<input>').addClass('form-control quantity').attr('type', 'number').attr('min',1).val(originalValues.quantity));
 
         $('#delivery_charge').html($('<input>').addClass('color-select deliveryCharge').attr('type','number').val(originalValues.deliveryCharge));
         $('#discount').html($('<input>').addClass('color-select discount').attr('type','number').val(originalValues.discount));
@@ -542,8 +541,8 @@ $(document).ready(function() {
         formData.sizeId = $row.find('.sizeId').val();
 
         // Get price and quantity
-        formData.price = $row.find('.price').val();
-        formData.quantity = $row.find('.quantity').val();
+        formData.price = $row.find('.price').val() || originalValues.price;
+        formData.quantity = $row.find('.quantity').val()|| originalValues.quantity;
         formData.total = $row.find('.total').val() || originalValues.total;
 
         formData.subtotal = $('#subtotal').find('.subtotal').val() || originalValues.subtotal;
@@ -551,7 +550,7 @@ $(document).ready(function() {
         // Get delivery charge, discount, and total paid
         formData.deliveryCharge = $('.deliveryCharge').val();
         formData.discount = $('.discount').val();
-        formData.totalPaid = $('.totalPaid').val();
+        formData.totalPaid = $('.totalPaid').val() || originalValues.paidAmount;
 
         // Get grand total and total due
         formData.grandTotal = $('#g_total').find('.g_total').val() || originalValues.gTotal;

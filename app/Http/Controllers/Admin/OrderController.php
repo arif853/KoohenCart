@@ -110,7 +110,7 @@ class OrderController extends Controller
         }
         $items = Products::with(['sizes','colors'])->get();
         // $customer = $order->customer;
-        return view('admin.order.order_details', compact('order', 'orderProducts', 'district', 'postOffice','items'));
+        return view('admin.order.order_details', compact('order', 'orderProducts', 'district', 'postOffice' ,'items'));
     }
 
 
