@@ -7,12 +7,12 @@
 
     <div class="page-header breadcrumb-wrap">
        <div class="container">
-          <div class="breadcrumb">
-             <a href="{{('/')}}" rel="nofollow">Home</a>
-             <span></span>
-             <a href="{{('/shop')}}" rel="nofollow">Shop</a>
-             <span></span> {{$product->slug}}
-          </div>
+            <div class="breadcrumb">
+                <a href="{{('/')}}" rel="nofollow">Home</a>
+                <span></span>
+                <a href="{{('/shop')}}" rel="nofollow">Shop</a>
+                <span></span> {{$product->slug}}
+            </div>
        </div>
     </div>
 

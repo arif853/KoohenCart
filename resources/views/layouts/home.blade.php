@@ -120,23 +120,6 @@
                                         $fullName = $user->customer->firstName . ' ' . $user->customer->lastName;
                                         @endphp
                                     <a class="customer_info " href="{{route('customer.dashboard')}}" >{{ $fullName }}</a>
-
-                                        {{-- <div class="dropdown">
-
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <li><a class="dropdown-item" href="{{route('customer.dashboard')}}">Profile</a></li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#" onclick="document.getElementById('logout_form').submit();">Logout</a>
-                                                    <form method="post" id="logout_form" action="{{ route('customer.logout') }}">
-                                                        @csrf
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                          </div> --}}
-                                        {{-- <form method="post" action="{{ route('customer.logout') }}">
-                                            @csrf
-                                            <button type="submit">Logout</button>
-                                        </form> --}}
                                     @else
                                         {{-- Show login/register links --}}
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#login">Log In / </a>

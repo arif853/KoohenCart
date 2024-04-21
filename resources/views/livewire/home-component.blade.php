@@ -104,7 +104,22 @@
     </div>
     <!--End tab-content-->
 
+    <div class="row mt-30">
+        <div class="col-12 text-center mb-4">
+            <span wire:loading.delay>
+                <button class="btn" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                  </button>
+            </span>
 
+        </div>
+        <div class="col-12 text-center" wire:loading.remove>
+            <p class="wow fadeIn animated">
+                <a wire:click.prevent="loadMore()" class="btn btn-brand text-white btn-shadow-brand hover-up btn-lg" href="#">Load More</a>
+            </p>
+        </div>
+    </div>
 
 
 <script>

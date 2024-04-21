@@ -51,6 +51,12 @@ class DashboardController extends Controller
                 $totalPurchase += $product->raw_price * $product->product_stocks->sum('inStock');
             }
 
+        $paidOrders = Order::whereHas('transaction', function ($query) {
+            $query->where('status', 'paid');
+        })->get();
+
+        // Count the number of paid orders
+        $paidOrdersCount = $paidOrders->count();
 
         // Retrieve the count of unread notifications for low stock products
 
@@ -70,7 +76,8 @@ class DashboardController extends Controller
             'topOrderedProducts',
             'totalProfit',
             'totalLoss',
-            'totalPurchase'
+            'totalPurchase',
+            'paidOrdersCount'
         ));
         // dd($unreadNotifications);
     }
@@ -78,25 +85,26 @@ class DashboardController extends Controller
 
     private function calculateTotalProfit()
     {
+        // Get completed orders
         $orders = Order::where('status', 'completed')->get();
 
         $totalProfit = 0;
 
         foreach ($orders as $order) {
-            // Get the total amount of the order
-            $totalAmount = $order->total;
+            // Get the total amount paid for the order (subtotal - discount)
+            $sellingPrice = $order->subtotal - $order->discount;
 
-            // Initialize total raw price for products in this order
-            $totalRawPrice = 0;
+            // Initialize total cost for products in this order
+            $PurchasePrice = 0;
 
-            // Calculate the total raw price of products in the order
+            // Calculate the total cost of products in the order
             foreach ($order->order_item as $orderItem) {
-                // Assuming 'raw_price' is the column name in the product table for the raw price
-                $totalRawPrice += $orderItem->product->raw_price * $orderItem->quantity;
+                // Assuming 'cost_price' is the column name in the product table for the cost price
+                $PurchasePrice += $orderItem->product->raw_price * $orderItem->quantity;
             }
 
             // Calculate profit for this order
-            $profit = $totalAmount - $totalRawPrice;
+            $profit = $sellingPrice - $PurchasePrice;
 
             // Accumulate profit
             $totalProfit += $profit;
@@ -107,35 +115,37 @@ class DashboardController extends Controller
 
     private function calculateTotalLoss()
     {
+        // Get completed orders
         $orders = Order::where('status', 'completed')->get();
 
         $totalLoss = 0;
 
         foreach ($orders as $order) {
-            // Get the total amount of the order
-            $totalAmount = $order->total;
+            // Calculate the total amount paid for the order (subtotal - discount)
+            $SellingPrice = $order->subtotal - $order->discount;
 
-            // Initialize total raw price for products in this order
-            $totalRawPrice = 0;
+            // Initialize total cost for products in this order
+            $purchasePrice = 0;
 
-            // Calculate the total raw price of products in the order
+            // Calculate the total cost of products in the order
             foreach ($order->order_item as $orderItem) {
-                // Assuming 'raw_price' is the column name in the product table for the raw price
-                $totalRawPrice += $orderItem->product->raw_price * $orderItem->quantity;
+                // Assuming 'cost_price' is the column name in the product table for the cost price
+                $purchasePrice += $orderItem->product->raw_price * $orderItem->quantity;
             }
 
-            if($totalRawPrice > $totalAmount){
+            // If the total cost of products is greater than the total amount paid
+            if ($purchasePrice > $SellingPrice) {
+                // Calculate the loss for this order
+                $loss = $purchasePrice - $SellingPrice;
 
-                // Calculate profit for this order
-                $loss = $totalRawPrice - $totalAmount ;
-
-                // Accumulate profit
+                // Accumulate the total loss
                 $totalLoss += $loss;
-
             }
         }
+
         return $totalLoss;
     }
+
 
 
     public function markNotificationAsRead(Request $request)

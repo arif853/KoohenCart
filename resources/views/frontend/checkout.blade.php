@@ -340,19 +340,19 @@
                                         Cash On Delivery
                                     </label>
                                     <br>
-                                    {{-- <input class="form-check-input" type="radio" name="payment_mode" id="payment_online" value="online">
+                                    <input class="form-check-input" type="radio" name="payment_mode" id="payment_online" value="online">
                                     <label class="form-check-label" for="payment_online">
                                         Online Payment
-                                    </label> --}}
+                                    </label>
                                     <br>
                                 </div>
                             </div>
 
-                            {{-- <button type="submit" class="btn btn-primary btn-lg btn-block" id="sslczPayBtn"
+                            <button type="submit" class="btn btn-primary btn-lg btn-block" id="sslczPayBtn"
                                     token="if you have any token validation"
                                     postdata="your javascript arrays or objects which requires in backend"
                                     order="If you already have the transaction generated for current order"
-                                    endpoint="{{ url('/pay-via-ajax') }}" style="display: none;" >Order and Pay</button> --}}
+                                    endpoint="{{ url('/pay-via-ajax') }}" style="display: none;" >Order and Pay</button>
 
                             <button type="submit" class="btn btn-fill-out btn-block mt-30" id="placeorder">Place Order</button>
                         </div>

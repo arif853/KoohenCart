@@ -154,6 +154,18 @@
         </div>
     </div>
 
+    <div class="col-lg-3">
+        <div class="card card-body mb-4 bg-warning-light">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Paid Invoice</h6>
+                    <span>৳ {{ $paidOrdersCount }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+
 </div>
 <div class="row">
     <div class="col-lg-8 col-md-8">

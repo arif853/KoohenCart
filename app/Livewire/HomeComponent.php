@@ -15,6 +15,9 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 class HomeComponent extends Component
 {
     public $slug;
+    public $paginate = 4;
+
+    use WithPagination;
 
     public function showQuickView($slug)
     {
@@ -22,7 +25,6 @@ class HomeComponent extends Component
         $this->dispatch('showQuickViewModal', slug: $slug);
     }
 
-    use WithPagination;
     // public $products;
     public function store($id)
     {
@@ -110,6 +112,7 @@ class HomeComponent extends Component
 
     public function render()
     {
+        sleep(2);
         // $products = Products::all();
         $products = Products::with([
             'overviews',
@@ -124,7 +127,7 @@ class HomeComponent extends Component
             'subcategory',
             'product_price',
             'product_stocks'
-        ])->paginate(8);
+        ])->paginate($this->paginate);
 
         if(Auth::guard('customer')->check()){
             Cart::instance('wishlist')->store(Auth::guard('customer')->user()->email);
@@ -133,6 +136,11 @@ class HomeComponent extends Component
 
         // print_r($products);
         return view('livewire.home-component',['products'=> $products,'campaign' => $campaign]);
+    }
+
+    public function loadMore()
+    {
+        $this->paginate += 4;
     }
 
 }

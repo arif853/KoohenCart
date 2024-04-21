@@ -74,7 +74,8 @@
                 <h3 class="section-title section-title-1 mb-20"><span>New</span> Arrivals</h3>
             </div>
                 <div class="new-arrival">
-                   @livewire('new-products-component')
+                   {{-- @livewire('new-products-component') --}}
+                   <livewire:new-products-component/>
                     <!--End product-grid-4-->
                 </div>
             <!--End tab-content-->
@@ -194,7 +195,8 @@
     <!--All Products (OK)-->
     <section class="product-tabs section-padding position-relative wow fadeIn animated">
         <div class="container">
-            @livewire('home-component')
+            {{-- @livewire('home-component') --}}
+            <livewire:home-component lazy/>
 
             {{-- <button wire:click="loadMore">Clickme</button> --}}
         </div>
