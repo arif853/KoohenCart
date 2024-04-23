@@ -22,8 +22,8 @@ class VarientController extends Controller
 
         $colors = Color::all();
         $sizes = Size::all();
-        $sizecharts = SizeChart::all();
-        return view('admin.products.varient.index',compact('colors','sizes','sizecharts'));
+        // $sizecharts = SizeChart::all();
+        return view('admin.products.varient.index',compact('colors','sizes'));
     }
 
     /**

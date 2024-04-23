@@ -354,7 +354,7 @@ $(document).ready(function() {
 
          // Fetch color options
          $.ajax({
-            url: '/get-color-options', // Replace with your route URL
+            url: '{{url('/get-color-options')}}', // Replace with your route URL
             type: 'GET',
             success: function(response) {
                 var colorSelect = $row.find('.color-select');
@@ -374,7 +374,7 @@ $(document).ready(function() {
 
         // Fetch size options
         $.ajax({
-            url: '/get-size-options', // Replace with your route URL
+            url: '{{url('/get-size-options')}}', // Replace with your route URL
             type: 'GET',
             success: function(response) {
                 var sizeSelect = $row.find('.size-select');
@@ -422,6 +422,7 @@ $(document).ready(function() {
             else{
                 subtotal += newTotal;
             }
+            
             // subtotal with hidden field
             $("#subtotal").text('৳' + subtotal);
             $("#subtotal").append($('<input>').addClass('subtotal').attr('type', 'hidden').attr('min',0).val(newTotal));

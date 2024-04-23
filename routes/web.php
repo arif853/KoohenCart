@@ -49,6 +49,7 @@ use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\Frontend\TrackorderController;
 use App\Http\Controllers\Admin\FeatureCategoryController;
 use App\Http\Controllers\Admin\FeatureProductsController;
+use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
@@ -540,4 +541,9 @@ Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
 Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
 //SSLCOMMERZ END
 
+
+Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
+
 require __DIR__.'/auth.php';
+

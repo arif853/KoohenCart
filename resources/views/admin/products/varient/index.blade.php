@@ -136,56 +136,7 @@
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div>
-    <div class="col-lg-12 col-md-12">
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between">
-                <h4>Size Chart Table</h4>
-                <div>
-                    <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#sizeChartModal">
-                        Size Chart
-                    </button>
 
-                </div>
-            </div>
-            <div class="card-body">
-                <table class="table table-border" id="sizeChartTable" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>#SN</th>
-                            <th>Size</th>
-                            <th>Chest</th>
-                            <th>Length</th>
-                            <th>Shoulder</th>
-                            <th>Sleeve</th>
-                            {{-- <th>Action</th> --}}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($sizecharts as $key => $chart)
-                        <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$chart->sizes->size_name}}</td>
-                            <td>{{$chart->chest}}</td>
-                            <td>{{$chart->length}}</td>
-                            <td>{{$chart->shoulder}}</td>
-                            <td>{{$chart->sleeve}}</td>
-                            {{-- <td>
-                                <a href="#" class="btn font-sm rounded btn-brand mb-2 size-edit" data-bs-toggle="modal" data-bs-target="#" data-chart-id="{{ $chart->id }}">
-                                    <i class="material-icons md-edit"></i> Edit
-                                </a>
-                                <a href="{{route('size.destroy',$size->id)}}" class="btn btn-sm font-sm btn-light rounded mb-2" onclick="confirmDelete(event)">
-                                    <i class="material-icons md-delete_forever"></i> Delete
-                                </a>
-                            </td> --}}
-                        </tr>
-                        @endforeach
-
-
-                    </tbody>
-                </table>
-            </div> <!-- card-body end// -->
-        </div> <!-- card end// -->
-    </div>
 </div>
 @include('admin.products.varient.colors_edit')
 @include('admin.products.varient.size_edit')
@@ -193,7 +144,6 @@
 @include('admin.products.varient.colors')
 @include('admin.products.varient.size')
 
-@include('admin.products.varient.sizeChart')
 
 @endsection
 @push('varient')

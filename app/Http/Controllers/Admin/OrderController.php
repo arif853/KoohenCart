@@ -438,7 +438,8 @@ class OrderController extends Controller
         return response()->json($sizes);
     }
 
-    public function newProductDetails(Request $request){
+    public function newProductDetails(Request $request)
+    {
 
         $productId = $request->input('id');
 
@@ -545,17 +546,27 @@ class OrderController extends Controller
             }
             else
             {
-                foreach($stocks as $stock){
-                    // Update stock based on quantity change
-                    if($stock->size_id == $orderItem->size_id){
+
+                foreach ($stocks as $stock) {
+                    // Update stock based on size and quantity change
+                    if ($orderItem->size_id == $sizeId) {
                         $quantityDifference = $request->quantity - $orderItem->quantity;
                         $stock->update([
                             'outStock' => $stock->outStock + $quantityDifference
                         ]);
-                    }elseif($stock->size_id == $sizeId){
-                        $stock->update([
-                            'outStock' => $stock->outStock + $request->quantity
-                        ]);
+                    } else {
+                        // Increase outStock for the new size and decrease for the previous size
+                        if ($stock->size_id == $sizeId) {
+                            $stock->update([
+                                'outStock' => $stock->outStock + $request->quantity
+                            ]);
+                        }
+
+                        if ($stock->size_id == $orderItem->size_id) {
+                            $stock->update([
+                                'outStock' => $stock->outStock - $orderItem->quantity
+                            ]);
+                        }
                     }
                 }
             }

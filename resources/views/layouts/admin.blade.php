@@ -35,6 +35,9 @@
     {{-- Notification --}}
     <link href="{{asset('admin/assets/vendors/notifications/notification.css')}}" rel="stylesheet" />
 
+
+
+
 @livewireStyles()
 
 </head>
@@ -192,6 +195,7 @@
         });
     </script>
     <script>
+
          $(document).ready(function() {
             $('.menu-item.has-submenu').click(function() {
                 $(this).toggleClass('active');

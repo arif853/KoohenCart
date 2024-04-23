@@ -364,22 +364,20 @@
             </div>
         </div>
     </div>
-
-
-            {{-- @if($errors->any())
-                <div style="color: red;">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif --}}
-            @if(View::hasSection('main'))
-                @yield('main')
-            @else
-                {{ $slot }}
-            @endif
+        {{-- @if($errors->any())
+            <div style="color: red;">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif --}}
+        @if(View::hasSection('main'))
+            @yield('main')
+        @else
+            {{ $slot }}
+        @endif
 
     <footer class="main">
         <section class="newsletter p-30 text-white wow fadeIn animated">
