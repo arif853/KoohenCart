@@ -20,7 +20,7 @@
                             {{$aboutus->title}}
                         </h1>
                         <p>
-                            {!! $aboutus->description !!}
+                            {!! $aboutus->about_desc !!}
                         </p>
                     </div>
                     {{-- <div class="col-lg-6">

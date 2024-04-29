@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Ads;
-use App\Models\Slider;
-use App\Models\Setting;
-use App\Models\Campaign;
-use App\Models\Category;
-use App\Models\Division;
 use App\Models\Products;
 use Illuminate\Http\Request;
-use Termwind\Components\Raw;
-use App\Models\Feature_category;
 use App\Http\Controllers\Controller;
-use App\Models\Aboutus;
+use App\Models\Category;
+use App\Models\Campaign;
+use App\Models\Slider;
+use App\Models\Ads;
+use App\Models\Division;
+use App\Models\Feature_category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use App\Models\Aboutus;
 
 class HomeController extends Controller
 {
@@ -56,12 +55,12 @@ class HomeController extends Controller
 
         $categories = Category::with('children')->whereNull('parent_category')->get();
         $cat_feature = Feature_category::where('status', 'Active')->first();
+
         $sliders = Slider::all();
         $adsbanner = Ads::all();
         $campaign = Campaign::where('status','Published')->first();
 
         return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign'));
-
     }
 
     /**
@@ -87,7 +86,7 @@ class HomeController extends Controller
         $divisions = Division::all();
         if (Auth::guard('customer')->check()) {
             $user = Auth::guard('customer')->user();
-
+            
             if ($user->customer->billing_address != null && $user->customer->shipping()->exists()) {
                 return view('frontend.checkout');
             } else {
@@ -143,12 +142,12 @@ class HomeController extends Controller
         // return response()->json($products, 200, [], JSON_PRETTY_PRINT);
 
     }
-
-    public function wishlist(){
-        return view('frontend.shop-wishlist');
-    }
-
-    /**
+    
+     public function wishlist(){
+            
+            return view('frontend.shop-wishlist');
+        }
+        /**
      * Show the form for editing the specified resource.
      */
     public function quickview(Request $request)
@@ -173,6 +172,7 @@ class HomeController extends Controller
         return response()->json( $product);
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -188,9 +188,8 @@ class HomeController extends Controller
     {
         //
     }
-
-
-    public function searchBar(Request $request)
+    
+     public function searchBar(Request $request)
     {
         $searchTerm = $request->input('search');
 
@@ -201,8 +200,8 @@ class HomeController extends Controller
                             // ->limit(5) // Limit the number of results
                             ->get();
 
+
         // Return the response as JSON
         return response()->json(['products' => $products]);
     }
-
 }

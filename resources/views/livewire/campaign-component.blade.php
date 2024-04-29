@@ -1,6 +1,6 @@
 <div>
     <div class="text-center">
-        <style>
+       <style>
             .sales_timer{
                 width: 250px;
                 /* height: 60px; */
@@ -51,8 +51,10 @@
                             </a>
                         </div>
                         <div class="product-action-1">
-                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                            <a aria-label="Quick view" class="action-btn hover-up quickview" data-bs-toggle="modal" data-bs-target="#quickViewModal" data-product-slug="{{$item->slug}}">
+                                <i class="fi-rs-eye"></i></a>
                             <a aria-label="Add To Wishlist" wire:click.prevent="AddToWishlist({{$item->product->id}})" onclick="wishNotify()" class="action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
+
                         </div>
                         <div class="product-badges product-badges-position product-badges-mrg">
                             <span class="sale">On Sale</span>
@@ -67,8 +69,8 @@
                         </div>
                         <div>
                             <div class="text-center">
-                                <a href="#" wire:click.prevent="store({{$item->product->id}})" onclick="cartNotify()"><button type="button" class="adto-cart-btn">Add To Cart</button></a>
-                                
+                            <a href="#" wire:click.prevent="store({{$item->product->id}})" onclick="cartNotify()"><button type="button" class="adto-cart-btn">Add To Cart</button></a>
+
                             </div>
                         </div>
                     </div>
@@ -81,7 +83,7 @@
         <!--End product-grid-4-->
     </div>
 <!--End tab-content-->
-    <div class="row mt-30">
+    <div class="row mt-30">s
         <div class="col-12 text-center">
             <p class="wow fadeIn animated">
                 <a class="btn btn-brand text-white btn-shadow-brand hover-up btn-lg">Load More</a>
@@ -89,10 +91,16 @@
         </div>
     </div>
 
+
+{{-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{asset('frontend/assets/vendor/jquery.countdown/css/jquery.countdown.css')}}">
+
+<script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.plugin.min.js')}}"></script>
+<script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.countdown.js')}}"></script> --}}
+
 </div>
 
 @push('camp')
-
 <script>
 
     function cartNotify(){

@@ -126,9 +126,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div >
-                            <h3 id="orderStatus"></h3>
-                        </div>
 
                         <div class="card-body text-primary">
 
@@ -146,15 +143,13 @@
                                 <tbody>
 
                                     <tr>
-                                        <td scope="row" class="text-start"></td>
+                                        <th scope="row" class="text-start"></th>
                                         <td scope="row" class="text-center">
                                             <a href="#">
                                                 <img height="80px" width="80px" src="" class="image-fluid" alt="ProductImage">
                                             <p></p>
                                             </a>
-
                                         </td>
-
                                         <td class="text-center"></td>
                                         <td class="text-center"></td>
                                     </tr>
@@ -187,6 +182,7 @@
                         </div>
                     </div> <!-- card end// -->
 
+
                 </div>
             </div>
         </div>
@@ -197,6 +193,7 @@
 @push('dashboard')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.min.js"></script>
+
 <script>
    $(document).ready(function () {
     // Attach a submit event listener to the form
@@ -243,7 +240,7 @@
                         $.each(['pending', 'confirmed', 'shipped', 'delivered', 'completed'], function(index, stepStatus) {
                             var iconClass = statusIcons[stepStatus];
                             var date = orderStatus[stepStatus + '_date_time'];
-                            var formattedDate = date ?  moment.utc(date).tz('Asia/Dhaka').format('D MMM YYYY') : '';
+                            var formattedDate = date ?  moment.utc(date).tz('Asia/Dhaka').format('D MMM YYYY, h:mmA') : '';
                             var isCompleted = index <= currentStatusIndex;
 
                             steps.append(
@@ -296,9 +293,9 @@
 
                             $('#orderDetailsTable tbody').append(row);
 
-                            var subtotal = response.order.total;
+                            var subtotal = response.order.subtotal;
                             var deliveryCharge = response.order.delivery_charge;
-                            var total = parseFloat(deliveryCharge) + parseFloat(response.order.total);
+                            var total = parseFloat(response.order.total);
 
                             $('#subtotal').text(subtotal);
                             $('#d_type').text(response.order.transaction.mode);
@@ -315,7 +312,6 @@
                     }
                 },
                 error: function (error) {
-                    $('#orderDetailsTable tbody').empty();
                     console.error('Error fetching order data:', error);
                 }
             });

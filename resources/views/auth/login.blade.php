@@ -23,7 +23,7 @@
         <section class="auth-main ">
             <div class="card codex-authbox ">
                 <div class="auth-header text-center">
-                    <div class="codex-brand"><a href="#"><img class="img-fluid light-logo" src="{{asset('admin/assets/imgs/Kohen_Logo_Main.png')}}" alt="Koohen"></a>
+                    <div class="codex-brand"><a href="#"><img class="img-fluid light-logo" src="{{asset('admin/assets/imgs/Kohen_Logo_Main.png')}}" alt="Kohen_Logo_Main.png"></a>
                     </div>
                     <h3>Welcome back </h3>
                     <h6>Login to access dashboard.</h6>
@@ -53,7 +53,7 @@
 
                         </div> <!-- form-group// -->
                         <div class="mb-4">
-
+                            <a href="#" class="float-end font-sm text-muted">Forgot password?</a>
                             <label class="form-check">
                                 <input type="checkbox" class="form-check-input" checked=""  name="remember">
                                 <span class="form-check-label">Remember</span>

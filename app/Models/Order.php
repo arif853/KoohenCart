@@ -2,38 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Notifications\Notifiable;
-use App\Notifications\NewPendingOrderNotification ;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'customer_id',
-        'subtotal',
-        'discount',
-        'tax',
-        'total',
-        'is_shipping_different',
-        'shipping_cost',
-        'comment',
-        'status',
-        'total_paid',
-        'total_due',
-        'is_pos'];
-
-        // protected static function booted()
-        // {
-        //     static::created(function ($order) {
-        //         if ($order->status === 'pending') {
-        //             // Trigger the notification when a new pending order is created
-        //             $order->notify(new NewPendingOrderNotification($order));
-        //         }
-        //     });
-        // }
+    protected $fillable = ['customer_id','subtotal','discount','tax','total','is_shipping_different','shipping_cost','comment','total_paid','total_due','is_pos'];
 
     public function customer()
     {
@@ -59,7 +34,7 @@ class Order extends Model
     {
         return $this->hasOne(Orderstatus::class);
     }
-
+    
     public function appliedCoupone()
     {
         return $this->belongsTo(AppliedCoupone::class, 'order_id');

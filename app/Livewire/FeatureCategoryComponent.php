@@ -12,7 +12,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 class FeatureCategoryComponent extends Component
 {
-    public function store($id)
+     public function store($id)
     {
         $product = Products::find($id);
         $item_name = $product->product_name;
@@ -49,6 +49,7 @@ class FeatureCategoryComponent extends Component
         $this->dispatch('cartRefresh')->to('cart-icon-component');
 
     }
+
     public function render()
     {
         $cat_features = Feature_category::where('status', 'Active')->first();
@@ -67,7 +68,7 @@ class FeatureCategoryComponent extends Component
             'product_price'
 
         ])->where('category_id', $cat_features->category_id)->get();
-
+        
         $products = $items->filter(function ($product) {
 
             // Calculate total stock balance for the product

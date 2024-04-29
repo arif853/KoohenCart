@@ -17,7 +17,7 @@
         </div> --}}
     </div>
     <div class="card mb-4">
-        <header class="card-header">
+       <header class="card-header">
             <h4 class="mb-2">Search Transactions:-</h4>
             <div class="row gx-3 customer_live_search">
                 <div class="col-lg-4 col-md-6 ">
@@ -33,7 +33,7 @@
                         id="customer_email">
                 </div> --}}
             </div>
-        </header> <!-- card-header end// -->
+        </header> 
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" id="datatable">
@@ -49,15 +49,18 @@
                             <th>Payment Method</th>
                             <th>Payment Status</th>
                             <th>Transaction Date</th>
+                          
                         </tr>
                     </thead>
                     <tbody id="transactionTable">
                         @foreach ($data as $key => $list)
                             <tr>
                                 <td>{{$key+1}}</td>
-                                <td>
-                                    <span>Order ID: {{ $list->order->id }}</span> <br>
-                                    Invoice no: <a href="{{route('order.details', ['id' => $list->order->id])}}" class="font-sm">{{$list->order->invoice_no}}</a>
+                                <td> 
+                                <span>Order ID: {{ $list->order->id }}</span> <br>
+                                Invoice no: <a href="{{route('order.details', ['id' => $list->order->id])}}" class="font-sm">{{$list->order->invoice_no}}</a>
+                                <!--<span style="color: #088178;"> </span>-->
+                                
                                 </td>
                                 <td>
                                     <a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">
@@ -73,32 +76,34 @@
                                 <td>{{ $list->order->total_due }}</td>
                                 <td>
                                     @if ($list->mode =='online')
-                                        <span class="badge rounded-pill alert-success">Online</span>
-                                    @elseif($list->mode =='cash')
-                                        <span class="badge rounded-pill alert-info">Cash</span>
+                                        <span class="badge rounded-pill alert-info">Online</span>
+                                    @elseif($list->mode =='card')
+                                        <span class="badge rounded-pill alert-info">Bank Card</span>
                                     @elseif($list->mode =='cod')
-                                        <span class="badge rounded-pill alert-success">Cash On Delivery</span>
+                                        <span class="badge rounded-pill alert-info">Cash On Delivery</span>
+                                    @elseif($list->mode =='cash')
+                                        <span class="badge rounded-pill alert-info">Cash </span>
                                     @elseif($list->mode =='bkash')
                                        <span class="badge rounded-pill alert-bkash">Bkash</span>
                                     @elseif($list->mode =='nagad')
                                     <span class="badge rounded-pill alert-nagad">Nagad</span>
                                     @elseif($list->mode =='rocket')
                                     <span class="badge rounded-pill alert-success">Rocket</span>
-
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($list->status == 'paid')
+                                     @if ($list->status == 'paid')
                                         <span class="badge rounded-pill alert-success">Paid</span>
                                     @elseif($list->status == 'unpaid')
                                         <span class="badge rounded-pill alert-danger">Unpaid</span>
-                                        {{-- @if ($list->order->is_pos == 1) --}}
+                                        <!--@if ($list->order->is_pos == 1)-->
+                                        <!--<a class="badge rounded-pill bg-success ml-2 pay" data-bs-toggle="modal" data-bs-target="#makepament" data-trans_id="{{$list->id}}"> Pay Now</a>-->
+                                        <!--@endif-->
                                         <a class="badge rounded-pill bg-success ml-2 pay" data-bs-toggle="modal" data-bs-target="#makepament" data-trans_id="{{$list->id}}"> Pay Now</a>
-                                        {{-- @endif --}}
                                     @elseif($list->status == 'refunded')
                                         <span class="badge rounded-pill alert-danger">Refunded</span>
                                     @elseif($list->status == 'declined')
-                                        <span class="badge rounded-pill alert-warning">declined</span>
+                                        <span class="badge rounded-pill alert-warning">Declined</span>
                                     @else
                                        <span class="badge rounded-pill alert-danger">Not Found
 
@@ -106,10 +111,9 @@
                                     @endif
                                 </td>
                                 <td>{{ $list->updated_at->format('d-m-Y') }}</td>
-
+                               
                             </tr>
                         @endforeach
-
                     </tbody>
                     <tr id="loading-indicator" class="d-none">
                         <td>Loading...</td>
@@ -118,6 +122,7 @@
             </div>
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
+
 
  <!-- Modal -->
     <div class="modal fade" id="makepament" tabindex="-1" aria-labelledby="makepamentLabel" aria-hidden="true">
@@ -160,7 +165,7 @@
                         <div class="col-md-4">
                             <label for="total" class="form-label">Payment Method</label>
                             <select name="paymentMode" id="paymentMode" class="form-control">
-
+    
                                 <option value="cash">Cash</option>
                                 <option value="cod">Cash On Delivery</option>
                                 <option value="bkash">Bkash</option>
@@ -176,10 +181,12 @@
                         </div>
                         <div class="col-md-4">
                             <label for="payment" class="form-label">
-                                Payment:
+                            Payment:
                             </label>
                             <input type="text" class="form-control" id="payment" name="payment" value="0">
+
                         </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -190,7 +197,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 @push('transaction')
     <script>
@@ -221,8 +227,9 @@
                     $('#total').val(response.order.total);
                     $('#paid').val(response.order.total_paid);
                     $('#due').val(response.order.total_due);
-
-                     // Enable input field for payment
+                    
+                    
+                    // Enable input field for payment
                     $('#payment').prop('disabled', false);
                     $('#payButton').prop('disabled', true);
 
@@ -253,8 +260,7 @@
         $("#paymentForm").submit(function(e) {
             e.preventDefault();
             const data = new FormData(this);
-            console.log(data);
-
+                console.log(data);
             $.ajax({
                 url: '{{url('/dashboard/transaction/payment-update')}}',
                 method: 'post',
@@ -275,8 +281,8 @@
                 }
             })
         });
-
-        $(document).ready(function() {
+        
+         $(document).ready(function() {
 
             function searchHandler() {
                 var loadingIndicator = $('#loading-indicator');
@@ -328,13 +334,9 @@
                                 }
 
                                 var tr = $('<tr>' +
-                                    '<td>'+(index+1)+'</td>'+
-                                    '<td>'+
-                                        '<span>Order ID: '+transaction.order.id+'</span> <br>'+
-                                    'Invoice no: <a href="{{route('order.details', ['id' => ''])}}'+transaction.order.id+'" class="font-sm">'+transaction.order.invoice_no+'</a>'+
-                                    '</td>' +
+                                    '<td> Order ID: ' + transaction.order.id + '</td>' +
                                     '<td>' +
-                                    '<a href="{{ route('customer.profile', ['id' => ''])}}'+transaction.customer_id+'" class="itemside">' +
+                                    '<a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">' +
                                     '<div class="info pl-3">' +
                                     '<h6 class="mb-0 title">' + transaction.customer.firstName + ' ' + transaction.customer.lastName + '</h6>' +
                                     '<small class="text-muted">Customer ID: #' + transaction.customer.id + '</small>' +
@@ -371,6 +373,6 @@
                 searchHandler();
             });
         });
-
+        
     </script>
 @endpush

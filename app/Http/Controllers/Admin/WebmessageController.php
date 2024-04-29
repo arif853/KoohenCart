@@ -48,7 +48,8 @@ class WebmessageController extends Controller
             'message'=> $request->message,
         ]);
         // Mail::to('qbittech.dev@gmail.com')->send(new Webmessagemail($data));
-        return redirect('/thankyou');
+        
+        return redirect()->back()->with('success','Message sent successfully, We will contact with you soon.');
     }
 
     /**

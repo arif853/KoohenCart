@@ -12,20 +12,20 @@
     </div>
 </div>
 <div class="row">
-
+   
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-1">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Sales </h6> <span>৳ {{ number_format($sales, 2 ) }}</span>
+                    <h6 class="mb-1 card-title">Total Sales </h6> <span>৳ {{ number_format($total, 2 ) }}</span>
+
                 </div>
             </article>
-
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-1">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -36,7 +36,74 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-1">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Due</h6> <span>৳ {{number_format($totalDue, 2)  }}</span>
+
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card card-body mb-4 bg-row-1">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Paid</h6> <span>৳ {{number_format($totalPaid, 2)  }}</span>
+
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card card-body mb-4  bg-row-2">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Purchase Stock</h6>
+                    <span> {{ $purchaseStock }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+     <div class="col-lg-3">
+        <div class="card card-body mb-4 bg-row-2">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Purchase</h6>
+                    <span>৳ {{ number_format($totalPurchase, 2 ) }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card card-body mb-4 bg-row-2">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Profit</h6> 
+                    <span>৳ {{ number_format($totalProfit, 2 ) }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card card-body mb-4 bg-row-2">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Total Loss</h6>
+                    <span>৳ {{ number_format($totalLoss, 2 ) }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
+   
+    <div class="col-lg-3">
+        <div class="card card-body mb-4 bg-row-3">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_bag"></i></span>
                 <div class="text">
@@ -46,19 +113,19 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-3">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_bag"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Products In stock</h6> <span>{{ $productInStock }} <span  style="font-size:12px; display:inline">Items in Stock</span></span>
+                    <h6 class="mb-1 card-title">Total Products In stock</h6> <span>{{ $productInStock }} <span  style="font-size:12px; display:inline">products in Stock</span></span>
                 </div>
             </article>
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-3">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-local_shipping"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title"> Total Orders </h6>
                     <span>{{$total_orders}}</span>
@@ -67,9 +134,9 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-3">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-category"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Total Category</h6> <span>{{ $category }}</span>
 
@@ -77,11 +144,11 @@
             </article>
         </div>
     </div>
-
+     
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-supervisor_account"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Total Customer</h6> <span>{{ $customers }}</span>
 
@@ -90,9 +157,9 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Total Pending Orders</h6> <span>{{ $pending_order }}</span>
 
@@ -101,9 +168,9 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Total Complete Orders</h6> <span>{{ $completed_order }}</span>
                 </div>
@@ -111,9 +178,9 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Active Campaign</h6> <span>{{ $campaign }}</span>
                 </div>
@@ -121,52 +188,41 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-5">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Profit</h6>
-                    <span>৳ {{ number_format($totalProfit, 2 ) }}</span>
+                    <h6 class="mb-1 card-title">Total Product Ordered</h6> 
+                    <span>{{ $ordered_products->sum('total_ordered') }}</span>
                 </div>
             </article>
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-5">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Loss</h6>
-                    <span>৳ {{ number_format($totalLoss, 2 ) }}</span>
+                    <h6 class="mb-1 card-title">Paid Invoice</h6> 
+                    <span>{{$paidOrdersCount}}</span>
                 </div>
             </article>
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-4 bg-row-5">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Purchase</h6>
-                    <span>৳ {{ number_format($totalPurchase, 2 ) }}</span>
-                </div>
-            </article>
-        </div>
-    </div>
-
-    <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-warning-light">
-            <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
-                <div class="text">
-                    <h6 class="mb-1 card-title">Total Paid Invoice</h6>
-                    <span>৳ {{ $paidOrdersCount }}</span>
+                    <h6 class="mb-1 card-title">Unpaid Invoice</h6> 
+                    <span>{{$unpaidOrdersCount}}</span>
                 </div>
             </article>
         </div>
     </div>
 
 </div>
+
 <div class="row">
     <div class="col-lg-8 col-md-8">
         <div class="card mb-4">

@@ -24,12 +24,7 @@ class FeatureProductsController extends Controller
     {
         $products = Products::latest('id')->get();
         $fproducts = FeatureProducts::latest('id')->get();
-        // $fproducts->products=->leftJoin('feature_products_with_pivot', 'feature_products.id', '=', 'feature_products_with_pivot.feature_products_id')
-        // ->leftJoin('products', 'feature_products_with_pivot.products_id', '=', 'products.id')
-        // ->select('feature_products.*', 'products.id as product_id', 'products.product_name as product_name')
-
-
-        return view('admin.feature.product_feature', ['products'=> $products,'fproducts' => $fproducts]);
+        return view('admin.feature.product_feature', ['products' => $products, 'fproducts' => $fproducts]);
     }
 
     /**
@@ -120,12 +115,6 @@ class FeatureProductsController extends Controller
     {
         $id = $request->id;
         $feature_products = FeatureProducts::findOrFail($id);
-
-        $feature_products->products = $feature_products->leftJoin('feature_products_with_pivot', 'feature_products.id', '=', 'feature_products_with_pivot.feature_products_id')
-                ->leftJoin('products','feature_products_with_pivot.products_id','=','products.id')
-                ->select('products.id as product_id','products.product_name as product_name') // Select columns you need from both tables
-                ->get();
-
         return response()->json($feature_products);
     }
     /**

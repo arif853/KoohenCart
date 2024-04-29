@@ -165,21 +165,21 @@
     </div>
 </div>
 
-{{-- {{$products}} --}}
+
 @endsection
 @push('product')
 <script>
     var i = 1;
     function addfield(){
-        // Assuming you have a variable 'products' containing the encoded product data
+        // // Assuming you have a variable 'products' containing the encoded product data
         // var productData = {!! json_encode($products) !!};
-        // console.log(productData);
+
         // // Generate product options dynamically
         // var productOptions = '<option value="">-- Select Product --</option>';
         // productData.forEach(function (product) {
         //     productOptions += '<option value="' + product.id + '" data-stock="' + product.stock + '" data-regular-price="' + product.regular_price + '">' + product.product_name + '</option>';
         // });
-
+        
         var productData = {!! json_encode($products) !!};
         // console.log(productData);
 
@@ -192,7 +192,7 @@
                 productOptions += '<option value="' + product.id + '" data-stock="' + product.totalStock + '" data-regular-price="' + product.regular_price + '">' + product.product_name + '</option>';
             }
         }
-        // console.log(productOptions);
+        
     i++;
     var data = '<div class="card">'+
                     '<div class="card-body">'+
@@ -265,7 +265,6 @@
 
     function syncAll() {
         var campaignOfferPercentage = parseFloat($("#camp_offer").val());
-
         if (isNaN(campaignOfferPercentage)) {
             alert("Please enter a valid campaign offer percentage.");
             return;

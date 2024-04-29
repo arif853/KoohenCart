@@ -172,7 +172,7 @@
                     } else {
                         var totalAmount = 0;
                         response.forEach(function(order, index) {
-                            var invoiceUrl = '{{ url('orders/invoice/') }}' + '/' + order.id;
+                             var invoiceUrl = '{{ url('orders/invoice/') }}' + '/' + order.id;
                             var formattedDate = new Date(order.created_at).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
@@ -236,13 +236,14 @@
                     } else {
                         var totalAmount = 0;
                         response.forEach(function(order, index) {
+                             var invoiceUrl = '{{ url('orders/invoice/') }}' + '/' + order.id;
                             var formattedDate = new Date(order.created_at).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
                             });
                             var tr = $('<tr>' +
-                                '<td>' + (index +1 ) + '</td>' +
+                                 '<td>' + (index +1 ) + '</td>' +
                                 '<td class="text-center">' + formattedDate + '</td>' +
                                 '<td class="text-center"><a href="'+invoiceUrl+'" target="__blank">' + order.invoice_no + '</a></td>' +
                                 '<td class="text-center">' + order.customer.firstName + ' ' + order.customer.lastName + '</td>' +
@@ -276,10 +277,10 @@
 
     function printTable() {
         var printWindow = window.open('', '_blank');
-
+    
         // Copy the content of the table to the new window
         printWindow.document.write('<html><head><title>Sale Report</title>');
-
+    
         // Include custom CSS styles for the printed table
         printWindow.document.write('<style>');
         printWindow.document.write('body { font-family: Arial, sans-serif; }');
@@ -289,15 +290,15 @@
         printWindow.document.write('th { background-color: #f2f2f2; }');
         printWindow.document.write('a { text-decoration: none; color:#000; }');
         printWindow.document.write('</style>');
-
+    
         printWindow.document.write('</head><body>');
         printWindow.document.write('<h2>Sales Report</h2>');
         printWindow.document.write('<table>' + $('#myTable').html() + '</table>');
         printWindow.document.write('</body></html>');
-
+    
         // Close the document stream
         printWindow.document.close();
-
+    
         // Print the new window
         printWindow.print();
     }

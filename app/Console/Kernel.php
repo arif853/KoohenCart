@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('app:update-campaign-status')->everyMinute();
+        $schedule->command('sitemap:generate')->daily();
     }
 
     /**
@@ -23,10 +23,10 @@ class Kernel extends ConsoleKernel
     {
         $this->load([
             __DIR__.'/Commands',
-            __DIR__.'/Commands/UpdateCampaignStatus.php',
+            __DIR__.'/Commands/GenerateSitemap.php',
         ]);
+        
 
         require base_path('routes/console.php');
     }
-
 }

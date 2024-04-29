@@ -1,7 +1,7 @@
 <aside class="navbar-aside" id="offcanvas_aside">
     <div class="aside-top">
-        <a href="{{url('/dashboard')}}" class="brand-wrap">
-            <img src="{{asset('admin/assets/imgs/Kohen_Logo_Main.png')}}" class="logo" alt="Koohen">
+        <a href="{{url('/dashboard')}}" class="brand-wrap" style="margin:0 auto;">
+            <img src="{{asset('admin/assets/imgs/Kohen_Logo_Main.png')}}" class="logo" alt="Kohen_Logo_Main.png">
         </a>
         <div>
             <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
@@ -88,7 +88,7 @@
                 </div>
             </li>
 
-            <li class="menu-item has-submenu {{ request()->is('dashboard/inventory/*') ? 'active' : '' }}">
+           <li class="menu-item has-submenu {{ request()->is('dashboard/inventory/*') ? 'active' : '' }}">
                 <a class="menu-link" href="#">
                     <i class="icon material-icons md-store"></i>
                     <span class="text">Inventory</span>
@@ -128,8 +128,8 @@
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
             </li>
-
-            <li class="menu-item has-submenu">
+           
+           <li class="menu-item has-submenu">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
                     <span class="text">Web Settings</span>
                 </a>
@@ -223,26 +223,6 @@
         </ul>
         @endif
         <br>
-         {{-- <li class="menu-item has-submenu">
-                <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
-                    <span class="text">Account</span>
-                </a> --}}
-                {{-- <div class="submenu">
-                    <a href="page-account-login.html">User login</a>
-                    <a href="page-account-register.html">User registration</a>
-                    <a href="page-error-404.html">Error 404</a>
-                </div> --}}
-            {{-- </li> --}}
-            {{-- <li class="menu-item">
-                <a class="menu-link" href="{{('reviews')}}"> <i class="icon material-icons md-comment"></i>
-                    <span class="text">Reviews</span>
-                </a>
-            </li> --}}
-
-            {{-- <li class="menu-item">
-                <a class="menu-link" href="{{route('media.index')}}"> <i class="icon material-icons md-stars"></i>
-                    <span class="text">Media</span> </a>
-            </li> --}}
     </nav>
 
 </aside>

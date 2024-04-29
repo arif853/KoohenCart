@@ -7,25 +7,19 @@ use App\Models\Campaign;
 use App\Models\Products;
 use Livewire\WithPagination;
 use App\Models\Product_image;
-use function Laravel\Prompts\alert;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
+
+
+use function Laravel\Prompts\alert;
 
 class HomeComponent extends Component
 {
-    public $slug;
-    public $paginate = 4;
 
     use WithPagination;
-
-    public function showQuickView($slug)
-    {
-        $this->slug = $slug;
-        $this->dispatch('showQuickViewModal', slug: $slug);
-    }
-
     // public $products;
+    
     public function store($id)
     {
         $product = Products::find($id);
@@ -109,10 +103,11 @@ class HomeComponent extends Component
 
         $this->dispatch('cartRefresh')->to('wishlist-icon-component');
     }
-
+    
+    public $paginate = 8;
+    
     public function render()
     {
-        sleep(2);
         // $products = Products::all();
         $products = Products::with([
             'overviews',
@@ -128,19 +123,19 @@ class HomeComponent extends Component
             'product_price',
             'product_stocks'
         ])->paginate($this->paginate);
-
-        if(Auth::guard('customer')->check()){
+        
+         if(Auth::guard('customer')->check()){
             Cart::instance('wishlist')->store(Auth::guard('customer')->user()->email);
         }
-        $campaign = Campaign::where('status','Published')->first();
+                $campaign = Campaign::where('status','Published')->first();
 
         // print_r($products);
         return view('livewire.home-component',['products'=> $products,'campaign' => $campaign]);
     }
-
+    
     public function loadMore()
     {
         $this->paginate += 4;
     }
-
+    
 }

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\Postcode;
 use App\Models\shipping;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 
 class CustomerController extends Controller
@@ -19,7 +18,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::all();
+        $customers = Customer::latest('id')->get();
         return view('admin.customer.index',compact('customers'));
     }
 
@@ -67,7 +66,7 @@ class CustomerController extends Controller
             'customerProducts',
             'totalOrders',
             'totalProductCount',
-            'totalOrderAmount',));
+            'totalOrderAmount'));
     }
     /**
      * Show the form for creating a new resource.
@@ -88,42 +87,12 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function CustomerFilter(Request $request)
+    public function show(string $id)
     {
-        $customerName = $request->customerName;
-        $customerPhone = $request->customerPhone;
-        $customerEmail = $request->customerEmail;
-
-        // Debugging output to see the received parameters
-      //  dd($customerName, $customerPhone, $customerEmail);
-
-        $query = Customer::query();
-
-        if ($customerName) {
-            $query->where(function ($q) use ($customerName) {
-                $q->where('firstName', 'like', "%$customerName%")
-                  ->orWhere('lastName', 'like', "%$customerName%");
-            });
-        }
-
-        if ($customerPhone) {
-            $query->where('phone', 'like', "%$customerPhone%");
-        }
-
-        if ($customerEmail) {
-            $query->where('email', 'like', "%$customerEmail%");
-        }
-
-        // Debugging output to see the generated query
-      //  dd($query->toSql(), $query->getBindings());
-
-        $customerFilters = $query->get();
-       // dd(json_encode($customrFilters));
-        return response()->json($customerFilters);
+        //
     }
 
-
-
+    
     /**
      * Show the form for editing the specified resource.
      */
@@ -160,60 +129,46 @@ class CustomerController extends Controller
         try{
             $supplier = Customer::find($request->id);
             $supplier->delete();
-            // Session::flash('success', 'Customer data has beed Deleted.');
-            return redirect()->back()->with('success', 'Customer deleted successfully.');
+            Session::flash('success', 'Customer data has beed Deleted.');
+            return redirect()->back()->with('danger', 'Customer deleted successfully.');
         } catch (\Exception $e) {
             // Log the exception or handle it in a way that makes sense for your application
             return redirect()->back()->with('danger', 'This Customer can not be deleted .');
         }
     }
 
-    public function export()
+
+    public function CustomerFilter(Request $request)
     {
-        $customers = Customer::all();
+        $customerName = $request->customer_name;
+        $customerPhone = $request->customer_phone;
+        $customerEmail = $request->customer_email;
 
-        $csvFileName = 'CustomerList.csv';
+        // Debugging output to see the received parameters
+      //  dd($customerName, $customerPhone, $customerEmail);
 
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'COntent-Disposition' => 'attachment; filename = "'.$csvFileName.'"',
-        ];
+        $query = Customer::query();
 
-        $handle = fopen('php://output','w');
-        fputcsv($handle,['First Name', 'Last Name', 'Phone', 'Email','Register Date']);
-
-        foreach($customers as $customer)
-        {
-            // $customerName = $customer->firstName .' '. $customer->lastName;
-            $registerdate = $customer->created_at->format('d M Y');
-            fputcsv($handle,[$customer->firstName , $customer->lastName, $customer->phone, $customer->email, $registerdate]);
+        if ($customerName) {
+            $query->where(function ($q) use ($customerName) {
+                $q->where('firstName', 'like', "%$customerName%")
+                  ->orWhere('lastName', 'like', "%$customerName%");
+            });
         }
 
-        fclose($handle);
-
-        return Response::make('',200,$headers);
-    }
-
-    public function import(Request $request)
-    {
-        if($request->hasFile('file')){
-            $file = $request->file('file');
-            $filecontent = file($file->getPathname());
-
+        if ($customerPhone) {
+            $query->where('phone', 'like', "%$customerPhone%");
         }
 
-        foreach($filecontent as $content)
-        {
-            $data = str_getcsv($content);
-            Customer::create([
-                'firstName' => $data[0],
-                'lastName' => $data[1],
-                'phone' => $data[2],
-                'email' => $data[3],
-            ]);
-            // dd($data[2]);
+        if ($customerEmail) {
+            $query->where('email', 'like', "%$customerEmail%");
         }
-        Session::flash('success','Customer store from csv successfully');
-        return redirect()->back();
+
+        // Debugging output to see the generated query
+      //  dd($query->toSql(), $query->getBindings());
+
+        $customerFilters = $query->latest('created_at')->get();
+       // dd(json_encode($customrFilters));
+        return response()->json($customerFilters);
     }
 }

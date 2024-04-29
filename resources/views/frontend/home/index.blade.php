@@ -9,7 +9,7 @@
 	<section class="section-slide">
 		<div class="wrap-slick1">
 			<div class="slick1">
-                @foreach ($sliders as $slider)
+			 @foreach ($sliders as $slider)
                 <div class="item-slick1" style="background-image: url({{asset('storage/'.$slider->image)}});">
 					<div class="container h-full">
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
@@ -42,29 +42,29 @@
     <!--Main Slider-->
 
     <!--Popular Catagory-->
-    <section class="popular-categories section-padding mt-15 mb-25">
-        <div class="container wow fadeIn animated">
-            <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>
-            <div class="carausel-6-columns-cover position-relative">
-                <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>
-                <div class="carausel-6-columns" id="carausel-6-columns">
+    <!--<section class="popular-categories section-padding mt-15 mb-25">-->
+    <!--    <div class="container wow fadeIn animated">-->
+    <!--        <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>-->
+    <!--        <div class="carausel-6-columns-cover position-relative">-->
+    <!--            <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>-->
+    <!--            <div class="carausel-6-columns" id="carausel-6-columns">-->
 
-                    @foreach ($categories as $category)
-                    <div class="card-1">
-                        <figure class=" img-hover-scale overflow-hidden" style="height: 170px;
-                        width: 100%;
-                        margin: revert-layer;">
-                            <a href="#"><img src="{{asset('storage/category_image/'.$category->category_image)}}" alt="{{$category->slug}}"></a>
-                        </figure>
-                        <h5><a href="#">{{$category->category_name}}</a></h5>
-                    </div>
-                    @endforeach
+    <!--                @foreach ($categories as $category)-->
+    <!--                <div class="card-1">-->
+    <!--                    <figure class=" img-hover-scale overflow-hidden" style="height: 170px;  margin: revert-layer;">-->
+    <!--                        <a href="#">-->
+    <!--                            <img src="{{asset('storage/category_image/'.$category->category_image)}}" alt="{{$category->slug}}" >-->
+    <!--                        </a>-->
+    <!--                    </figure>-->
+    <!--                    <h5><a href="#">{{$category->category_name}}</a></h5>-->
+    <!--                </div>-->
+    <!--                @endforeach-->
 
 
-                </div>
-            </div>
-        </div>
-    </section>
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</section>-->
     <!--Popular Catagory-->
 
     <!--New Arrival (OK)-->
@@ -74,8 +74,7 @@
                 <h3 class="section-title section-title-1 mb-20"><span>New</span> Arrivals</h3>
             </div>
                 <div class="new-arrival">
-                   {{-- @livewire('new-products-component') --}}
-                   <livewire:new-products-component/>
+                   @livewire('new-products-component')
                     <!--End product-grid-4-->
                 </div>
             <!--End tab-content-->
@@ -93,7 +92,7 @@
     <!--Advertise-->
     <section class="banner-2">
         <div class="container">
-            @foreach ($adsbanner as $ads)
+           @foreach ($adsbanner as $ads)
             @if($ads->is_featured == 1 && $ads->is_feature_no == 1)
             <div class="banner-img banner-big wow fadeIn animated f-none">
                 <img src="{{asset('storage/'.$ads->image)}}" alt="$ads->title">
@@ -109,11 +108,10 @@
             @endif
             {{-- @break --}}
             @endforeach
-
         </div>
     </section>
     <!--Advertise-->
-
+    
     <!--Category products (OK)-->
     @if($cat_feature)
 
@@ -131,7 +129,7 @@
                     </h3>
 
                 </div>
-                <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
+                <a href="{{route('shop')}}" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
             </div>
             <div class="row">
                 <div class="col-lg-3 d-none d-lg-flex">
@@ -154,7 +152,7 @@
 
     @endif
 
-    @if($campaign)
+     @if($campaign)
 
     <!--Campaign (OK)-->
     <section class="product-tabs section-padding position-relative wow fadeIn animated">
@@ -167,12 +165,45 @@
 
     @endif
 
-
     <!--Advertise-->
     <section class="banner-2">
         <div class="container">
-            @foreach ($adsbanner as $ads)
-            @if($ads->is_featured == 1 && $ads->is_feature_no == 2)
+             @foreach ($adsbanner as $ads)
+                @if($ads->is_featured == 1 && $ads->is_feature_no == 2)
+                <div class="banner-img banner-big wow fadeIn animated f-none">
+                    <img src="{{asset('storage/'.$ads->image)}}" alt="$ads->title">
+                    <div class="banner-text d-md-block d-none">
+                        <h4 class="mb-15 text-brand">{{$ads->header}}</h4>
+                        <h1 class="fw-600 mb-20" style="width: 450px; color:#fff">{{$ads->title}}</h1>
+    
+                        @if($ads->shop_url != null)
+                        <a href="{{$ads->shop_url}}" class="btn">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                        @endif
+                    </div>
+                </div>
+    
+                @endif
+
+            @endforeach
+        </div>
+    </section>
+    <!--Advertise-->
+
+    <!--All Products (OK)-->
+    <section class="product-tabs section-padding position-relative wow fadeIn animated">
+        <div class="container">
+            @livewire('home-component')
+
+            {{-- <button wire:click="loadMore">Clickme</button> --}}
+        </div>
+    </section>
+    <!--All Products (OK)-->
+    
+     <!--Advertise-->
+    <section class="banner-2">
+        <div class="container">
+           @foreach ($adsbanner as $ads)
+            @if($ads->is_featured == 1 && $ads->is_feature_no == 3)
             <div class="banner-img banner-big wow fadeIn animated f-none">
                 <img src="{{asset('storage/'.$ads->image)}}" alt="$ads->title">
                 <div class="banner-text d-md-block d-none">
@@ -184,24 +215,12 @@
                     @endif
                 </div>
             </div>
-
             @endif
-
+            {{-- @break --}}
             @endforeach
         </div>
     </section>
     <!--Advertise-->
-
-    <!--All Products (OK)-->
-    <section class="product-tabs section-padding position-relative wow fadeIn animated">
-        <div class="container">
-            {{-- @livewire('home-component') --}}
-            <livewire:home-component lazy/>
-
-            {{-- <button wire:click="loadMore">Clickme</button> --}}
-        </div>
-    </section>
-    <!--All Products (OK)-->
 </main>
-  <!-- Quick view -->
+
 @endsection

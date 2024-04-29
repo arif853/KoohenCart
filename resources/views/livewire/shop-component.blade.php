@@ -185,13 +185,13 @@
                                         <span><i class="fi-rs-apps"></i>Show:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
-                                        <span> 8 <i class="fi-rs-angle-small-down"></i></span>
+                                        <span> 12 <i class="fi-rs-angle-small-down"></i></span>
                                     </div>
                                 </div>
                                 <div class="sort-by-dropdown">
                                     <ul>
-                                        <li><a class="active" href="#" wire:click.prevent= "changePerPage(8)">8</a></li>
-                                        <li><a href="#" wire:click.prevent= "changePerPage(12)">12</a></li>
+                                        <!--<li><a  wire:click.prevent= "changePerPage(8)">8</a></li>-->
+                                        <li><a class="active" href="#" wire:click.prevent= "changePerPage(12)">12</a></li>
                                         <li><a href="#" wire:click.prevent= "changePerPage(24)">24</a></li>
                                         <li><a href="#" wire:click.prevent= "changePerPage(48)">48</a></li>
                                         <li><a href="#" wire:click.prevent= "changePerPage(60)">60</a></li>

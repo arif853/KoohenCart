@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Koohen'),
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -160,7 +160,7 @@ return [
          * Package Service Providers...
          */
         // Intervention\Image\ImageServiceProvider::class,
-        // niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -172,7 +172,7 @@ return [
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         misterspelik\LaravelPdf\PdfServiceProvider::class,
         Igoshev\Captcha\Providers\CaptchaServiceProvider::class,
-
+        Spatie\Permission\PermissionServiceProvider::class,
 
     ])->toArray(),
 
@@ -193,9 +193,6 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF' => misterspelik\LaravelPdf\Facades\Pdf::class,
-        // 'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
-        Spatie\Permission\PermissionServiceProvider::class,
     ])->toArray(),
 
 ];
-

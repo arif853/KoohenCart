@@ -18,7 +18,7 @@
             <div class="card mb-4">
                 <header class="card-header">
                     <h5 class="mb-3">Filter by</h5>
-                    <form id="orderFilterForm">
+                   <form id="orderFilterForm">
                         <div class="row order_live_search">
                             <div class="col-md-3 mb-4">
                                 <label for="Order" class="form-label">Order ID</label>
@@ -34,7 +34,6 @@
                             </div>
                         </div>
                     </form>
-                </form>
 
                 </header>
                     <div class="row gx-3 mt-4">
@@ -61,7 +60,8 @@
                         <table class="table table-hover" id="datatable">
                             <thead>
                                 <tr>
-                                    {{-- <td><input type="checkbox" id="select-all-checkbox"></td> --}}
+                                   <tr>
+                                    <!--<td><input type="checkbox" id="select-all-checkbox"></td>-->
                                     <th>ID</th>
                                     <th>Order No</th>
                                     <th>Customer </th>
@@ -71,11 +71,12 @@
                                     <th>Status</th>
                                     <th class="text-end"> Action </th>
                                 </tr>
+                                </tr>
                             </thead>
                             <tbody id="orderTableBody">
                                 @foreach ($completedOrders as $key => $order)
-                                <tr>
-                                    {{-- <td><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td> --}}
+                                 <tr>
+                                    <!--<td><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td>-->
                                     <td>{{$key+1}}</td>
                                     <td>
                                         <small >Order No.: #{{$order->id}}</small><br>
@@ -86,7 +87,7 @@
                                             <div class="info pl-3">
                                                 <h6 class="mb-0 title">{{$order->customer->firstName}} {{$order->customer->lastName}}</h6>
                                                 <a class="text-muted" href="tel:{{$order->customer->phone}}">{{$order->customer->phone}}</a><br>
-                                                <small class="text-muted" style="width:200px">{{$order->customer->billing_address}}</small>
+                                                <!--<small class="text-muted" style="width:200px;">{{$order->customer->billing_address}}</small>-->
                                             </div>
                                         </a>
                                     </td>
@@ -265,8 +266,8 @@
     //     //     var selectedColor = $('option:selected', '.order_status').css('color');
     //     //     $('.order_status').css('background-color', selectedColor);
     //     // // });
-
-        $('#orderFilterForm input').on('keyup change', function() {
+    
+     $('#orderFilterForm input').on('keyup change', function() {
             // Capture form input values
 
             var orderId = $('#order_id').val();

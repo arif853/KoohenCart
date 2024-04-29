@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use DB;
-use App\Models\Order;
 use App\Models\Campaign;
+use App\Models\Order;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Products;
 use App\Models\order_items;
-use Illuminate\Http\Request;
 use App\Models\Product_stock;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
+
 
 class DashboardController extends Controller
 {
@@ -28,10 +28,15 @@ class DashboardController extends Controller
         $campaign = Campaign::where('status','Published')->count();
 
         $orders = Order::where('status','pending')->latest()->get();
-        $sales = Order::where('status','completed')->sum('total');
+        
+        $total = Order::where('status','completed')->sum('total');
         $subtotal = Order::where('status','completed')->sum('subtotal') - Order::where('status','completed')->sum('discount');
+        $totalDue = Order::where('status', 'completed')->sum('total_due');
+        $totalPaid = Order::where('status', 'completed')->sum('total_paid');
+        
+        $purchaseStock = Product_stock::sum('inStock');
         $productInStock = Product_stock::sum('inStock') - Product_stock::sum('outStock');
-
+        
         $topOrderedProducts = order_items::with('product')
             ->whereHas('order', function ($query) {
                 $query->where('status', 'completed');
@@ -41,30 +46,43 @@ class DashboardController extends Controller
             ->orderByDesc('total_quantity')
             ->take(10) // Adjust the number of top products as needed
             ->get();
-
-        // Calculate total profit
-        $totalProfit = $this->calculateTotalProfit();
-        $totalLoss = $this->calculateTotalLoss();
+        $ordered_products = order_items::select('product_id', \DB::raw('SUM(quantity) as total_ordered'))
+                    ->groupBy('product_id')
+                    ->get();
+                   
+        // Calculate total puchase 
         $totalPurchase = 0;
-            foreach(Products::all() as $product)
-            {
-                $totalPurchase += $product->raw_price * $product->product_stocks->sum('inStock');
-            }
-
-        $paidOrders = Order::whereHas('transaction', function ($query) {
+        
+        foreach(Products::all() as $product)
+        {
+            $totalPurchase += $product->raw_price * $product->product_stocks->sum('inStock');
+        }
+        
+        $paidOrders = Order::where('status','completed')->whereHas('transaction', function ($query) {
             $query->where('status', 'paid');
         })->get();
 
         // Count the number of paid orders
         $paidOrdersCount = $paidOrders->count();
+        
+        $paidOrders = Order::where('status','completed')->whereHas('transaction', function ($query) {
+            $query->where('status', 'unpaid');
+        })->get();
 
-        // Retrieve the count of unread notifications for low stock products
-
-
+        // Count the number of paid orders
+        $unpaidOrdersCount = $paidOrders->count();
+        
+        // Calculate total profit
+        $totalProfit = $this->calculateTotalProfit();
+        $totalLoss = $this->calculateTotalLoss();
+        
+        // Calculate total profit
+        // $totalLoss = $this->calculateTotalLoss();
+        
         return view('admin.index',compact(
             'orders',
             'total_orders',
-            'sales',
+            'total',
             'products',
             'category',
             'customers',
@@ -74,45 +92,54 @@ class DashboardController extends Controller
             'subtotal',
             'productInStock',
             'topOrderedProducts',
+            'ordered_products',
             'totalProfit',
             'totalLoss',
             'totalPurchase',
-            'paidOrdersCount'
-        ));
-        // dd($unreadNotifications);
+            'purchaseStock',
+            'totalDue',
+            'totalPaid',
+            'paidOrdersCount',
+            'unpaidOrdersCount'
+            ));
     }
-
-
+    
     private function calculateTotalProfit()
     {
         // Get completed orders
-        $orders = Order::where('status', 'completed')->get();
-
+        $orders = Order::where('status', 'completed')->whereHas('transaction', function ($query) {
+            $query->where('status', 'paid');
+        })->get();
+    
         $totalProfit = 0;
-
+    
         foreach ($orders as $order) {
-            // Get the total amount paid for the order (subtotal - discount)
-            $sellingPrice = $order->subtotal - $order->discount;
-
             // Initialize total cost for products in this order
-            $PurchasePrice = 0;
-
+            $purchasePrice = 0;
+    
             // Calculate the total cost of products in the order
             foreach ($order->order_item as $orderItem) {
                 // Assuming 'cost_price' is the column name in the product table for the cost price
-                $PurchasePrice += $orderItem->product->raw_price * $orderItem->quantity;
+                $purchasePrice += $orderItem->product->raw_price * $orderItem->quantity;
             }
-
+    
+            // Calculate 1% of the total amount for courier
+            $onePercent = ($order->subtotal - $order->discount) * 0.01;
+            
+            // Selling price remains unchanged
+            $sellingPrice = ($order->subtotal - $order->discount) - $onePercent;
+    
             // Calculate profit for this order
-            $profit = $sellingPrice - $PurchasePrice;
-
+            $profit = $sellingPrice - $purchasePrice;
+    
             // Accumulate profit
             $totalProfit += $profit;
         }
-
+    
         return $totalProfit;
     }
 
+    
     private function calculateTotalLoss()
     {
         // Get completed orders
@@ -121,8 +148,11 @@ class DashboardController extends Controller
         $totalLoss = 0;
 
         foreach ($orders as $order) {
-            // Calculate the total amount paid for the order (subtotal - discount)
-            $SellingPrice = $order->subtotal - $order->discount;
+            // Calculate 1% of the total amount for courier
+            $onePercent = ($order->subtotal - $order->discount) * 0.01;
+            
+            // Selling price remains unchanged
+            $SellingPrice = ($order->subtotal - $order->discount) - $onePercent;
 
             // Initialize total cost for products in this order
             $purchasePrice = 0;
@@ -147,7 +177,6 @@ class DashboardController extends Controller
     }
 
 
-
     public function markNotificationAsRead(Request $request)
     {
         // Find the notification by its ID
@@ -168,4 +197,5 @@ class DashboardController extends Controller
         // Redirect the user back to the previous page or to a specific route
         return response()->json(200);
     }
+
 }

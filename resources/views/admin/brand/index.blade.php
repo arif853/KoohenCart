@@ -23,7 +23,29 @@
 <div class="row">
     <div class="col-lg-12 col-md-12">
         <div class="card mb-4">
-           <!-- card-header end// -->
+            <header class="card-header">
+                <div class="row gx-3">
+                    <div class="col-lg-4 mb-lg-0 mb-15 me-auto">
+                        <input type="text" placeholder="Search..." class="form-control">
+                    </div>
+                    {{-- <div class="col-lg-2 col-6">
+                        <div class="custom_select">
+                            <select class="form-select select-nice">
+                                <option selected>Categories</option>
+                                <option>Technology</option>
+                                <option>Fashion</option>
+                                <option>Home Decor</option>
+                                <option>Healthy</option>
+                                <option>Travel</option>
+                                <option>Auto-car</option>
+                            </select>
+                        </div>
+                    </div> --}}
+                    <div class="col-lg-2 col-6">
+                        <input type="date" class="form-control" name="">
+                    </div>
+                </div>
+            </header> <!-- card-header end// -->
             <div class="card-body">
                 <div class="row gx-3">
                     @if ($brands)
@@ -35,9 +57,9 @@
                                     <form class="deleteForm" action="{{ route('brands.destroy', $brand->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <a href="#" class="edit-brand" data-bs-toggle="modal" data-bs-target="#brandModalEdit" data-brand-id="{{$brand->id}}"><i class="far fa-edit"></i></a>
+                                        <a href="#" class="edit-brand" data-bs-toggle="modal" data-bs-target="#brandModalEdit" data-brand-id="{{$brand->id}}"><i class="fa-regular fa-pen-to-square"></i></a>
 
-                                        <a href="#" class="delete_brand" ><i class="far fa-trash-alt"></i></a>
+                                        <a href="#" class="delete_brand" ><i class="fa-regular fa-trash-can"></i></a>
                                     </form>
                                 </div>
                             </div>
@@ -82,7 +104,7 @@
                 }
             });
             $.ajax({
-                url: '{{route('brands.edit')}}',
+                url: '/dashboard/brands/edit',
                 method: 'GET',
                 data: {
                     id: brandId,
@@ -107,7 +129,7 @@
             const data = new FormData(this);
             // console.log(data);
             $.ajax({
-                url: '{{route('brands.update')}}',
+                url: '/dashboard/brands/update',
                 method: 'post',
                 data: data,
                 cache: false,

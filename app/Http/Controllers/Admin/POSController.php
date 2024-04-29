@@ -24,13 +24,14 @@ class POSController extends Controller
     public function index()
     {
         $products = Products::with([
-                            'sizes',
-                            'colors',
-                            'category',
-                            'product_price',
-                            'product_thumbnail',
-                            'product_stocks',
-                        ])->paginate(15);
+                'sizes',
+                'colors',
+                'category',
+                'product_price',
+                'product_thumbnail',
+                'product_stocks',
+            ])->get();
+
 
         foreach ($products as $product) {
             $stock = $product->product_stocks;
@@ -86,8 +87,8 @@ class POSController extends Controller
 
 
             $item_price = $request->input('price');
-            $color = $request->input('color');
-            $size = $request->input('size');
+            $color = $request->filled('color') ? $request->input('color') : null;
+            $size = $request->filled('size') ? $request->input('size') : null;
 
                 // $item_price = $product->regular_price;
             $item_slug = $product->slug;
@@ -249,7 +250,7 @@ class POSController extends Controller
                     'outStock' => \DB::raw("outStock + $cartItem->qty"), // Assuming outStock starts at 0
                 ]
             );
-
+            
             $product = Products::find($cartItem->id);
             $stock = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
             if ($stock < 5) {
@@ -275,8 +276,6 @@ class POSController extends Controller
             ];
         }
 
-
-
         transactions::create($transaction_data);
 
         Cart::instance('pos_cart')->destroy();
@@ -288,7 +287,7 @@ class POSController extends Controller
         // dd($order);
         return response()->json(route('pos.invoice', ['id' => $order->id]));
     }
-
+    
     public function orderInvoice($id)
     {
 

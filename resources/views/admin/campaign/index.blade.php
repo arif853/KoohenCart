@@ -83,10 +83,10 @@
                                                 <a href="#" class="btn btn-danger btn-sm font-sm  rounded delete">
                                                     <i class="material-icons md-delete_forever"></i> Delete
                                                 </a>
-                                                <a href="#" class="btn btn-info btn-sm font-sm  rounded view ml-2">
-                                                    <i class="material-icons md-visibility"></i>
-                                                    view
-                                                </a>
+                                                <!--<a href="#" class="btn btn-info btn-sm font-sm  rounded view ml-2">-->
+                                                <!--    <i class="material-icons md-visibility"></i>-->
+                                                <!--    view-->
+                                                <!--</a>-->
                                             </form>
                                         </td>
                                     </tr>
@@ -105,7 +105,7 @@
 
 </div>
 
-<h6>It is not the man who has too little, but the man who craves more, that is poor. - Seneca</h6>
+<!--<h6>It is not the man who has too little, but the man who craves more, that is poor. - Seneca</h6>-->
 
 @endsection
 @push('product')

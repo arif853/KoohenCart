@@ -18,15 +18,17 @@ class InventoryController extends Controller
 
         foreach ($products as $product) {
             $stock = $product->product_stocks;
+            
             foreach($product->product_stocks as $data){
-
+                
                 $product->purchase_date = $data->purchase_date;
             }
+
             $inStock = $stock->sum('inStock');
             $soldQuantity = $stock->sum('outStock');
 
             $product->inStock = $inStock;
-            $product->balance =  $inStock - $soldQuantity;
+            $product->balance =  $inStock - $soldQuantity;            
             $product->purchasePrice = $inStock * $product->raw_price;
             $product->purchaseBalance = $product->balance * $product->raw_price;
 
@@ -44,7 +46,7 @@ class InventoryController extends Controller
         foreach ($products as $product) {
             foreach ($product->sizes as $size) {
                 // Find the product stock for the current size
-                $stock = Product_stock::where('product_id', $product->id)->where('size_id', $size->id)->first();
+                $stock = $product->product_stocks->firstWhere('size_id', $size->id);
 
                 // Calculate in-stock, out-of-stock, and balance quantities
                 $inStock = $stock ? $stock->inStock : 0;
@@ -55,15 +57,13 @@ class InventoryController extends Controller
                 $size->inStock = $inStock;
                 $size->outStock = $outStock;
                 $size->balance = $balance;
-
             }
+            
             $product->totalInStock = $product->product_stocks->sum('inStock');
             $product->totalOutStock = $product->product_stocks->sum('outStock');
             $product->totalBalance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
-
         }
 
-        // dd($products);
         return view('admin.inventory.sizewise',['products' => $products]);
     }
 

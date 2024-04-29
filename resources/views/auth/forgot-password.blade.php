@@ -3,7 +3,7 @@
 @section('main')
 
 <main class="main">
-    
+
     <section class="pt-150 pb-150">
         <div class="container">
             <div class="row">
@@ -23,7 +23,7 @@
                                                 <span class="text-danger">{{ $errors->first('email') }}</span>
                                             @endif
                                         </div>
-                                     
+
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login"> Send Password Reset Link </button>
                                         </div>
@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
             </div>

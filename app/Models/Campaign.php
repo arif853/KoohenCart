@@ -19,7 +19,6 @@ class Campaign extends Model
         });
 
     }
-    
     public function camp_product()
     {
         return $this->hasMany(Camp_product::class);

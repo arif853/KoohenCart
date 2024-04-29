@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title','Pending Orders List')
+@section('title','Orders list')
 @section('content')
 
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Pending Order List </h2>
+            <h2 class="content-title card-title">Order List </h2>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="{{'/dashborad'}}">Dashboard</a></li>
@@ -18,7 +18,7 @@
             <div class="card mb-4">
                 <header class="card-header">
                     <h5 class="mb-3">Filter by</h5>
-                    <form id="orderFilterForm">
+                     <form id="orderFilterForm">
                         <div class="row order_live_search">
                             <div class="col-md-3 mb-4">
                                 <label for="Order" class="form-label">Order ID</label>
@@ -59,7 +59,7 @@
                     <div class="table-responsive">
                         <table class="table table-hover" id="datatable">
                             <thead>
-                                <tr>
+                                 <tr>
                                     <td><input type="checkbox" id="select-all-checkbox"></td>
                                     <th>ID</th>
                                     <th>Order No</th>
@@ -71,7 +71,7 @@
                                     <th class="text-end"> Action </th>
                                 </tr>
                             </thead>
-                            <tbody id="orderTableBody">
+                            <tbody id="pendingOrderTableBody">
                                 @foreach ($pendingOrders as $key => $order)
                                 <tr>
                                     <td><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td>
@@ -95,7 +95,7 @@
                                             {{$key+1}} .
                                             <span class="text-brand">{{$item->product->product_name}}</span>,
                                             <span > Size: {{$item->product_sizes->size_name}}</span>,
-                                            @if($item->product_colors)
+                                             @if($item->product_colors)
                                             <span> Color: {{$item->product_colors->color_name}}</span>,
                                             @endif
                                             <span>Quantiy: {{$item->quantity}}</span><br>
@@ -247,6 +247,11 @@
                 }
             });
         });
+
+        // // $('.order_status').change(function () {
+        //     var selectedColor = $('option:selected', '.order_status').css('color');
+        //     $('.order_status').css('background-color', selectedColor);
+        // // });
 
         $('#orderFilterForm input').on('keyup change', function() {
                 // Capture form input values

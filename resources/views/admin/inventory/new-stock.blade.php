@@ -27,10 +27,33 @@
                         <label for="purchase_date" class="form-label">Purchase Date</label>
                         <input type="date" class="form-control " id="purchase_date" name="purchase_date" >
                       </div>
+                        <style>
+                            .input-header {
+                            display: flex;
+                            justify-content: space-between;
+                            background-color: #f0f0f0; /* Change the background color as needed */
+                            padding: 8px; /* Adjust padding as needed */
+                            border-radius: 5px; /* Add border radius for rounded corners */
+                            margin-bottom: 5px; /* Add margin to separate the header from input fields */
+                            width: 300px;
+                        }
 
-                    <div class="col-md-6 mb-2">
-                        <label for="size" class="form-label">Size ---- Balance ---- New<span class="text-danger">*</span></label>
-                     <div id="input_container">
+                        .input-label {
+                            flex: 1; /* Distribute space evenly among labels */
+                            text-align: center; /* Center-align text */
+                            font-weight: bold; /* Add bold font weight */
+                        }
+                        </style>
+                    <div class="col-md-8 mb-2">
+                        <!--<label for="size" style="width: 350px;" class="form-label">Size -------- In -------- Out -------- Balance -------- New<span class="text-danger">*</span></label>-->
+                         <div class="input-header">
+                            <span class="input-label">Color</span>
+                            <span class="input-label">In</span>
+                            <span class="input-label">Out</span>
+                            <span class="input-label">Balance</span>
+                            <span class="input-label">New</span>
+                        </div>
+                     <div id="input_container" style="width: 300px;">
 
                      </div>
                     </div>

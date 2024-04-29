@@ -5,7 +5,7 @@
 @section('content')
 <div class="content-header">
     <div>
-        <h2 class="content-title card-title">Feature Category</h2>
+        <h2 class="content-title card-title">Feature Items</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="{{'/dashborad'}}">Dashborad</a></li>
@@ -277,7 +277,7 @@
             }
         });
         $.ajax({
-            url: '{{url('/dashboard/feature/category_feature/edit')}}',
+            url: '/dashboard/category_feature/edit',
             method: 'GET',
             data: {
                 id: itemId,
@@ -301,7 +301,7 @@
         const data = new FormData(this);
         console.log(data);
         $.ajax({
-            url: '{{url('/dashboard/feature/category_feature/update')}}',
+            url: '/dashboard/category_feature/update',
             method: 'post',
             data: data,
             cache: false,

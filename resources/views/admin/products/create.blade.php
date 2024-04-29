@@ -68,6 +68,7 @@
                                                     @foreach ($brands as $brand)
                                                     <option value="{{$brand->id}}">{{$brand->brand_name}}</option>
                                                     @endforeach
+
                                                 </select>
                                             </div>
                                             <div class="col-md-4 mb-4">
@@ -75,8 +76,9 @@
                                                 <select class="select-nice" id="product_category" name="product_category"  required>
                                                     <option value="0">Select a Category....</option>
                                                     @foreach ($categories as $category)
-                                                        <option value="{{$category->id}}">{{$category->category_name}}</option>
+                                                    <option value="{{$category->id}}">{{$category->category_name}}</option>
                                                     @endforeach
+
                                                 </select>
                                             </div>
                                             <div class="col-md-4  mb-3">
@@ -86,7 +88,7 @@
                                                     <input type="text" placeholder="Type here" class="form-control tag-input" spellcheck="false">
                                                     <div class="tag-details d-flex justify-content-between">
                                                         <p><span>10</span> tags are remaining</p>
-                                                        <button><i class="fa fa-times"></i></button>
+                                                        <button><i class="fa-solid fa-times"></i></button>
                                                     </div>
                                                     <ul class="tag-content">
                                                     </ul>
@@ -110,7 +112,7 @@
                                             </div> --}}
 
                                             <div class="col-lg-6 mb-4">
-                                                <label class="form-label">Product Thumbnail <small class="text-success">(Two Thumbnail Image only.)</small></label>
+                                                <label class="form-label">Product Thumbnail<span class="text-danger">*</span> <small class="text-success">(Two Thumbnail Image only.)</small></label>
                                                 <input class="form-control" type="file" multiple name="product_thumbnail[]" id="imageInput3">
                                                 {{-- <span><small>(Add multiple image, use ctrl or cmd key to select multiple image.)</small></span> --}}
                                                 <div id="imagePreview3" class="row mt-4">
@@ -118,7 +120,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 mb-4">
-                                                <label class="form-label">Product images <small class="text-success">(Select product all images.)</small></label>
+                                                <label class="form-label">Product images<span class="text-danger">*</span> <small class="text-success">(Select product all images.)</small></label>
                                                 <input class="form-control" type="file" multiple name="product_image[]" id="imageInput2">
                                                 <span><small>(Add multiple image, use ctrl or cmd key to select multiple image.)</small></span>
 
@@ -179,7 +181,7 @@
                                         <div class="row mt-2">
                                             <div class="col-lg-4">
                                                 {{-- <label class="pr-1" for="featurename-1">Name 1: </label> --}}
-                                                <input class="form-control" type="text" id="featurename-1" name="featurename[1]" value="Type Of Packing : " required>
+                                                <input class="form-control" type="text" id="featurename-1" name="featurename[1]" value="Fabric Type: " required>
                                             </div>
                                             <div class="col-lg-8">
                                                 {{-- <label class="pr-1" for="featurevalue-1">Value 1: </label> --}}
@@ -355,10 +357,10 @@
             <div class="right-bar" id="right_bar">
                 <div class="card mb-4">
                     <div class="card-body">
-                        {{-- <div class="mb-4">
-                            <label class="form-label">Stock<span class="text-danger">*</span></label>
-                           <input type="number" name="stock" class="form-control" id="stock" placeholder="Add Stock" required>
-                        </div> --}}
+                        <!--<div class="mb-4">-->
+                        <!--    <label class="form-label">Stock<span class="text-danger">*</span></label>-->
+                        <!--   <input type="number" name="stock" class="form-control" id="stock" placeholder="Add Stock" required>-->
+                        <!--</div>-->
                         <div class="mb-4">
                             <label class="form-label">Status<span class="text-danger">*</span></label>
                             <select class="select-nice" name="status" required>
@@ -368,9 +370,9 @@
                         </div>
                         <div class="mb-4">
                             <label for="product_sku" class="form-label">SKU</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_sku" name="sku" readonly>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_sku" name="sku">
                         </div>
-
+                        
                         <hr>
                         <div class="mb-4">
                             <label class="form-label">Warranty Type</label>
@@ -384,7 +386,7 @@
                             <label class="form-label">Delivery Type</label>
                             <select name="delivery_type" id="delivery_type" class="form-select" name="delivery_type">
                                 <option value="0">Select Delivery </option>
-                                <option value="1">Cash on delivery avilable</option>
+                                <option value="1" selected>Cash on delivery avilable</option>
                                 <option value="2">Cash on delivery not avilable</option>
                             </select>
                         </div>
@@ -392,7 +394,7 @@
                             <label class="form-label">EMI</label>
                             <select class="form-select" name="emi">
                                 <option value="Available">Available</option>
-                                <option value="Not Available">Not Available</option>
+                                <option value="Not Available" selected>Not Available</option>
                             </select>
                         </div>
 
@@ -473,7 +475,7 @@
 
             const image = document.createElement('img');
             const removeButton = document.createElement('button');
-
+            
             // Set up the remove button
             removeButton.innerHTML = '<i class="fa-solid fa-times"></i>';
             removeButton.className = 'btn btn-danger btn-delete';
@@ -482,6 +484,7 @@
                 previewContainer.removeChild(imageDiv);
             });
 
+           
             // Set up the image
             reader.onload = function (e) {
                 image.src = e.target.result;
@@ -492,7 +495,6 @@
             // Append image and remove button to imageDiv
             imageDiv.appendChild(image);
             imageDiv.appendChild(removeButton);
-
             // Append imageDiv to previewContainer
             previewContainer.appendChild(imageDiv);
         }
@@ -524,18 +526,19 @@
                     // Remove the corresponding imageDiv when the remove button is clicked
                     previewContainer.removeChild(imageDiv);
                 });
-
+          
                 // Set up the image
                 reader.onload = function (e) {
                     image.src = e.target.result;
                 };
-
+    
+              
                 reader.readAsDataURL(input.files[i]);
 
                 // Append image and remove button to imageDiv
                 imageDiv.appendChild(image);
                 imageDiv.appendChild(removeButton);
-
+                
                 // Append imageDiv to previewContainer
                 previewContainer.appendChild(imageDiv);
             }
@@ -548,4 +551,3 @@
 </script>
 <script src="{{asset('admin/assets/js/script.js')}}"></script>
 @endsection
-

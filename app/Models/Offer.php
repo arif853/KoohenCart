@@ -15,8 +15,7 @@ class Offer extends Model
         'offer_percent',
         'to_date',
         'from_date',
-        'day',
-        'slug'
+        'day'
     ];
     public function products()
     {

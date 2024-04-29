@@ -17,10 +17,10 @@
                         <thead>
                         <tr>
                             <th scope="col" class="text-center">Order date</th>
-                            <th scope="col" class="text-center" >Product</th>
+                            <th scope="col" class="text-center" width=30%>Product</th>
                             <th scope="col" class="text-center">Varient</th>
                             <th scope="col" class="text-center">Qty</th>
-                            <th scope="col" class="text-center">Amount</th>
+                            <th scope="col" class="text-center">Price</th>
                             <th scope="col" class="text-center">Status</th>
                             <th scope="col" class="text-center" width=20%> Action</th>
                         </tr>
@@ -91,11 +91,11 @@
                                                 <p class="left">{{ $orderItem->quantity }} x {{ $orderItem->price * $orderItem->quantity}}  </p>
                                             </li>
                                             @endforeach
-
                                         </ul>
                                     </td>
                                     <td class="text-start">
                                        <span> = {{$order->total}}</span>
+                                       
                                     </td>
                                     <td class="text-center">
                                         @if($order->status == 'pending')

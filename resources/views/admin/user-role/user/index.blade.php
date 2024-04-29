@@ -66,6 +66,19 @@
                                 @endif
                             </td>
                             <td>
+                                @if($user->hasRole(['Super Admin']))
+                                <form class="deleteForm" action="{{ url('/dashboard/users/'.$user->id.'/delete') }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
+                                    data-bs-toggle="modal" data-bs-target="#userEditModal" data-user-id="{{ $user->id}}">
+                                        <i class="material-icons md-edit"></i> Edit
+                                    </a>
+                                    <a href="#" class="btn btn-sm font-sm btn-light rounded delete d-none">
+                                        <i class="material-icons md-delete_forever"></i> Delete
+                                    </a>
+                                </form>
+                                @else
                                 <form class="deleteForm" action="{{ url('/dashboard/users/'.$user->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
@@ -77,6 +90,8 @@
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>
                                 </form>
+                                @endif
+
                             </td>
                         </tr>
                         @endforeach
@@ -142,7 +157,6 @@
         });
 
         const data = new FormData(this);
-        console.log(data);
         $.ajax({
             url: "{{url('dashboard/users/store')}}",
             method: 'post',
@@ -155,10 +169,10 @@
                     // $("#sliderEditModal").modal('hide');
                     location.reload();
                 }
-                else{
-                    $.Notification.autoHideNotify('danger', 'top right', 'Danger', res);
-
-                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $.Notification.autoHideNotify('danger', 'top right', 'Error', xhr.responseJSON.errors.join('<br>'));
+                $("#userModal").modal('hide');
             }
         })
     });
@@ -190,6 +204,10 @@
                     $.Notification.autoHideNotify('danger', 'top right', 'Danger', res);
 
                 }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $.Notification.autoHideNotify('danger', 'top right', 'Error', xhr.responseJSON.errors.join('<br>'));
+                $("#userEditModal").modal('hide');
             }
         })
     });

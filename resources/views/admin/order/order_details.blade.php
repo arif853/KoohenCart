@@ -2,38 +2,6 @@
 @section('title','Orders-'.$order->id)
 @section('content')
 
-<style>
-    .icontext span {
-        font-size: 12px;
-        font-weight: 400;
-        display: inline-block;
-    }
-    .color-select{
-        background-color: #f4f5f9;
-        border: 2px solid #f4f5f9;
-        font-size: 13px;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        padding-left: 16px;
-        color: #4f5d77;
-        width: 80px;
-        border-radius: 4px;
-        height: 36px;
-    }
-    .size-select{
-        background-color: #f4f5f9;
-        border: 2px solid #f4f5f9;
-        font-size: 13px;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        padding-left: 16px;
-        color: #4f5d77;
-        width: 80px;
-        border-radius: 4px;
-        height: 36px;
-    }
-</style>
-
     <div class="content-header">
         <div>
             <h2 class="content-title card-title">Order detail</h2>
@@ -53,15 +21,16 @@
                     <small class="text-muted">Order ID: {{$order->id}}</small>
                 </div>
                 <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                    {{-- <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                        <option>Change status</option>
-                        <option>Awaiting payment</option>
-                        <option>Confirmed</option>
-                        <option>Shipped</option>
-                        <option>Delivered</option>
-                    </select> --}}
-                    {{-- <a class="btn btn-primary" href="#">Save</a> --}}
-                    <a class="btn btn-secondary print ms-2" href="{{ url('/orders/invoice/'.$order->id) }}"><i class="icon material-icons md-print"></i></a>
+                    <!--<select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">-->
+                    <!--    <option>Change status</option>-->
+                    <!--    <option>Awaiting payment</option>-->
+                    <!--    <option>Confirmed</option>-->
+                    <!--    <option>Shipped</option>-->
+                    <!--    <option>Delivered</option>-->
+                    <!--</select>-->
+                    <!--<a class="btn btn-primary" href="#">Save</a>-->
+                    <a class="btn btn-secondary print ms-2" target="_blank"  href="{{ url('/orders/invoice/'.$order->id) }}"><i class="icon material-icons md-print"></i></a>
+
                 </div>
             </div>
         </header> <!-- card-header end// -->
@@ -75,7 +44,9 @@
                         <div class="text">
                             <h6 class="mb-1">Customer</h6>
                             <p class="mb-1">
-                                {{$order->customer->firstName}} {{$order->customer->lastName}} <br> {{$order->customer->email}} <br> {{$order->customer->phone}}
+                                {{$order->customer->firstName}} {{$order->customer->lastName}}  <br>
+                                    {{$order->customer->billing_address}}
+                                <br> {{$order->customer->phone}}<br> {{$order->customer->email}} 
                             </p>
                             <a href="{{route('customer.profile', ['id' => $order->customer->id])}}">View profile</a>
                         </div>
@@ -88,30 +59,60 @@
                         </span>
                         <div class="text">
                             <h6 class="mb-1">Order info</h6>
-
-                            <p class="mb-1">
+                            <style>
+                                .icontext span {
+                                    font-size: 12px;
+                                    font-weight: 400;
+                                    display: inline-block;
+                                }
+                                    .color-select{
+                                        background-color: #f4f5f9;
+                                        border: 2px solid #f4f5f9;
+                                        font-size: 13px;
+                                        -webkit-box-shadow: none;
+                                        box-shadow: none;
+                                        padding-left: 16px;
+                                        color: #4f5d77;
+                                        width: 140px;
+                                        border-radius: 4px;
+                                        height: 36px;
+                                    }
+                                    .size-select{
+                                        background-color: #f4f5f9;
+                                        border: 2px solid #f4f5f9;
+                                        font-size: 13px;
+                                        -webkit-box-shadow: none;
+                                        box-shadow: none;
+                                        padding-left: 16px;
+                                        color: #4f5d77;
+                                        width: 80px;
+                                        border-radius: 4px;
+                                        height: 36px;
+                                    }
+                            </style>
+                            <p class="mb-1" >
                                 Shipping: Global Shipping <br> Pay method: {{$order->transaction->mode}} <br>
-                                Status:
+                                Order Status:
                                 @if($order->status == 'pending')
-                                <span class="badge rounded-pill alert-primary">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-primary" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'confirmed')
-                                <span class="badge rounded-pill alert-info ">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-info " style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'shipped')
-                                <span class="badge rounded-pill alert-warning">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-warning" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'delivered')
-                                <span class="badge rounded-pill alert-success">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-success" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'completed')
-                                <span class="badge rounded-pill alert-success">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-success" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'returned')
-                                <span class="badge rounded-pill alert-danger">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-danger" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'cancelled')
-                                <span class="badge rounded-pill alert-danger">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-danger" style="text-transform: uppercase;">{{$order->status}}</span>
                                 @endif
                             </p>
                             {{-- <a href="#">Download info</a> --}}
@@ -136,14 +137,12 @@
                         </div>
                     </article>
                         @endif
-
                 </div> <!-- col// -->
             </div> <!-- row // -->
             <div class="row">
-                <div class="col-lg-7">
-                    {{-- <form id="orderUpdateForm"> --}}
-                        <div class="table-responsive">
-                            <table class="table">
+                <div class="col-lg-8">
+                    <div class="table-responsive">
+                        <table class="table">
                                 <thead>
                                     <tr>
                                         <th width="10%">
@@ -173,17 +172,18 @@
                                                     <img src="{{asset('storage/product_images/'. $product->product_images->first()->product_image)}}" width="40" height="40" class="img-xs" alt="Item">
                                                 </div>
                                                 <div class="info">
-                                                    <span class="product-name" >{{$product->product_name}},</span>
+                                                    <span class="product-name" >{{$product->product_name}}</span>,
 
                                                     <br>
                                                     @if ($product->color)
-                                                    <span class="product-color">{{$product->color->color_name}}</span>
+                                                    <span class="product-color">{{$product->color->color_name}}</span>,
                                                     @endif
                                                 <br>
                                                     @if($product->size)
                                                     <span class="product-size">{{$product->size->size_name}}</span>
                                                     @endif
                                                 </div>
+                                                <!--</div>-->
                                             </span>
                                         </td>
                                         <td>৳{{$product->price}} </td>
@@ -230,38 +230,13 @@
 
                                 </tbody>
                             </table>
-                        </div> <!-- table-responsive// -->
-                    {{-- </form> --}}
-                    <a class="btn btn-primary" href="{{route('order.track', ['id' => $order->id])}}">View Order Tracking</a>
+                    </div> <!-- table-responsive// -->
+                    <!--<a class="btn btn-primary" href="{{route('order.track', ['id' => $order->id])}}">View Order Tracking</a>-->
                 </div> <!-- col// -->
-                <div class="col-lg-1"></div>
-                <div class="col-lg-4">
-                    <div class="box shadow-sm bg-light">
-                        <h6 class="mb-15">Payment info</h6>
-                        <p>
-                            @if($order->transaction->mode == 'cod')
-                            Cash On delivery <br>
-                            Charge: {{$order->delivery_charge}}
-                            <br>
-                            @else
-                                Master Card **** **** 4768 <br>
-                                Business name: Grand Market LLC <br>
-                                Phone: +1 (800) 555-154-52
-                            @endif
-                        </p>
-                    </div>
-                    <div class="h-25 pt-4">
-                        <div class="mb-3">
-                            <label>Notes</label>
-                            <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
-                        </div>
-                        <button class="btn btn-primary">Save note</button>
-                    </div>
-                </div> <!-- col// -->
+
             </div>
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
-
 <!--New item add Modal -->
 <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="newItemModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -319,13 +294,10 @@
         </div>
     </div>
 </div>
-
 @endsection
 @push('order_status')
 <script>
-$(document).ready(function() {
-
-    $('.select-me').select2();
+    $(document).ready(function() {
     // Define a variable to store original values
     var originalValues = {};
 
@@ -352,9 +324,9 @@ $(document).ready(function() {
         $row.find('.product-color').replaceWith($('<select>').addClass('color-select colorId mt-2').append($('<option>').text(originalValues.color)));
         $row.find('.product-size').replaceWith($('<select>').addClass('size-select sizeId mt-2').append($('<option>').text(originalValues.size)));
 
-         // Fetch color options
+        // Fetch color options
          $.ajax({
-            url: '{{url('/get-color-options')}}', // Replace with your route URL
+            url: '/get-color-options', // Replace with your route URL
             type: 'GET',
             success: function(response) {
                 var colorSelect = $row.find('.color-select');
@@ -374,7 +346,7 @@ $(document).ready(function() {
 
         // Fetch size options
         $.ajax({
-            url: '{{url('/get-size-options')}}', // Replace with your route URL
+            url: '/get-size-options', // Replace with your route URL
             type: 'GET',
             success: function(response) {
                 var sizeSelect = $row.find('.size-select');
@@ -392,8 +364,8 @@ $(document).ready(function() {
             }
         });
 
-        //$row.find('td:nth-child(3)').html($('<input>').addClass('form-control price').attr('type', 'text').val(originalValues.price));
-        //$row.find('td:nth-child(4)').html($('<input>').addClass('form-control quantity').attr('type', 'number').attr('min',1).val(originalValues.quantity));
+        // $row.find('td:nth-child(3)').html($('<input>').addClass('form-control price').attr('type', 'text').val(originalValues.price));
+        // $row.find('td:nth-child(4)').html($('<input>').addClass('form-control quantity').attr('type', 'number').attr('min',0).val(originalValues.quantity));
 
         $('#delivery_charge').html($('<input>').addClass('color-select deliveryCharge').attr('type','number').val(originalValues.deliveryCharge));
         $('#discount').html($('<input>').addClass('color-select discount').attr('type','number').val(originalValues.discount));
@@ -412,22 +384,11 @@ $(document).ready(function() {
 
             $row.find('td:nth-child(5)').text('৳' + newTotal);
             $row.find('td:nth-child(5)').append($('<input>').addClass('total').attr('type', 'hidden').attr('min',0).val(newTotal));
-
-            var subtotal = originalValues.subtotal;
-
-            if(newTotal < originalValues.total)
-            {
-                subtotal -= newTotal;
-            }
-            else{
-                subtotal += newTotal;
-            }
-            
             // subtotal with hidden field
-            $("#subtotal").text('৳' + subtotal);
+            $("#subtotal").text('৳' + newTotal);
             $("#subtotal").append($('<input>').addClass('subtotal').attr('type', 'hidden').attr('min',0).val(newTotal));
             // grandtotal value with hidden field
-            var grandTotal = subtotal + originalValues.deliveryCharge - originalValues.discount;
+            var grandTotal = newTotal + originalValues.deliveryCharge - originalValues.discount;
             $("#g_total").text('৳' + grandTotal);
             $("#g_total").append($('<input>').addClass('g_total').attr('type', 'hidden').attr('min',0).val(grandTotal));
             // due value with hidden field
@@ -454,7 +415,7 @@ $(document).ready(function() {
 
         $(document).on('input', '.deliveryCharge, .discount', function() {
             var d_charge = parseInt($('.deliveryCharge').val(), 10);
-            // console.log(d_charge);
+            console.log(d_charge);
             var discount = parseInt($('.discount').val(), 10);
             // console.log(discount);
             var subtotal = parseInt($('#subtotal').text().trim().replace('৳', ''), 10);
@@ -551,7 +512,7 @@ $(document).ready(function() {
         // Get delivery charge, discount, and total paid
         formData.deliveryCharge = $('.deliveryCharge').val();
         formData.discount = $('.discount').val();
-        formData.totalPaid = $('.totalPaid').val() || originalValues.paidAmount;
+        formData.totalPaid = $('.totalPaid').val();
 
         // Get grand total and total due
         formData.grandTotal = $('#g_total').find('.g_total').val() || originalValues.gTotal;
@@ -612,8 +573,9 @@ $(document).ready(function() {
             }
         });
     }
-
-    $('.btn-delete').on('click',function(event){
+    
+    
+        $('.btn-delete').on('click',function(event){
         event.preventDefault();
         var orderId = $('#orderId').val();
         var orderItemId = $(this).data('order-item-id');
@@ -646,8 +608,8 @@ $(document).ready(function() {
     });
 
     function deleteOrderItem(orderId, orderItemId) {
-        // console.log(orderId);
-        // console.log(orderItemId);
+        console.log(orderId);
+        console.log(orderItemId);
         $.ajax({
             url: '{{route('orderItem.delete')}}', // Replace with your server endpoint
             type: 'POST',
@@ -658,6 +620,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 // Handle success response
+                console.log(response);
                 if (response.status === 'success') {
                     // Optionally, update the UI to reflect the deletion
                     // For example, remove the deleted order item from the DOM
@@ -723,8 +686,8 @@ $(document).ready(function() {
     $('#newprice').on('input', function() {
         calculateSubtotal();
     });
-
-    // Event listener for quantity input change
+    
+        // Event listener for quantity input change
     $('#newqty').on('input', function() {
         calculateSubtotal();
     });

@@ -81,11 +81,10 @@ class CustomerDashboardController extends Controller
      */
     public function newShipping(Request $request)
     {
-
+        
         $request->validate([
             'customer_id' => 'exists:customers,id',
             'shipper_fname' => 'required|string',
-            'shipper_lname' => 'required|string',
             'shipper_phone' => 'required|string',
             'shipper_email' => 'required|email',
             'shipper_address' => 'required|string',
@@ -112,11 +111,9 @@ class CustomerDashboardController extends Controller
     public function shipping_update(Request $request, string $id)
     {
         $shipping = shipping::find($id);
-
         $request->validate([
-            'customer_id' => 'exists:customers,id',
+            // 'customer_id' => 'exists:customers,id',
             'shipper_fname' => 'required|string',
-            'shipper_lname' => 'required|string',
             'shipper_phone' => 'required|string',
             'shipper_email' => 'required|email',
             'shipper_address' => 'required|string',
@@ -124,7 +121,7 @@ class CustomerDashboardController extends Controller
             's_district' => 'required|exists:districts,id',
             's_area' => 'required|exists:postcodes,id',
         ]);
-
+        
         $shipping->update([
             'first_name' => $request->shipper_fname,
             'last_name' => $request->shipper_lname,
@@ -161,6 +158,7 @@ class CustomerDashboardController extends Controller
         }
 
     }
+    
     public function userNameUpdate(Request $request, string $id)
     {
         $request->validate([
@@ -196,6 +194,7 @@ class CustomerDashboardController extends Controller
         return redirect()->back()->with('success', 'User updated successfully');
     }
 
+
     public function orderReturn(Request $request)
     {
         $orderId = $request->orderId;
@@ -218,7 +217,9 @@ class CustomerDashboardController extends Controller
         // Update the OrderStatus table
         $statusColumn = $newStatus . '_date_time';
         Orderstatus::updateOrCreate(['order_id' => $orderId], ['status' => $newStatus, $statusColumn => Carbon::now()]);
+
         Session::flash('success','Your order has been returned. Someone will conatct with you soon.');
+
         return response()->json([
             'success' => true,
             'message' => 'Order status updated ' . $previousStatus . ' to ' . $newStatus . ' successfully']);
@@ -238,6 +239,4 @@ class CustomerDashboardController extends Controller
     {
         //
     }
-
-
 }

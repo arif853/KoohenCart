@@ -1,6 +1,6 @@
 
-
 <div>
+
     <div class="text-center">
         <h3 class="section-title section-title-1 mb-20"><span>All Products</span> </h3>
     </div>
@@ -12,26 +12,28 @@
                     <div class="product-img-action-wrap">
                         <div class="product-img product-img-zoom">
                             <a href="{{route('product.detail',['slug'=>$product->slug])}}">
+                               
                                 @foreach ($product->product_thumbnail as $index => $image)
                                 @if($index == 0)
                                 <img class="default-img"
                                 src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail[0]->product_thumbnail)}}" alt="{{$product->slug}}">
                                 @endif
-
+    
                                 @if($index == 1)
                                 <img class="hover-img"
                                 src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail[1]->product_thumbnail)}}" alt="{{$product->slug}}">
                                 @endif
                                 @endforeach
+                                
                             </a>
                         </div>
+                       
                         <div class="product-action-1">
                             <a aria-label="Quick view" class="action-btn hover-up quickview" data-bs-toggle="modal" data-bs-target="#quickViewModal" data-product-slug="{{$product->slug}}">
                                 <i class="fi-rs-eye"></i></a>
-                            <a aria-label="Add To Wishlist" wire:click.prevent="AddToWishlist({{$product->id}})" onclick="wishNotify()" class="action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
+                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#" wire:click.prevent="AddToWishlist({{$product->id}})" onclick="wishNotify()"><i class="fi-rs-heart"></i></a>
                         </div>
-
-                            @php
+                        @php
                             $flag = 0;
                             $thisProduct = $product->id;
                             if ($campaign) {
@@ -62,10 +64,7 @@
                     <div class="product-content-wrap text-center">
                         {{-- <h2><a href="product-details.php">Colorful Pattern Shirts</a></h2> --}}
                         <h2><a href="{{route('product.detail',['slug'=>$product->slug])}}">{{$product->product_name}}</a></h2>
-
-
-
-                        <div class="product-price">
+                          <div class="product-price">
                             @if($flag == 1)
                             <span>৳{{$camp_price}} </span>
                             <span class="old-price">৳{{$product->regular_price}}</span>
@@ -79,6 +78,7 @@
 
                             @endif
                         </div>
+                        
                         <div>
                             @if($product->product_stocks)
                                 @php
@@ -103,7 +103,6 @@
         <!--End product-grid-4-->
     </div>
     <!--End tab-content-->
-
     <div class="row mt-30">
         <div class="col-12 text-center mb-4">
             <span wire:loading.delay>
@@ -112,27 +111,27 @@
                     Loading...
                   </button>
             </span>
-
         </div>
         <div class="col-12 text-center" wire:loading.remove>
             <p class="wow fadeIn animated">
                 <a wire:click.prevent="loadMore()" class="btn btn-brand text-white btn-shadow-brand hover-up btn-lg" href="#">Load More</a>
+                
             </p>
         </div>
     </div>
 
 
-<script>
+   <script>
 
-       function cartNotify(){
-           $.Notification.autoHideNotify('success', 'top right', 'Success', 'Product added to cart successfully');
-       }
+        function cartNotify(){
+            $.Notification.autoHideNotify('success', 'top right', 'Success', 'Product added to cart successfully');
+        }
+        
+         function wishNotify(){
+            $.Notification.autoHideNotify('success', 'bottom right', 'Success', 'Product added to wishlist successfully');
+        }
 
-       function wishNotify(){
-           $.Notification.autoHideNotify('success', 'bottom right', 'Success', 'Product added to wishlist successfully');
-       }
-
-</script>
+    </script>
 
 </div>
 

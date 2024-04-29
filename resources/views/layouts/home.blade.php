@@ -2,17 +2,16 @@
 <html class="no-js" lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-
+    
     @php
         $tags = DB::table('product_tags')->distinct()->pluck('tag')->implode(', ');
         $description = DB::table('settings')->pluck('company_short_details')->first();
         // echo $description;
     @endphp
+    <meta charset="utf-8">
     <meta name="description" content="{{$description}}">
     <meta name="keywords" content="{{$tags}}">
-    <meta name=”robots” content="index, follow">
+    <meta name="robots" content="index, follow">
     <meta name="author" content="{{ config('app.name') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -33,11 +32,13 @@
     <meta name="twitter:title" content="{{ config('app.name') }}">
     <meta name="twitter:description" content="{{$description}}">
     <meta name="twitter:image" content="{{asset('frontend/assets/imgs/favicon_128x128.ico')}}">
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title') - Koohen | YOUR ULTIMATE LIFESTYLE</title>
-
+    <meta name="google-site-verification" content="JQkHKHzfb1bWvZnjgXV4fjWaaHeX8G6uY4SsOfP3WTg" />
+    <!--কহেন-->
+    <title>@yield('title') - {{ config('app.name') }} | YOUR ULTIMATE LIFESTYLE</title>
+    
+    
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('frontend/assets/imgs/favicon_128x128.ico')}}">
     <!--Font-->
@@ -51,16 +52,27 @@
 
     {{-- sweet alert --}}
     <link rel="stylesheet" href="{{asset('admin/assets/css/vendors/sweetalert2.min.css')}}">
+
     <!-- Template CSS -->
-    <link rel="stylesheet" href="{{asset('/')}}frontend/assets/css/main.css?v=3.4">
+    <link rel="stylesheet" href="{{asset('')}}frontend/assets/css/main.css?v=3.4">
     <link rel="stylesheet" href="{{asset('frontend/assets/css/responsive.css')}}">
     <link rel="stylesheet" href="{{asset('frontend/assets/css/helper.css')}}">
-
+    
     <!--Font-->
     @livewireStyles
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MTWGTJB6');</script>
+    <!-- End Google Tag Manager -->
+    @stack('viewItem')
 </head>
 
 <body>
+
 
     <header class="header-area header-style-4 header-height-2">
         <!--Top Header-->
@@ -68,19 +80,19 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-xl-3 col-lg-4">
-                        <div class="header-info">
+                       <div class="header-info">
                             @php
                                 $settings = DB::table('settings')->first();
                             @endphp
                             <ul>
-                                <li><i class="far fa-phone-alt"></i> <a href="tel:{{$settings->secondary_mobile_no}}">{{$settings->secondary_mobile_no}}</a></li>
-                                <li><i class="fal fa-envelope"></i><a  href="mailto:{{$settings->email}}">{{$settings->email}}</a></li>
+                                <li><i class="far fa-phone-alt"></i> <a href="tel:<?php echo $settings->secondary_mobile_no?>">{{$settings->secondary_mobile_no}}</a></li>
+                                <li><i class="fal fa-envelope"></i><a  href="mailto:<?php echo $settings->email?>">{{$settings->email}}</a></li>
                             </ul>
                         </div>
                     </div>
                     <!--Top Offer Notice-->
                     <div class="col-xl-6 col-lg-4">
-                        <div class="text-center">
+                         <div class="text-center">
                             <div id="news-flash" class="d-inline-block">
                                 @php
                                     $offers = DB::table('offers')->get();
@@ -119,7 +131,24 @@
                                         $user = Auth::guard('customer')->user();
                                         $fullName = $user->customer->firstName . ' ' . $user->customer->lastName;
                                         @endphp
-                                    <a class="customer_info " href="{{route('customer.dashboard')}}" >{{ $fullName }}</a>
+                                        <a class="customer_info " href="{{route('customer.dashboard')}}" >{{ $fullName }}</a>
+                                        {{-- <div class="dropdown">
+                                            <a class="customer_info dropdown-toggle" href="#"  id="dropdownMenuButton"
+                                            data-mdb-toggle="dropdown"
+                                            aria-expanded="false">{{ $fullName }}</a>
+
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item" href="{{route('customer.dashboard')}}">Profile</a></li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#" onclick="document.getElementById('logout_form').submit();">Logout</a>
+                                                    <form method="post" id="logout_form" action="{{ route('customer.logout') }}">
+                                                        @csrf
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                          </div> --}}
+
+
                                     @else
                                         {{-- Show login/register links --}}
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#login">Log In / </a>
@@ -133,29 +162,18 @@
                 </div>
             </div>
         </div>
-        <!--Top Header-->
-        {{-- <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
-            <div class="container">
-                <div class="header-wrap">
-                    <div class="logo logo-width-1">
-                        <a href="index.html"><img src="{{asset('')}}frontend/assets/imgs/Kohen_Logo_Main.png" alt="logo"></a>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         <div class="header-bottom header-bottom-bg-color sticky-bar" style="padding-top: 10px; padding-bottom: 4px;">
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="{{route('home')}}"><img src="{{asset('')}}frontend/assets/imgs/Kohen_Logo_Main.png" alt="logo"></a>
+                        <a href="{{route('home')}}"><img src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo"></a>
                     </div>
-                    <div class="logo logo-width-1 d-block d-sm-none">
+                     <div class="logo logo-width-1 d-block d-sm-none">
                         <a href="{{route('home')}}"><img src="{{asset('')}}frontend/assets/imgs/Kohen_Logo_Main.png" alt="logo"></a>
                     </div>
 
                     <div class="header-nav d-none d-lg-flex" id="header-nav">
-
-                        <!--Main Menu Bar-->
+                        
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
                             <nav>
                                 <ul>
@@ -176,14 +194,13 @@
                         </div>
                         <!--Main Menu Bar-->
                     </div>
-                    <style>
-
-                    </style>
+                    
+                     
+                    
                     <div class="hotline d-none d-lg-block">
                         <div class="header-action-2 header">
-                            {{-- <span id="form-open" class="search-toggle">
-                                <i class="fal fa-search"></i>
-                            </span> --}}
+                           
+                             
                             <div class="searchbar">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                                  <div class="togglesearch">
@@ -212,16 +229,55 @@
                                 </div>
 
                             </div>
-
+                             
                             @livewire('wishlist-icon-component')
 
                             @livewire('cart-icon-component')
 
+                                {{-- <div class="header-action-icon-2">
+                                    <a class="mini-cart-icon" href="#">
+                                        <img alt="Evara" src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-cart.svg">
+                                        <span class="pro-count blue">{{Cart::count()}}</span>
+                                    </a> --}}
+
+                                    {{-- @if(Cart::count() > 0)
+                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
+                                        <ul>
+                                            @foreach (Cart::content() as $item)
+                                            <li>
+                                                <div class="shopping-cart-img">
+                                                    <a href="{{route('shop.cart')}}"><img alt="{{$item->options->slug}}" src="{{asset('storage/product_images/').$item->options->image->product_image}}"></a>
+                                                </div>
+                                                <div class="shopping-cart-title">
+                                                    <h4><a href="{{route('shop.cart')}}">{{substr($item->name,0,20)}}</a></h4>
+                                                    <h3><span>{{$item->qty}} × </span>${{$item->price}}</h3>
+                                                </div>
+                                                <div class="shopping-cart-delete">
+                                                    <a href="{{route('remove.cart',$item->rowId)}}"><i class="fi-rs-cross-small"></i></a>
+                                                </div>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                        <div class="shopping-cart-footer">
+                                            <div class="shopping-cart-total">
+                                                <h4>Total <span>${{Cart::subtotal()}}</span></h4>
+                                            </div>
+                                            <div class="shopping-cart-button">
+                                                <a href="{{route('shop.cart')}}" class="outline">View cart</a>
+                                                <a href="checkout.php">Checkout</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif --}}
+                                {{-- </div> --}}
+                                {{-- @livewire('cart-icon-component') --}}
+
                         </div>
                     </div>
-                    {{-- <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p> --}}
+                    <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p>
                     <div class="header-action-right d-block d-lg-none">
                         <div class="header-action-2">
+                            
                             <div class="searchbar">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                                  <div class="togglesearch">
@@ -250,9 +306,9 @@
                                 </div>
 
                             </div>
+                            
                             @livewire('wishlist-icon-component')
                             @livewire('cart-icon-component')
-
                             <div class="header-action-icon-2 d-block d-lg-none">
                                 <div class="burger-icon burger-icon-white">
                                     <span class="burger-icon-top"></span>
@@ -266,12 +322,11 @@
             </div>
         </div>
     </header>
-
     <div class="mobile-header-active mobile-header-wrapper-style">
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="{{route('home')}}"><img src="{{asset('')}}frontend/assets/imgs/Kohen_Logo_Main.png" alt="logo"></a>
+                    <a href="{{route('home')}}"><img src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo"></a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                     <button class="close-style search-close">
@@ -281,12 +336,6 @@
                 </div>
             </div>
             <div class="mobile-header-content-area">
-                {{-- <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="#">
-                        <input type="text" placeholder="Search for items…">
-                        <button type="submit"><i class="fi-rs-search"></i></button>
-                    </form>
-                </div> --}}
                 <div class="mobile-menu-wrap mobile-header-border">
 
                     <!-- mobile menu start -->
@@ -312,72 +361,58 @@
                     </nav>
                     <!-- mobile menu end -->
                 </div>
+
+
+
                 <div class="mobile-header-info-wrap mobile-header-border">
 
                     <div class="single-mobile-header-info">
-                        @auth('customer')
-                        <i class="fi-rs-user"></i>
-                            @php
-                            $user = Auth::guard('customer')->user();
-                            $fullName = $user->customer->firstName . ' ' . $user->customer->lastName;
-                            @endphp
+                          @auth('customer')
+                         <i class="fi-rs-user"></i>
+                                @php
+                                $user = Auth::guard('customer')->user();
+                                $fullName = $user->customer->firstName . ' ' . $user->customer->lastName;
+                                @endphp
 
-                            <a class="customer_info " href="{{route('customer.dashboard')}}" >{{ $fullName }}</a>
+                                <div class="dropdown">
+                                    <a class="customer_info dropdown-toggle" href="#"  id="dropdownMenuButton"
+                                    data-mdb-toggle="dropdown"
+                                    aria-expanded="false">{{ $fullName }}</a>
 
-                            {{-- <div class="dropdown">
-                                <a class="customer_info dropdown-toggle" href="#"  id="dropdownMenuButton"
-                                data-mdb-toggle="dropdown"
-                                aria-expanded="false">{{ $fullName }}</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item" href="{{route('customer.dashboard')}}">Profile</a></li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" onclick="document.getElementById('logout_form').submit();">Logout</a>
+                                            <form method="post" id="logout_form" action="{{ route('customer.logout') }}">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                    </ul>
+                                  </div>
 
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li><a class="dropdown-item" href="{{route('customer.dashboard')}}">Profile</a></li>
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="document.getElementById('logout_form').submit();">Logout</a>
-                                        <form method="post" id="logout_form" action="{{ route('customer.logout') }}">
-                                            @csrf
-                                        </form>
-                                    </li>
-                                </ul>
-                              </div> --}}
-
-                        @else
-                            {{-- Show login/register links --}}
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#login" style="display: inline">Log In / </a>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#signup" style="display: inline"> Sign Up</a>
-                        @endauth
+                            @else
+                                {{-- Show login/register links --}}
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#login">Log In / </a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#signup"> Sign Up</a>
+                            @endauth
                     </div>
-                    <div class="single-mobile-header-info">
-                        <a href="tel:{{ $settings->secondary_mobile_no }}">{{ $settings->secondary_mobile_no }}</a>
+                   <div class="single-mobile-header-info">
+                        <a href="tel:<?php echo $settings->secondary_mobile_no?>">{{ $settings->secondary_mobile_no }}</a>
                     </div>
                     <div class="single-mobile-header-info mt-30">
                         <a  href="{{route('contactus')}}"> Our location: <p>{{ $settings->company_address }}</p></a>
                     </div>
                 </div>
-                <div class="mobile-social-icon">
-                    <h5 class="mb-15 text-grey-4">Follow Us</h5>
-                    <a href="#"><img src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
-                    <a href="#"><img src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
-                    <a href="#"><img src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
-                    <a href="#"><img src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
-                    <a href="#"><img src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
-                </div>
+                
             </div>
         </div>
     </div>
-        {{-- @if($errors->any())
-            <div style="color: red;">
-                <ul>
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif --}}
-        @if(View::hasSection('main'))
-            @yield('main')
-        @else
-            {{ $slot }}
-        @endif
+
+            @if(View::hasSection('main'))
+                @yield('main')
+            @else
+                {{ $slot }}
+            @endif
 
     <footer class="main">
         <section class="newsletter p-30 text-white wow fadeIn animated">
@@ -422,45 +457,49 @@
 
                         </div>
                     </div>
+                    
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <h5 class="widget-title wow fadeIn animated">Contact</h5>
-                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                         <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
                             <li>
                                 <a href="https://wa.link/3qi05h"><span><i class="fab fa-whatsapp"></i></span> {{ $settings->primary_mobile_no }}</a>
 
                             </li>
-                            <li><a href="tel:{{ $settings->secondary_mobile_no }}"><span><i class="fal fa-phone-alt"></i></span> {{ $settings->secondary_mobile_no }}</a></li>
-                            <li><a href="mailto:{{ $settings->email }}"><span><i class="fal fa-envelope"></i></span> {{ $settings->email }}</a></li>
+                            <li><a href="tel:<?php echo $settings->secondary_mobile_no?>"><span><i class="fal fa-phone-alt"></i></span> {{ $settings->secondary_mobile_no }}</a></li>
+                            <li><a href="mailto:<?php echo $settings->email?>"><span><i class="fal fa-envelope"></i></span> {{ $settings->email }}</a></li>
                             <li><a href="#"><span><i class="fal fa-map-marker-alt"></i></span> {{ $settings->company_address }}</a></li>
 
                         </ul>
-                        <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
-                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                                <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-facebook.svg')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-twitter.svg')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-instagram.svg')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-pinterest.svg')}}" alt=""></a>
-                                <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube.svg')}}" alt=""></a>
-                            </div>
+                        <!--<h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>-->
+                        <!--    <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">-->
+                        <!--        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-facebook.svg')}}" alt=""></a>-->
+                        <!--        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-twitter.svg')}}" alt=""></a>-->
+                        <!--        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-instagram.svg')}}" alt=""></a>-->
+                        <!--        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-pinterest.svg')}}" alt=""></a>-->
+                        <!--        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube.svg')}}" alt=""></a>-->
+                        <!--    </div>-->
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <h5 class="widget-title wow fadeIn animated">Usefull Links</h5>
                         <ul class="footer-list wow fadeIn animated">
                             <li><a href="{{url('/delivery_information')}}">Delivery Information</a></li>
-                            {{-- <li><a href="{{url('/terms-and-condition')}}">Terms & Conditions</a></li> --}}
+                            <li><a href="{{url('/terms-and-condition')}}">Terms & Conditions</a></li>
                             <li><a href="{{url('/privacy_and_policy')}}">Privacy Policy</a></li>
                             <li><a href="{{url('/cancellation_and_return')}}">Cancellation & Return</a></li>
-                            {{-- <li><a href="#">FAQS</a></li> --}}
+                            <li><a href="{{route('aboutus')}}">About Us</a></li>
                             <li><a href="{{route('trackorder')}}">Track My Order</a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3">
-                        <h5 class="widget-title wow fadeIn animated">Trusted member of - </h5>
-                        <a href="https://e-cab.net"><img src="{{asset('frontend/assets/imgs/ecab.png')}}" alt="ecab" width="80px"></a>
+                    <div class="col-lg-3 col-sm-3">
+                        
+                        <h5 class="widget-title wow fadeIn animated">Registered Address: TRAD/DSCC/042967/2022</h5>
+                        <!--<h5 class="widget-title wow fadeIn animated">Trusted member of - </h5>-->
+                        <!--<a href="https://e-cab.net"><img src="{{asset('frontend/assets/imgs/ecab.png')}}" alt="ecab" width="80px"></a>-->
+                        
                         <div class="row">
-                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-3">
+                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
                                 <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
-                                <img class="wow fadeIn animated" src="{{asset('frontend/assets/imgs/pay_image.png')}}" alt="pay_image">
+                                 <img class="wow fadeIn animated" src="{{asset('frontend/assets/imgs/pay_image.png')}}" alt="pay_image">
                             </div>
                         </div>
                     </div>
@@ -473,23 +512,23 @@
                     <div class="footer-bottom"></div>
                 </div>
                 <div class="col-lg-6">
-                    <p class="float-md-left font-sm text-muted mb-0 d-flex">&copy;
-                    <script>document.write(new Date().getFullYear())</script> ,
+                    <p class="float-md-left font-sm text-muted mb-0 d-flex">
+                    <script>document.write(new Date().getFullYear())</script> &copy; All rights reserved,
                     <strong class="text-brand mr-10 ml-10">
                         <img width="40" src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo">
                     </strong><span style="text-transform:uppercase"> - Your ultimate Lifestyle.</span> </p>
                 </div>
                 <div class="col-lg-6">
                     <p class="text-lg-end text-start font-sm text-muted mb-0">
-                        Developed by <a href="https://qbit-tech.com/" target="_blank">QBitTech </a>. All rights reserved
+                        Developed by <a href="https://qbit-tech.com/" target="_blank">QBitTech </a>.
                     </p>
                 </div>
             </div>
         </div>
     </footer>
-
-    <livewire:quick-view-component />
-
+    
+    
+     <livewire:quick-view-component />
 
     <!-- Preloader Start -->
     <!--<div id="preloader-active">-->
@@ -511,7 +550,6 @@
     @include('auth.registermodal')
 
     @include('auth.loginmodal')
-
 
     <!-- Vendor JS-->
     <script src="{{asset('')}}frontend/assets/js/vendor/modernizr-3.6.0.min.js"></script>
@@ -538,16 +576,16 @@
     <script src="{{asset('frontend/assets/notifications/notifications.js')}}"></script>
 	{{-- <script src="{{asset('frontend/assets/vendor/slick/slick.min.js')}}"></script> --}}
     <script src="{{asset('frontend/assets/js/vendor/slick-custom.js')}}"></script>
-    <script src="{{asset('frontend/assets/js/vendor/moment.js')}}"></script>
-    <script src="{{asset('frontend/assets/js/vendor/moment-with-locales.js')}}"></script>
 
     <script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.plugin.min.js')}}"></script>
     <script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.countdown.js')}}"></script>
-    {{-- sweet alert --}}
+ {{-- sweet alert --}}
     <script src="{{asset('admin/assets/js/vendors/sweetalert2.all.min.js')}}"></script>
     <!-- Template  JS -->
     <script src="{{asset('')}}frontend/assets/js/main.js?v=3.4"></script>
     <script src="{{asset('')}}frontend/assets/js/shop.js?v=3.4"></script>
+
+    
 
 
     @stack('dashboard')
@@ -555,12 +593,12 @@
     @stack('shop')
     @stack('camp')
     @stack('order')
-    @livewireScripts
+    
+@livewireScripts
 
 <script>
 
-
-    $(document).on('click', '.quickview', function (e) {
+ $(document).on('click', '.quickview', function (e) {
 
         e.preventDefault();
         var Slug = $(this).data('product-slug');
@@ -688,18 +726,16 @@
         });
     });
 
-    $(document).ready(function() {
+      $(document).ready(function() {
 
         $(".fa-search").click(function() {
             $(".togglesearch").toggle();
             $("input[type='text']").focus();
         });
 
-        // var searchInput = $('#search-input');
-
 
         function searchHandel(searchInput, showProductDiv) {
-
+            
             var loadingIndicator = $('#loading-indicator');
             var searchTerm = searchInput.val().trim();
             console.log(searchTerm);
@@ -774,7 +810,8 @@
             searchHandel($('#search-input2'), $('#show-product2'));
         });
     });
-
+    
+    
 </script>
     @if(Session::has('success'))
     <script>
@@ -791,6 +828,7 @@
         $.Notification.autoHideNotify('warning', 'top right', 'Warning', '{{ Session::get('warning') }}');
     </script>
     @endif
+
 
 
 </body>

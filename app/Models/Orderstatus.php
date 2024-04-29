@@ -9,8 +9,7 @@ class Orderstatus extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'order_id',
-        'status',
+        'order_id','status',
         'confirmed_date_time',
         'shipped_date_time',
         'delivered_date_time',

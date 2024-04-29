@@ -5,11 +5,11 @@ namespace App\Mail;
 use PDF;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\SerializesModels;
 
 class customerMail extends Mailable
 {
@@ -34,6 +34,12 @@ class customerMail extends Mailable
         );
     }
 
+    // public function build(){
+    //     return $this->view('admin.email.customermail',[
+    //         'order' => $this->data
+    //     ]);
+    // }
+
     public function build(){
 
         $pdf = $this->generateInvoicePDF($this->data->id);
@@ -43,11 +49,9 @@ class customerMail extends Mailable
             'mime' => 'application/pdf',
         ]);
     }
-
-
-    public function generateInvoicePDF($id)
-    {
-       // ini_set('max_execution_time',3600);
+    
+    public function generateInvoicePDF($id){
+        
         $order = Order::where('id', $id)->first();
 
         if (!$order) {
@@ -55,8 +59,7 @@ class customerMail extends Mailable
         }
 
         $pdf= PDF::loadView('admin.order.invoice',['order'=>$order]);
-
-         $mpdf = $pdf->Output('', 'S');
+        $mpdf = $pdf->Output('', 'S');
 
         return $mpdf;
     }

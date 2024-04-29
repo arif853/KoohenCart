@@ -16,15 +16,30 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $data = transactions::latest('id')->with('order','customer')->get();
+        $data = transactions::with('order','customer')->latest('id')->get();
         return view('admin.transactions.index', ['data' => $data]);
-
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
         //
     }
@@ -41,7 +56,7 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function paymentUpdate(Request $request)
+        public function paymentUpdate(Request $request)
     {
         $order = Order::find($request->orderNo);
         $transaction = transactions::find($request->trans_id);
@@ -76,7 +91,9 @@ class TransactionController extends Controller
         return response()->json(['status'=> 200]);
     }
 
-
+    /**
+     * Remove the specified resource from storage.
+     */
     public function transactionSearch( Request $request)
     {
         $orderNo = $request->input('orderNo');
@@ -87,34 +104,12 @@ class TransactionController extends Controller
         ->whereHas('customer', function ($query) use ($customerName) {
             $query->where('firstName', 'like', '%' . $customerName . '%')
                 ->orWhere('lastName', 'like', '%' . $customerName . '%');
-        })->limit(10)
+        })
+        ->limit(10)
+        ->latest('id')
         ->get();
 
         // Return the response as JSON
         return response()->json(['transactions' => $transactions]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
