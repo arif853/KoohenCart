@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\SeoSetting;
 use App\Models\Socialinfo;
 use Illuminate\Support\Facades\Session;
 
@@ -78,7 +79,7 @@ class ProfileController extends Controller
             'description' => 'nullable|string',
             'startDate' => 'nullable|date',
             'weblogo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
-            'webfavicon' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'webfavicon' => 'nullable|mimes:jpeg,png,jpg,ico|max:2048', // Max 2MB
         ]);
 
         // Handle file uploads
@@ -139,6 +140,40 @@ class ProfileController extends Controller
             ],
             $validatedData);
         Session::flash('success','Your Social info updated.');
+        return redirect()->back();
+    }
+
+    public function SEOUpdate(Request $request)
+    {
+        $validatedData = $request->validate([
+            'seoTitle' => 'required|string|max:255',
+            'seoLogo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'seoDescription' => 'required|string|max:255',
+        ]);
+
+        if ($request->hasFile('seoLogo')) {
+
+            $logo = $request->file('seoLogo');
+
+            $manager = new ImageManager(new Driver());
+            $logoName =  time() .  '.' . $logo->getClientOriginalExtension();
+
+            $img = $manager->read($logo);
+
+            $logoPath = 'Seologos/' . $logoName;
+
+            Storage::disk('public')->put($logoPath , (string)$img->encode());
+
+            $validatedData['seoLogo'] = $logoName;
+        }
+
+        SeoSetting::updateOrCreate(
+            [
+                'id' => $request->socialInfo_id,
+            ],
+            $validatedData
+        );
+        Session::flash('success','Your SEO info updated.');
         return redirect()->back();
     }
 }

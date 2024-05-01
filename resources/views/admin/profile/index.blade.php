@@ -141,43 +141,46 @@
                         </div>
                         <div class="tab-pane" id="social" role="tabpanel" aria-labelledby="social-tab">
                             <section class="content-body p-xl-4">
+                                @php
+                                    $social = DB::table('socialinfos')->first();
+                                @endphp
                                 <form action="{{route('user.socialupdate')}}" method="post" >
                                     @csrf
                                     @method('POST')
-                                    <input type="hidden" name="socialInfo_id" id="socialInfo_id" value="">
+                                    <input type="hidden" name="socialInfo_id" id="socialInfo_id" value="{{$social->id}}">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12">
                                             <div class="row gx-3">
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3">
                                                     <label class="form-label">App Phone <span class="text-danger">*</span></label>
-                                                    <input class="form-control" type="text" name="appPhone" placeholder="Type here">
+                                                    <input class="form-control" type="text" value="{{$social->appPhone}}" name="appPhone" placeholder="Type here">
                                                 </div> <!-- col .// -->
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3">
                                                     <label class="form-label">App Email<span class="text-danger">*</span></label>
-                                                    <input class="form-control" type="email" name="appEmail" placeholder="example@mail.com">
+                                                    <input class="form-control" type="email" value="{{$social->appEmail}}" name="appEmail" placeholder="example@mail.com">
                                                 </div> <!-- col .// -->
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3">
                                                     <label class="form-label">WhatsApp <small>(Number Only, No link.)</small>
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input class="form-control" type="text" name="whatsapp" placeholder="+880 1...">
+                                                    <input class="form-control" type="text" value="{{$social->whatsapp}}" name="whatsapp" placeholder="+880 1...">
                                                 </div> <!-- col .// -->
 
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3">
                                                     <label class="form-label">Facebook <small>(Link only)</small></label>
-                                                    <input class="form-control" type="url" name="facebook" placeholder="www.facebook.com/yourpage">
+                                                    <input class="form-control" type="url" value="{{$social->facebook}}" name="facebook" placeholder="www.facebook.com/yourpage">
                                                 </div> <!-- col .// -->
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3">
                                                     <label class="form-label">Instagram <small>(Link only)</small></label>
-                                                    <input class="form-control" type="url" name="instragram"  placeholder="Type here">
+                                                    <input class="form-control" type="url" value="{{$social->instragram}}" name="instragram"  placeholder="Type here">
                                                 </div> <!-- col .// -->
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3">
                                                     <label class="form-label">YouTube <small>(Link only)</small></label>
-                                                    <input class="form-control" type="url" name="youtube" placeholder="Type here">
+                                                    <input class="form-control" type="url" value="{{$social->youtube}}" name="youtube" placeholder="Type here">
                                                 </div> <!-- col .// -->
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3">
                                                     <label class="form-label">CopyRight Title <small>(Title Only)</small></label>
-                                                    <input class="form-control" type="text" name="copyright" placeholder="Type here">
+                                                    <input class="form-control" type="text" value="{{$social->copyright}}" name="copyright" placeholder="Type here">
                                                 </div> <!-- col .// -->
                                             </div> <!-- row.// -->
                                         </div> <!-- col.// -->
@@ -192,34 +195,39 @@
                         </div>
                         <div class="tab-pane" id="SEO" role="tabpanel" aria-labelledby="SEO-tab">
                             <section class="content-body p-xl-4">
+                                @php
+                                    $seo = DB::table('seo_settings')->first();
+                                @endphp
                                 <form action="{{route('user.SEOUpdate')}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     @method('POST')
+                                    <input type="hidden" name="seo_id" id="seo_id" value="{{$seo->id}}">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12">
                                             <div class="row gx-3">
                                                 <div class="col-6 col-lg-6 col-md-4  mb-3">
                                                     <label class="form-label">Title<span class="text-danger">*</span></label>
-                                                    <input class="form-control" type="text" name="seoTitle" placeholder="Type here">
+                                                    <input class="form-control" type="text" value="{{$seo->seoTitle}}" name="seoTitle" placeholder="Type here">
                                                 </div> <!-- col .// -->
                                                 <div class="col-4 col-lg-4 col-md-4  mb-3 text-lg-center">
                                                     <div id="app" class="photo-upload">
                                                         <div class="file-upload-form">
-                                                            <input type="file" name="seoLogo" id="seologo" accept="image/*" class="input-file">
+                                                            <input type="file" name="seoLogo"  id="seologo" accept="image/*" class="input-file">
                                                             <label for="seologo">SEO Logo</label>
                                                         </div>
                                                         <div class="image-preview" id="seo-preview" >
-                                                            <img id="seo-img" class="image-preview__img">
+                                                            <img id="seo-img" src="{{asset('storage/Seologos/'.$seo->seoLogo)}}" class="image-preview__img">
                                                         </div>
                                                     </div>
                                                     <label for="" class="form-label">SEO Logo</label>
                                                 </div> <!-- col .// -->
                                                 <div class="col-6 col-lg-6 col-md-6  mb-3">
                                                     <label class="form-label">SEO Description </label>
-                                                    <textarea class="form-control" name="seoDescription" placeholder="SEO Description" cols="30" rows="15"></textarea>
+                                                    <textarea class="form-control" name="seoDescription"
+                                                    placeholder="SEO Description" cols="30" rows="15">
+                                                    {{$seo->seoDescription}}
+                                                </textarea>
                                                 </div> <!-- col .// -->
-
-
                                             </div> <!-- row.// -->
                                         </div> <!-- col.// -->
 
