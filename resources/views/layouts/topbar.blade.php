@@ -15,7 +15,7 @@
     </div>
     <style>
         .nav-item .pos{
-            width: 90px;
+            width: 150px;
             height: 40px;
             line-height: 36px;
             border: 2px solid #E52E16;
@@ -26,7 +26,7 @@
             color:#fff !important;
         }
         .nav-item .cache{
-            width: 100px;
+            width: 150px;
             height: 40px;
             line-height: 36px;
             border: 2px solid #3cbff0;
@@ -36,9 +36,12 @@
             background-color: #3cbff0;
             color:#fff !important;
         }
-        .nav-item .pos:hover,
+        .nav-item .pos:hover{
+            color: #E52E16 !important;
+        }
+
         .nav-item .cache:hover{
-            color: #000 !important;
+            color: #3cbff0 !important;
         }
     </style>
     <div class="col-nav">
