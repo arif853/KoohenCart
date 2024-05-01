@@ -487,6 +487,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('dashboard/profile/userupdate',[ProfileController::class, 'userProfileUpdate'])->name('user.profileupdate');
+    Route::post('dashboard/profile/usersocialupdate',[ProfileController::class, 'userSocialUpdate'])->name('user.socialupdate');
+    Route::post('dashboard/profile/seoupdate',[ProfileController::class, 'SEOUpdate'])->name('user.SEOUpdate');
 });
 
 // Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);

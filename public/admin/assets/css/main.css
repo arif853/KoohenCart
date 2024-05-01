@@ -5465,3 +5465,72 @@ footer.main-footer {
 .icon-sm{
     line-height: 42px !important;
 }
+.photo-upload {
+    height: auto;
+    margin: 20px 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+
+.input-file {
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 0.1px;
+    z-index: -1;
+}
+
+.input-file:focus + label {
+    border-color: blue;
+}
+
+.input-file + label {
+    background: transparent;
+    border: 2px solid pink;
+    border-radius: 50%;
+    color: gray;
+    display: inline-block;
+    font-size: 12pt;
+    font-weight: 500;
+    text-align: center;
+    height: 150px;
+    width: 150px;
+    line-height: 150px;
+}
+
+.input-file + label:hover,
+.input-file + label:focus {
+    border-color: blue;
+    cursor: pointer;
+}
+
+.image-preview {
+    width: 130px;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.image-preview2{
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.image-preview__img {
+    /* border: 2px solid pink; */
+    /* border-radius: 50%; */
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}

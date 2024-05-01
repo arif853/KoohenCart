@@ -39,7 +39,7 @@ class OrderController extends Controller
             'shipping',
             'transaction')
             ->latest('created_at')->get();
-        
+
         return view('admin.order.index',compact('orders'));
     }
 
@@ -115,14 +115,14 @@ class OrderController extends Controller
 
             $orderProducts->push($product);
         }
-        
+
         $items = Products::with(['sizes','colors'])->get();
         // $customer = $order->customer;
         return view('admin.order.order_details',compact('order','orderProducts','district','postOffice','items'));
     }
 
 
-// Multiple order status update 
+// Multiple order status update
   public function updateOrderStatus(Request $request)
     {
         $selectedStatus = $request->input('status');
@@ -177,11 +177,11 @@ class OrderController extends Controller
                     }
                 }
             }
-            
+
             if($newStatus == 'returned' && $order->is_pos == 1){
 
                 foreach($order->order_item as $item){
-    
+
                     if($item && $item->size_id){
                         Product_stock::updateOrCreate(
                             [
@@ -206,7 +206,7 @@ class OrderController extends Controller
     }
 
 
-    
+
     // Single Order status update
     public function updateOneOrderStatus(Request $request)
     {
@@ -226,7 +226,7 @@ class OrderController extends Controller
 
         // Update the OrderStatus table
         $statusColumn = $newStatus . '_date_time';
-        
+
         Orderstatus::updateOrCreate(['order_id' => $orderId], ['status' => $newStatus, $statusColumn => Carbon::now()]);
 
 
@@ -349,6 +349,8 @@ class OrderController extends Controller
             $customerName = $request->customerName;
             $status = $request->status;
             $customerPhone = $request->customerPhone;
+            $sku = $request->sku;
+            $productSize = $request->size;
 
             $query = Order::with('customer','order_item.product','order_item.product_sizes','order_item.product_colors');
 
@@ -360,6 +362,17 @@ class OrderController extends Controller
                 $query->whereHas('customer', function ($query) use ($customerName) {
                     $query->where('firstName', 'LIKE', '%' . $customerName . '%')
                           ->orWhere('lastName', 'LIKE', '%' . $customerName . '%');
+                });
+            }
+            if ($productSize) {
+                $query->whereHas('order_item.product_sizes', function ($query) use ($productSize) {
+                    $query->where('size', 'LIKE', '%' . $productSize . '%');
+                });
+            }
+
+            if ($sku) {
+                $query->whereHas('order_item.product', function ($query) use ($sku) {
+                    $query->where('sku', 'LIKE', '%' . $sku . '%');
                 });
             }
 
@@ -409,7 +422,7 @@ class OrderController extends Controller
             return response()->json($orders);
         }
     }
-    
+
     public function completedfilters( Request $request)
     {
         if($request->ajax()) {
@@ -447,7 +460,7 @@ class OrderController extends Controller
         $order_return = Order::with('customer')->where('status','returned')->get();
         return view('admin.order.order_return.index',compact('order_return'));
     }
-    
+
     // Order return confirmation
     public function return_confirm(string $id)
     {
@@ -464,8 +477,8 @@ class OrderController extends Controller
         Session::flash('success', ' Order return confirmation done.');
         return redirect()->back();
     }
-    
-    
+
+
     public function getColorOptions()
     {
         $colors = Color::all();
@@ -477,7 +490,7 @@ class OrderController extends Controller
         $sizes = Size::all();
         return response()->json($sizes);
     }
-    
+
      public function newProductDetails(Request $request){
 
         $productId = $request->input('id');
@@ -633,7 +646,7 @@ class OrderController extends Controller
         }
 
     }
-    
+
     public function deleteOrderItem(Request $request)
     {
         // Retrieve the order item ID from the request
@@ -686,6 +699,6 @@ class OrderController extends Controller
         }
     }
 
-    
+
 
 }
