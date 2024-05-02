@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Customer')
+@section('title','customer')
 @section('content')
 
     <div class="content-header">
@@ -7,8 +7,8 @@
             <h2 class="content-title card-title">Customer List</h2>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ '/dashborad' }}">Dashborad</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Customers</li>
+                  <li class="breadcrumb-item"><a href="{{'/dashborad'}}">Dashborad</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Customers</li>
                 </ol>
             </nav>
         </div>
@@ -18,23 +18,20 @@
     </div>
     <div class="card mb-4">
         <header class="card-header">
-            <div class="row gx-3" id="customer_live_search">
+            <div class="row gx-3 customer_live_search">
                 <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Customer name..." class="form-control"
+                    <input type="text" placeholder="Customer name..." class="form-control" name="customer_name"
                         id="customer_name">
                 </div>
                 <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Customer mobile number..." class="form-control"
+                    <input type="text" placeholder="Customer mobile number..." class="form-control" name="customer_phone"
                         id="customer_phone">
                 </div>
                 <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="email" placeholder="Customer email..." class="form-control"
+                    <input type="email" placeholder="Customer email..." class="form-control" name="customer_email"
                         id="customer_email">
                 </div>
-                <div class="col-lg-4">
-                    <a href="{{route('customerExport')}}" class="btn btn-brand font-sm  mt-4">CSV</a>
-                    <a href="#" class="btn btn-brand font-sm mt-4" data-bs-toggle="modal" data-bs-target="#customerModal">Import Customer</a>
-                </div>
+
             </div>
         </header> <!-- card-header end// -->
         <div class="card-body">
@@ -42,6 +39,7 @@
                 <table class="table table-hover" id="datatable">
                     <thead>
                         <tr>
+                            <!--<th>#</th>-->
                             <th>Customer</th>
                             <th>Phone</th>
                             <th>Email</th>
@@ -52,28 +50,32 @@
                     </thead>
                     <tbody id="CustomerTable">
                         @foreach ($customers as $key => $customer)
-                            <tr>
-                                <td>
-                                    <a href="{{ route('customer.profile', ['id' => $customer->id]) }}" class="itemside">
-                                        <div class="info pl-3">
-                                            <h6 class="mb-0 title">{{ $customer->firstName }} {{ $customer->lastName }}</h6>
-                                            <small class="text-muted">Customer ID: #{{ $customer->id }}</small>
-                                        </div>
-                                    </a>
-                                </td>
-                                <td>{{ $customer->phone }}</td>
-                                <td>{{ $customer->email }}</td>
-                                <td>
-                                    @if ($customer->status == 'registerd')
-                                        <span class="badge rounded-pill alert-success">Registerd</span>
-                                    @else
-                                        <span class="badge rounded-pill alert-danger">Not Registerd</span>
-                                    @endif
-                                </td>
-                                <td>{{ $customer->created_at->format('d-m-Y') }}</td>
-                                <td class="text-end">
 
-                                    <form class="deleteForm"
+                        <tr>
+                            <!--<td>{{$key+1}}</td>-->
+                            <td>
+                                <a href="{{route('customer.profile', ['id' => $customer->id])}}" class="itemside">
+                                    <div class="info pl-3">
+                                        <h6 class="mb-0 title">{{$customer->firstName}} {{$customer->lastName}}</h6>
+                                        <small class="text-muted">Customer ID: #{{$customer->id}}</small>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>{{$customer->phone}}</td>
+                            <td>{{$customer->email}}</td>
+                            <td>
+                                @if($customer->status == 'registerd')
+                                <span class="badge rounded-pill alert-success">Registerd</span>
+
+                                @else
+                                <span class="badge rounded-pill alert-danger">Not Registerd</span>
+
+                                @endif
+                            </td>
+                            <td>{{$customer->created_at->format('d-m-Y')}}</td>
+                            <td class="text-end">
+                                
+                                <form class="deleteForm"
                                         action="{{ route('customer.destroy', ['id' => $customer->id]) }}" method="post">
                                         @csrf
                                         @method('DELETE')
@@ -86,8 +88,9 @@
                                         <a href="#"
                                             class="btn btn-sm btn-danger rounded font-sm mt-15 delete">Delete</a>
                                     </form>
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
+
                         @endforeach
 
 
@@ -96,6 +99,18 @@
             </div>
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
+    {{-- <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+            </ul>
+        </nav>
+    </div> --}}
 
 
     <!-- Modal -->
@@ -149,45 +164,13 @@
         </div>
     </div>
 
-      <!-- Modal -->
-      <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="customerModalLabel">Update Customer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="POST" enctype="multipart/form-data" action="{{route('customerimport')}}">
-                    @csrf
-                    @method('post')
-                    <div class="modal-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="file" class="form-label">Add CSV file <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" id="file" name="file" required>
-                            </div>
-
-                            {{-- <div class="col-12 d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </div> --}}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Upload</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @push('customer_filter')
     <script type="text/javascript">
+    
 
-
-
-        $('#customer_live_search input').on('keyup', function() {
+        $('.customer_live_search input').on('keyup', function() {
             let customerName = $('#customer_name').val();
             let customerPhone = $('#customer_phone').val();
             let customerEmail = $('#customer_email').val();
@@ -196,9 +179,9 @@
                 url: "{{ route('customer.filter') }}",
                 method: "GET",
                 data: {
-                    customerName: customerName,
-                    customerPhone: customerPhone, // Corrected parameter name to match the server-side code
-                    customerEmail: customerEmail // Corrected parameter name to match the server-side code
+                    customer_name: customerName,
+                    customer_phone: customerPhone, // Corrected parameter name to match the server-side code
+                    customer_email: customerEmail // Corrected parameter name to match the server-side code
                 },
                 success: function(response) {
                     let customerTableBody = $('#CustomerTable');
@@ -248,15 +231,7 @@
                         row.append($('<td>').text(formattedDate));
 
                         // Create the "View details" button cell
-                        // let detailsCell = $('<td>').addClass('text-end').append(
-                        //     $('<a>').attr('href',
-                        //         "{{ route('customer.profile', ['id' => '']) }}" + customer
-                        //         .id)
-                        //     .addClass('btn btn-sm btn-brand rounded font-sm mt-15').text(
-                        //         'View details')
-                        // );
-
-                        // Create a new <td> element
+                         // Create a new <td> element
                         let detailsCell = $('<td>').addClass('text-end');
 
                         // Create the form element
@@ -290,8 +265,8 @@
 
             });
         });
-
-        // Edit customer
+        
+            // Edit customer
         $(document).on('click', '.edit', function(e) {
             e.preventDefault();
             var customerId = $(this).data('customer-id');
@@ -368,6 +343,6 @@
                 });
             });
         });
-
+    
     </script>
 @endpush

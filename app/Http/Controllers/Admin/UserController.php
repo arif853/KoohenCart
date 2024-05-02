@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -35,24 +36,34 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|max:20',
             'user_role' => 'required'
         ]);
 
+        // If validation fails, return the errors as JSON response
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()], 422);
+        }
+
+        // If validation passes, create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
 
+        // Assign roles to the user
         $user->syncRoles($request->user_role);
 
-        Session::flash('success', 'New user add successfully.');
+        // Flash success message
+        Session::flash('success', 'New user added successfully.');
 
-        return response()->json(['status'=>200]);
+        // Return success response
+        return response()->json(['status' => 200]);
     }
 
     /**
@@ -81,13 +92,16 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $user = User::find($request->user_id);
-
-        $request->validate([
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            // 'password' => 'min:6|max:12',
-            // 'user_role' => 'required'
+            'email' => 'required|email'
         ]);
+
+        // If validation fails, return the errors as JSON response
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()], 422);
+        }
 
         $data = [
             'name' => $request->name,

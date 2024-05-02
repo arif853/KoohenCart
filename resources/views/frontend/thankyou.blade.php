@@ -1,4 +1,3 @@
-
 @extends('layouts.home')
 @section('title','Thank You')
 @section('main')
@@ -56,12 +55,19 @@
                     </p>
                     <p class="wow fadeIn animated">
                         <a class="btn btn-brand btn-lg font-weight-bold text-white border-radius-5 btn-shadow-brand hover-up" href="{{route('home')}}">Back to home</a>
-                        {{-- <a href="#contact" class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand bg-white text-hover-white ml-15 border-radius-5 btn-shadow-brand hover-up">Support Center</a> --}}
                     </p>
                 </div>
             </div>
         </div>
     </section>
-
 </main>
+
+<!-- Add the dataLayer script with dynamic values -->
+<script>
+    dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+    dataLayer.push({
+        event: "purchase",
+        ecommerce: @json(session('purchaseEventData')) // Serialize the PHP array to JSON
+    });
+</script>
 @endsection

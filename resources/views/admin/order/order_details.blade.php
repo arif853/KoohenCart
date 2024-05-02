@@ -2,38 +2,6 @@
 @section('title','Orders-'.$order->id)
 @section('content')
 
-<style>
-    .icontext span {
-        font-size: 12px;
-        font-weight: 400;
-        display: inline-block;
-    }
-    .color-select{
-        background-color: #f4f5f9;
-        border: 2px solid #f4f5f9;
-        font-size: 13px;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        padding-left: 16px;
-        color: #4f5d77;
-        width: 80px;
-        border-radius: 4px;
-        height: 36px;
-    }
-    .size-select{
-        background-color: #f4f5f9;
-        border: 2px solid #f4f5f9;
-        font-size: 13px;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        padding-left: 16px;
-        color: #4f5d77;
-        width: 80px;
-        border-radius: 4px;
-        height: 36px;
-    }
-</style>
-
     <div class="content-header">
         <div>
             <h2 class="content-title card-title">Order detail</h2>
@@ -53,15 +21,16 @@
                     <small class="text-muted">Order ID: {{$order->id}}</small>
                 </div>
                 <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                    {{-- <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                        <option>Change status</option>
-                        <option>Awaiting payment</option>
-                        <option>Confirmed</option>
-                        <option>Shipped</option>
-                        <option>Delivered</option>
-                    </select> --}}
-                    {{-- <a class="btn btn-primary" href="#">Save</a> --}}
-                    <a class="btn btn-secondary print ms-2" href="{{ url('/orders/invoice/'.$order->id) }}"><i class="icon material-icons md-print"></i></a>
+                    <!--<select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">-->
+                    <!--    <option>Change status</option>-->
+                    <!--    <option>Awaiting payment</option>-->
+                    <!--    <option>Confirmed</option>-->
+                    <!--    <option>Shipped</option>-->
+                    <!--    <option>Delivered</option>-->
+                    <!--</select>-->
+                    <!--<a class="btn btn-primary" href="#">Save</a>-->
+                    <a class="btn btn-secondary print ms-2" target="_blank"  href="{{ url('/orders/invoice/'.$order->id) }}"><i class="icon material-icons md-print"></i></a>
+
                 </div>
             </div>
         </header> <!-- card-header end// -->
@@ -75,7 +44,9 @@
                         <div class="text">
                             <h6 class="mb-1">Customer</h6>
                             <p class="mb-1">
-                                {{$order->customer->firstName}} {{$order->customer->lastName}} <br> {{$order->customer->email}} <br> {{$order->customer->phone}}
+                                {{$order->customer->firstName}} {{$order->customer->lastName}}  <br>
+                                    {{$order->customer->billing_address}}
+                                <br> {{$order->customer->phone}}<br> {{$order->customer->email}} 
                             </p>
                             <a href="{{route('customer.profile', ['id' => $order->customer->id])}}">View profile</a>
                         </div>
@@ -88,30 +59,60 @@
                         </span>
                         <div class="text">
                             <h6 class="mb-1">Order info</h6>
-
-                            <p class="mb-1">
+                            <style>
+                                .icontext span {
+                                    font-size: 12px;
+                                    font-weight: 400;
+                                    display: inline-block;
+                                }
+                                    .color-select{
+                                        background-color: #f4f5f9;
+                                        border: 2px solid #f4f5f9;
+                                        font-size: 13px;
+                                        -webkit-box-shadow: none;
+                                        box-shadow: none;
+                                        padding-left: 16px;
+                                        color: #4f5d77;
+                                        width: 140px;
+                                        border-radius: 4px;
+                                        height: 36px;
+                                    }
+                                    .size-select{
+                                        background-color: #f4f5f9;
+                                        border: 2px solid #f4f5f9;
+                                        font-size: 13px;
+                                        -webkit-box-shadow: none;
+                                        box-shadow: none;
+                                        padding-left: 16px;
+                                        color: #4f5d77;
+                                        width: 80px;
+                                        border-radius: 4px;
+                                        height: 36px;
+                                    }
+                            </style>
+                            <p class="mb-1" >
                                 Shipping: Global Shipping <br> Pay method: {{$order->transaction->mode}} <br>
-                                Status:
+                                Order Status:
                                 @if($order->status == 'pending')
-                                <span class="badge rounded-pill alert-primary">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-primary" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'confirmed')
-                                <span class="badge rounded-pill alert-info ">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-info " style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'shipped')
-                                <span class="badge rounded-pill alert-warning">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-warning" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'delivered')
-                                <span class="badge rounded-pill alert-success">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-success" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'completed')
-                                <span class="badge rounded-pill alert-success">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-success" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'returned')
-                                <span class="badge rounded-pill alert-danger">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-danger" style="text-transform: uppercase;">{{$order->status}}</span>
 
                                 @elseif($order->status == 'cancelled')
-                                <span class="badge rounded-pill alert-danger">{{$order->status}}</span>
+                                <span class="badge rounded-pill alert-danger" style="text-transform: uppercase;">{{$order->status}}</span>
                                 @endif
                             </p>
                             {{-- <a href="#">Download info</a> --}}
@@ -136,18 +137,17 @@
                         </div>
                     </article>
                         @endif
-
                 </div> <!-- col// -->
             </div> <!-- row // -->
             <div class="row">
-                <div class="col-lg-7">
-                    {{-- <form id="orderUpdateForm"> --}}
-                        <div class="table-responsive">
-                            <table class="table">
+                <div class="col-lg-8">
+                    <div class="table-responsive">
+                        <table class="table">
                                 <thead>
                                     <tr>
                                         <th width="10%">
-                                            {{-- <a href="#" class="order-btn"><i class="fas fa-plus"></i></a> --}}
+                                            <a href="#" class="order-btn" data-bs-toggle="modal" data-bs-target="#newItemModal"
+                                            data-customer-id="{{ $order->id }}"><i class="fas fa-plus"></i></a>
                                         </th>
                                         <th width="40%">Product</th>
                                         <th >Unit Price</th>
@@ -160,7 +160,7 @@
                                     <input type="hidden" name="orderId" id="orderId" value="{{$order->id}}">
                                     <tr>
                                         <td>
-                                            {{-- <a href="#" class="order-btn btn-delete"><i class="fas fa-trash"></i></a> --}}
+                                            <a href="#" class="order-btn btn-delete" data-order-item-id="{{$product->itemId}}"><i class="fas fa-trash"></i></a>
                                             <a href="#" class="order-btn btn-edit" data-product-id="{{$product->id}}"><i class="fas fa-pen"></i></a>
 
                                             <a class="order-btn btn-save" style="display: none;"><i class="fas fa-check"></i></a>
@@ -172,19 +172,19 @@
                                                     <img src="{{asset('storage/product_images/'. $product->product_images->first()->product_image)}}" width="40" height="40" class="img-xs" alt="Item">
                                                 </div>
                                                 <div class="info">
-                                                    <span class="product-name" >{{$product->product_name}},</span>
+                                                    <span class="product-name" >{{$product->product_name}}</span>,
 
                                                     <br>
                                                     @if ($product->color)
-                                                    <span class="product-color">{{$product->color->color_name}}</span>
+                                                    <span class="product-color">{{$product->color->color_name}}</span>,
                                                     @endif
                                                 <br>
                                                     @if($product->size)
                                                     <span class="product-size">{{$product->size->size_name}}</span>
                                                     @endif
                                                 </div>
-                                                </div>
-                                            </a>
+                                                <!--</div>-->
+                                            </span>
                                         </td>
                                         <td>৳{{$product->price}} </td>
                                         <td> {{$product->quantity}} </td>
@@ -230,38 +230,70 @@
 
                                 </tbody>
                             </table>
-                        </div> <!-- table-responsive// -->
-                    {{-- </form> --}}
-                    <a class="btn btn-primary" href="{{route('order.track', ['id' => $order->id])}}">View Order Tracking</a>
+                    </div> <!-- table-responsive// -->
+                    <!--<a class="btn btn-primary" href="{{route('order.track', ['id' => $order->id])}}">View Order Tracking</a>-->
                 </div> <!-- col// -->
-                <div class="col-lg-1"></div>
-                <div class="col-lg-4">
-                    <div class="box shadow-sm bg-light">
-                        <h6 class="mb-15">Payment info</h6>
-                        <p>
-                            @if($order->transaction->mode == 'cod')
-                            Cash On delivery <br>
-                            Charge: {{$order->delivery_charge}}
-                            <br>
-                            @else
-                                Master Card **** **** 4768 <br>
-                                Business name: Grand Market LLC <br>
-                                Phone: +1 (800) 555-154-52
-                            @endif
-                        </p>
-                    </div>
-                    <div class="h-25 pt-4">
-                        <div class="mb-3">
-                            <label>Notes</label>
-                            <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
-                        </div>
-                        <button class="btn btn-primary">Save note</button>
-                    </div>
-                </div> <!-- col// -->
+
             </div>
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
-
+<!--New item add Modal -->
+<div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="newItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="newItemModalLabel">Add New Item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="newItemForm">
+                <input type="hidden" name="newItemOrderId" id="newItemOrderId" value="{{$order->id}}">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="newProduct" class="form-label">Product <span class="text-danger">*</span></label>
+                            <select name="newProduct" id="newProduct" class="form-control">
+                                <option value="">Select Product</option>
+                                @foreach ($items as $item)
+                                <option value="{{$item->id}}">{{$item->product_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="form-label">Size</label>
+                            <select name="size" id="size" class="form-control">
+                               <option value="">select size</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="form-label">Color</label>
+                            <select name="color" id="color" class="form-control">
+                               <option value="">select color</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="form-label">Price</label>
+                            <input type="number" name="newprice" id="newprice" class="form-control" placeholder="Price" value="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="form-label">Qty</label>
+                            <input type="number" name="newqty" id="newqty" class="form-control" placeholder="Quantity" min="1">
+                        </div>
+                        <div class="col-md-9"></div>
+                        <div class="col-md-1">
+                            <span for="newSubtotal" class="form-label">Subtotal: </span>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="newSubtotal" name="newSubtotal" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 @push('order_status')
 <script>
@@ -292,7 +324,7 @@
         $row.find('.product-color').replaceWith($('<select>').addClass('color-select colorId mt-2').append($('<option>').text(originalValues.color)));
         $row.find('.product-size').replaceWith($('<select>').addClass('size-select sizeId mt-2').append($('<option>').text(originalValues.size)));
 
-         // Fetch color options
+        // Fetch color options
          $.ajax({
             url: '/get-color-options', // Replace with your route URL
             type: 'GET',
@@ -332,8 +364,8 @@
             }
         });
 
-        $row.find('td:nth-child(3)').html($('<input>').addClass('form-control price').attr('type', 'text').val(originalValues.price));
-        $row.find('td:nth-child(4)').html($('<input>').addClass('form-control quantity').attr('type', 'number').attr('min',0).val(originalValues.quantity));
+        // $row.find('td:nth-child(3)').html($('<input>').addClass('form-control price').attr('type', 'text').val(originalValues.price));
+        // $row.find('td:nth-child(4)').html($('<input>').addClass('form-control quantity').attr('type', 'number').attr('min',0).val(originalValues.quantity));
 
         $('#delivery_charge').html($('<input>').addClass('color-select deliveryCharge').attr('type','number').val(originalValues.deliveryCharge));
         $('#discount').html($('<input>').addClass('color-select discount').attr('type','number').val(originalValues.discount));
@@ -471,11 +503,11 @@
         formData.sizeId = $row.find('.sizeId').val();
 
         // Get price and quantity
-        formData.price = $row.find('.price').val();
-        formData.quantity = $row.find('.quantity').val();
+        formData.price = $row.find('.price').val() || originalValues.price;
+        formData.quantity = $row.find('.quantity').val()|| originalValues.quantity;
         formData.total = $row.find('.total').val() || originalValues.total;
 
-        formData.subtotal = $('#subtotal').find('.subtotal').val() ||originalValues.subtotal;
+        formData.subtotal = $('#subtotal').find('.subtotal').val() || originalValues.subtotal;
 
         // Get delivery charge, discount, and total paid
         formData.deliveryCharge = $('.deliveryCharge').val();
@@ -486,7 +518,40 @@
         formData.grandTotal = $('#g_total').find('.g_total').val() || originalValues.gTotal;
         formData.totalDue = $('#totalDue').find('.totalDue').val() || originalValues.dueAmount;
 
-        // console.log(formData);
+        // Use SweetAlert for confirmation
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                saveData(formData);
+                Swal.fire("Saved!", "", "success");
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+        // Swal.fire({
+        //     title: 'Confirm Save',
+        //     text: 'Are you sure you want to save this data?',
+        //     icon: 'info',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, save it!'
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         // Proceed with AJAX request to save the data
+        //         saveData(formData);
+        //     }
+        // });
+    });
+
+    // Function to make an AJAX request to save the data
+    function saveData(formData) {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -494,9 +559,154 @@
         });
         // Make an AJAX request to save the data
         $.ajax({
-            url: '{{route('order.update')}}', // Replace with your server endpoint
+            url: '{{ route('order.update') }}', // Replace with your server endpoint
             type: 'POST',
             data: formData,
+            success: function(response) {
+                // Handle success response
+                location.reload();
+                console.log('Data saved successfully!');
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error(error);
+            }
+        });
+    }
+    
+    
+        $('.btn-delete').on('click',function(event){
+        event.preventDefault();
+        var orderId = $('#orderId').val();
+        var orderItemId = $(this).data('order-item-id');
+        console.log(orderId);
+        console.log(orderItemId);
+        var totalOrderItems = $('.btn-delete').length;
+        // Check if there's only one order item
+        if (totalOrderItems === 1) {
+            // Show error message
+            Swal.fire('Error!', 'You cannot delete the only item in the order.', 'error');
+            return; // Stop further execution
+        }
+
+        // Show confirmation dialog using SweetAlert
+        Swal.fire({
+            title: 'Confirm Delete',
+            text: 'Are you sure you want to delete this order item?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Proceed with AJAX request to delete the order item
+                deleteOrderItem(orderId, orderItemId);
+            }
+        });
+
+    });
+
+    function deleteOrderItem(orderId, orderItemId) {
+        console.log(orderId);
+        console.log(orderItemId);
+        $.ajax({
+            url: '{{route('orderItem.delete')}}', // Replace with your server endpoint
+            type: 'POST',
+            data: {
+                order_id: orderId,
+                order_item_id: orderItemId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+                if (response.status === 'success') {
+                    // Optionally, update the UI to reflect the deletion
+                    // For example, remove the deleted order item from the DOM
+                    $(`.btn-delete[data-order-item-id="${orderItemId}"]`).closest('tr').remove();
+                    // Show success message
+                    Swal.fire('Deleted!', 'The order item has been deleted.', 'success');
+                    location.reload();
+                } else {
+                    // Show error message
+                    Swal.fire('Error!', 'Failed to delete the order item.', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error(error);
+            }
+        });
+    }
+
+    $('#newProduct').on('change', function() {
+        var productId = $(this).val();
+
+        // Fetch product details via AJAX
+        $.ajax({
+            url: '{{ route('newproduct.details') }}', // Replace with your route URL to fetch product details
+            type: 'GET',
+            data: { id: productId },
+            success: function(response) {
+                // Populate size options
+                // console.log(response);
+                $('#size').html('');
+                $.each(response.sizes, function(index, size) {
+                    $('#size').append('<option value="' + size.id + '">' + size.size_name + '</option>');
+                });
+
+                // Populate color options
+                $('#color').html('');
+                $.each(response.colors, function(index, color) {
+                    $('#color').append('<option value="' + color.id + '">' + color.color_name + '</option>');
+                });
+
+                // // Set price input
+                var price = $('#newprice').val(response.price);
+                var qty = $('#newqty').val(1);
+                var subtotal = response.price * 1;
+                $('#newSubtotal').val(subtotal.toFixed(2));
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error(error);
+            }
+        });
+    });
+    // Function to calculate subtotal
+    function calculateSubtotal() {
+        var price = parseFloat($('#newprice').val());
+        var quantity = parseInt($('#newqty').val());
+        var subtotal = price * quantity;
+        $('#newSubtotal').val(subtotal.toFixed(2)); // Display subtotal with two decimal places
+    }
+
+    // Event listener for price input change
+    $('#newprice').on('input', function() {
+        calculateSubtotal();
+    });
+    
+        // Event listener for quantity input change
+    $('#newqty').on('input', function() {
+        calculateSubtotal();
+    });
+
+    $('#newItemForm').on('submit', function(e) {
+        e.preventDefault();
+        var newItemData = $(this).serialize();
+        console.log(newItemData);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        // Make an AJAX request to save the data
+        $.ajax({
+            url: '{{ route('newProduct.store') }}', // Replace with your server endpoint
+            type: 'POST',
+            data: newItemData,
             success: function(response) {
                 // Handle success response
                 location.reload();

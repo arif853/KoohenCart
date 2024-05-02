@@ -6,7 +6,6 @@ use Datetime;
 use App\Models\Offer;
 use App\Models\Products;
 use App\Models\OfferType;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -31,7 +30,7 @@ class OfferController extends Controller
      */
     public function create_offer_type(Request $request)
     {
-
+       
         $rules = [
             'offer_type_name' => 'required|string|max:255',
         ];
@@ -96,7 +95,6 @@ class OfferController extends Controller
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'day' => $days_diff,
-                'slug' => Str::slug($request->offer_name),
             ]);
 
             $productIdArray = $request->input('offer_product_id'); // Correcting array access
@@ -131,27 +129,22 @@ class OfferController extends Controller
 
         // Fetch offer data from the database
         $offer = Offer::find($offerId);
-        $offer->items = $offer->products;
+
         // Check if offer exists
         if (!$offer) {
             return response()->json(['error' => 'Offer not found'], 404);
         }
 
-
+      
         return response()->json($offer);
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      */
-    public function updateOfferType(Request $request, $id)
+    public function edit(string $id)
     {
-        $OfferType = OfferType::findOrFail($id);
-        $OfferType->update([
-            'offer_type_name' => $request->offerType,
-        ]);
-
-        return response()->json('status', 200);
+        //
     }
 
     /**
@@ -165,11 +158,8 @@ class OfferController extends Controller
         // Calculate days
         $from_date_dt = new DateTime($from_date);
         $to_date_dt = new DateTime($to_date);
-
         $days_diff = $from_date_dt->diff($to_date_dt)->days;
-
         $id = $request->offer_id;
-
         $offerItem = Offer::find($id);
         $offerItem->offer_name = $request->offer_name;
         $offerItem->offer_percent = $request->offer_percent;
@@ -177,11 +167,8 @@ class OfferController extends Controller
         $offerItem->from_date = $request->from_date;
         $offerItem->to_date = $request->to_date;
         $offerItem->day = $days_diff;
-        $offerItem->slug = Str::slug($request->offer_name);
         $offerItem->save();
-
         $offerItem->products()->sync($request->input('offer_product_id'));
-
        if($offerItem ==true){
         return response()->json([
           'status' =>'success',
@@ -193,8 +180,8 @@ class OfferController extends Controller
          'message' => 'Offer Not Updated.',
         ]);
        }
-
-
+        
+       
     }
 
     /**

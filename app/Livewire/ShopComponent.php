@@ -132,7 +132,7 @@ class ShopComponent extends Component
 
     public $selectedColors = [], $colorBadge = [];
     public $selectedSizes = [], $sizeBadge = [];
-    public $perPage = 8;
+    public $perPage = 12;
     // public $products,
     public $groupedCategories ;
     public $selectedBadges = [];

@@ -21,9 +21,7 @@ class MyOrderComponent extends Component
 
     public function orderTracked($orderId)
     {
-        // Retrieve the order details using the order ID
-        // $trackedOrder = Order::with('product', 'color', 'size') // Add relationships as needed
-        //     ->find($orderId);
+
         $trackedOrder = Order::with('customer', 'order_item', 'shipping', 'transaction','orderStatus')
         ->where('order_track_id', $orderId)->first();
 
@@ -51,13 +49,13 @@ class MyOrderComponent extends Component
         // Set the tracked order in the component state
         $this->trackedOrder = $trackedOrder;
         $this->trackedProduct = $orderProducts;
-
         return view('livewire.my-order-component');
 
     }
 
     public function render()
     {
+
         $user = Auth::guard('customer')->user();
         $customer_id = $user->customer_id;
 

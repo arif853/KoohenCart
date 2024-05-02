@@ -56,6 +56,19 @@
                             <td>{{$role->name}}</td>
 
                             <td>
+                                @if($role->name =='Super Admin')
+                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
+                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
+                                        <i class="material-icons md-edit"></i> Edit
+                                    </a>
+                                    <a href="#" class="btn btn-sm font-sm btn-light rounded delete d-none">
+                                        <i class="material-icons md-delete_forever"></i> Delete
+                                    </a>
+                                </form>
+                                @else
                                 <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
@@ -67,6 +80,7 @@
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -139,10 +153,14 @@
                     // $("#sliderEditModal").modal('hide');
                     location.reload();
                 }
-                else{
-                    $.Notification.autoHideNotify('danger', 'top right', 'Danger', res);
-
-                }
+                // else{
+                //     $.Notification.autoHideNotify('danger', 'top right', 'Danger', res.responseJSON.errors.name[0]);
+                //     $("#sliderEditModal").modal('hide');
+                // }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $.Notification.autoHideNotify('danger', 'top right', 'Danger', xhr.responseJSON.errors.name[0]);
+                $("#roleModal").modal('hide');
             }
         })
     });
@@ -167,10 +185,13 @@
                     // $("#sliderEditModal").modal('hide');
                     location.reload();
                 }
-                else{
-                    $.Notification.autoHideNotify('danger', 'top right', 'Danger', res);
-
-                }
+                // else{
+                //     $.Notification.autoHideNotify('danger', 'top right', 'Danger', res);
+                // }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $.Notification.autoHideNotify('danger', 'top right', 'Danger', xhr.responseJSON.errors.name[0]);
+                $("#roleUpdateModal").modal('hide');
             }
         })
     });

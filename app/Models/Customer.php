@@ -30,10 +30,9 @@ class Customer extends Model
     {
         return $this->hasMany(transactions::class);
     }
-
+    
     public function appliedCoupone()
     {
         return $this->belongsTo(AppliedCoupone::class, 'customer_id');
     }
-
 }

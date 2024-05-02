@@ -2,9 +2,7 @@
 @extends('layouts.home')
 @section('title', 'Cart')
 @section('main')
-
     @livewire('cart-component')
-
     {{-- <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -15,6 +13,9 @@
                 </div>
             </div>
         </div>
+        
+
+
         <section class="mt-50">
             <div class="container">
                 <div class="row">
@@ -33,6 +34,7 @@
                                 </thead>
                                 <tbody>
                                     @if(Cart::count() > 0)
+                                    
                                         @foreach (Cart::content() as $item)
                                         <tr>
                                             <td class="image product-thumbnail"><img src="{{asset('storage/product_images/'.$item->options->image->product_image)}}" alt="{{$item->options->slug}}"></td>
@@ -154,3 +156,12 @@
         </section>
     </main> --}}
 @endsection
+
+
+
+
+
+
+
+
+

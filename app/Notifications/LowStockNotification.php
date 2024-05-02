@@ -49,11 +49,13 @@ class LowStockNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $stock = $this->product->product_stocks->sum('inStock') - $this->product->product_stocks->sum('outStock');
         return [
             'message' => 'Low stock alert!',
             'product_id' => $this->product->id,
             'product_name' => $this->product->product_name,
-            // 'current_stock' => $this->product->product_stock->sum('inStock') - $this->product->product_stock->sum('outStock'),
+            'current_stock' => $stock,
+            'date' => now(),
         ];
     }
 }

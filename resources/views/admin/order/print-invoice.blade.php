@@ -98,7 +98,7 @@
 
                                             <span>Size :</span>
                                             <span> {{ $item->product_sizes->size }} </span>  <br>
-
+                                           
                                             @endif
                                             <br>
 

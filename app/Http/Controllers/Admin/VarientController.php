@@ -19,8 +19,8 @@ class VarientController extends Controller
     public function index()
     {
 
-        $colors = Color::paginate(5);
-        $sizes = Size::paginate(5);
+        $colors = Color::all();
+        $sizes = Size::all();
         return view('admin.products.varient.index',compact('colors','sizes'));
     }
 
@@ -176,7 +176,8 @@ class VarientController extends Controller
                 'color_name' => $request->color_name,
                 'status' => $request->status ? 1 : 0,
             ]);
-            Session::flash('success','Color updated successfully!');
+            Session::flash('success', 'Color updated successfully!');
+            
             return response()->json(['status' => 200]);
             // return redirect()->back()->with('success', 'Color updated successfully.');
         }
@@ -213,10 +214,10 @@ class VarientController extends Controller
                 'size' => $request->size_value,
                 'status' => $request->status ? 1 : 0,
             ]);
+            
+            Session::flash('success', 'Size updated successfully!');
 
-            Session::flash('success','Size updated successfully!');
-
-            return response()->json(['status' => 200,]);
+            return response()->json(['status' => 200]);
             // return redirect()->back()->with('success', 'Color updated successfully.');
         }
 

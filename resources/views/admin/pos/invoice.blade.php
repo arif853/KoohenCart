@@ -120,6 +120,7 @@ footer{
     <div class="row" style="width: 100%; margin-bottom:25px;">
         <div class="content-address" style="width:60%; float:left;">
             <img src="{{ base_path('public/frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="Logo" style="width:120px;"><br>
+            {{-- <img src="{{ asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="Logo" style="width:120px;"><br> --}}
             <address style="margin-top:4px; font-size:8px;">{{ $settings->company_address }}</address>
             <p style="margin-top:4px; font-size:8px;">{{ $settings->secondary_mobile_no }},  {{ $settings->email }}</p>
         </div>
@@ -140,24 +141,22 @@ footer{
     <h3 class="tera" style="margin-bottom:0%;text-transform:uppercase;">Ship To:-</h3>
     <div class="customer" style="display: flex; justify-content: space-between; align-items: center;">
         @if ($order->customer->shipping->isNotEmpty())
-        <p style="margin-top:4px;"> <strong>Customer Name :</strong>
-            <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->shipping[0]->first_name.' '.$order->customer->shipping[0]->last_name }}</span>
-        </p>
-        <p style="margin-top:4px;"> <strong>Phone :</strong>
-            <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->shipping[0]->s_phone }}</span>
-        </p>
-        <p style="margin-top:4px; "> <strong>Address :</strong>
-            <span style="margin-top:4px; font-family: 'nikosh'; font-size:12px">{{ $order->customer->shipping[0]->shipping_add }}</span>
-        </p>
+            <p style="margin-top:4px; font-family: 'nikosh';"> <strong>Customer Name :</strong>
+                {{ $order->customer->shipping[0]->first_name.' '.$order->customer->shipping[0]->last_name }}
+            </p>
+            <p style="margin-top:4px; font-family: 'nikosh';"> <strong>Phone :</strong>
+                {{ $order->customer->shipping[0]->s_phone }}
+            </p>
+            <p style="margin-top:4px; font-family: 'nikosh';"> <strong>Address :</strong>
+                {{ $order->customer->shipping[0]->shipping_add }}
+            </p>
         @else
-        <p style="margin-top:4px; "> <strong>Customer Name :</strong>
-            <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->firstName.' '.$order->customer->lastName }}</span>
+        <p style="margin-top:4px; font-family: 'nikosh';"> <strong>Customer Name :</strong>{{ $order->customer->firstName.' '.$order->customer->lastName }}</p>
+        <p style="margin-top:4px; font-family: 'nikosh';"> <strong>Phone :</strong>
+            {{ $order->customer->phone }}
         </p>
-        <p style="margin-top:4px; "> <strong>Phone :</strong>
-        <span style="font-family: 'nikosh'; font-size:10px">{{ $order->customer->phone}}</span>
-        </p>
-        <p style="margin-top:4px;"> <strong>Address :</strong>
-            <span style="font-family: 'nikosh'; font-size:12px">{{ $order->customer->billing_address}}</span>
+        <p style="margin-top:4px; font-family: 'nikosh';"> <strong>Address :</strong>
+        {{ $order->customer->billing_address }}
         </p>
         @endif
 
@@ -242,6 +241,7 @@ footer{
 
     <div class="bg-watermark">
         <img class="watermark" style="opacity: 0.08;" src="{{ base_path('public/frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark">
+        {{-- <img class="watermark" style="opacity: 0.08;" src="{{ asset('frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark"> --}}
     </div>
 </body>
 </html>

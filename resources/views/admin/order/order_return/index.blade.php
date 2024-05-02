@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+@section('title','Orders Retrun')
 @section('content')
 
     <div class="content-header">
@@ -12,28 +13,32 @@
                 </ol>
             </nav>
         </div>
-
+        {{-- <div>
+            <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#returnModal">
+                 Return Order
+            </button>
+        </div> --}}
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                {{-- <header class="card-header">
-                    <h5 class="mb-3">Filter by</h5>
-                    <form>
-                        <div class="row">
-                        <div class="col-md-3 mb-4">
-                            <label for="order_id" class="form-label">Order ID</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="order_id">
-                        </div>
+                <!--<header class="card-header">-->
+                <!--    <h5 class="mb-3">Filter by</h5>-->
+                <!--    <form>-->
+                <!--        <div class="row">-->
+                <!--        <div class="col-md-3 mb-4">-->
+                <!--            <label for="order_id" class="form-label">Order ID</label>-->
+                <!--            <input type="text" placeholder="Type here" class="form-control" id="order_id">-->
+                <!--        </div>-->
 
-                        <div class="col-md-3 mb-4">
-                            <label for="order_created_date" class="form-label">Return Date</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="order_created_date">
-                        </div>
-                    </div>
-                </form>
+                <!--        <div class="col-md-3 mb-4">-->
+                <!--            <label for="order_created_date" class="form-label">Return Date</label>-->
+                <!--            <input type="text" placeholder="Type here" class="form-control" id="order_created_date">-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--</form>-->
 
-                </header> --}}
+                <!--</header>-->
 
                 <!-- card-header end// -->
                 <div class="card-body">
@@ -50,7 +55,6 @@
                                     <th>Return Date</th>
                                     <th>Action</th>
                                 </tr>
-                            </thead>
                             </thead>
                             <tbody>
                                 @if ($order_return->isNotEmpty())
@@ -97,6 +101,8 @@
                                     </tr>
                                     @endforeach
                                 @endif
+
+
                             </tbody>
                         </table>
                     </div> <!-- table-responsive //end -->

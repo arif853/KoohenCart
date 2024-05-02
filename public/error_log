@@ -1,0 +1,1096 @@
+[07-Feb-2024 05:01:51 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.0.30. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[04-Mar-2024 04:06:43 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:08:53 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:08:53 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:08:54 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:08:59 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:09:04 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:09:10 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:09:13 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:09:15 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:10:42 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.0.30. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[04-Mar-2024 04:12:05 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[04-Mar-2024 04:12:07 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[04-Mar-2024 04:12:27 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:12:35 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:20:15 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:24:07 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:24:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:24:27 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:27:38 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:28:53 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:29:25 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:29:59 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:07 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:08 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:10 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:11 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:12 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:13 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:14 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:14 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 04:30:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 06:11:35 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[04-Mar-2024 06:12:17 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "config" does not exist in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:912
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#13 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#14 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#15 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [config] does not exist. in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php:914
+Stack trace:
+#0 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate\Container\Container->build('config')
+#1 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(957): Illuminate\Container\Container->resolve('config', Array, true)
+#2 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate\Foundation\Application->resolve('config', Array)
+#3 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(942): Illuminate\Container\Container->make('config', Array)
+#4 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php(1454): Illuminate\Foundation\Application->make('config')
+#5 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(560): Illuminate\Container\Container->offsetGet('config')
+#6 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(611): Illuminate\Log\LogManager->getDefaultDriver()
+#7 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(124): Illuminate\Log\LogManager->parseDriver(NULL)
+#8 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(681): Illuminate\Log\LogManager->driver()
+#9 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(317): Illuminate\Log\LogManager->error('Call to undefin...', Array)
+#10 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(278): Illuminate\Foundation\Exceptions\Handler->reportThrowable(Object(Error))
+#11 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(497): Illuminate\Foundation\Exceptions\Handler->report(Object(Error))
+#12 /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(146): Illuminate\Foundation\Http\Kernel->reportException(Object(Error))
+#13 /home/koohen/public_html/index.php(51): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 {main}
+  thrown in /home/koohen/public_html/koohen/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 914
+[04-Mar-2024 06:12:40 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[04-Mar-2024 06:13:19 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[04-Mar-2024 06:13:21 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/koohen/public_html/koohen/vendor/composer/platform_check.php on line 24
+[27-Mar-2024 06:05:56 UTC] PHP Warning:  require(/home/koohen/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/koohen/public_html/index.php on line 34
+[27-Mar-2024 06:05:56 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/koohen/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/koohen/public_html/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/koohen/public_html/index.php on line 34
+[27-Mar-2024 06:06:42 UTC] PHP Warning:  require(/home/koohen/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/koohen/public_html/index.php on line 34
+[27-Mar-2024 06:06:42 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/koohen/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/koohen/public_html/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/koohen/public_html/index.php on line 34
+[27-Mar-2024 06:06:46 UTC] PHP Warning:  require(/home/koohen/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/koohen/public_html/index.php on line 34
+[27-Mar-2024 06:06:46 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/koohen/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/koohen/public_html/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/koohen/public_html/index.php on line 34

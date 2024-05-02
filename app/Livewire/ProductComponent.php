@@ -7,10 +7,10 @@ use App\Models\Color;
 use Livewire\Component;
 use App\Models\Campaign;
 use App\Models\Products;
-use Livewire\Attributes\On;
 use App\Models\Product_image;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Livewire\Attributes\On;
 
 class ProductComponent extends Component
 {
@@ -26,8 +26,7 @@ class ProductComponent extends Component
         $product = Products::find($id);
         $item_name = $product->product_name;
         $offer_price = $product->product_price->offer_price;
-
-        $campaign = Campaign::where('status','Published')->first();
+       $campaign = Campaign::where('status','Published')->first();
         $flag = 0;
         if ($campaign) {
             $camp_products = $campaign->camp_product;
@@ -59,7 +58,7 @@ class ProductComponent extends Component
 
         Session::flash('success','Product added To cart.');
         $this->dispatch('cartRefresh')->to('cart-icon-component');
-
+        
         return redirect()->route('cart');
 
     }
@@ -73,8 +72,8 @@ class ProductComponent extends Component
         $item_qty = session()->get('quantity') + 1;
         $item_size = session()->get('product_size');
         $item_color = session()->get('product_color');
-        $offer_price = $product->product_price->offer_price;
 
+        $offer_price = $product->product_price->offer_price;
         $campaign = Campaign::where('status','Published')->first();
         $flag = 0;
         if ($campaign) {
@@ -123,7 +122,7 @@ class ProductComponent extends Component
         session()->forget('quantity');
         session()->forget('product_size');
         session()->forget('product_color');
-
+        
         Session::flash('success', 'Product added to cart.');
             // return response()->json( $item_data);
         return redirect()->route('checkout');
@@ -149,9 +148,6 @@ class ProductComponent extends Component
             'product_stocks',
         ])->where('slug', $this->slug)->first();
 
-        $campaign = Campaign::where('status','Published')->first();
-
-
-        return view('livewire.product-component',['product'=>$product, 'campaign' => $campaign]);
+        return view('livewire.product-component',['product'=>$product]);
     }
 }

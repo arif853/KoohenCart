@@ -117,20 +117,19 @@
             }
         });
         $.ajax({
-            url: '/dashboard/inventory/newstock',
+            url: '{{url('/dashboard/inventory/newstock')}}',
             method: 'GET',
             data: {
                 id: product,
             },
             success: function (response) {
-                console.log(response.stock.purchase_date);
+                console.log(response.stock);
 
                 // Update other fields
                 $('#product_id').val(response.product.id);
                 $('#old_stock').val(response.stock ? response.stock.inStock : 0);
                 $('#product_name').val(response.product.product_name);
                 $('#supplier').val(response.product.supplier.supplier_name);
-                $('#purchase_date').val(response.stock.purchase_date);
 
 
                 // Create and append input fields for each size
@@ -138,14 +137,16 @@
                 inputContainer.empty();
 
                 var i = 0;
-                var balanceQuantity = 0;
+                    var balanceQuantity = 0, inStock = 0, outStock = 0;
                 // Create and append input fields for each size
                 $.each(response.product.sizes, function (index, size) {
 
                     $.each(response.stock, function (index, stock) {
                         // Check if stock information is available for the size
-                        if (stock.size_id === size.id) {
+                        if (stock.size_id == size.id) {
                             // Calculate balance quantity
+                            inStock = stock.inStock;
+                            outStock = stock.outStock;
                             balanceQuantity = stock.inStock - stock.outStock;
                             // console.log(balanceQuantity);
                         }
@@ -155,7 +156,9 @@
                     var inputField = '<div class="input-group mb-3">' +
                                         '<input type="hidden" value="'+size.id+'" name=size['+i+']>'+
                                         '<label class="input-group-text" for="quantity_' + size.id + '">'+ size.size_name + '</label>' +
-                                        '<input type="text" readonly class="form-control" id="" name="" value="' + balanceQuantity + '">' +
+                                        '<input type="text" readonly class="form-control" value="' + inStock + '">' +
+                                        '<input type="text" readonly class="form-control" value="' + outStock + '">' +
+                                        '<input type="text" readonly class="form-control" value="' + balanceQuantity + '">' +
                                         '<input type="number" class="form-control" id="quantity_' + i + '" name="quantity[' + i + ']" value="0">' +
                                     '</div>';
                     inputContainer.append(inputField);
@@ -173,7 +176,7 @@
         const data = new FormData(this);
         console.log(data);
         $.ajax({
-            url: '/dashboard/inventory/addstock',
+            url: '{{url('/dashboard/inventory/addstock')}}',
             method: 'post',
             data: data,
             cache: false,

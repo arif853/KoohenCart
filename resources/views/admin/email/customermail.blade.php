@@ -16,9 +16,8 @@
         <div class="card-body" style="padding:15px 25px;">
             <h3 class="card-title"><strong>{{$order->customer->firstName}} {{$order->customer->lastName}}</strong>, your order has been placed. Login to check order status.</h3>
             <p class="card-text">
-                <h4><a href="{{url('trackorder/track_order/'.$order->order_track_id)}}">[Tracking No {{$order->order_track_id}}]</a>  ({{$order->created_at->setTimezone('Asia/Dhaka')->format('M j, Y, g:iA')}})</h4>
+                <h4><a href="#">[Tracking No #{{$order->order_track_id}}]</a>  ({{$order->created_at->setTimezone('Asia/Dhaka')->format('M j, Y')}})</h4>
                 <h4>Order Status : <span style="color: #088178; border-bottom:1px solid #088178">{{$order->orderStatus->status}}</span></h4>
-
             </p>
             <table cellspacing="0" cellpadding="8" border="1" bgcolor="#000000" style="width: 100%; text-align:center">
                 <tr bgcolor="#ffffff" >
@@ -69,7 +68,7 @@
                     <p>Email: <a href="#">{{$shipping->s_email}}</a></p>
                 </p>
             </div>
-            <p>User your phone or email as usename and phone number as password for login. <a href="https://www.koohen.com" class="">Click on.</a></p>
+            <p>Track Your order <a href="https://www.koohen.com/trackorder" class="">Click on.</a></p>
         </div>
     </div>
 </body>

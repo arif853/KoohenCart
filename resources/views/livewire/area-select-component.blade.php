@@ -8,6 +8,9 @@
                     <option value="{{ $division->id }}">{{ $division->name }}</option>
                 @endforeach
             </select>
+            @error('s_division')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
     </div>
     <div class="col-lg-6">
@@ -19,6 +22,9 @@
                     <option value="{{ $district->id }}">{{ $district->name }}</option>
                 @endforeach
             </select>
+            @error('s_district')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
     </div>
     <div class="col-lg-6">
@@ -30,6 +36,9 @@
                     <option value="{{ $postOffice->id }}">{{ $postOffice->postOffice }} - {{$postOffice->postCode}} - {{$postOffice->zone_charge}}</option>
                 @endforeach
             </select>
+            @error('s_area')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
     </div>
      {{-- <div class="col-lg-6">

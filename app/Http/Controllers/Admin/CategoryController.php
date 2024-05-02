@@ -40,7 +40,7 @@ class CategoryController extends Controller
     {
         $rules = [
             'category_name' => 'required',
-            'category_icon' => 'required|mimes:jpeg,png,jpg,gif,svg,webp|max:500',
+            'category_icon' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ];
 
@@ -80,14 +80,15 @@ class CategoryController extends Controller
             if ($request->hasFile('category_image')) {
                 $image = $request->file('category_image');
                 // create new manager instance with desired driver
-
                 $manager = new ImageManager(new Driver());
                 $imageName = $request->category_name . '_' . time() . '.' . $image->getClientOriginalExtension();
-
                 // read image from filesystem
+                
                 $img = $manager->read($image);
+                
                 // $img = $img->resize(150, 150);
                 // Save the original image
+                
                 $imagePath = 'category_image/' . $imageName;
                 Storage::disk('public')->put( $imagePath , (string)$img->encode());
 
@@ -139,6 +140,7 @@ class CategoryController extends Controller
 
         $rules = [
             'category_name' => 'required',
+            'category_icon' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ];
 
@@ -154,7 +156,7 @@ class CategoryController extends Controller
         }
         else{
 
-            if($request->hasFile('category_icon'))
+                        if($request->hasFile('category_icon'))
             {
                 $iconImage = $request->file('category_icon');
                 // create new manager instance with desired driver
@@ -205,7 +207,7 @@ class CategoryController extends Controller
                 'category_image' => $cat_image,
                 'status' => $request->status ? 1 : 0,
             ]);
-
+            
             Session::flash('success', 'Category Updated successfully.');
             return response()->json(['status'=> 200, 'message' => 'Category Updated Successfully!']);
         }

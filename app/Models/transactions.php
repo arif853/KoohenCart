@@ -9,7 +9,7 @@ class transactions extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'order_id', 'mode','status'];
+    protected $fillable = ['customer_id', 'order_id', 'mode','status','transaction_no'];
 
     public function order()
     {

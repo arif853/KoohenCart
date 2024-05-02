@@ -19,19 +19,19 @@
                         <i class="material-icons md-calendar_today"></i> <b>{{$order->created_at->setTimezone('Asia/Dhaka')->format('D, M j, Y, g:iA')}}</b>
                     </span> <br>
                     <small class="text-muted">Order ID: {{$order->id}}</small> <br>
-                    {{-- <small class="text-muted">Your order has been delivered</small> --}}
+                    <!--<small class="text-muted">Your order has been delivered</small>-->
                 </div>
-                <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                    <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200 mr-15">
-                        <option>Change status</option>
-                        <option>Awaiting payment</option>
-                        <option>Confirmed</option>
-                        <option>Shipped</option>
-                        <option>Delivered</option>
-                    </select>
-                    <a class="btn btn-primary" href="#">Screenshot</a>
-                    <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print mr-5"></i>Print</a>
-                </div>
+                <!--<div class="col-lg-6 col-md-6 ms-auto text-md-end">-->
+                <!--    <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200 mr-15">-->
+                <!--        <option>Change status</option>-->
+                <!--        <option>Awaiting payment</option>-->
+                <!--        <option>Confirmed</option>-->
+                <!--        <option>Shipped</option>-->
+                <!--        <option>Delivered</option>-->
+                <!--    </select>-->
+                <!--    <a class="btn btn-primary" href="#">Screenshot</a>-->
+                <!--    <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print mr-5"></i>Print</a>-->
+                <!--</div>-->
             </div>
         </header> <!-- card-header end// -->
         <div class="card-body">

@@ -18,10 +18,14 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{asset('')}}frontend/assets/css/main.css?v=3.4">
     <!--Font-->
-
+    
+    
+    
 </head>
 
 <body>
+
+    
     <!-- Quick view -->
     <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
         <div class="modal-dialog">

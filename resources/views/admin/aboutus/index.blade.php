@@ -78,7 +78,7 @@
                     </div>
                     <div class="col-md-12 mb-2">
                         <label for="summernote" class="form-label">Description<span class="text-danger">*</span></label>
-                        <textarea placeholder="Type here" class="form-control" id="summernote" rows="15" name="description"></textarea>
+                        <textarea placeholder="Type here" class="form-control details" id="summernote" rows="15" name="description"></textarea>
                     </div>
                     <div class="col-12 d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">Save</button>

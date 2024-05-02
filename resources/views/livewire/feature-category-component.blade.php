@@ -11,19 +11,22 @@
                     <div class="product-img product-img-zoom">
                         <a href="{{route('product.detail',['slug'=>$product->slug])}}">
 
-                            @foreach ($product->product_images as $index => $image)
-                            @if($index == 0)
-                            <img class="default-img"
-                            src="{{asset('storage/product_images/'.$product->product_images[0]->product_image)}}" alt="{{$product->slug}}">
-                            @endif
-
-
-                            @endforeach
+                                @foreach ($product->product_thumbnail as $index => $image)
+                                @if($index == 0)
+                                <img class="default-img"
+                                src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail[0]->product_thumbnail)}}" alt="{{$product->slug}}">
+                                @endif
+    
+                                @if($index == 1)
+                                <img class="hover-img"
+                                src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail[1]->product_thumbnail)}}" alt="{{$product->slug}}">
+                                @endif
+                                @endforeach
                         </a>
                     </div>
                     <div class="product-action-1">
-                        <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
-                        <i class="fi-rs-eye"></i></a>
+                        <a aria-label="Quick view" class="action-btn hover-up quickview" data-bs-toggle="modal" data-bs-target="#quickViewModal" data-product-slug="{{$product->slug}}">
+                                <i class="fi-rs-eye"></i></a>
                         <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                     </div>
                     <div class="product-badges product-badges-position product-badges-mrg">

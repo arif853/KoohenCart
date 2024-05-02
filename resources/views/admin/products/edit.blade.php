@@ -76,7 +76,7 @@
                                                     <input type="text" placeholder="Type here" class="form-control tag-input" spellcheck="false">
                                                     <div class="tag-details d-flex justify-content-between">
                                                         <p><span>10</span> tags are remaining</p>
-                                                        <button><i class="fa fa-times"></i></button>
+                                                        <button><i class="fa-solid fa-times"></i></button>
                                                     </div>
                                                     <ul class="tag-content">
                                                         @foreach ($products->tags as $oldtag)
@@ -114,14 +114,14 @@
                                                 <div  class="row mt-4">
                                                     @foreach ($products->product_thumbnail as $productImage)
                                                     <div class="col-lg-3">
-                                                        {{-- <div class="overlay-bg">
+                                                        <div class="overlay-bg">
                                                             <div class="brand-overlay">
                                                                 <div class="action-icon">
                                                                      <input type="hidden" name="productimage_id" value="{{$productImage->id}}" id="productimage_id">
                                                                     <a class="delete_image" data-productimage-id="{{$productImage->id}}" href="#"><i class="fa-solid fa-times"></i></a>
                                                                 </div>
                                                             </div>
-                                                        </div> --}}
+                                                        </div>
                                                         <img src="{{asset('storage/product_images/thumbnail/'.$productImage->product_thumbnail)}}" alt="{{$products->slug}}">
                                                         {{-- <button class="btn btn-danger btn-sm">Remove</button> --}}
                                                         <button class="btn btn-danger btn-sm delete_thumb mb-2"  data-productimage-id="{{$productImage->id}}"><i class="fa fa-times"></i></button>
@@ -365,10 +365,10 @@
             <div class="right-bar" id="right_bar">
                 <div class="card mb-4">
                     <div class="card-body">
-                        {{-- <div class="mb-4">
-                            <label class="form-label">Stock<span class="text-danger">*</span></label>
-                           <input type="number" name="stock" class="form-control" id="stock" value="{{$products->stock}}" required>
-                        </div> --}}
+                        <!--<div class="mb-4">-->
+                        <!--    <label class="form-label">Stock<span class="text-danger">*</span></label>-->
+                        <!--   <input type="number" name="stock" class="form-control" id="stock" value="{{$products->stock}}" required>-->
+                        <!--</div>-->
                         <div class="mb-4">
                             <label class="form-label">Status<span class="text-danger">*</span></label>
                             <select class="select-nice" name="status" required>
@@ -507,7 +507,7 @@
 
             // Get the product image ID
             var productImageId = element.getAttribute('data-productimage-id');
-                // console.log(productImageId);
+                console.log(productImageId);
             // Show SweetAlert confirmation
             Swal.fire({
                 title: 'Are you sure?',

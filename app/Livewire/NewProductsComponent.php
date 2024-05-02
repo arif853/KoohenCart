@@ -6,20 +6,21 @@ use Livewire\Component;
 use App\Models\Campaign;
 use App\Models\Products;
 use App\Models\Product_image;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
+
 
 class NewProductsComponent extends Component
 {
     public $Newproducts = [];
+    
     public function store($id)
     {
         $product = Products::find($id);
         $item_name = $product->product_name;
         $offer_price = $product->product_price->offer_price;
-
-        $campaign = Campaign::where('status','Published')->first();
+         $campaign = Campaign::where('status','Published')->first();
         $flag = 0;
         if ($campaign) {
             $camp_products = $campaign->camp_product;
@@ -51,7 +52,7 @@ class NewProductsComponent extends Component
         $this->dispatch('cartRefresh')->to('cart-icon-component');
 
     }
-
+    
     public function AddToWishlist($id){
 
         $product = Products::find($id);
@@ -107,13 +108,13 @@ class NewProductsComponent extends Component
             'category',
             'subcategory',
             'product_price',
-            'product_stocks',
+            'product_stocks'
         ])->latest('created_at')->take(8)->get();
-
-        if(Auth::guard('customer')->check()){
+        
+         if(Auth::guard('customer')->check()){
             Cart::instance('wishlist')->store(Auth::guard('customer')->user()->email);
         }
-        $campaign = Campaign::where('status','Published')->first();
+                $campaign = Campaign::where('status','Published')->first();
 
 
         return view('livewire.new-products-component',[

@@ -131,8 +131,12 @@
             contentType: false,
             success: function (res) {
                 if (res.status == 200) {
+
                     // $("#sliderEditModal").modal('hide');
+
                     location.reload();
+
+                    // $.Notification.autoHideNotify('success', 'top right', 'Success', res.message);
                 }
                 else{
                     $.Notification.autoHideNotify('danger', 'top right', 'Danger', res);

@@ -33,19 +33,19 @@
                         {{-- <input type="text" class="form-control" id="validationDefault01" required> --}}
                     </div>
                     <div class="col-md-12 mb-4">
-                        <label for="offer_product_id" class="form-label">Products<span class="text-danger">*</span></label>
-                        <select id="offer_product_id" class="form-control select-nice" name="offer_product_id[]" multiple="multiple">
+                        <label for="validationDefault01" class="form-label">Products<span class="text-danger">*</span></label>
+                        <select id="offer_product_id" class="js-select2" name="offer_product_id[]" multiple="multiple">
                            @foreach ($products as $product)
                            <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                            @endforeach
                         </select>
                         {{-- <input type="text" class="form-control" id="validationDefault01" required> --}}
                     </div>
-                    {{-- <div class="product_list">
+                    <div class="product_list">
                         <ul id="offer_productlist">
                             <li></li>
                         </ul>
-                    </div> --}}
+                    </div>
                     <div class="col-md-12 mb-4 ">
                         <input type="checkbox"  id="CheckBoxFields" >
                         <label for="showVariantFields" class="form-label ml-2">Check if offer time limited</label>

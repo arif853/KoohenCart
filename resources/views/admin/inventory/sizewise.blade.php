@@ -118,6 +118,7 @@
                                                 </div>
 
                                                 @endforeach
+                                                
                                                 <div class="size-stock-balance">
                                                     <div class="size-name">Total</div>
                                                     <div class="stock-info">
@@ -158,7 +159,7 @@
         var printWindow = window.open('', '_blank');
 
         // Copy the content of the table to the new window
-        printWindow.document.write('<html><head><title>Sale Report</title>');
+        printWindow.document.write('<html><head><title>Size Wise Inventory Report</title>');
 
         // Include custom CSS styles for the printed table
         printWindow.document.write('<style>');
@@ -179,7 +180,7 @@
         printWindow.document.write('</style>');
 
         printWindow.document.write('</head><body>');
-        printWindow.document.write('<h2>Sales Report</h2>');
+        printWindow.document.write('<h2>Size Wise Inventory Report</h2>');
         printWindow.document.write('<table>' + $('#datatable').html() + '</table>');
         printWindow.document.write('</body></html>');
 

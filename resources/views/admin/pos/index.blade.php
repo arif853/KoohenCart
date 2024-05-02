@@ -48,7 +48,6 @@
         border-radius: 10px;
         padding: 15px 25px;
     }
-
     .select-form {
         background-color: #f4f5f9;
         border: 2px solid #f4f5f9;
@@ -96,7 +95,7 @@
                         </div>
 
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="height: 700px; overflow-y: scroll;">
 
                         <table class="table table-hover shopping-cart-wrap" id="productTable">
                             <thead class="text-muted">
@@ -109,8 +108,7 @@
                                     <th scope="col" class="text-end" >Action</th>
                                 </tr>
                             </thead>
-
-                            <tbody>
+                             <tbody>
                                 @foreach ($products as $product)
                                 <tr>
                                     <td>
@@ -128,7 +126,7 @@
 
                                     <td>
                                     <select name="colors" class="form-control" id="colorSelect" data-product-color>
-                                    {{-- <option value="">Select Color</option> --}}
+                                    <!--<option value="">Select Color</option>-->
                                         @foreach ($product->colors as $color)
                                             <option value="{{$color->id}}">{{$color->color_name}}</option>
                                         @endforeach
@@ -137,7 +135,7 @@
 
                                     <td>
                                     <select name="sizes" class="form-control" id="sizeSelect" data-product-size>
-                                    {{-- <option value="">Select Size</option> --}}
+                                    <!--<option value="">Select Size</option>-->
                                         @foreach ($product->sizes as $size )
                                             @php
                                                 $sizeStock = DB::table('product_stocks')
@@ -184,9 +182,6 @@
 
             <div class="col-md-5">
                 <form action="#" id="pos_order_form">
-                    {{-- @csrf
-                        {{url('dashboard/pos/store')}}
-                    @method('POST') --}}
                     <div class="customer-wrapper">
                         <div class="customer-body-wrapper">
                             <a class="btn btn-primary mr-10" id="existing_customer_btn">Existing Customer</a>
@@ -199,9 +194,9 @@
                             </div>
 
                             <div class="customer-search" style="display: none;">
-                                <div class="mt-20 search-box">
+                                <div class="mt-10 search-box">
                                     <input type="text" class="form-control searchInput" id="searchInput" placeholder="Search customer by phone or email">
-                                    {{-- <a class="btn btn-primary ml-2" id="addNewCustomer" href="#"><i class="fa-solid fa-plus"></i></a> --}}
+                                    <!--<a class="btn btn-primary ml-2" id="addNewCustomer" href="#"><i class="fa-solid fa-plus"></i></a>-->
 
                                     <div id="customerList">
                                         <ul >
@@ -233,7 +228,6 @@
                                         @endphp
                                         @foreach (Cart::instance('pos_cart')->content() as $item)
                                         <tr>
-                                            <input type="hidden" value="{{$item->rowId}}">
                                             <td>
                                             <figure class="media">
 
@@ -243,7 +237,6 @@
                                             </figure>
                                             </td>
                                             <td class="text-center">
-                                            {{-- <span>{{$item->qty}}</span> --}}
                                             <span class="product-qty mt-4">
                                                 <a href="{{url('dashboard/pos_cart/remove/'.$item->rowId)}}" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
 
@@ -285,7 +278,7 @@
 
                                             </td>
                                             <td class="text-right">
-                                            <a href="#" class="btn btn-outline-danger removeCartItems" data-row-id="{{$item->rowId}}"><i class="fal fa-times"></i></a>
+                                            <a href="#" class="btn btn-outline-danger removeCartItems" data-row-id="{{$item->rowId}}"> <i class="fa-solid fa-xmark"></i></a>
                                             </td>
                                             </tr>
                                         <tr>
@@ -300,22 +293,21 @@
                         </div>
 
                     </div> <!-- card.// -->
-            {{-- <style>
-                .table tr td{
-                    padding: 5px 0 ;
-
-                }
-                .table tr td:nth-child(2){
-                    width: 35%;
-                    font-size: 16px;
-                }
-            </style> --}}
-
+                <!--<style>-->
+                <!--    .table tr td{-->
+                <!--        padding: 5px 0 ;-->
+    
+                <!--    }-->
+                <!--    .table tr td:nth-child(2){-->
+                <!--        width: 35%;-->
+                <!--        font-size: 16px;-->
+                <!--    }-->
+                <!--</style>-->
                     <div class="card">
                         <div class="card-body">
-                            <table class="table text-end">
+                            <table class="table  shopping-cart-wrap text-end">
                                 <tr >
-                                    <td colspan="2">Subtotal:</td>
+                                    <td>Subtotal:</td>
                                     <td >
                                         @if($total > 0)
                                         ৳{{$total}}
@@ -327,32 +319,32 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Delivery Charge:</td>
+                                    <td>Delivery Charge:</td>
                                     <td><input type="text" class="form-input" placeholder="Delivery Charge" name="delivery_charge" id="delivery_charge" value="0"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Discount:</td>
+                                    <td>Discount:</td>
                                     <td><input type="text" class="form-input" placeholder="Discount" name="discount" id="discount" value="0"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Total Payable:</td>
+                                    <td>Total:</td>
                                     <td id="total">৳{{$total}}</td>
                                     <input type="hidden" name="total" id="g_total" value="{{$total}}">
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Paid Amount:</td>
+                                    <td >Paid Amount:</td>
                                     <td>
                                         <input type="text" class="form-input" placeholder="total_paid" name="total_paid" id="total_paid" value="0">
                                     </td>
                                     {{-- <input type="hidden" name="total" id="total_paid" value="{{$total}}"> --}}
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Due Amount:</td>
+                                    <td >Due Amount:</td>
                                     <td id="t_due">৳{{$total}}</td>
                                     <input type="hidden" name="total_due" id="total_due" value="{{$total}}">
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Order From:</td>
+                                    <td >Order From:</td>
                                     <td >
                                         <select name="order_from" id="orderFrom" class="select-form">
                                             <option value=""> --Select order from-- </option>
@@ -368,8 +360,9 @@
 
                                 </div>
                                 <div class="col-md-7">
-                                    <a href="#" class="btn btn-danger btn-block" id="order_cancel"><i class="fal fa-times"></i> Cancel </a>
-                                    <a href="#" class="btn btn-primary" id="proceed_order_btn"><i class="fal fa-shopping-bag mr-5"></i>Procced order </a>
+                                    <a href="#" class="btn btn-danger btn-block" id="order_cancel">
+                                        <i class="fa-solid fa-xmark"></i> Cancel </a>
+                                    <a href="#" class="btn btn-primary " id="proceed_order_btn"><i class="fa-solid fa-bag-shopping"></i>Procced order </a>
                                 </div>
                             </div>
                         </div>
@@ -380,10 +373,10 @@
             </div>
         </div>
     </div><!-- container //  -->
-
 </section>
 
-    <!-- Modal -->
+
+<!-- Modal -->
     <div class="modal fade" id="newCustomer" tabindex="-1" aria-labelledby="newCustomerLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -432,7 +425,7 @@
         var deliveryChargeInput = $('#delivery_charge');
         var discountInput = $('#discount');
         var totalElement = $('#total');
-        var paidElement = $('#total_paid');
+         var paidElement = $('#total_paid');
         var dueElement = $('#t_due');
 
         // Attach event listeners to the input fields
@@ -441,7 +434,7 @@
         paidElement.on('keyup', updateDue);
 
 
-        function updateTotal() {
+       function updateTotal() {
             // Get the values from the input fields, default to 0 if empty
             var deliveryCharge = parseFloat(deliveryChargeInput.val()) || 0;
             var discount = parseFloat(discountInput.val()) || 0;
@@ -478,6 +471,7 @@
         });
 
 
+       
         function handleSearch() {
             var searchTerm = $(this).val().trim();
             // console.log(searchTerm)
@@ -519,7 +513,7 @@
                                 var selectedCustomerHTML = '<div class="selected-customer">' +
                                                                 '<p class="mt-5">' + selectedCustomer + '</p>' +
                                                                 '<input type="hidden" id="ex_customer" name="customer_id" data-customer-id="'+selectedCustomerId+'">'+
-                                                                '<a href="#" class="remove-customer"><i class="fal fa-times"></i> Remove</a>' +
+                                                                '<a href="#" class="remove-customer"><i class="fa-solid fa-xmark"></i> Remove</a>' +
                                                             '</div>';
 
                                 $('.customer-search').empty().html(selectedCustomerHTML);
@@ -553,7 +547,7 @@
             // Clear the selected customer and re-bind the search input
             $('.customer-search').empty().html('<div class="mt-10 search-box">' +
                 '<input type="text" class="form-control searchInput" name="customer" id="searchInput" placeholder="Search customer by phone or email">' +
-                '<a class="btn btn-primary ml-2" id="addNewCustomer" href="#"><i class="fal fa-plus"></i></a>' +
+                '<a class="btn btn-primary ml-2" id="addNewCustomer" href="#"><i class="fa-solid fa-plus"></i></a>' +
                 '<div id="customerList">' +
                 ' <ul ></ul>' +
                 '</div>' +
@@ -563,19 +557,19 @@
             // Re-bind the input event for the search functionality
             $('#searchInput').on('input', handleSearch);
         });
-
-        $('#product_search').on('input', function () {
+        
+         $('#product_search').on('input', function () {
             var searchTerm = $(this).val().trim();
             console.log(searchTerm)
 
-            if (searchTerm.length > 1) { // Adjust the minimum characters for search as needed
+            if (searchTerm.length > 2) { // Adjust the minimum characters for search as needed
                 $.ajax({
                     url: '{{ route('search.products') }}',
                     type: 'GET',
                     data: { term: searchTerm },
                     success: function (response) {
                         displaySearchResults(response);
-                        console.log(response)
+                        // console.log(response)
                     },
                     error: function (error) {
                         console.error('Error fetching search results:', error);
@@ -584,7 +578,8 @@
             }
         });
 
-        function displaySearchResults(products) {
+
+         function displaySearchResults(products) {
             var tableBody = $('#productTable tbody');
             tableBody.empty();
 
@@ -594,13 +589,14 @@
                     var colors = '';
                     var sizes = '';
                     var totalStock = 0; // Variable to store the total stock for the current product
-                    // Loop through product stocks to calculate the total stock
-                    product.product_stocks.forEach(function (element) {
+                    
+                    
+                     product.product_stocks.forEach(function (element) {
                         // Convert 'inStock' to a number before adding
                         var balance = parseInt(element.inStock, 10) - parseInt(element.outStock, 10) || 0; // Use parseInt() with a fallback of 0
 
                         totalStock += balance;
-                        console.log(totalStock);
+                        // console.log(totalStock);
                     });
                         // Now, 'totalStock' contains the sum of 'inStock' values for the product
                     var stockStatus = totalStock > 0 ? 'In Stock' : 'Out of Stock';
@@ -719,7 +715,7 @@
 
             // console.log(productId);
             // console.log(selectedColor);
-            console.log(selectedSize);
+            // console.log(selectedSize);
 
             $.ajax({
                 url: '/dashboard/pos_cart/' + productId,
@@ -783,7 +779,7 @@
         function updateCartTable(cartItems) {
             var tableBody = $('#cart tbody');
             // tableBody.empty();
-            console.log("Caritems: ",cartItems)
+            // console.log("Caritems: ",cartItems)
 
             $.each(cartItems, function (index, cartItem) {
                 var cartPrice = cartItem.qty * cartItem.price;
@@ -811,7 +807,7 @@
                     // '<p>' + cartItem.options.size + '</p>' +
                     '</td>' +
                     '<td class="text-right">' +
-                    '<a href="#" class="btn btn-outline-danger removeCartItem" data-row-id="' + cartItem.rowId + '"> <i class="fal fa-times"></i></a>' +
+                    '<a href="#" class="btn btn-outline-danger removeCartItem" data-row-id="' + cartItem.rowId + '"> <i class="fa-solid fa-xmark"></i></a>' +
                     '</td>' +
                     '</tr>';
 
@@ -839,9 +835,9 @@
                 });
             });
         }
+        
 
-
-        // Array to store new customer data
+       // Array to store new customer data
         var newCustomers = [];
 
         // Function to add a new customer to the array and update the list
@@ -888,6 +884,7 @@
         // Function to update the customer list in the HTML
         function updateCustomerList() {
             var customerList = document.getElementById('newCustomerList');
+            // console.log(customerList);
             customerList.innerHTML = ''; // Clear the existing list
 
             // Iterate through the new customers array and update the list
@@ -897,8 +894,8 @@
 
                 // Add a remove button to each customer
                 var removeBtn = document.createElement('button');
-                removeBtn.innerHTML = '<i class="fal fa-times"></i>';
-                removeBtn.className = 'btn btn-danger btn-sm ml-2';
+                removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                removeBtn.className = 'btn btn-danger btn-sm ';
                 removeBtn.addEventListener('click', function () {
                     removeCustomer(index);
                 });
@@ -977,6 +974,7 @@
             }
 
         });
+
 
     });
 </script>

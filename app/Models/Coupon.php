@@ -12,6 +12,6 @@ class Coupon extends Model
 
     public function appliedCoupone()
     {
-        return $this->belongsTo(AppliedCoupone::class, 'coupone_id');
+        return $this->belongsTo(AppliedCoupone::class, 'customer_id');
     }
 }

@@ -23,13 +23,13 @@
 
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between">
-                <h4>Color Varient Table</h4>
+                <h4>Colors </h4>
                 <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#colorModal">
                     Add color
                 </button>
             </div>
             <div class="card-body">
-                <table class="table table-border" style="width:100%">
+                <table class="table table-border" id="colorTable" style="width:100%">
                     <thead>
                         <tr>
                             <th>#SN</th>
@@ -80,20 +80,19 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $colors->links() }}
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div>
     <div class="col-lg-6 col-md-6">
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between">
-                <h4>Size Varient Table</h4>
+                <h4>Sizes</h4>
                 <button type="button" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#sizeModal">
                     Add Size
                 </button>
             </div>
             <div class="card-body">
-                <table class="table table-border" style="width:100%">
+                <table class="table table-border" id="sizeTable" style="width:100%">
                     <thead>
                         <tr>
                             <th>#SN</th>
@@ -130,7 +129,6 @@
 
                     </tbody>
                 </table>
-                {{ $sizes->links() }}
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div>
@@ -146,6 +144,16 @@
 
 <script>
     $(document).ready(function () {
+        
+        $('#colorTable').DataTable( {
+            pageLength : 5,
+            lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'All']]
+        } )
+
+        $('#sizeTable').DataTable( {
+            pageLength : 5,
+            lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'All']]
+        } )
         // Edit Color
         $(document).on('click', '.edit-color', function (e) {
             e.preventDefault();
@@ -158,7 +166,7 @@
                 }
             });
             $.ajax({
-                url: '{{route('color.edit')}}',
+                url: '/dashboard/varient/color_edit',
                 method: 'GET',
                 data: {
                     id: colorId,
@@ -180,7 +188,7 @@
             const data = new FormData(this);
             // console.log(data);
             $.ajax({
-                url: '{{route('color.update')}}',
+                url: '/dashboard/varient/color_update',
                 method: 'post',
                 data: data,
                 cache: false,
@@ -213,7 +221,7 @@
                 }
             });
             $.ajax({
-                url: '{{route('size.edit')}}',
+                url: '/dashboard/varient/size_edit',
                 method: 'GET',
                 data: {
                     id: sizeId,
@@ -235,7 +243,7 @@
             const data = new FormData(this);
             console.log(data);
             $.ajax({
-                url: '{{route('size.update')}}',
+                url: '/dashboard/varient/size_update',
                 method: 'post',
                 data: data,
                 cache: false,
