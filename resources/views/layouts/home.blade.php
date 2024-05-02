@@ -397,10 +397,10 @@
                             @endauth
                     </div>
                    <div class="single-mobile-header-info">
-                        <a href="tel:<?php echo $settings->secondary_mobile_no?>">{{ $settings->secondary_mobile_no }}</a>
+                        <a href="tel:{{$socialinfo->appPhone}}">{{$socialinfo->appPhone}}</a>
                     </div>
                     <div class="single-mobile-header-info mt-30">
-                        <a  href="{{route('contactus')}}"> Our location: <p>{{ $settings->company_address }}</p></a>
+                        <a  href="{{route('contactus')}}"> Our location: <p>{{$userData->address}}</p></a>
                     </div>
                 </div>
 
