@@ -375,12 +375,8 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/transaction/payment-info', 'paymentInfo')->name('payment.info');
         Route::post('/dashboard/transaction/payment-update', 'paymentUpdate')->name('payment.update');
         Route::get('/dashboard/transaction/search', 'transactionSearch')->name('transaction.search');
-<<<<<<< HEAD
-
         Route::get('/dashboard/transaction-filter', 'transactionFilter')->name('transaction.filter');
 
-=======
->>>>>>> master
     });
 
     //Slider
