@@ -124,8 +124,7 @@
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{{asset('frontend/assets/imgs/favicon_128x128.ico')}}" alt="User"></a>
                 <span class="text-center">{{auth()->user()->name}}</span>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                    <a class="dropdown-item" href="{{route('profile.edit')}}"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                    <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                    <a class="dropdown-item" href="{{route('profile.edit')}}"><i class="material-icons md-settings"></i>Account Settings</a>
                     <!--<a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>-->
                     <!--<a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>-->
                     <!--<a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>-->
