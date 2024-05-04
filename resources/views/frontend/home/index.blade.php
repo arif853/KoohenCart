@@ -4,8 +4,6 @@
 
 <main class="main">
     <!--Main Slider-->
-
-	<!-- Slider -->
 	<section class="section-slide">
 		<div class="wrap-slick1">
 			<div class="slick1">
@@ -27,7 +25,7 @@
 
 							<div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
 								<a href="{{$slider->slider_url}}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-									Shop Now
+									{{$slider->btntext}}
 								</a>
 							</div>
 						</div>
@@ -40,32 +38,6 @@
 	</section>
 
     <!--Main Slider-->
-
-    <!--Popular Catagory-->
-    <!--<section class="popular-categories section-padding mt-15 mb-25">-->
-    <!--    <div class="container wow fadeIn animated">-->
-    <!--        <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>-->
-    <!--        <div class="carausel-6-columns-cover position-relative">-->
-    <!--            <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>-->
-    <!--            <div class="carausel-6-columns" id="carausel-6-columns">-->
-
-    <!--                @foreach ($categories as $category)-->
-    <!--                <div class="card-1">-->
-    <!--                    <figure class=" img-hover-scale overflow-hidden" style="height: 170px;  margin: revert-layer;">-->
-    <!--                        <a href="#">-->
-    <!--                            <img src="{{asset('storage/category_image/'.$category->category_image)}}" alt="{{$category->slug}}" >-->
-    <!--                        </a>-->
-    <!--                    </figure>-->
-    <!--                    <h5><a href="#">{{$category->category_name}}</a></h5>-->
-    <!--                </div>-->
-    <!--                @endforeach-->
-
-
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</section>-->
-    <!--Popular Catagory-->
 
     <!--New Arrival (OK)-->
     <section class="product-tabs section-padding position-relative wow fadeIn animated">
@@ -111,7 +83,7 @@
         </div>
     </section>
     <!--Advertise-->
-    
+
     <!--Category products (OK)-->
     @if($cat_feature)
 
@@ -175,13 +147,13 @@
                     <div class="banner-text d-md-block d-none">
                         <h4 class="mb-15 text-brand">{{$ads->header}}</h4>
                         <h1 class="fw-600 mb-20" style="width: 450px; color:#fff">{{$ads->title}}</h1>
-    
+
                         @if($ads->shop_url != null)
                         <a href="{{$ads->shop_url}}" class="btn">Shop Now <i class="fi-rs-arrow-right"></i></a>
                         @endif
                     </div>
                 </div>
-    
+
                 @endif
 
             @endforeach
@@ -198,7 +170,7 @@
         </div>
     </section>
     <!--All Products (OK)-->
-    
+
      <!--Advertise-->
     <section class="banner-2">
         <div class="container">

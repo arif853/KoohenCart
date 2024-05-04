@@ -7,7 +7,7 @@
         <h2 class="content-title card-title">Manage About Us</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{{'/dashborad'}}">Dashborad</a></li>
+              <li class="breadcrumb-item"><a href="{{'/dashboard'}}">Dashborad</a></li>
               <li class="breadcrumb-item active" aria-current="page">About Us</li>
             </ol>
         </nav>
@@ -108,7 +108,7 @@
             }
         });
         $.ajax({
-            url: '{{url('/dashboard/aboutus/edit')}}',
+            url: '{{route('aboutus.edit')}}',
             method: 'GET',
             data: {
                 id: aboutusId,
@@ -131,7 +131,7 @@
         console.log(data);
 
         $.ajax({
-            url: '{{url('/dashboard/aboutus/update')}}',
+            url: '{{route('aboutus.update')}}',
             method: 'post',
             data: data,
             cache: false,

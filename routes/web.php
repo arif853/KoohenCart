@@ -48,6 +48,7 @@ use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AboutusController;
+use App\Http\Controllers\Admin\WebSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -170,7 +171,6 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 // =================================++++++++++++++++++++++++++++++++++++++++++++++++++++++++===================================== //
 
 // Backend Route Start
-
 
     //dashboard
     Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -379,20 +379,21 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Slider
     Route::controller(SliderController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/slider', 'index')->name('slider');
-        Route::post('/dashboard/slider/store', 'store')->name('slider.store');
-        Route::get('/dashboard/slider/edit', 'edit')->name('slider.edit');
-        Route::post('/dashboard/slider/update', 'update')->name('slider.update');
-        Route::delete('/dashboard/slider/destroy/{id}', 'destroy')->name('slider.destroy');
+        Route::get('/dashboard/setting/slider', 'index')->name('slider');
+        Route::post('/dashboard/setting/slider/store', 'store')->name('slider.store');
+        Route::get('/dashboard/setting/slider/edit', 'edit')->name('slider.edit');
+        Route::post('/dashboard/setting/slider/update', 'update')->name('slider.update');
+        Route::delete('/dashboard/setting/slider/destroy/{id}', 'destroy')->name('slider.destroy');
     });
 
     //ads route
     Route::controller(AdsController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/ads', 'index')->name('ads');
-        Route::post('/dashboard/ads/store', 'store')->name('ads.store');
-        Route::get('/dashboard/ads/edit', 'edit')->name('ads.edit');
-        Route::post('/dashboard/ads/update', 'update')->name('ads.update');
-        Route::delete('/dashboard/ads/destroy/{id}', 'destroy')->name('ads.destroy');
+        Route::get('/dashboard/setting/ads', 'index')->name('ads');
+        Route::post('/dashboard/setting/ads/store', 'store')->name('ads.store');
+        Route::get('/dashboard/setting/ads/edit', 'edit')->name('ads.edit');
+        Route::post('/dashboard/setting/ads/update', 'update')->name('ads.update');
+        Route::delete('/dashboard/setting/ads/destroy/{id}', 'destroy')->name('ads.destroy');
+        Route::get('/dashboard/setting/ads/update-status','UpdateStatus')->name('update.status');
     });
 
 
@@ -444,7 +445,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     // User Managment
-    Route::controller(UserController::class)->group(function(){
+    Route::controller(UserController::class)->middleware('auth')->group(function(){
         Route::get('/dashboard/users/index', 'index')->name('users.index');
         Route::post('/dashboard/users/store', 'store')->name('users.store');
         Route::get('/dashboard/users/edit', 'edit')->name('users.edit');
@@ -457,19 +458,36 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     Route::post('/dashboard/roles/{role}', [RoleController::class, 'update']);
     Route::delete('/dashboard/roles/{userId}/delete', [RoleController::class, 'destroy']);
 
-    // About us
-    Route::controller(AboutusController::class)->group(function(){
-        Route::get('/dashboard/aboutus/', 'index')->name('aboutus.index');
-        Route::get('/dashboard/aboutus/edit', 'edit')->name('aboutus.edit');
-        Route::post('/dashboard/aboutus/update', 'update')->name('aboutus.update');
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-// <========================= Backend Route End ========================>
+    Route::controller(WebSettingController::class)->middleware('auth')->group(function(){
+
+        Route::get('dashboard/setting/profile/web-info','webInfo')->name('webinfo.index');
+        Route::post('dashboard/setting/profile/web-info','webInfoUpdate')->name('webinfo.update');
+
+        Route::get('dashboard/setting/profile/social-info','socialInfo')->name('socialinfo.index');
+        Route::post('dashboard/setting/profile/social-info-update', 'SocialInfoUpdate')->name('socialinfo-update');
+
+        Route::post('dashboard/profile/seoupdate', 'SEOUpdate')->name('user.SEOUpdate');
+    });
+
+    // About us
+    Route::controller(AboutusController::class)->middleware('auth')->group(function(){
+        Route::get('/dashboard/setting/aboutus/', 'index')->name('aboutus.index');
+        Route::get('/dashboard/setting/aboutus/edit', 'edit')->name('aboutus.edit');
+        Route::post('/dashboard/setting/aboutus/update', 'update')->name('aboutus.update');
+    });
+
+    // <========================= Backend Route End ========================>
 
 
-Route::controller(WebmessageController::class)->middleware('auth')->group(function(){
+    Route::controller(WebmessageController::class)->middleware('auth')->group(function(){
 
-});
+    });
 
 Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
 Route::get('/contact/webmessage/destroy' ,  [WebmessageController::class,'destroy'])->name('webmessage.destroy');
@@ -483,15 +501,7 @@ Route::get('/dashboard/reviews', function () {
     return view('admin.reviews.index');
 })->name('reviews');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::post('dashboard/profile/userupdate',[ProfileController::class, 'userProfileUpdate'])->name('user.profileupdate');
-    Route::post('dashboard/profile/usersocialupdate',[ProfileController::class, 'userSocialUpdate'])->name('user.socialupdate');
-    Route::post('dashboard/profile/seoupdate',[ProfileController::class, 'SEOUpdate'])->name('user.SEOUpdate');
-});
 
 // Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);
 // Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);

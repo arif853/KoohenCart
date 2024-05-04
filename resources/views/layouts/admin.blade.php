@@ -295,7 +295,7 @@
 
 
             $('#summernote').summernote({
-                placeholder: 'Your About us Description Here...',
+                placeholder: 'Write Description Here...',
                 tabsize: 2,
                 height: 250,
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'],

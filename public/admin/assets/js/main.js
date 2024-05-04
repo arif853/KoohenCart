@@ -1,13 +1,20 @@
 (function ($) {
     "use strict";
 	//===== jquery code for sidebar menu
-	$('.menu-item.has-submenu .menu-link').on('click', function(e){
-		e.preventDefault();
-		if($(this).next('.submenu').is(':hidden')){
-			$(this).parent('.has-submenu').siblings().find('.submenu').slideUp(200);
-		}
-		$(this).next('.submenu').slideToggle(200);
-	});
+    $('.menu-item.has-submenu .menu-link').on('click', function(e){
+        e.preventDefault();
+        var $submenu = $(this).next('.submenu');
+        if($submenu.is(':hidden')){
+            $(this).parent('.has-submenu').siblings().find('.submenu').slideUp(200);
+        }
+        $submenu.slideToggle(200);
+    });
+
+    // Handling sub-submenu toggling
+    $('.menu-item.has-submenu .sub-submenu > a').on('click', function(e){
+        e.preventDefault();
+        $(this).siblings('.sub-submenu-content').slideToggle(200);
+    });
 
 	// mobile offnavas triggerer for generic use
 	$("[data-trigger]").on("click", function(e){

@@ -5466,7 +5466,7 @@ footer.main-footer {
     line-height: 42px !important;
 }
 .photo-upload {
-    height: auto;
+    height: 90px;
     margin: 20px 0;
     position: relative;
     text-align: center;

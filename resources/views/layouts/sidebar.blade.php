@@ -120,7 +120,6 @@
                 </a>
                 <div class="submenu">
                     <a href="{{route('sale.report')}}">Sales Report</a>
-
                 </div>
             </li>
             <li class="menu-item">
@@ -128,24 +127,87 @@
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
             </li>
-           
-           <li class="menu-item has-submenu">
+            <style>
+                .sub-submenu-content {
+                    display: none;
+                    margin-left: 15px;
+                }
+                .menu-aside .submenu .sub-submenu > .menu-link::after {
+                    display: inline-block;
+                    position: absolute;
+                    right: 10px;
+                    top: 10px;
+                    margin-top: .6em;
+                    vertical-align: middle;
+                    content: "";
+                    border-top: 5px solid #adb5bd;
+                    border-right: 5px solid transparent;
+                    border-bottom: 0;
+                    border-left: 5px solid transparent;
+                }
+                .menu-aside .sub-submenu .sub-submenu-content a::before {
+                    content: none;
+
+                }
+                .menu-aside .sub-submenu .sub-submenu-content .icon {
+                    color: #adb5bd;
+                    margin-right: 10px;
+                    font-size: 16px;
+                }
+            </style>
+            <li class="menu-item has-submenu {{ request()->is('dashboard/campaign') ? 'active' : '' }}">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
                     <span class="text">Web Settings</span>
                 </a>
                 <div class="submenu">
-                    <a href="{{ route('settings.index') }}">WebInfo</a>
-
+                    <a href="{{route('aboutus.index')}}">
+                        <span class="text">About us</span>
+                    </a>
                     <a href="{{route('slider')}}">
-                        <span class="text">Manage Slider</span>
+                        <span class="text">Slider</span>
+                    </a>
+                    <a href="{{route('ads')}}">
+                        <span class="text">Advertisement</span>
+                    </a>
+                    <a href="{{ route('webinfo.index') }}">
+                        <span class="text">WebInfo</span>
+                    </a>
+                    <a href="#">
+                        <span class="text">Contact Info</span>
                     </a>
 
-                    <a href="{{route('ads')}}">
-                        <span class="text">Manage Ads</span>
+                    <a href="{{route('socialinfo.index')}}">
+                        <span class="text">Social Info</span>
                     </a>
-                    <a href="{{url('/dashboard/aboutus')}}">
-                        <span class="text">Manage About us</span>
+
+                    <a href="#">
+                        <span class="text">Shipping Method</span>
                     </a>
+
+                    <a href="#">
+                        <span class="text">Subscriber</span>
+                    </a>
+                    <a href="#">
+                        <span class="text">Web Message</span>
+                    </a>
+
+                    <div class="sub-submenu"> <!-- New sub-submenu level -->
+                        <a href="#" class="menu-link">
+                            <span class="text">SEO Setting</span>
+                        </a>
+                        <div class="sub-submenu-content"> <!-- Sub-submenu content -->
+                            <a href="#">
+                                <i class="icon material-icons md-arrow_forward"></i>
+                                 <span class="text">Google Analytics</span>
+                            </a>
+                            <a href="#">
+                                <i class="icon material-icons md-arrow_forward"></i>
+                                <span class="text">Meta Setting</span>
+                            </a>
+                        </div>
+                    </div>
+
+
                 </div>
             </li>
 
