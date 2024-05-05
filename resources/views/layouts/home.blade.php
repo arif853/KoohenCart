@@ -6,9 +6,9 @@
     @php
         $tags = DB::table('product_tags')->distinct()->pluck('tag')->implode(', ');
         // $description = DB::table('user-profile')->pluck('company_short_details')->first();
-        $userData = DB::table('user_profiles')->first();
+        $userData = DB::table('web_infos')->first();
         $seoData = DB::table('seo_settings')->first();
-        $socialinfo = DB::table('socialinfos')->first();
+        $socialinfos = DB::table('socialinfos')->get();
         // echo $description;
     @endphp
 
@@ -84,10 +84,15 @@
                 <div class="row align-items-center">
                     <div class="col-xl-3 col-lg-4">
                        <div class="header-info">
-                            <ul>
-                                <li><i class="far fa-phone-alt"></i> <a href="tel:{{$socialinfo->appPhone}}">{{$socialinfo->appPhone}}</a></li>
-                                <li><i class="fal fa-envelope"></i><a  href="mailto:{{$socialinfo->appEmail}}">{{$socialinfo->appEmail}}</a></li>
-                            </ul>
+                        <ul>
+                            @foreach($socialinfos as $socialinfo)
+                                @if($socialinfo->social_title === 'Phone')
+                                    <li><i class="far fa-phone-alt"></i> <a href="tel:{{$socialinfo->title_value}}">{{$socialinfo->title_value}}</a></li>
+                                @elseif($socialinfo->social_title === 'Email')
+                                    <li><i class="fal fa-envelope"></i> <a href="mailto:{{$socialinfo->title_value}}">{{$socialinfo->title_value}}</a></li>
+                                @endif
+                            @endforeach
+                        </ul>
                         </div>
                     </div>
                     <!--Top Offer Notice-->
@@ -147,8 +152,6 @@
                                                 </li>
                                             </ul>
                                           </div> --}}
-
-
                                     @else
                                         {{-- Show login/register links --}}
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#login">Log In / </a>
@@ -194,8 +197,6 @@
                         </div>
                         <!--Main Menu Bar-->
                     </div>
-
-
 
                     <div class="hotline d-none d-lg-block">
                         <div class="header-action-2 header">
@@ -397,7 +398,12 @@
                             @endauth
                     </div>
                    <div class="single-mobile-header-info">
-                        <a href="tel:{{$socialinfo->appPhone}}">{{$socialinfo->appPhone}}</a>
+                    @foreach($socialinfos as $socialinfo)
+                        @if($socialinfo->social_title === 'Phone')
+                        <a href="tel:{{$socialinfo->title_value}}">{{$socialinfo->title_value}}</a>
+                        @endif
+                    @endforeach
+
                     </div>
                     <div class="single-mobile-header-info mt-30">
                         <a  href="{{route('contactus')}}"> Our location: <p>{{$userData->address}}</p></a>
@@ -460,11 +466,30 @@
 
                             <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
                             <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                                <a href="{{$socialinfo->facebook}}"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-facebook.svg')}}" alt="{{$socialinfo->facebook}}"></a>
-                                {{-- <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-twitter.svg')}}" alt=""></a> --}}
-                                <a href="{{$socialinfo->instragram}}"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-instagram.svg')}}" alt="{{$socialinfo->instragram}}"></a>
-                                {{-- <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-pinterest.svg')}}" alt=""></a> --}}
-                                {{-- <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube.svg')}}" alt=""></a> --}}
+                                @foreach($socialinfos as $socialinfo)
+                                    @if($socialinfo->social_title === 'Facebook')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-facebook.svg')}}" alt="{{$socialinfo->title_value}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'Instagram')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-instagram.svg')}}" alt="{{$socialinfo->title_value}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'Twitter')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-twitter.svg')}}" alt="{{$socialinfo->title_value}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'YouTube')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube.svg')}}" alt="{{$socialinfo->social_title}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'LinkedIn')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-linkedin.svg')}}" alt="{{$socialinfo->social_title}}">
+                                    </a>
+                                    @endif
+
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -472,14 +497,29 @@
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <h5 class="widget-title wow fadeIn animated">Contact</h5>
                             <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
-                            <li>
-                                <a href="https://wa.me/{{$socialinfo->whatsapp}}"><span><i class="fab fa-whatsapp"></i></span> {{$socialinfo->whatsapp}}</a>
+                             @foreach($socialinfos as $socialinfo)
+                                @if ($socialinfo->social_title === 'WhatsApp')
+                                <li>
+                                    <a href="https://wa.me/{{$socialinfo->title_value}}"><span><i class="fab fa-whatsapp"></i>
+                                    </span> {{$socialinfo->title_value}}
+                                    </a>
+                                </li>
+                                @elseif ($socialinfo->social_title === 'Phone')
+                                <li>
+                                    <a href="tel:{{$socialinfo->title_value}}" target="__blank"><span><i class="fal fa-phone-alt"></i>
+                                    </span> {{$socialinfo->title_value}}
+                                    </a>
+                                </li>
+                                @elseif ($socialinfo->social_title === 'Email')
+                                <li>
+                                    <a href="mailto:{{$socialinfo->title_value}}" target="__blank"><span><i class="fal fa-envelope"></i>
+                                    </span> {{$socialinfo->title_value}}
+                                    </a>
+                                </li>
+                                @endif
 
-                            </li>
-                            <li><a href="tel:{{$socialinfo->appPhone}}" target="__blank"><span><i class="fal fa-phone-alt"></i></span> {{$socialinfo->appPhone}}</a></li>
-                            <li><a href="mailto:{{$socialinfo->appEmail}}" target="__blank"><span><i class="fal fa-envelope"></i></span> {{$socialinfo->appEmail}}</a></li>
+                            @endforeach
                             <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{$userData->address}}</a></li>
-
                         </ul>
 
                     </div>
@@ -517,11 +557,11 @@
                 </div>
                 <div class="col-lg-6">
                     <p class="float-md-left font-sm text-muted mb-0 d-flex">
-                    <script>document.write(new Date().getFullYear())</script> &copy; All rights reserved,
+                    {{-- <script>document.write(new Date().getFullYear())</script> &copy; All rights reserved, --}}
+                    {{$userData->copyright}},
                     <strong class="text-brand mr-10 ml-10">
                         <!--<img width="40" src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo">-->
                         <img width="40" src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="logo">
-
                     </strong><span style="text-transform:uppercase"> - Your ultimate Lifestyle.</span> </p>
                 </div>
                 <div class="col-lg-6">
@@ -767,7 +807,7 @@
 
                                 ul.append(li);
                             });
-                            console.log(ul);
+                            // console.log(ul);
                         }
 
                         // Hide loading indicator after displaying results

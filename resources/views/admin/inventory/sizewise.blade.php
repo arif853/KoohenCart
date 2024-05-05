@@ -118,7 +118,7 @@
                                                 </div>
 
                                                 @endforeach
-                                                
+
                                                 <div class="size-stock-balance">
                                                     <div class="size-name">Total</div>
                                                     <div class="stock-info">
@@ -170,13 +170,13 @@
         printWindow.document.write('table, th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }');
         printWindow.document.write('th { background-color: #f2f2f2; }');
         printWindow.document.write('a { text-decoration: none; color:#000; }');
-        printWindow.document.write('.size-stock-container {display: flex;flex-wrap: wrap;}');
-        printWindow.document.write('.size-stock-item {width: 150px;padding: 10px;margin: 5px;border: 1px solid #ccc;border-radius: 5px;}');
-        printWindow.document.write('a { text-decoration: none; color:#000; }');
-        printWindow.document.write('.size-name { font-weight: bold; margin-bottom: 5px; text-align: center; border-bottom: 2px solid; }');
-        printWindow.document.write('.stock-info { display: flex;  margin-bottom: 3px; }');
-        printWindow.document.write('.stock-label { width: 60px; font-size: 12px; }');
-        printWindow.document.write('.stock-value { font-size: 12px; font-weight: bold; color: #088178; }');
+        // printWindow.document.write('.size-stock-container {display: flex;flex-wrap: wrap;}');
+        // printWindow.document.write('.size-stock-item {width: 150px;padding: 10px;margin: 5px;border: 1px solid #ccc;border-radius: 5px;}');
+        // printWindow.document.write('a { text-decoration: none; color:#000; }');
+        // printWindow.document.write('.size-name { font-weight: bold; margin-bottom: 5px; text-align: center; border-bottom: 2px solid; }');
+        // printWindow.document.write('.stock-info { display: flex;  margin-bottom: 3px; }');
+        // printWindow.document.write('.stock-label { width: 60px; font-size: 12px; }');
+        // printWindow.document.write('.stock-value { font-size: 12px; font-weight: bold; color: #088178; }');
         printWindow.document.write('</style>');
 
         printWindow.document.write('</head><body>');

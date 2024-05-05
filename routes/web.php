@@ -67,7 +67,7 @@ Route::get('/cache_clear',function(){
     return redirect()->back()->with('success','Cache cleard!!');
 });
 
-Route::get('/storage',function(){
+Route::get('/storage_link',function(){
     Artisan::call('storage:link');
     return redirect()->back()->with('success','Storage link complete!!');
     // return "Storage Linked";

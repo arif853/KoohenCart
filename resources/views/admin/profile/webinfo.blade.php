@@ -19,33 +19,33 @@
         <div class="card mb-4">
             <div class="card-body">
                 @php
-                    $userData = DB::table('user_profiles')->first();
+                    $webinfo = DB::table('web_infos')->first();
                 @endphp
                 <form action="{{route('webinfo.update')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
-                    <input type="hidden" name="user_id" id="user_id" value="{{$userData->id}}">
+                    <input type="hidden" name="user_id" id="user_id" value="{{$webinfo->id}}">
 
                     <div class="row gx-3">
                         <div class="col-6 col-lg-6 mb-3">
                             <label class="form-label">Application Name <span class="text-danger">*</span></label>
-                            <input class="form-control" type="text" value="{{ $userData->appName }}" name="appName" placeholder="Type here">
+                            <input class="form-control" type="text" value="{{ $webinfo->appName }}" name="appName" placeholder="Type here">
                         </div> <!-- col .// -->
                         <div class="col-6 col-lg-6 mb-3">
                             <label class="form-label">Owner Name</label>
-                            <input class="form-control" type="text" value="{{$userData->ownerName}}" name="ownerName" placeholder="Type here">
+                            <input class="form-control" type="text" value="{{$webinfo->ownerName}}" name="ownerName" placeholder="Type here">
                         </div> <!-- col .// -->
                     </div>
 
                     <div class="row">
                         <div class="col-lg-6  mb-3">
                             <label class="form-label">Address</label>
-                            <input class="form-control" type="text" name="address" value="{{$userData->address}}" placeholder="Type here">
+                            <input class="form-control" type="text" name="address" value="{{$webinfo->address}}" placeholder="Type here">
                         </div> <!-- col .// -->
                         <div class="col-lg-6  mb-3">
                             <label class="form-label">Short Description <span class="text-danger">*</span></label>
                             <textarea class="form-control" name="description" id="description" placeholder="Type here" cols="30" rows="15">
-                                {{$userData->description}}
+                                {{$webinfo->description}}
                             </textarea>
                         </div> <!-- col .// -->
                     </div> <!-- row.// -->
@@ -67,7 +67,7 @@
                             <figure class="text-lg-center">
                                 <div id="app" class="photo-upload">
                                     <div class="image-preview" id="image-preview" >
-                                        <img id="preview-img" src="{{asset('storage/logos/'.$userData->weblogo)}}" class="image-preview__img">
+                                        <img id="preview-img" src="{{asset('storage/logos/'.$webinfo->weblogo)}}" class="image-preview__img">
                                     </div>
                                 </div>
                             </figure>
@@ -76,7 +76,7 @@
                         <div class="col-lg-6 col-md-6">
                             <div id="app" class="photo-upload">
                                 <div class="image-preview2" id="image-preview2" >
-                                    <img id="preview-img2" src="{{asset('storage/favicons/'.$userData->webfavicon)}}" class="image-preview__img">
+                                    <img id="preview-img2" src="{{asset('storage/favicons/'.$webinfo->webfavicon)}}" class="image-preview__img">
                                 </div>
                             </div>
                         </div> <!-- col.// -->
@@ -84,11 +84,11 @@
                     <div class="row gx-3 mt-50">
                         <div class="col-lg-6">
                             <label for="" class="form-label">Marquee Text/ Notice Text</label>
-                            <input type="text" name="marquee" id="marquee" class="form-control" placeholder="Add Notice here">
+                            <input type="text" name="marquee" id="marquee" class="form-control" placeholder="Add Notice here" value="{{$webinfo->marquee}}">
                         </div>
                         <div class="col-lg-6">
                             <label for="" class="form-label">Footer Copyright Text</label>
-                            <input type="text" name="copyright" id="copyright" class="form-control" placeholder="Add copyright text with year and sign.">
+                            <input type="text" name="copyright" id="copyright" value="{{$webinfo->copyright}}" class="form-control" placeholder="Add copyright text with year and sign.">
                         </div>
                     </div>
                     <div class="row gx-3 mt-50">

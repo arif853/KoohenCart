@@ -127,34 +127,6 @@
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
             </li>
-            <style>
-                .sub-submenu-content {
-                    display: none;
-                    margin-left: 15px;
-                }
-                .menu-aside .submenu .sub-submenu > .menu-link::after {
-                    display: inline-block;
-                    position: absolute;
-                    right: 10px;
-                    top: 10px;
-                    margin-top: .6em;
-                    vertical-align: middle;
-                    content: "";
-                    border-top: 5px solid #adb5bd;
-                    border-right: 5px solid transparent;
-                    border-bottom: 0;
-                    border-left: 5px solid transparent;
-                }
-                .menu-aside .sub-submenu .sub-submenu-content a::before {
-                    content: none;
-
-                }
-                .menu-aside .sub-submenu .sub-submenu-content .icon {
-                    color: #adb5bd;
-                    margin-right: 10px;
-                    font-size: 16px;
-                }
-            </style>
             <li class="menu-item has-submenu {{ request()->is('dashboard/campaign') ? 'active' : '' }}">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
                     <span class="text">Web Settings</span>
@@ -206,8 +178,6 @@
                             </a>
                         </div>
                     </div>
-
-
                 </div>
             </li>
 

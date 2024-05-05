@@ -20,7 +20,7 @@
             <div class="card-body">
                 @php
                 $socials = DB::table('socialinfos')->get();
-            @endphp
+                @endphp
             <form action="{{route('socialinfo.update')}}" method="post" >
                 @csrf
                 @method('POST')

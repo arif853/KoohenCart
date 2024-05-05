@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\WebInfo;
 use Illuminate\View\View;
 use App\Models\Socialinfo;
-use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManager;
@@ -25,13 +25,12 @@ class WebSettingController extends Controller
         $validatedData = $request->validate([
             'appName' => 'required|string|max:255',
             'ownerName' => 'nullable|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'startDate' => 'nullable|date',
             'weblogo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
             'webfavicon' => 'nullable|mimes:jpeg,png,jpg,ico|max:2048', // Max 2MB
+            'marquee' => 'nullable|string|max:255',
+            'copyright' => 'required'
         ]);
 
         // Handle file uploads
@@ -69,7 +68,7 @@ class WebSettingController extends Controller
 
         // Create or update user profile
         // For example:
-        UserProfile::updateOrCreate(['id' => $request->user_id], $validatedData);
+        WebInfo::updateOrCreate(['id' => $request->user_id], $validatedData);
         Session::flash('success','Your App info updated.');
         return redirect()->back();
     }

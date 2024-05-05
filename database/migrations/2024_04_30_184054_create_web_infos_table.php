@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_profiles', function (Blueprint $table) {
+        Schema::create('web_infos', function (Blueprint $table) {
             $table->id();
             $table->string('appName');
             $table->string('ownerName')->nullable();
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->longText('description')->nullable();
             $table->date('startDate')->nullable();
             $table->string('weblogo');
             $table->string('webfavicon');
+            $table->string('marquee')->nullable();
+            $table->string('copyright');
             $table->timestamps();
         });
     }

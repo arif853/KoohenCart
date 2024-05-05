@@ -5465,6 +5465,7 @@ footer.main-footer {
 .icon-sm{
     line-height: 42px !important;
 }
+
 .photo-upload {
     height: 90px;
     margin: 20px 0;
@@ -5533,4 +5534,30 @@ footer.main-footer {
     width: 100%;
     object-fit: cover;
     object-position: center;
+}
+.sub-submenu-content {
+    display: none;
+    margin-left: 15px;
+}
+.menu-aside .submenu .sub-submenu > .menu-link::after {
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    margin-top: .6em;
+    vertical-align: middle;
+    content: "";
+    border-top: 5px solid #adb5bd;
+    border-right: 5px solid transparent;
+    border-bottom: 0;
+    border-left: 5px solid transparent;
+}
+.menu-aside .sub-submenu .sub-submenu-content a::before {
+    content: none;
+
+}
+.menu-aside .sub-submenu .sub-submenu-content .icon {
+    color: #adb5bd;
+    margin-right: 10px;
+    font-size: 16px;
 }
