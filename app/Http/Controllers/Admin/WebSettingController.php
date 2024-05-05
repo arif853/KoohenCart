@@ -81,24 +81,49 @@ class WebSettingController extends Controller
 
     public function SocialInfoUpdate(Request $request)
     {
-        $validatedData = $request->validate([
-            'appPhone' => 'required|string|max:255',
-            'appEmail' => 'required|string|max:255',
-            'whatsapp' => 'required|string|max:255',
-            'facebook' => 'nullable|url|max:255',
-            'instragram' => 'nullable|url|max:255',
-            'linkednIn' => 'nullable|url|max:255',
-            'twitter' => 'nullable|url|max:255',
-            'youtube' => 'nullable|url',
-            'copyright' => 'nullable|string',
-        ]);
+        $rules = [
+            'title_value' => 'required|array',
+            'title_value.*' => 'required|string',
+        ];
 
-        Socialinfo::updateOrCreate(
-            [
-                'id' => $request->socialInfo_id,
-            ],
-            $validatedData);
-        Session::flash('success','Your Social info updated.');
+        // Validate the request data
+        $validatedData = $request->validate($rules);
+
+        // Extract data from the request
+        $socialTitles = $request->input('social_title');
+        $titleValues = $request->input('title_value');
+
+        // Loop through the social titles and update or create records in the database
+        foreach ($socialTitles as $index => $socialTitle) {
+            Socialinfo::updateOrCreate(
+                ['social_title' => $socialTitle],
+                ['title_value' => $titleValues[$index]]
+            );
+        }
+
+        // Flash a success message
+        Session::flash('success', 'Your Social info has been updated.');
+
+        // Redirect back
         return redirect()->back();
+    }
+
+    public function socialInfoStatusUpdate(Request $request)
+    {
+        $social = Socialinfo::find($request->id);
+
+        if ($social) {
+            $social->status = $social->status == 1 ? 0 : 1;
+            $social->save();
+
+            Session::flash('success', 'Status Updated.');
+        }
+        else {
+            Session::flash('error', 'Item not found.');
+        }
+
+        return response()->json(200);
+
+        // dd($social);
     }
 }

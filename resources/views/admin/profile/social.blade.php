@@ -19,127 +19,31 @@
         <div class="card mb-4">
             <div class="card-body">
                 @php
-                $social = DB::table('socialinfos')->first();
+                $socials = DB::table('socialinfos')->get();
             @endphp
-            <form action="{{route('socialinfo-update')}}" method="post" >
+            <form action="{{route('socialinfo.update')}}" method="post" >
                 @csrf
                 @method('POST')
-                <input type="hidden" name="socialInfo_id" id="socialInfo_id" value="{{$social->id}}">
-
+                {{-- <input type="hidden" name="socialInfo_id" id="socialInfo_id" value="{{$social->id}}"> --}}
+                @foreach ($socials as $key => $social)
                 <div class="row gx-3 ">
                     <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <label class="form-label">App Phone <span class="text-danger">*</span></label>
+                        <label class="form-label">{{$social->social_title}}<span class="text-danger">*</span></label>
                     </div> <!-- col .// -->
                     <div class="col-4 col-lg-4 col-md-4 mb-3 align-self-center">
-                        <input class="form-control" type="text" value="{{$social->appPhone}}" name="appPhone" placeholder="Type here">
+                        <input type="hidden" name="social_title[{{$key+1}}]" id="socialTitle_1" value="{{$social->social_title}}">
+                        <input class="form-control" type="text" value="{{$social->title_value}}" name="title_value[{{$key+1}}]" placeholder="Type here">
                     </div> <!-- col .// -->
                     <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
                         {{-- <input type="checkbox" name="phone_status" id="phoneStatus" checked class="form-check "> --}}
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
+                        <button type="button" onclick="UpdateStatus({{$social->id}})" class="btn btn-toggle {{$social->status == 1 ? 'active':'' }}"
+                            data-bs-toggle="button" aria-pressed="{{$social->status == 1 ? 'true':'false' }}" >
                             <div class="handle"></div>
                         </button>
                     </div> <!-- col .// -->
                 </div>
+                @endforeach
 
-                <div class="row gx-3 ">
-                    <div class="col-2 col-lg-2 col-md-2  mb-3 align-self-center">
-                        <label class="form-label">App Email<span class="text-danger ">*</span></label>
-                    </div> <!-- col .// -->
-                    <div class="col-4 col-lg-4 col-md-4  mb-3 align-self-center">
-                        <input class="form-control" type="email" value="{{$social->appEmail}}" name="appEmail" placeholder="example@mail.com">
-                    </div> <!-- col .// -->
-                    <div class="col-2 col-lg-2 col-md-2  mb-3 align-self-center">
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
-                            <div class="handle"></div>
-                        </button>
-                    </div> <!-- col .// -->
-                </div>
-
-                <div class="row gx-3 ">
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <label class="form-label">WhatsApp <small>(Number Only, No link.)</small>
-                            <span class="text-danger">*</span>
-                        </label>
-                    </div> <!-- col .// -->
-                    <div class="col-4 col-lg-4 col-md-4 mb-3 align-self-center">
-                        <input class="form-control" type="text" value="{{$social->whatsapp}}" name="whatsapp" placeholder="+880 1...">
-                    </div> <!-- col .// -->
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
-                            <div class="handle"></div>
-                        </button>
-                    </div> <!-- col .// -->
-                </div>
-
-                <div class="row gx-3 ">
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <label class="form-label">Facebook <small>(Link only)</small></label>
-                    </div> <!-- col .// -->
-                    <div class="col-4 col-lg-4 col-md-4 mb-3 align-self-center">
-                            <input class="form-control" type="url" value="{{$social->facebook}}" name="facebook" placeholder="www.facebook.com/yourpage">
-                    </div> <!-- col .// -->
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
-                            <div class="handle"></div>
-                        </button>
-                    </div> <!-- col .// -->
-                </div>
-
-                <div class="row gx-3 ">
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <label class="form-label">Instagram <small>(Link only)</small></label>
-                    </div> <!-- col .// -->
-                    <div class="col-4 col-lg-4 col-md-4 mb-3 align-self-center">
-                        <input class="form-control" type="url" value="{{$social->instragram}}" name="instragram"  placeholder="Type here">
-                    </div> <!-- col .// -->
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
-                            <div class="handle"></div>
-                        </button>
-                    </div> <!-- col .// -->
-                </div>
-
-                <div class="row gx-3 ">
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <label class="form-label">LinkedIn <small>(Link Only.)</small></label>
-                    </div> <!-- col .// -->
-                    <div class="col-4 col-lg-4 col-md-4 mb-3 align-self-center">
-                        <input class="form-control" type="text" value="" name="linkedIn" placeholder="LinkednIn link here.">
-                    </div> <!-- col .// -->
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
-                            <div class="handle"></div>
-                        </button>
-                    </div> <!-- col .// -->
-                </div>
-
-                <div class="row gx-3 ">
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <label class="form-label">YouTube <small>(Link only)</small></label>
-                    </div> <!-- col .// -->
-                    <div class="col-4 col-lg-4 col-md-4 mb-3 align-self-center">
-                            <input class="form-control" type="url" value="{{$social->youtube}}" name="youtube" placeholder="YouTube">
-                    </div> <!-- col .// -->
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
-                            <div class="handle"></div>
-                        </button>
-                    </div> <!-- col .// -->
-                </div>
-
-                <div class="row gx-3 ">
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <label class="form-label">Twitter <small>(Link only)</small></label>
-                    </div> <!-- col .// -->
-                    <div class="col-4 col-lg-4 col-md-4 mb-3 align-self-center">
-                            <input class="form-control" type="url" value="" name="twitter" placeholder="Twitter/X link here.">
-                    </div> <!-- col .// -->
-                    <div class="col-2 col-lg-2 col-md-2 mb-3 align-self-center">
-                        <button type="button" class="btn btn-toggle active" data-bs-toggle="button" aria-pressed="true" autocomplete="off">
-                            <div class="handle"></div>
-                        </button>
-                    </div> <!-- col .// -->
-                </div>
                 <br>
                 <button class="btn btn-primary" type="submit">Save </button>
             </form>
@@ -149,4 +53,31 @@
     </div>
 </div>
 
+
+
 @endsection
+@push('transaction')
+<script>
+
+    function UpdateStatus(id){
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: '{{route('socialstatus.update')}}',
+            method: 'post',
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                console.log(response);
+                location.reload();
+            }
+        });
+    }
+</script>
+@endpush

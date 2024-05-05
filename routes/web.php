@@ -466,11 +466,12 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     Route::controller(WebSettingController::class)->middleware('auth')->group(function(){
 
-        Route::get('dashboard/setting/profile/web-info','webInfo')->name('webinfo.index');
-        Route::post('dashboard/setting/profile/web-info','webInfoUpdate')->name('webinfo.update');
+        Route::get('/dashboard/setting/profile/web-info','webInfo')->name('webinfo.index');
+        Route::post('/dashboard/setting/profile/web-info','webInfoUpdate')->name('webinfo.update');
 
-        Route::get('dashboard/setting/profile/social-info','socialInfo')->name('socialinfo.index');
-        Route::post('dashboard/setting/profile/social-info-update', 'SocialInfoUpdate')->name('socialinfo-update');
+        Route::get('/dashboard/setting/profile/social-info','socialInfo')->name('socialinfo.index');
+        Route::post('/dashboard/setting/profile/social-info-update', 'SocialInfoUpdate')->name('socialinfo.update');
+        Route::post('/dashboard/setting/profile/social-info-status-update','socialInfoStatusUpdate')->name('socialstatus.update');
 
         Route::post('dashboard/profile/seoupdate', 'SEOUpdate')->name('user.SEOUpdate');
     });
