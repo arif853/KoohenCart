@@ -29,7 +29,7 @@ class Category extends Model
     }
     public function product()
     {
-        return $this->hasOne(Products::class, 'product_id');
+        return $this->hasMany(Products::class, 'product_id');
     }
     public function subcategories()
     {

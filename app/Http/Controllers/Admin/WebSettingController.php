@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Models\WebInfo;
 use Illuminate\View\View;
 use App\Models\Socialinfo;
+use App\Models\Contactinfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Drivers\Gd\Driver;
 
 class WebSettingController extends Controller
@@ -24,8 +27,6 @@ class WebSettingController extends Controller
     {
         $validatedData = $request->validate([
             'appName' => 'required|string|max:255',
-            'ownerName' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'weblogo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
             'webfavicon' => 'nullable|mimes:jpeg,png,jpg,ico|max:2048', // Max 2MB
@@ -124,5 +125,52 @@ class WebSettingController extends Controller
         return response()->json(200);
 
         // dd($social);
+    }
+
+    public function contactindex()
+    {
+        $data = Contactinfo::all();
+        return view('admin.profile.contactinfo',compact('data'));
+    }
+
+    public function contactInfoEdit(Request $request)
+    {
+        $data = Contactinfo::find($request->id);
+
+        return response()->json(['status'=> 200, 'data' => $data]);
+    }
+
+    public function contactInfoUpdate(Request $request)
+    {
+        $data = Contactinfo::find($request->id);
+
+        $rules = [
+            'phone' => 'required|string',
+            'whatsapp' => 'required|string',
+            'email' => 'nullable|email',
+            'address' => 'nullable|string',
+            'officehour' => 'nullable|string',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+
+        // Validate the request
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        else{
+            // WebInfo::updateOrCreate(['id' => $request->user_id], $validatedData);
+            $data->update([
+                'phone' => $request->phone,
+                'whatsapp' => $request->whatsapp,
+                'email' => $request->email,
+                'address' => $request->address,
+                'officehour' => $request->officehour,
+            ]);
+            // dd($data);
+
+            Session::flash('success','Contact Info data has been updated .');
+            return response()->json(['status'=>200]);
+        }
+
     }
 }

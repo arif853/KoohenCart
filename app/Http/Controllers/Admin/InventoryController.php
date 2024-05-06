@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\Product_stock;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Session;
 
 class InventoryController extends Controller
@@ -18,9 +20,9 @@ class InventoryController extends Controller
 
         foreach ($products as $product) {
             $stock = $product->product_stocks;
-            
+
             foreach($product->product_stocks as $data){
-                
+
                 $product->purchase_date = $data->purchase_date;
             }
 
@@ -28,7 +30,7 @@ class InventoryController extends Controller
             $soldQuantity = $stock->sum('outStock');
 
             $product->inStock = $inStock;
-            $product->balance =  $inStock - $soldQuantity;            
+            $product->balance =  $inStock - $soldQuantity;
             $product->purchasePrice = $inStock * $product->raw_price;
             $product->purchaseBalance = $product->balance * $product->raw_price;
 
@@ -41,6 +43,7 @@ class InventoryController extends Controller
 
     public function SizeWise()
     {
+        $categories = Category::all();
         $products = Products::with(['sizes', 'product_stocks'])->get();
 
         foreach ($products as $product) {
@@ -58,13 +61,13 @@ class InventoryController extends Controller
                 $size->outStock = $outStock;
                 $size->balance = $balance;
             }
-            
+
             $product->totalInStock = $product->product_stocks->sum('inStock');
             $product->totalOutStock = $product->product_stocks->sum('outStock');
             $product->totalBalance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
         }
 
-        return view('admin.inventory.sizewise',['products' => $products]);
+        return view('admin.inventory.sizewise',['products' => $products,'categories' => $categories]);
     }
 
 
@@ -117,5 +120,73 @@ class InventoryController extends Controller
 
         Session::flash('success', 'New Stock added to the inventory.');
         return response()->json(['status' => 200, 'message' => 'New Stock added to the inventory!']);
+    }
+
+
+    public function CategoryWiseFilter(Request $request)
+    {
+        // Get the selected category IDs from the request
+        $categoryIds = $request->input('id');
+
+        // Query products with sizes and product stocks where the product belongs to any of the selected categories
+        $products = Products::with(['sizes', 'product_stocks'])
+        ->whereHas('category', function ($query) use ($categoryIds) {
+            $query->whereIn('id', $categoryIds);
+        })->get();
+
+        foreach ($products as $product) {
+            foreach ($product->sizes as $size) {
+                // Find the product stock for the current size
+                $stock = $product->product_stocks->firstWhere('size_id', $size->id);
+
+                // Calculate in-stock, out-of-stock, and balance quantities
+                $inStock = $stock ? $stock->inStock : 0;
+                $outStock = $stock ? $stock->outStock : 0;
+                $balance = $inStock - $outStock;
+
+                // Assign calculated quantities to the size object
+                $size->inStock = $inStock;
+                $size->outStock = $outStock;
+                $size->balance = $balance;
+            }
+
+            $product->totalInStock = $product->product_stocks->sum('inStock');
+            $product->totalOutStock = $product->product_stocks->sum('outStock');
+            $product->totalBalance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
+        }
+
+        // dd($products);
+        return response()->json(['status'=>200, 'data' => $products]);
+    }
+
+    public function SizeWiseReport()
+    {
+        $products = Products::with(['sizes', 'product_stocks'])->get();
+
+        foreach ($products as $product) {
+            foreach ($product->sizes as $size) {
+                // Find the product stock for the current size
+                $stock = $product->product_stocks->firstWhere('size_id', $size->id);
+
+                // Calculate in-stock, out-of-stock, and balance quantities
+                $inStock = $stock ? $stock->inStock : 0;
+                $outStock = $stock ? $stock->outStock : 0;
+                $balance = $inStock - $outStock;
+
+                // Assign calculated quantities to the size object
+                $size->inStock = $inStock;
+                $size->outStock = $outStock;
+                $size->balance = $balance;
+            }
+
+            $product->totalInStock = $product->product_stocks->sum('inStock');
+            $product->totalOutStock = $product->product_stocks->sum('outStock');
+            $product->totalBalance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
+        }
+
+        $pdf= PDF::loadView('admin.inventory.sizewise_report',['products'=>$products],[],[
+            'format' => 'A4'
+          ]);
+        return $pdf->stream('sizewise_Inventory_report.pdf');
     }
 }

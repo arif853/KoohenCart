@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Mail\Webmessagemail;
 use App\Models\Webmessage;
+use App\Mail\Webmessagemail;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class WebmessageController extends Controller
 {
@@ -15,7 +16,8 @@ class WebmessageController extends Controller
      */
     public function index()
     {
-        //
+        $messages = Webmessage::all();
+        return view('admin.websetting.webmessage',compact('messages'));
     }
 
     /**
@@ -48,7 +50,7 @@ class WebmessageController extends Controller
             'message'=> $request->message,
         ]);
         // Mail::to('qbittech.dev@gmail.com')->send(new Webmessagemail($data));
-        
+
         return redirect()->back()->with('success','Message sent successfully, We will contact with you soon.');
     }
 
@@ -81,6 +83,18 @@ class WebmessageController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $message = Webmessage::findOrfail($id);
+
+            $message->delete();
+            Session::flash('success','Message has been deleted successfully!!');
+            return redirect()->back();
+
+        } catch (\Throwable $th) {
+            throw $th;
+            Session::flash('success', $th);
+            return redirect()->back();
+        }
+
     }
 }

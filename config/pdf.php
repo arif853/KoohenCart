@@ -12,7 +12,7 @@ return [
             ]
         ],
         'mode'                  => 'utf-8',
-        'format'                => 'A5',
+        'format'              =>'A5',
         'margin_left'          => 8,
         'margin_right'         => 8,
         'margin_top'           => 10,

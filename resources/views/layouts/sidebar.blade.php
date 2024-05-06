@@ -127,7 +127,7 @@
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
             </li>
-            <li class="menu-item has-submenu {{ request()->is('dashboard/campaign') ? 'active' : '' }}">
+            <li class="menu-item has-submenu {{ request()->is('dashboard/setting') ? 'active' : '' }}">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
                     <span class="text">Web Settings</span>
                 </a>
@@ -144,7 +144,7 @@
                     <a href="{{ route('webinfo.index') }}">
                         <span class="text">WebInfo</span>
                     </a>
-                    <a href="#">
+                    <a href="{{route('contactinfo.index')}}">
                         <span class="text">Contact Info</span>
                     </a>
 
@@ -159,7 +159,7 @@
                     <a href="#">
                         <span class="text">Subscriber</span>
                     </a>
-                    <a href="#">
+                    <a href="{{route('webmessage.index')}}">
                         <span class="text">Web Message</span>
                     </a>
 

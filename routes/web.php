@@ -419,6 +419,10 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/inventory/newstock', 'newstock')->name('new.stock');
         Route::post('/dashboard/inventory/addstock', 'addstock')->name('add.stock');
 
+        //inventory Report
+        Route::get('/dashboard/inventory/sizewise-report','SizeWiseReport')->name('sizewise.report');
+        Route::post('/dashboard/inventory/sizewise/categorywisefilter','CategoryWiseFilter')->name('categorywise.filter');
+
     });
 
     //Pos route
@@ -474,6 +478,10 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::post('/dashboard/setting/profile/social-info-status-update','socialInfoStatusUpdate')->name('socialstatus.update');
 
         Route::post('dashboard/profile/seoupdate', 'SEOUpdate')->name('user.SEOUpdate');
+
+        Route::get('/dashboard/setting/contact-info','contactindex')->name('contactinfo.index');
+        Route::get('/dashboard/setting/contact-info/edit','contactInfoEdit')->name('contactinfo.edit');
+        Route::post('/dashboard/setting/contact-info/update','contactInfoUpdate')->name('contactinfo.update');
     });
 
     // About us
@@ -483,15 +491,20 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::post('/dashboard/setting/aboutus/update', 'update')->name('aboutus.update');
     });
 
-    // <========================= Backend Route End ========================>
-
-
     Route::controller(WebmessageController::class)->middleware('auth')->group(function(){
+        Route::get('/dashboard/setting/webmessage','index')->name('webmessage.index');
+
+        Route::delete('/dashboard/setting/webmessage/destroy/{id}', 'destroy')->name('webmessage.destroy');
 
     });
 
-Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
-Route::get('/contact/webmessage/destroy' ,  [WebmessageController::class,'destroy'])->name('webmessage.destroy');
+    Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
+    // Route::get('/contact/webmessage/destroy' ,  [WebmessageController::class,'destroy'])->name('webmessage.destroy');
+
+
+    // <========================= Backend Route End ========================>
+
+
 
 Route::get('/thankyou',function(){
     return view('frontend.thankyou');

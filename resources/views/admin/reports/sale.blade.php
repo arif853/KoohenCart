@@ -19,8 +19,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <header class="card-header">
-                    <h5 class="mb-3">Filter by</h5>
+                <header class="card-header d-flex justify-content-between">
+                    <div>
+                        <h5 class="mb-3">Filter by</h5>
                     <form action="#">
                         <div class="row">
                             <div class="col-md-3 mb-4">
@@ -66,7 +67,15 @@
                             </div>
                         </div>
                     </form>
-                    <button id="print-btn" class="btn btn-warning ">print</button>
+                    </div>
+
+                    <div class="mt-50">
+                        <button id="print-btn" class="btn btn-info ">
+                            <i class="material-icons md-print"></i>
+
+                            <span class="ml-2">Print</span>
+                        </button>
+                    </div>
 
                 </header>
                 <style>

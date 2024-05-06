@@ -31,16 +31,15 @@
                             <label class="form-label">Application Name <span class="text-danger">*</span></label>
                             <input class="form-control" type="text" value="{{ $webinfo->appName }}" name="appName" placeholder="Type here">
                         </div> <!-- col .// -->
-                        <div class="col-6 col-lg-6 mb-3">
-                            <label class="form-label">Owner Name</label>
-                            <input class="form-control" type="text" value="{{$webinfo->ownerName}}" name="ownerName" placeholder="Type here">
-                        </div> <!-- col .// -->
+                        <div class="col-lg-6">
+                            <label for="" class="form-label">Marquee Text/ Notice Text</label>
+                            <input type="text" name="marquee" id="marquee" class="form-control" placeholder="Add Notice here" value="{{$webinfo->marquee}}">
+                        </div>
                     </div>
-
                     <div class="row">
-                        <div class="col-lg-6  mb-3">
-                            <label class="form-label">Address</label>
-                            <input class="form-control" type="text" name="address" value="{{$webinfo->address}}" placeholder="Type here">
+                        <div class="col-lg-6">
+                            <label for="" class="form-label">Footer Copyright Text</label>
+                            <input type="text" name="copyright" id="copyright" value="{{$webinfo->copyright}}" class="form-control" placeholder="Add copyright text with year and sign.">
                         </div> <!-- col .// -->
                         <div class="col-lg-6  mb-3">
                             <label class="form-label">Short Description <span class="text-danger">*</span></label>
@@ -81,16 +80,7 @@
                             </div>
                         </div> <!-- col.// -->
                     </div>
-                    <div class="row gx-3 mt-50">
-                        <div class="col-lg-6">
-                            <label for="" class="form-label">Marquee Text/ Notice Text</label>
-                            <input type="text" name="marquee" id="marquee" class="form-control" placeholder="Add Notice here" value="{{$webinfo->marquee}}">
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="" class="form-label">Footer Copyright Text</label>
-                            <input type="text" name="copyright" id="copyright" value="{{$webinfo->copyright}}" class="form-control" placeholder="Add copyright text with year and sign.">
-                        </div>
-                    </div>
+
                     <div class="row gx-3 mt-50">
                         <div class="col-lg-12">
                             <button class="btn btn-primary" type="submit">Save </button>
