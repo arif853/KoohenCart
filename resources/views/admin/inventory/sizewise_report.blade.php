@@ -27,7 +27,7 @@
         table tr td{
             padding: 2px;
             text-align: center;
-            font-size: 10px
+            font-size: 8px
         }
     }
 

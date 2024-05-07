@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use PDF;
+use Carbon\Carbon;
+use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\Product_stock;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Support\Facades\Session;
 
 class InventoryController extends Controller
@@ -125,14 +127,29 @@ class InventoryController extends Controller
 
     public function CategoryWiseFilter(Request $request)
     {
-        // Get the selected category IDs from the request
         $categoryIds = $request->input('id');
+        $dateRange = $request->input('date');
 
-        // Query products with sizes and product stocks where the product belongs to any of the selected categories
-        $products = Products::with(['sizes', 'product_stocks'])
-        ->whereHas('category', function ($query) use ($categoryIds) {
-            $query->whereIn('id', $categoryIds);
-        })->get();
+
+
+        $query = Products::with(['sizes', 'product_stocks']);
+
+        if ($categoryIds) {
+            $query->whereHas('category', function ($innerQuery) use ($categoryIds) {
+                $innerQuery->whereIn('id', $categoryIds);
+            });
+        }
+
+        if ($dateRange) {
+            $dates = explode(' - ', $dateRange);
+            $startDate = Carbon::createFromFormat('m/d/Y', $dates[0])->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('m/d/Y', $dates[1])->format('Y-m-d');
+            $query->whereHas('product_stocks', function ($innerQuery) use ($startDate, $endDate) {
+                $innerQuery->whereBetween('purchase_date', [$startDate, $endDate]);
+            });
+        }
+
+        $products = $query->get();
 
         foreach ($products as $product) {
             foreach ($product->sizes as $size) {
@@ -161,7 +178,9 @@ class InventoryController extends Controller
 
     public function SizeWiseReport()
     {
-        $products = Products::with(['sizes', 'product_stocks'])->get();
+        $query = Products::with(['sizes', 'product_stocks']);
+
+        $products = $query->get();
 
         foreach ($products as $product) {
             foreach ($product->sizes as $size) {
@@ -184,9 +203,13 @@ class InventoryController extends Controller
             $product->totalBalance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
         }
 
+        // dd($products);
+        // Log::info($products);
         $pdf= PDF::loadView('admin.inventory.sizewise_report',['products'=>$products],[],[
             'format' => 'A4'
           ]);
-        return $pdf->stream('sizewise_Inventory_report.pdf');
+
+        //   $pdf->download();
+        return $pdf->download('sizewise_Inventory_report.pdf');
     }
 }

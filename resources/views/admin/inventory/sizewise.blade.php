@@ -80,8 +80,11 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-4">
-                                <label for="customer_name" class="form-label">Purchase Date</label>
-                                <input type="text" placeholder="Type Customer Name here" class="form-control" id="customer_name">
+                                <label for="daterange" class="form-label">Purchase Date</label>
+                                <input type="text" placeholder="Type Customer Name here"  class="form-control" id="daterange" name="daterange">
+                            </div>
+                            <div class="col-md-4 mb-4 " style="margin-top: 28px;">
+                                <button id="resetFiltersBtn" class="btn btn-secondary">Reset Filters</button>
                             </div>
                         </div>
                     </div>
@@ -90,8 +93,16 @@
                             <i class="material-icons md-print"></i>
                             <span class="ml-2">Print</span>
                         </button> --}}
-                        <a href="{{route('sizewise.report')}}" class="btn btn-info " target="__blank">
-                            <i class="material-icons md-description"></i><span class="ml-2">Generate Report</span></a>
+                        <a href="{{route('sizewise.report')}}" class="btn btn-info " id="reportBtn" target="__blank">
+                            <i class="material-icons md-description"></i><span class="ml-2">Generate Report</span>
+                        </a>
+
+                        {{-- <a href="{{route('sizewise.report',)}}" class="btn btn-info d-none" id="CatReportBtn" target="__blank">
+                            <i class="material-icons md-description"></i><span class="ml-2">Generate Report</span>
+                        </a>
+                        <a href="{{route('sizewise.report')}}" class="btn btn-info d-none" id="DateReportBtn" target="__blank">
+                            <i class="material-icons md-description"></i><span class="ml-2">Generate Report</span>
+                        </a> --}}
                     </div>
 
                 </div>
@@ -181,19 +192,41 @@
 
 
 $(document).ready(function() {
+
+
+    $('input[name="daterange"]').daterangepicker({
+        "showDropdowns": true,
+        "autoApply": true,
+        "linkedCalendars": false,
+    });
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
     $('#categoryWiseStock').on('change', function() {
-        // event.preventDefault();
-        var catId = $(this).val();
+        var catId = $(this).val(); // Get the selected category ID
+        var daterange = ''; // Get the current date range value
+        StockFilter(catId, daterange); // Pass category ID and date range to the filter function
+    });
+
+    $('#daterange').on('change', function() {
+        var catId = $('#categoryWiseStock').val(); // Get the selected category ID
+        var daterange = $(this).val(); // Get the current date range value
+        StockFilter(catId, daterange); // Pass category ID and date range to the filter function
+    });
+
+
+    function StockFilter(catId, daterange)
+    {
         $.ajax({
             url: '{{ route('categorywise.filter') }}',
             type: 'POST',
             data:{
                 id: catId,
+                date: daterange,
             } , // Sending form data directly
             dataType: 'json', // Expecting JSON response
             success: function(response) {
@@ -260,7 +293,20 @@ $(document).ready(function() {
                 console.error('Error occurred while fetching products:', error);
             }
         });
+    };
+
+    $('#resetFiltersBtn').on('click', function() {
+        // Clear selected values in the category select
+        $('#categoryWiseStock').val(null).trigger('change');
+
+        // Clear selected date range
+        $('#daterange').val('');
+
+        // Reload or refresh the product list
+        location.reload();
+        // You can implement the logic to reload the product list here
     });
+
 });
 
 
