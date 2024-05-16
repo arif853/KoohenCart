@@ -21,16 +21,16 @@
                       <form id="orderFilterForm">
                         <div class="row order_live_search">
                             <div class="col-md-2 mb-4">
-                                <label for="Order" class="form-label">Order No</label>
-                                <input type="text" placeholder="Type Order No here" class="form-control" id="order_id">
+                                <label for="Order" class="form-label">Order ID</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_id">
                             </div>
                             <div class="col-md-2 mb-4">
                                 <label for="customer_name" class="form-label">Customer</label>
-                                <input type="text" placeholder="Type Customer Name here" class="form-control" id="customer_name">
+                                <input type="text" placeholder="Type here" class="form-control" id="customer_name">
                             </div>
                             <div class="col-md-2 mb-4">
                                 <label for="customerPhone" class="form-label">Phone</label>
-                                <input type="text" placeholder="Type Phone here" class="form-control" id="customerPhone">
+                                <input type="text" placeholder="Type here" class="form-control" id="customerPhone">
                             </div>
                             <div class="col-md-2 mb-4">
                                 <label for="productSKU" class="form-label">SKU</label>
@@ -104,7 +104,7 @@
                                      <td>
                                         <small >Order No.: #{{$order->id}}</small><br>
                                         Date: <small >{{ $order->created_at->format('d-m-Y') }}</small>
-
+                                        
                                     </td>
                                     <td>
                                         <a href="{{route('customer.profile', ['id' => $order->customer->id])}}" class="">
@@ -145,14 +145,14 @@
                                         @else
                                         <div class="status-container">
                                             <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200 order_status" id="order_status" data-order-id="{{ $order->id }}" name="order_status">
-
+                                            
                                                 <option value="completed" style="color: purple;" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
                                                 <option value="returned" style="color: gray;" {{ $order->status == 'returned' ? 'selected' : '' }}>Returned</option>
                                             </select>
                                         </div>
                                         @endif
                                     </td>
-
+                                    
                                     <td class="text-end">
                                         <a href="{{route('order.details', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Detail</a>
                                          @if($order->is_pos == 0 )
@@ -301,10 +301,9 @@
                 var status = $('#orderStatus').val();
                 // console.log(status);
                 var customerPhone = $('#customerPhone').val();
+                // console.log(customerPhone);
                 var productSKU = $('#productSKU').val();
                 var size = $('#ProductSize').val();
-                // console.log(productSKU);
-                // console.log(size);
 
                 $.ajax({
                     url: "{{ route('order.filters') }}",
@@ -419,11 +418,11 @@
                             // Append more columns as needed
                             tableBody.append(row);
                         });
-
+                        
                         $('.order_status').change(function() {
                             var orderId = $(this).data('order-id');
                             var newStatus = $(this).val();
-
+                
                             console.log(newStatus);
                             console.log(orderId);
                             // Perform an AJAX request to update the status of selected orders

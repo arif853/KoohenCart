@@ -22,23 +22,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $Newproducts = Products::with([
-        //     'overviews',
-        //     'product_infos',
-        //     'product_images',
-        //     'product_extras',
-        //     'tags',
-        //     'sizes',
-        //     'colors',
-        //     'brand',
-        //     'category',
-        //     'subcategory',
-        //     'product_price'
-        // ])->latest('created_at')->take(8)->get();
-
-        // echo '<pre>';
-        // print_r($products);
-
         function getChildren($categoryName) {
             $children = Category::where('parent_category', $categoryName)->get();
             foreach ($children as $child) {
@@ -54,13 +37,47 @@ class HomeController extends Controller
         }
 
         $categories = Category::with('children')->whereNull('parent_category')->get();
-        $cat_feature = Feature_category::where('status', 'Active')->first();
+
+        $cat_features = Feature_category::where('status', 'Active')->get();
+
+        foreach($cat_features as $cat_feature){
+
+            $items = Products::with([
+                'overviews',
+                'product_infos',
+                'product_images',
+                'product_extras',
+                'tags',
+                'sizes',
+                'colors',
+                'brand',
+                'category',
+                'subcategory',
+                'product_price'
+
+            ])->where('category_id', $cat_feature->category_id)->get();
+
+            $cat_feature->products = $items->filter(function ($product) {
+
+                // Calculate total stock balance for the product
+                $totalStock = $product->product_stocks->sum(function ($stock) {
+                    return $stock->inStock - $stock->outStock;
+                });
+                // Add a property to the product object with the total stock balance
+                $product->totalStock = $totalStock;
+
+                // Return true if total stock balance is greater than zero
+                return $totalStock > 0;
+            });
+        }
+
 
         $sliders = Slider::all();
         $adsbanner = Ads::all();
         $campaign = Campaign::where('status','Published')->first();
 
-        return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign'));
+        return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign','cat_features'));
+        // dd($cat_features);
     }
 
     /**
@@ -86,7 +103,7 @@ class HomeController extends Controller
         $divisions = Division::all();
         if (Auth::guard('customer')->check()) {
             $user = Auth::guard('customer')->user();
-            
+
             if ($user->customer->billing_address != null && $user->customer->shipping()->exists()) {
                 return view('frontend.checkout');
             } else {
@@ -142,9 +159,9 @@ class HomeController extends Controller
         // return response()->json($products, 200, [], JSON_PRETTY_PRINT);
 
     }
-    
+
      public function wishlist(){
-            
+
             return view('frontend.shop-wishlist');
         }
         /**
@@ -188,7 +205,7 @@ class HomeController extends Controller
     {
         //
     }
-    
+
      public function searchBar(Request $request)
     {
         $searchTerm = $request->input('search');

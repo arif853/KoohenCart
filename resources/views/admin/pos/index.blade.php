@@ -60,6 +60,9 @@
         height: 45px;
         padding-left: 15px;
     }
+    #productTable tr td{
+        vertical-align: middle !important;
+    }
 </style>
 
 <!-- ========================= SECTION CONTENT ========================= -->
@@ -97,30 +100,34 @@
                     </div>
                     <div class="card-body" style="height: 700px; overflow-y: scroll;">
 
-                        <table class="table table-hover shopping-cart-wrap" id="productTable">
+                        <table class="table table-hover shopping-cart-wrap table-border" id="productTable">
                             <thead class="text-muted">
                                 <tr>
-                                    <th scope="col">Item</th>
-                                    <th scope="col" width="120">Stock</th>
-                                    <th scope="col" width="120">Color</th>
-                                    <th scope="col" width="120">Size</th>
-                                    <th scope="col" width="120" class="text-center">Price</th>
-                                    <th scope="col" class="text-end" >Action</th>
+                                    <th >Item</th>
+                                    <th width="120">Stock</th>
+                                    <th width="120">Color</th>
+                                    <th width="120">Size</th>
+                                    <th width="120" class="text-center">Price</th>
+                                    <th class="text-end" >Action</th>
                                 </tr>
                             </thead>
                              <tbody>
                                 @foreach ($products as $product)
                                 <tr>
                                     <td>
-                                        <figure class="media">
-                                            <figcaption class="media-body">
-                                                <h6 class="title text-truncate">{{$product->product_name}}</h6>
+                                        <a class="itemside" href="#">
+                                            <div class="left">
+                                                <img src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail->first()->product_thumbnail)}}" 
+                                                class="img-sm img-thumbnail" alt="{{$product->slug}}" >
+                                            </div>
+                                            <div class="info">
+                                                <h6 class="mb-0">{{$product->product_name}}</h6>
                                                 <small>{{$product->sku}}</small>
-                                            </figcaption>
-                                        </figure>
+                                            </div>
+                                        </a>
                                     </td>
 
-                                    <td class="">
+                                    <td>
                                         <span>{{$product->balance}}</span>
                                     </td>
 
@@ -229,12 +236,11 @@
                                         @foreach (Cart::instance('pos_cart')->content() as $item)
                                         <tr>
                                             <td>
-                                            <figure class="media">
-
-                                            <figcaption class="media-body">
-                                            <h6 class="title text-truncate">{{$item->name}}</h6>
-                                            </figcaption>
-                                            </figure>
+                                                <a class="itemside" href="#">
+                                                    <div class="info">
+                                                        <h6 class="mb-0">{{$item->name}}</h6>
+                                                    </div>
+                                                </a>
                                             </td>
                                             <td class="text-center">
                                             <span class="product-qty mt-4">

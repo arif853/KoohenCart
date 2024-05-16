@@ -114,15 +114,14 @@ footer{
     @endphp
     <div class="row" style="width: 100%; margin-bottom:25px;">
         <div class="content-address" style="width:60%; float:left;">
-            {{-- <img src="{{ asset('frontend/assets/imgs/Kohen_Logo_Main.png') }}" alt="Logo" style="width:120px;"><br> --}}
-            <img src="{{ base_path('public/frontend/assets/imgs/Kohen_Logo_Main.png') }}" alt="Logo" style="width:120px;"><br>
+            <img src="{{ asset('frontend/assets/imgs/Kohen_Logo_Main.png') }}" alt="Logo" style="width:120px;"><br>
             <address style="margin-top:4px; font-size:8px;">{{ $settings->company_address }}</address>
             <p style="margin-top:4px; font-size:8px;">{{ $settings->secondary_mobile_no }},  {{ $settings->email }}</p>
         </div>
         <div class="invoice-content"style=" float:right;">
             <h2 style="margin-left:20px; width:70%; background: #e9e9e9b7;  text-align:center;text-transform:uppercase;color:#3abff0; padding:8px;">Invoice</h2>
             <p style="margin-left:20px; text-align:left; "><b class="tera">Date:</b> {{ date('j F y', strtotime($order->created_at)) }}</p>
-
+            
             <p style="margin-left:20px; text-align:left;"><b class="tera">Invoice No:#</b> {{ $order->invoice_no ?? $order->invoice_no  }}</p>
                 @if ($order->transaction->status == 'paid')
                 <p class="badge-soft-success">Paid</p>
@@ -224,10 +223,9 @@ footer{
             <p style="font-size:11px; margin-bottom:5px;font-family: 'nikosh';">৩.&nbsp;কাস্টমারের কাছে যদি পণ্য ক্ষতিগ্রস্ত অবস্থায় পৌঁছায় । </p>
         </div>
     </footer>
-
+    
     <div class="bg-watermark">
-        <img class="watermark" style="opacity: 0.08;" src="{{ base_path('public/frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Koohen">
-        {{-- <img class="watermark" style="opacity: 0.08;" src="{{ asset('frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Koohen"> --}}
+        <img class="watermark" style="opacity: 0.08;" src="{{ asset('frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Koohen">
     </div>
 
 </body>

@@ -52,10 +52,12 @@ class DashboardController extends Controller
                    
         // Calculate total puchase 
         $totalPurchase = 0;
+        $totalInStockBalance = 0;
         
         foreach(Products::all() as $product)
         {
             $totalPurchase += $product->raw_price * $product->product_stocks->sum('inStock');
+            $totalInStockBalance += $product->raw_price * ($product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock'));
         }
         
         $paidOrders = Order::where('status','completed')->whereHas('transaction', function ($query) {
@@ -65,12 +67,12 @@ class DashboardController extends Controller
         // Count the number of paid orders
         $paidOrdersCount = $paidOrders->count();
         
-        $paidOrders = Order::where('status','completed')->whereHas('transaction', function ($query) {
+        $unpaidOrders = Order::where('status','completed')->whereHas('transaction', function ($query) {
             $query->where('status', 'unpaid');
         })->get();
 
         // Count the number of paid orders
-        $unpaidOrdersCount = $paidOrders->count();
+        $unpaidOrdersCount = $unpaidOrders->count();
         
         // Calculate total profit
         $totalProfit = $this->calculateTotalProfit();
@@ -100,7 +102,8 @@ class DashboardController extends Controller
             'totalDue',
             'totalPaid',
             'paidOrdersCount',
-            'unpaidOrdersCount'
+            'unpaidOrdersCount',
+            'totalInStockBalance',
             ));
     }
     

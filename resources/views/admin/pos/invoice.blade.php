@@ -119,8 +119,7 @@ footer{
     @endphp
     <div class="row" style="width: 100%; margin-bottom:25px;">
         <div class="content-address" style="width:60%; float:left;">
-            <img src="{{ base_path('public/frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="Logo" style="width:120px;"><br>
-            {{-- <img src="{{ asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="Logo" style="width:120px;"><br> --}}
+            <img src="{{ asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="Logo" style="width:120px;"><br>
             <address style="margin-top:4px; font-size:8px;">{{ $settings->company_address }}</address>
             <p style="margin-top:4px; font-size:8px;">{{ $settings->secondary_mobile_no }},  {{ $settings->email }}</p>
         </div>
@@ -240,8 +239,7 @@ footer{
     </footer>
 
     <div class="bg-watermark">
-        <img class="watermark" style="opacity: 0.08;" src="{{ base_path('public/frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark">
-        {{-- <img class="watermark" style="opacity: 0.08;" src="{{ asset('frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark"> --}}
+        <img class="watermark" style="opacity: 0.08;" src="{{ asset('frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark">
     </div>
 </body>
 </html>

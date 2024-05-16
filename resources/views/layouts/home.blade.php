@@ -497,7 +497,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <h5 class="widget-title wow fadeIn animated">Contact</h5>
                             <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
-                             @foreach($socialinfos as $socialinfo)
+                            @foreach($socialinfos as $socialinfo)
                                 @if ($socialinfo->social_title === 'WhatsApp')
                                 <li>
                                     <a href="https://wa.me/{{$socialinfo->title_value}}"><span><i class="fab fa-whatsapp"></i>
@@ -520,6 +520,7 @@
 
                             @endforeach
                             <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{$userData->address}}</a></li>
+
                         </ul>
 
                     </div>
@@ -574,8 +575,6 @@
     </footer>
 
 
-     <livewire:quick-view-component />
-
     @include('auth.registermodal')
 
     @include('auth.loginmodal')
@@ -608,18 +607,21 @@
 
     <script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.plugin.min.js')}}"></script>
     <script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.countdown.js')}}"></script>
-        {{-- sweet alert --}}
+ {{-- sweet alert --}}
     <script src="{{asset('admin/assets/js/vendors/sweetalert2.all.min.js')}}"></script>
     <!-- Template  JS -->
     <script src="{{asset('')}}frontend/assets/js/main.js?v=3.4"></script>
     <script src="{{asset('')}}frontend/assets/js/shop.js?v=3.4"></script>
+
+    
+
 
     @stack('dashboard')
     @stack('checkout')
     @stack('shop')
     @stack('camp')
     @stack('order')
-
+    
 @livewireScripts
 
 <script>
@@ -711,28 +713,6 @@
 
                 Livewire.dispatch('buyNow', response.product_id);
 
-                // $(".slider-nav-thumbnails").empty();
-
-                // $.each(response.product_images, function(index, image){
-                //     var baseUrl = "{{ asset('storage/product_images/') }}";
-                //     var imageUrl = baseUrl + '/' + image.product_image;
-                //     var image_Div = '<div><img src="' + imageUrl + '" alt="'+response.slug+'"></div>';
-                //     $(".slider-nav-thumbnails").append(image_Div);
-
-
-                // });
-                //     $(".product-image-slider").slick();
-
-                //     // $('.slider-nav-thumbnails').slick();
-                //     $(".slider-nav-thumbnails").slick({
-                //         slidesToShow: 4,
-                //         slidesToScroll: 1,
-                //         asNavFor: '.product-image-slider',
-                //         dots: false,
-                //         centerMode: false,
-                //         focusOnSelect: true
-                //     });
-
                 $(".product-image-slider").empty();
                 if (response.product_thumbnail && response.product_thumbnail.length > 0) {
                     var baseUrl = "{{ asset('storage/product_images/thumbnail/') }}";
@@ -744,10 +724,6 @@
 
                     $(".product-image-slider").append(imageDiv);
                 }
-
-
-                // const outputImage = document.getElementById('output-image2');
-                // outputImage.src = "{{asset('storage')}}"+'/'+response.image
             }
         });
     });
@@ -761,7 +737,7 @@
 
 
         function searchHandel(searchInput, showProductDiv) {
-
+            
             var loadingIndicator = $('#loading-indicator');
             var searchTerm = searchInput.val().trim();
             console.log(searchTerm);
@@ -807,7 +783,7 @@
 
                                 ul.append(li);
                             });
-                            // console.log(ul);
+                            console.log(ul);
                         }
 
                         // Hide loading indicator after displaying results
@@ -836,8 +812,8 @@
             searchHandel($('#search-input2'), $('#show-product2'));
         });
     });
-
-
+    
+    
 </script>
     @if(Session::has('success'))
     <script>

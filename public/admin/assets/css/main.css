@@ -309,8 +309,8 @@ table .form-check {
 }
 
 .icon-sm {
-  width: 48px;
-  height: 48px;
+  width: 58px;
+  height: 58px;
   line-height: 48px !important;
   font-size: 20px;
 }
@@ -616,9 +616,7 @@ b {
   border-bottom: 0;
   border-left: 5px solid transparent;
 }
-.nav-tabs {
-	border-bottom: 0px ;
-}
+
 .nav-pills .nav-link {
   color: #6c757d;
   font-weight: 500;
@@ -627,17 +625,6 @@ b {
 .nav-pills .nav-link:hover {
   color: #1e2231;
   background-color: rgba(173, 181, 189, 0.15);
-}
-
-.nav-tabs .nav-link {
-    color: #6c757d;
-    font-weight: 500;
-    border: none;
-}
-
-.nav-tabs .nav-link:hover {
-    color: #1e2231;
-    background-color: rgba(173, 181, 189, 0.15);
 }
 
 /*Pagination*/
@@ -701,10 +688,6 @@ b {
   color: #088178;
   background-color: rgba(8, 129, 120, 0.2);
 }
-.nav-tabs .nav-link.active, .nav-tabs .show > .nav-link {
-    color: #088178;
-    background-color: rgba(8, 129, 120, 0.2);
-  }
 
 .btn.btn-primary {
   font-size: 14px;
@@ -3990,7 +3973,7 @@ body.offcanvas-active {
 }
 
 .navbar-aside .aside-top {
-  padding: 12px .5rem;
+  padding: 9.5px .5rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -5463,11 +5446,11 @@ footer.main-footer {
 }
 
 .icon-sm{
-    line-height: 42px !important;
+    line-height: 50px !important;
 }
 
 .photo-upload {
-    height: 90px;
+    height: auto;
     margin: 20px 0;
     position: relative;
     text-align: center;
@@ -5535,6 +5518,13 @@ footer.main-footer {
     object-fit: cover;
     object-position: center;
 }
+
+/*Custom CSS*/
+.counter{
+    padding: 15px 15px;
+    margin-bottom: 20px;
+}
+
 .sub-submenu-content {
     display: none;
     margin-left: 15px;
@@ -5562,15 +5552,18 @@ footer.main-footer {
     font-size: 16px;
 }
 
+/*pos button css*/
+
 .nav-item .pos {
-    width: 40px; /* Adjust width to fit only the icon initially */
-    height: 40px; /* Adjust height to fit only the icon initially */
-    line-height: 40px; /* Adjust line height for vertical centering */
-    border: 2px solid #E52E16;
-    border-radius: 50%; /* Make it a circle */
+    width: 50px; /* Adjust width to fit only the icon initially */
+    height: 50px; /* Adjust height to fit only the icon initially */
+    line-height: 45px; /* Adjust line height for vertical centering */
+    /*border: 2px solid #E52E16;*/
+    border-radius: 10%; /* Make it a circle */
     margin-left: 15px;
     margin-right: 15px;
-    background-color: #E52E16;
+    /*background-color: #E52E16;*/
+    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
     color: #fff !important;
     text-align: center;
     overflow: hidden;
@@ -5597,7 +5590,7 @@ footer.main-footer {
     left: 100%; /* Initially position text outside the button */
     top: 0;
     height: 100%;
-    line-height: 36px;
+    line-height: 50px;
     padding-left: 15px;
     background-color: transparent;
     transition: left 0.5s ease, opacity 0.5s ease;
@@ -5606,15 +5599,18 @@ footer.main-footer {
 .nav-item .pos:hover {
     width: 150px; /* Expand width on hover */
     border-radius: 28px; /* Adjust border-radius */
+    color: #fff !important;
+    background: transparent;
+    border: 1px solid #051937;
 }
 
 .nav-item .pos:hover .text {
     opacity: 1; /* Show text on hover */
     left: 40px; /* Move text inside the button */
     background-color: transparent; /* Change background color */
-    color: #E52E16 !important; /* Change text color */
+    color: #004d7a !important; /* Change text color */
 }
 .nav-item .pos:hover span.icon{
     left: -35px;
-    color: #E52E16 !important;
+    color: #004d7a !important;
 }

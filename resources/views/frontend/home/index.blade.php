@@ -4,6 +4,8 @@
 
 <main class="main">
     <!--Main Slider-->
+
+	<!-- Slider -->
 	<section class="section-slide">
 		<div class="wrap-slick1">
 			<div class="slick1">
@@ -38,6 +40,32 @@
 	</section>
 
     <!--Main Slider-->
+
+    <!--Popular Catagory-->
+    <!--<section class="popular-categories section-padding mt-15 mb-25">-->
+    <!--    <div class="container wow fadeIn animated">-->
+    <!--        <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>-->
+    <!--        <div class="carausel-6-columns-cover position-relative">-->
+    <!--            <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>-->
+    <!--            <div class="carausel-6-columns" id="carausel-6-columns">-->
+
+    <!--                @foreach ($categories as $category)-->
+    <!--                <div class="card-1">-->
+    <!--                    <figure class=" img-hover-scale overflow-hidden" style="height: 170px;  margin: revert-layer;">-->
+    <!--                        <a href="#">-->
+    <!--                            <img src="{{asset('storage/category_image/'.$category->category_image)}}" alt="{{$category->slug}}" >-->
+    <!--                        </a>-->
+    <!--                    </figure>-->
+    <!--                    <h5><a href="#">{{$category->category_name}}</a></h5>-->
+    <!--                </div>-->
+    <!--                @endforeach-->
+
+
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</section>-->
+    <!--Popular Catagory-->
 
     <!--New Arrival (OK)-->
     <section class="product-tabs section-padding position-relative wow fadeIn animated">
@@ -85,8 +113,10 @@
     <!--Advertise-->
 
     <!--Category products (OK)-->
-    @if($cat_feature)
+    @if($cat_features)
+    @foreach ($cat_features as $cat_feature)
 
+    @if ($cat_feature->is_featured == 1)
     <section class="section-padding">
         <div class="container pt-25 pb-25">
             <div class="heading-tab d-flex">
@@ -107,13 +137,18 @@
                 <div class="col-lg-3 d-none d-lg-flex">
                     <div class="banner-img style-2 wow fadeIn animated">
                         <img src="{{asset('storage/'.$cat_feature->image)}}" alt="{{$cat_feature->title}}">
-
                     </div>
                 </div>
                 <div class="col-lg-9 col-md-12">
                     <div class="category-view">
-                        @livewire('feature-category-component')
-
+                        {{-- @livewire('feature-category-component') --}}
+                        <div class="carausel-4-columns-cover arrow-center position-relative">
+                            <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow" id="carausel-4-columns-arrows"></div>
+                            <div class="carausel-4-columns carausel-arrow-center" id="carausel-4-columns">
+                                @foreach ($cat_feature->products as $product)
+                                @livewire('feature-category-component', ['product' => $product])
+                                @endforeach
+                        </div>
                     </div>
                 </div>
                 <!--End Col-lg-9-->
@@ -121,19 +156,8 @@
         </div>
     </section>
     <!--Best Sale (OK)-->
-
     @endif
-
-     @if($campaign)
-
-    <!--Campaign (OK)-->
-    <section class="product-tabs section-padding position-relative wow fadeIn animated">
-        <div class="container">
-
-            @livewire('campaign-component')
-        </div>
-    </section>
-    <!--Campaign (OK)-->
+    @endforeach
 
     @endif
 
@@ -161,6 +185,74 @@
     </section>
     <!--Advertise-->
 
+     @if($campaign)
+
+    <!--Campaign (OK)-->
+    <section class="product-tabs section-padding position-relative wow fadeIn animated">
+        <div class="container">
+
+            @livewire('campaign-component')
+        </div>
+    </section>
+    <!--Campaign (OK)-->
+
+    @endif
+
+
+    <!--Category products (OK)-->
+    @if($cat_features)
+    @foreach ($cat_features as $cat_feature)
+        @if ($cat_feature->is_featured == 2)
+            <section class="section-padding">
+                <div class="container pt-25 pb-25">
+                    <div class="heading-tab d-flex">
+                        <div class="heading-tab-left wow fadeIn animated">
+                            <?php
+                            // Split the title into parts based on a delimiter (for example, a space)
+                            $titleParts = explode(' ', $cat_feature->title);
+                            ?>
+
+                            <h3 class="section-title">
+                                <span>{{ $titleParts[0] }}</span> {{ isset($titleParts[1]) ? $titleParts[1] : '' }}
+                            </h3>
+
+                        </div>
+                        <a href="{{route('shop')}}" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 d-none d-lg-flex">
+                            <div class="banner-img style-2 wow fadeIn animated">
+                                <img src="{{asset('storage/'.$cat_feature->image)}}" alt="{{$cat_feature->title}}">
+
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-12">
+                            <div class="category-view">
+                                {{-- @livewire('feature-category-component') --}}
+                                <div class="carausel-5-columns-cover arrow-center position-relative">
+                                    <div  class="slider-arrow slider-arrow-2 carausel-5-columns-arrow" id="carausel-5-columns-arrows"></div>
+
+                                    <div class="carausel-5-columns carausel-arrow-center" id="carausel-5-columns">
+                                        @foreach ($cat_feature->products as $product)
+
+                                        @livewire('feature-category-component', ['product' => $product])
+                                        {{-- {{$product->slug}} --}}
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--End Col-lg-9-->
+                    </div>
+                </div>
+            </section>
+            <!--Best Sale (OK)-->
+        @endif
+    @endforeach
+    @endif
+
     <!--All Products (OK)-->
     <section class="product-tabs section-padding position-relative wow fadeIn animated">
         <div class="container">
@@ -172,7 +264,7 @@
     <!--All Products (OK)-->
 
      <!--Advertise-->
-    <section class="banner-2">
+     <section class="banner-2">
         <div class="container">
            @foreach ($adsbanner as $ads)
             @if($ads->is_featured == 1 && $ads->is_feature_no == 3)
@@ -193,6 +285,7 @@
         </div>
     </section>
     <!--Advertise-->
+
 </main>
 
 @endsection

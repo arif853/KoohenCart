@@ -54,6 +54,10 @@
                                             <td>{{$key+1}}</td>
                                             <td>
                                                 <a class="itemside" href="#">
+                                                    <div class="left">
+                                                        <img src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail->first()->product_thumbnail)}}" 
+                                                        class="img-sm img-thumbnail" alt="{{$product->slug}}" >
+                                                    </div>
                                                     <div class="info">
                                                         <h6 class="mb-0">{{$product->product_name}}</h6>
                                                     </div>
@@ -123,14 +127,16 @@
                 id: product,
             },
             success: function (response) {
-                console.log(response.stock);
+                // console.log(response);
 
                 // Update other fields
                 $('#product_id').val(response.product.id);
                 $('#old_stock').val(response.stock ? response.stock.inStock : 0);
                 $('#product_name').val(response.product.product_name);
                 $('#supplier').val(response.product.supplier.supplier_name);
-
+                $('#supplierPrice').val(response.product.raw_price);
+                $('#regularPrice').val(response.product.regular_price);
+                
 
                 // Create and append input fields for each size
                 var inputContainer = $('#input_container');
@@ -149,8 +155,10 @@
                             outStock = stock.outStock;
                             balanceQuantity = stock.inStock - stock.outStock;
                             // console.log(balanceQuantity);
+                            purchaseDate = stock.purchase_date
                         }
                     });
+                            
 
                     // sizeSelect.append('<option value="' + size.id + '">' + size.size_name + '</option>');
                     var inputField = '<div class="input-group mb-3">' +
@@ -165,6 +173,8 @@
 
                     i++;
                 });
+                // console.log(purchaseDate);
+                $('#purchase_date').val(purchaseDate);
 
             }
         });
