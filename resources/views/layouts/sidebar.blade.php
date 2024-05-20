@@ -8,7 +8,7 @@
         </div>
     </div>
     <nav>
-        @if(auth()->user()->hasRole(['Super Admin','Admin']))
+        @if(auth()->user()->hasRole(['Super Admin','User']))
         <ul class="menu-aside">
             <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                 <a class="menu-link" href="{{('/dashboard')}}"> <i class="icon material-icons md-home"></i>

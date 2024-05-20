@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
         if(is_null($admin)){
             $admin = new User();
             $admin->name = 'Super Admin';
-            $admin->email = 'superadmin@gmail.com';
+            $admin->email = 'admin@koohen.com';
             $admin->email_verified_at = now();
             $admin->password = Hash::make(12345678);
             $admin->remember_token = Str::random(10);

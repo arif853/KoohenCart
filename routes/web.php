@@ -122,6 +122,9 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/cart', 'cart')->name('cart');
     Route::get('/home/quickview', 'quickview')->name('quickview');
     Route::get('/home/product_search', 'searchBar')->name('search');
+    Route::get('/delivery_information', 'deliveryInfo')->name('delivery_info');
+    Route::get('/privacy_and_policy', 'PrivacyPolicy')->name('privacy_policy');
+    Route::get('/terms-and-condition', 'termsCondition')->name('terms.condition');
 });
 
 // Route::get('/shop', [ShopController::class, 'index'])->name('shop');
@@ -209,9 +212,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/subcategory/edit', 'edit')->name('subcategory.edit');
         Route::post('/dashboard/subcategory/update', 'update')->name('subcategory.update');
         Route::delete('/dashboard/subcategory/destroy/{id}', 'destroy')->name('subcategory.destroy');
-
         Route::get('/dashboard/subcategory/get_subcategory/{id}', 'get_subcategory')->name('category.subcategory');
-
     });
 
 
