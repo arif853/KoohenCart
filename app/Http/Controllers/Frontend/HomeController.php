@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Ads;
-use App\Models\Slider;
-use App\Models\Setting;
-use App\Models\Campaign;
-use App\Models\Category;
-use App\Models\Division;
 use App\Models\Products;
 use Illuminate\Http\Request;
-use Termwind\Components\Raw;
-use App\Models\Feature_category;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Campaign;
+use App\Models\Slider;
+use App\Models\Ads;
+use App\Models\Division;
+use App\Models\Feature_category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use App\Models\Aboutus;
 
 class HomeController extends Controller
 {
@@ -22,23 +22,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $Newproducts = Products::with([
-        //     'overviews',
-        //     'product_infos',
-        //     'product_images',
-        //     'product_extras',
-        //     'tags',
-        //     'sizes',
-        //     'colors',
-        //     'brand',
-        //     'category',
-        //     'subcategory',
-        //     'product_price'
-        // ])->latest('created_at')->take(8)->get();
-
-        // echo '<pre>';
-        // print_r($products);
-
         function getChildren($categoryName) {
             $children = Category::where('parent_category', $categoryName)->get();
             foreach ($children as $child) {
@@ -54,13 +37,47 @@ class HomeController extends Controller
         }
 
         $categories = Category::with('children')->whereNull('parent_category')->get();
-        $cat_feature = Feature_category::where('status', 'Active')->first();
+
+        $cat_features = Feature_category::where('status', 'Active')->get();
+
+        foreach($cat_features as $cat_feature){
+
+            $items = Products::with([
+                'overviews',
+                'product_infos',
+                'product_images',
+                'product_extras',
+                'tags',
+                'sizes',
+                'colors',
+                'brand',
+                'category',
+                'subcategory',
+                'product_price'
+
+            ])->where('category_id', $cat_feature->category_id)->get();
+
+            $cat_feature->products = $items->filter(function ($product) {
+
+                // Calculate total stock balance for the product
+                $totalStock = $product->product_stocks->sum(function ($stock) {
+                    return $stock->inStock - $stock->outStock;
+                });
+                // Add a property to the product object with the total stock balance
+                $product->totalStock = $totalStock;
+
+                // Return true if total stock balance is greater than zero
+                return $totalStock > 0;
+            });
+        }
+
+
         $sliders = Slider::all();
         $adsbanner = Ads::all();
         $campaign = Campaign::where('status','Published')->first();
 
-        return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign'));
-
+        return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign','cat_features'));
+        // dd($cat_features);
     }
 
     /**
@@ -68,7 +85,8 @@ class HomeController extends Controller
      */
     public function aboutus()
     {
-        return view('frontend.about-us');
+        $aboutus = Aboutus::first();
+        return view('frontend.about-us', ['aboutus' => $aboutus]);
     }
 
     /**
@@ -142,11 +160,11 @@ class HomeController extends Controller
 
     }
 
-    public function wishlist(){
-        return view('frontend.shop-wishlist');
-    }
+     public function wishlist(){
 
-    /**
+            return view('frontend.shop-wishlist');
+        }
+        /**
      * Show the form for editing the specified resource.
      */
     public function quickview(Request $request)
@@ -171,6 +189,7 @@ class HomeController extends Controller
         return response()->json( $product);
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -187,8 +206,7 @@ class HomeController extends Controller
         //
     }
 
-
-    public function searchBar(Request $request)
+     public function searchBar(Request $request)
     {
         $searchTerm = $request->input('search');
 
@@ -199,8 +217,8 @@ class HomeController extends Controller
                             // ->limit(5) // Limit the number of results
                             ->get();
 
+
         // Return the response as JSON
         return response()->json(['products' => $products]);
     }
-
 }

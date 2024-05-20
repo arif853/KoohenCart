@@ -7,9 +7,9 @@
     <div>
         <h2 class="content-title card-title">Delivery Zone</h2>
     </div>
-    {{-- <div>
+    <div>
         <input type="text" placeholder="Search by name" class="form-control bg-white">
-    </div> --}}
+    </div>
 </div>
 <div class="card mb-4">
     <header class="card-header">

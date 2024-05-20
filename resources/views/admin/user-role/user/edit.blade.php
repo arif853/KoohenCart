@@ -39,16 +39,16 @@
 
                     <div class="col-md-12 mb-2">
                       <label for="user_role" class="form-label">Roles<span class="text-danger">*</span></label>
-                      <select id="edit_user_roles_id" class="form-control select-nice user_roles" multiple="multiple"
-                                name="user_role[]">
-                                <option value="">--Select Use Role --</option>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                            @endforeach
-                        </select>
+                      <select name="user_role[]" id="user_role" class="form-select" multiple>
+                        <option value="null">-- Selecte Use Role --</option>
+                        @foreach ($roles as $role)
+                        <option value="{{$role->name}}">{{$role->name}}</option>
+                        @endforeach
+                      </select>
                       @error('user_role')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
+                        <small>(Use Ctrl to selecte multiple.)</small>
                     </div>
 
                     <div class="col-12 d-flex justify-content-end">

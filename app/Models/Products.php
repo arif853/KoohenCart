@@ -6,10 +6,11 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class Products extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable =
     [
@@ -123,17 +124,12 @@ class Products extends Model
 
     public function camp_product()
     {
-        return $this->hasMany(Camp_product::class, 'product_id');
+        return $this->hasMany(Camp_product::class);
     }
-
-    public function product_stocks()
+    
+        public function product_stocks()
     {
         return $this->hasMany(Product_stock::class, 'product_id');
     }
-
-    // public function featureItem()
-    // {
-    //     return $this->belongsTo(FeatureProducts::class, 'feature_products_id', 'feature_products_with_pivot' );
-    // }
 
 }

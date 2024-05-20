@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use DB;
 use App\Models\Order;
 use App\Models\Coupon;
 use App\Mail\AdminMail;
@@ -16,7 +17,6 @@ use App\Models\Product_stock;
 use App\Models\AppliedCoupone;
 use Illuminate\Support\Carbon;
 use App\Models\Register_customer;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Notifications\NewPendingOrderNotification;
 
 class CheckoutController extends Controller
 {
@@ -80,7 +81,8 @@ class CheckoutController extends Controller
     {
         $track_id = $this->generateCode();
         $invoiceNo = $this->generateInvoiceNo();
-
+        // Initialize an empty array to store purchase event data
+        $purchaseEventData = [];
         if (Auth::guard('customer')->check()) {
 
             $user = Auth::guard('customer')->user();
@@ -105,7 +107,15 @@ class CheckoutController extends Controller
             $order_status = Orderstatus::create([
                 'order_id' => $order->id,
             ]);
-
+            //Transaction details
+                $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
+                $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
+                $purchaseEventData['tax'] = $request->tax; // Tax amount
+                $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
+                $purchaseEventData['currency'] = "BDT"; // Currency
+                $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ""; // Coupon code
+                $purchaseEventData['items'] = [];
+                
             $cartItems = Cart::instance('cart')->content();
 
             // Loop through the cart items and save them to the order item table
@@ -121,7 +131,14 @@ class CheckoutController extends Controller
                     'price' => $cartItem->price,
                     'quantity' => $cartItem->qty,
                 ]);
-
+                //dataLayer Data
+                $item = [
+                    'item_id' => $cartItem->id,
+                    'item_name' => $cartItem->name, // Assuming you have a 'name' property for the item
+                    'price' => $cartItem->price,
+                    'quantity' => $cartItem->qty,
+                ];
+            $purchaseEventData['items'][] = $item;
             }
 
             $transaction = transactions::create([
@@ -146,9 +163,11 @@ class CheckoutController extends Controller
             }
 
             $customer = Customer::find($customer_id);
+            
+            // auth()->user()->notify(new NewPendingOrderNotification($order));
 
             Session::flash('warning','Check your order in dashboard.');
-            // Mail::to($customer->email)->send( new customerMail($order));
+            Mail::to($customer->email)->send( new customerMail($order));
 
         }
         else{
@@ -169,6 +188,9 @@ class CheckoutController extends Controller
                 'phone.required' => 'Please fill up phone field .',
                 'email.required' => 'Please fill up email field.',
                 'billing_address.required' => 'Please fill up billing address field.',
+                'division.required' => 'Please fill up division field.',
+                'district.required' => 'Please fill up district field.',
+                'area.required' => 'Please fill up area field.',
             ];
 
             $validator = Validator::make($request->all(), $rules, $customMessages);
@@ -264,7 +286,17 @@ class CheckoutController extends Controller
                 $order_status = Orderstatus::create([
                     'order_id' => $order->id,
                 ]);
-
+                //Transaction details
+                $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
+                $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
+                $purchaseEventData['tax'] = $request->tax; // Tax amount
+                $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
+                $purchaseEventData['currency'] = "BDT"; // Currency
+                $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ""; // Coupon code
+                $purchaseEventData['items'] = [];
+                
+                
+                
                 $cartItems = Cart::instance('cart')->content();
 
                 // Loop through the cart items and save them to the order item table
@@ -280,6 +312,14 @@ class CheckoutController extends Controller
                         'price' => $cartItem->price,
                         'quantity' => $cartItem->qty,
                     ]);
+                    
+                    $item = [
+                            'item_id' => $cartItem->id,
+                            'item_name' => $cartItem->name, // Assuming you have a 'name' property for the item
+                            'price' => $cartItem->price,
+                            'quantity' => $cartItem->qty,
+                        ];
+                    $purchaseEventData['items'][] = $item;
                 }
 
                 if($request->is_shipping){
@@ -321,23 +361,23 @@ class CheckoutController extends Controller
                     'mode' => $request->payment_mode,
                 ]);
             }
-            // Mail::to( $customer->email)->send( new customerMail($order));
+            
+            // auth()->user()->notify(new NewPendingOrderNotification($order));
+            Mail::to( $customer->email)->send( new customerMail($order));
 
         }
+        
         // Clear the cart after saving to the order item table
-        // Mail::to('qbittech.dev1@gmail.com')->send( new AdminMail($order));
+        Mail::to('masudszone.design@gmail.com')->send( new AdminMail($order));
+        // masudszone.design@gmail.com
+        
+        Cart::instance('cart')->destroy();
+        
+        return redirect()->route('thankyou')->with([
+            'success' => 'Your order has been placed',
+            'purchaseEventData' => $purchaseEventData
+        ]);
 
-        // if($request->payment_mode == 'online')
-        // {
-        //     Cart::instance('cart')->destroy();
-        //     // $order = $order->id;
-        //     return view('frontend.mypayment',compact('order'))->with('success', 'Your order has been placed, Please make your payment here.');
-        // }
-        // else
-        // {
-            Cart::instance('cart')->destroy();
-            return redirect()->route('thankyou')->with('success', 'Your order has been placed');
-        // }
     }
 
 

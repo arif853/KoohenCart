@@ -20,7 +20,7 @@ class FeatureCategoryController extends Controller
     public function index()
     {
         $feature_items = Feature_category::all();
-        $categories = Category::whereNull('parent_category')->get();
+        $categories = Category::all();
         return view('admin.feature.category_feature',compact('categories','feature_items'));
     }
 

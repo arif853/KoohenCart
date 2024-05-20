@@ -5,10 +5,11 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Products;
 use App\Models\Product_image;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class WishlistComponent extends Component
 {
@@ -37,7 +38,7 @@ class WishlistComponent extends Component
     }
 
     public function removewish($id){
-
+       
         if(Auth::guard('customer')->check()){
 
             $userEmail = Auth::guard('customer')->user()->email;
@@ -62,7 +63,6 @@ class WishlistComponent extends Component
             Cart::instance('wishlist')->restore(Auth::guard('customer')->user()->email);
             $this->dispatch('cartRefresh')->to('wishlist-icon-component');
         }
-
         return view('livewire.wishlist-component');
     }
 }

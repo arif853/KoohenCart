@@ -7,7 +7,6 @@ use App\Models\Brand;
 use App\Models\Color;
 use App\Models\Category;
 use App\Models\Products;
-use App\Models\Supplier;
 use App\Models\Product_tag;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
@@ -19,10 +18,11 @@ use Illuminate\Http\Response;
 use App\Models\products_color;
 use Illuminate\Validation\Rule;
 use App\Models\Product_overview;
-use App\Models\Product_thumbnail;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManager;
 use App\Models\Product_additionalinfo;
+use App\Models\Product_thumbnail;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -51,17 +51,15 @@ class ProductController extends Controller
             'category',
             'product_stocks',
         ])->get();
-
+        
+        
         foreach($products as $product)
         {
             $product->balance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
         }
-
+        
         return view('admin.products.index',compact('products'));
     }
-
-   
-    
 
     /**
      * Show the form for creating a new resource.
@@ -98,7 +96,6 @@ class ProductController extends Controller
             'offer_price' => 'nullable|numeric',
             'description' => 'required|string',
             'sku' => 'required|string|unique:products,sku',
-            'stock' => 'nullable|string',
             'status' => 'required|in:active,inactive',
 
             'featurename.*' => 'nullable|string',
@@ -140,7 +137,6 @@ class ProductController extends Controller
             // $product->offer_price = $request->offer_price;
             $product->description = $request->description;
             $product->sku = $request->sku;
-            // $product->stock = $request->stock;
             $product->status = $request->status;
             $product->save();
 
@@ -163,13 +159,13 @@ class ProductController extends Controller
                 ]);
             }
 
-            if($request->hasFile('product_thumbnail')){
+             if($request->hasFile('product_thumbnail')){
                 $thumbnail = $request->file('product_thumbnail');
 
                 foreach ($thumbnail as $index => $image) {
                     $manager = new ImageManager(new Driver());
 
-                    $imageName = $product->slug.'_' .$index . '_' . time() . '.' . $image->getClientOriginalExtension();
+                    $imageName = $product->slug.'_' .$index . '.' . $image->getClientOriginalExtension();
 
                     $img = $manager->read($image);
                     // $encoded = $img->toWebp();
@@ -188,13 +184,14 @@ class ProductController extends Controller
                 }
             }
 
+
             if($request->hasFile('product_image')){
                 $images = $request->file('product_image');
 
                 foreach ($images as $index => $image) {
                     $manager = new ImageManager(new Driver());
 
-                    $imageName = $product->slug.'_' .$index . '_' . time() .  '.' . $image->getClientOriginalExtension();
+                    $imageName = $product->slug.'_' .$index . '.' . $image->getClientOriginalExtension();
 
                     $img = $manager->read($image);
                     // $img = $img->resize(400, 600);
@@ -207,7 +204,6 @@ class ProductController extends Controller
                     ]);
                 }
             }
-
 
             // overview store here
             $featureNames = $request->input('featurename',[]);
@@ -334,8 +330,7 @@ class ProductController extends Controller
             'brand',
             'category',
             'product_price',
-            'supplier',
-            'product_thumbnail'
+            'supplier'
         ])->findOrFail($id);
             // dd($products);
         // return response()->json($products, 200, [], JSON_PRETTY_PRINT);
@@ -357,7 +352,6 @@ class ProductController extends Controller
             'offer_price' => 'nullable|numeric',
             'description' => 'required|string',
             // 'sku' => 'required|string|unique:products,sku',
-            'stock' => 'nullable|string',
             'status' => 'required|in:active,inactive',
 
             'featurename.*' => 'nullable|string',
@@ -368,7 +362,7 @@ class ProductController extends Controller
             'info_name.*' => 'nullable|string',
             'info_value.*' => 'nullable|string',
 
-            'product_image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
+           'product_image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             'product_thumnail.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
 
             'product_size.*' => 'nullable|exists:sizes,id',
@@ -400,7 +394,6 @@ class ProductController extends Controller
                 'regular_price' => $request->regular_price,
                 'description' => $request->description,
                 // 'sku' => $request->sku,
-                // 'stock' => $request->stock,
                 'status' => $request->status,
             ]);
 
@@ -457,35 +450,36 @@ class ProductController extends Controller
                 $thumbnail = $request->file('product_thumbnail');
 
                 foreach ($thumbnail as $index => $image) {
-
                     $manager = new ImageManager(new Driver());
-                    $thumbImage = $product->slug.'_' .$index . '_' . time() . '.' . $image->getClientOriginalExtension();
+
+                    $imageName = $product->slug.'_' .$index . '_' . time() . '.' . $image->getClientOriginalExtension();
 
                     $img = $manager->read($image);
                     // $encoded = $img->toWebp();
                     // $img = $img->resize(400, 600);
 
-                    $imagePath = 'product_images/thumbnail/' . $thumbImage;
+                    $imagePath = 'product_images/thumbnail/' . $imageName;
 
                     // Check if an image with the same name already exists
-                    $existingthumb = $existingthumbs->where('product_thumbnail', $thumbImage)->first();
+                    $existingthumb = $existingthumbs->where('product_thumbnail', $imageName)->first();
 
                     if ($existingthumb) {
                         // Update existing image
                         $existingthumb->update([
-                            'product_thumbnail' => $thumbImage,
+                            'product_thumbnail' => $imageName,
                         ]);
                     } else {
 
                     Product_thumbnail::create([
                         'product_id' => $product->id,
-                        'product_thumbnail' => $thumbImage,
+                        'product_thumbnail' => $imageName,
                     ]);
 
                     Storage::disk('public')->put($imagePath , (string)$img->encode());
                 }
             }
         }
+
             // // Delete images that were removed
             // $removedImages = $existingImages->pluck('product_image')->diff($newImages->pluck('product_image'));
 
@@ -589,7 +583,7 @@ class ProductController extends Controller
             $tags = explode(',', $request->input('tags'));
             foreach ($tags as $tagName) {
                 $product->tags()->updateOrCreate(
-                    ['tag' => trim($tagName)],
+                    ['tag' => trim($tagName)]
                     // additional attributes if needed
                 );
             }
@@ -649,6 +643,7 @@ class ProductController extends Controller
 
             Session::flash('success', 'Product thumbnail image has been deleted !!');
 
+
             // Return a JSON response indicating success
             return response()->json(['message' => 'Thumbnail image deleted successfully'], Response::HTTP_OK);
         } else {
@@ -656,6 +651,7 @@ class ProductController extends Controller
             return response()->json(['error' => 'Product image not found'], Response::HTTP_NOT_FOUND);
         }
     }
+
     public function ProductFilter(Request $request)
     {
         $product_name = $request->input('product_name');
@@ -663,16 +659,7 @@ class ProductController extends Controller
         $startDate = $request->input('created_at');
         $endDate = $request->input('updated_at');
 
-        $query = Products::query()->with(['overviews',
-                'product_infos',
-                'product_images',
-                'product_extras',
-                'tags', 'sizes',
-                'colors',
-                'brand',
-                'category',
-                'product_stocks'
-            ]);
+        $query = Products::query()->with(['overviews', 'product_infos', 'product_images', 'product_extras', 'tags', 'sizes', 'colors', 'brand', 'category']);
 
         $query->where(function ($query) use ($product_name, $productSku, $startDate, $endDate) {
             if ($product_name) {
@@ -694,12 +681,6 @@ class ProductController extends Controller
             }
         });
         $products = $query->get();
-        foreach($products as $product)
-        {
-            $product->balance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
-        }
-
         return response()->json(['products' => $products]);
     }
-
 }

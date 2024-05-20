@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Koohen'),
+    'name' => env('APP_NAME', 'KOOHEN'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://www.koohen.com'),
 
     'asset_url' => env('ASSET_URL'),
 
@@ -160,7 +160,6 @@ return [
          * Package Service Providers...
          */
         // Intervention\Image\ImageServiceProvider::class,
-     
         /*
          * Application Service Providers...
          */
@@ -193,9 +192,6 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF' => misterspelik\LaravelPdf\Facades\Pdf::class,
-        // 'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
-        Spatie\Permission\PermissionServiceProvider::class,
-         'Captcha' => Igoshev\Captcha\Facades\Captcha::class,
     ])->toArray(),
 
 ];

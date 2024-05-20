@@ -63,7 +63,7 @@ class BrandController extends Controller
 
             // read image from filesystem
             $img = $manager->read($image);
-            // $img = $img->resize(120, 150);
+            $img = $img->resize(120, 150);
             // Save the original image
             $imagePath = 'brand_image/' . $imageName;
             Storage::disk('public')->put( $imagePath , (string)$img->encode());

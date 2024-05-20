@@ -67,37 +67,11 @@ class SupplierController extends Controller
     /**
      * Display the specified resource.
      */
-    public function SupplierFilter(Request $request)
+    public function show(string $id)
     {
-        $supplierName = $request->supplierName;
-      
-        $supplierPhone = $request->supplierPhone;
-        
-        $supplierEmail = $request->supplierEmail;
-
-        // Construct the query without fetching any records yet
-        $query = Supplier::query();
-    
-        if ($supplierName) {
-            $query->where('supplier_name', 'like', "%$supplierName%");
-        }
-    
-        if ($supplierPhone) {
-            $query->where('phone', 'like', "%$supplierPhone%");
-        }
-    
-        if ($supplierEmail) {
-            $query->where('email', 'like', "%$supplierEmail%");
-        }
-    
-        // Execute the query and fetch the results
-        $supplierFilters = $query->get();
-    
-        return response()->json($supplierFilters);
+        //
     }
-    
-   
-    
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -161,4 +135,35 @@ class SupplierController extends Controller
             return redirect()->back()->with('danger', 'This Supplier can not be deleted .');
         }
     }
+
+
+    public function SupplierFilter(Request $request)
+    {
+        $supplierName = $request->supplier_name;
+
+        $supplierPhone = $request->supplier_phone;
+
+        $supplierEmail = $request->supplier_email;
+
+        // Construct the query without fetching any records yet
+        $query = Supplier::query();
+
+        if ($supplierName) {
+            $query->where('supplier_name', 'like', "%$supplierName%");
+        }
+
+        if ($supplierPhone) {
+            $query->where('phone', 'like', "%$supplierPhone%");
+        }
+
+        if ($supplierEmail) {
+            $query->where('email', 'like', "%$supplierEmail%");
+        }
+
+        // Execute the query and fetch the results
+        $supplierFilters = $query->get();
+
+        return response()->json($supplierFilters);
+    }
+
 }

@@ -7,7 +7,7 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="index.html" rel="nofollow">Home</a>
-                <span></span> Pages
+                <!--<span></span> Pages-->
                 <span></span> Contact us
             </div>
         </div>

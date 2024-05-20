@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
                                 <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
-                                <img class="wow fadeIn animated" src="{{asset('')}}frontend/assets/imgs/theme/payment-method.png" alt="">
+                                <img class="wow fadeIn animated" src="{{asset('')}}frontend/assets/imgs/theme/payment-method.png" alt="ssl commerce">
                             </div>
                         </div>
                     </div>
@@ -147,8 +147,6 @@
     <!-- Template  JS -->
     <script src="{{asset('')}}frontend/assets/js/main.js?v=3.4"></script>
     <script src="{{asset('')}}frontend/assets/js/shop.js?v=3.4"></script>
-
-
 </body>
 
 </html>

@@ -6,6 +6,8 @@ use Livewire\Component;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\Postcode;
+use App\Livewire\CheckoutComponent;
+use Illuminate\Support\Facades\Session;
 
 class BillingAreaComponent extends Component
 {
@@ -43,9 +45,16 @@ class BillingAreaComponent extends Component
     {
         $this->selectedPostOffices = null;
     }
+
     public function updateDeliveryCharge()
     {
-        $this->dispatch('postOfficeChanged', $this->selectedPostOffices);
+        if ($this->selectedPostOffices) {
+            $postOffice = Postcode::find($this->selectedPostOffices);
+            if ($postOffice) {
+                // $this->dispatch('postOfficeChanged', $postOffice->zone_charge);
+                $this->dispatch('postOfficeChanged', $postOffice->zone_charge)->to(CheckoutComponent::class);
+            }
+        }
     }
 
 }

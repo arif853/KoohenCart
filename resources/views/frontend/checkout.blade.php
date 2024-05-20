@@ -173,14 +173,14 @@
                                 <div class="col-lg-6">
                                     <div class="">
                                         <label for="" class="form-label">First name <span>*</span></label>
-                                        <input type="text" required class="form-control mb-2" name="fname" id="customer_fname"
+                                        <input type="text" required class="form-control mb-2" name="fname"
                                             placeholder="First name *">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="">
                                         <label for="" class="form-label">Last name <span>*</span></label>
-                                        <input type="text" required class="form-control mb-2" name="lname" id="customer_lname"
+                                        <input type="text" required class="form-control mb-2" name="lname"
                                             placeholder="Last name *">
                                     </div>
                                 </div>
@@ -188,14 +188,14 @@
                                 <div class="col-lg-6">
                                     <div class="">
                                         <label for="" class="form-label">Phone <span>*</span></label>
-                                        <input required type="text" class="form-control mb-2" name="phone" id="customer_phone"
+                                        <input required type="text" class="form-control mb-2" name="phone"
                                             placeholder="Phone *">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="">
                                         <label for="" class="form-label">Email address <span>*</span></label>
-                                        <input required type="text" class="form-control mb-2" name="email" id="customer_email"
+                                        <input required type="text" class="form-control mb-2" name="email"
                                             placeholder="Email address *">
                                     </div>
                                 </div>
@@ -203,7 +203,7 @@
                                 <div class="col-lg-12">
                                     <div class="">
                                         <label for="" class="form-label">Address <span>*</span></label>
-                                        <input type="text" class="form-control mb-2" name="billing_address" required id="customer_address"
+                                        <input type="text" class="form-control mb-2" name="billing_address" required
                                             placeholder="Address *">
                                     </div>
                                 </div>
@@ -327,90 +327,89 @@
                             @auth('customer')
 
                             @livewire('checkout-component', ['delivery_charge' => $shippingAddress->zone->zone_charge], key($shippingAddress->zone->zone_charge))
-
                             @else
-                            @livewire('checkout-component', ['delivery_charge' => 0])
+                            @livewire('checkout-component', ['delivery_charge'])
 
                             @endif
 
                             <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                            <div class="payment_option">
-                                <div class="custome-radio">
-                                    <input class="form-check-input" type="radio" name="payment_mode" id="payment_cod" value="cod" checked>
-                                    <label class="form-check-label" for="payment_cod">
-                                        Cash On Delivery
-                                    </label>
-                                    <br>
-                                    <input class="form-check-input" type="radio" name="payment_mode" id="payment_online" value="online">
-                                    <label class="form-check-label" for="payment_online">
-                                        Online Payment
-                                    </label>
-                                    <br>
+                            <div class="payment_method">
+                                <div class="mb-25">
+                                    <h5>Payment</h5>
+                                </div>
+                                <div class="payment_option">
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" type="radio" name="payment_mode"
+                                            id="payment_cod" checked value="cod">
+                                        <label class="form-check-label" for="payment_cod" data-bs-toggle="collapse"
+                                            data-target="#bankTranfer" aria-controls="bankTranfer">Cash On
+                                            Delivery</label>
+                                        
+                                        {{-- <div class="form-group collapse in" id="bankTranfer">
+                                            <p class=" mt-5">There are many variations of passages of Lorem
+                                                Ipsum available, but the majority have suffered alteration. </p>
+                                        </div> --}}
+                                    </div>
+                                    <!-- Terms & Conditions Checkbox -->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                        <label class="form-check-label" for="agreeTerms">
+                                            I agree to the <a href="{{ url('/terms-and-condition') }}" target="_blank">Terms & Conditions</a>, <a href="{{ url('/privacy_and_policy') }}" target="_blank">, Privacy Policy</a> and <a href="{{ url('/cancellation_and_return') }}" target="_blank">Return and Refund Policy</a>
+                                        </label>
+                                    </div>
+                                    {{-- <div class="custome-radio">
+                                        <input class="form-check-input" required type="radio" name="payment_option"
+                                            id="exampleRadios4" >
+                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
+                                            data-target="#checkPayment" aria-controls="checkPayment">Online
+                                            Payment</label>
+                                        <div class="form-group " id="checkPayment">
+                                            <p class="text-muted mt-5">Please send your cheque to Store Name, Store
+                                                Street, Store Town, Store State / County, Store Postcode. </p>
+                                        </div>
+                                    </div> --}}
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-lg btn-block" id="sslczPayBtn"
-                                    token="if you have any token validation"
-                                    postdata="your javascript arrays or objects which requires in backend"
-                                    order="If you already have the transaction generated for current order"
-                                    endpoint="{{ url('/pay-via-ajax') }}" style="display: none;" >Order and Pay</button>
 
-                            <button type="submit" class="btn btn-fill-out btn-block mt-30" id="placeorder">Place Order</button>
+
+                            <button type="submit" class="btn btn-fill-out btn-block mt-30">Place Order</button>
+                            {{-- @endif --}}
+
                         </div>
                     </div>
                 </div>
-
-                {{-- <input type="hidden" value="{{$order->customer->firstName}}" id="customer_fname">
-                <input type="hidden" value="{{$order->customer->phone}}" id="customer_phone">
-                <input type="hidden" value="{{$order->customer->email}}" id="customer_email">
-                <input type="hidden" value="{{$order->customer->billing_address}}" id="customer_address">
-                <input type="hidden" value="{{$order->total}}" id="t_amount"> --}}
             </form>
         </div>
     </section>
 </main>
+    <script>
+    // Clear the previous ecommerce object
+    dataLayer.push({ ecommerce: null });
 
+    // Push new ecommerce data to dataLayer for beginning checkout
+    dataLayer.push({
+        event: "begin_checkout",
+        ecommerce: {
+            currency: "BDT",
+            items: [@foreach (Cart::content() as $product)
+                {
+                    item_id: "{{ $product->id }}", // Assuming sku is present in your product array
+                    item_name: "{{ $product->name }}",
+                    item_brand: "{{ $product->brand_name ?? "" }}", // Assuming brand_name is present in your product array
+                    item_category: "{{ $product->category_name ?? "" }}", // Assuming category_name is present in your product array
+                    // Add other item properties as needed
+                    price: {{ $product->price }}, // Assuming regular_price is present in your product array
+                    index: 0,
+                    quantity: {{ $product->qty ?? 0 }},
+                },@endforeach
+            ]
+        }
+    });
+</script>
 @endsection
 @push('checkout')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the radio buttons and buttons
-            const paymentCOD = document.getElementById('payment_cod');
-            const paymentOnline = document.getElementById('payment_online');
-            const placeOrderButton = document.getElementById('placeorder');
-            const payNowButton = document.getElementById('sslczPayBtn');
-
-            // Add event listener to radio buttons
-            paymentCOD.addEventListener('change', function() {
-                placeOrderButton.style.display = 'block';
-                payNowButton.style.display = 'none';
-            });
-
-            paymentOnline.addEventListener('change', function() {
-                placeOrderButton.style.display = 'none';
-                payNowButton.style.display = 'block';
-            });
-        });
-
-        var obj = {};
-        obj.cus_name = $('#customer_fname').val();
-        obj.cus_phone = $('#customer_phone').val();
-        obj.cus_email = $('#customer_email').val();
-        obj.cus_addr1 = $('#customer_address').val();
-        obj.amount = $('#t_amount').val();
-
-        $('#sslczPayBtn').prop('postdata', obj);
-
-        (function (window, document) {
-            var loader = function () {
-                var script = document.createElement("script"), tag = document.getElementsByTagName("script")[0];
-                // script.src = "https://seamless-epay.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR LIVE
-                script.src = "https://sandbox.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR SANDBOX
-                tag.parentNode.insertBefore(script, tag);
-            };
-
-            window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
-        })(window, document);
 
     $("#coupne_form").submit(function(event) {
         event.preventDefault(); // Prevent form submission

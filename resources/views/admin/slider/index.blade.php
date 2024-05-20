@@ -37,7 +37,8 @@
                             <th>Title</th>
                             <th>Subtitle </th>
                             <th width=20% >Image</th>
-                            <th>Shop Link</th>
+                            <th>Button Text</th>
+                            <th>Button Link</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -50,7 +51,9 @@
                             <td>
                                 <img src="{{asset('storage/'.$slider->image)}}" alt="{{$slider->title}}" width="100%">
                             </td>
-
+                            <td>
+                                {{$slider->btntext}}
+                            </td>
                             <td>
                                 {{$slider->slider_url}}
                             </td>
@@ -100,7 +103,7 @@
             }
         });
         $.ajax({
-            url: '/dashboard/slider/edit',
+            url: '{{route('slider.edit')}}',
             method: 'GET',
             data: {
                 id: sliderId,
@@ -109,6 +112,7 @@
                 $('#slider_id').val(response.id);
                 $('#slider_title').val(response.title);
                 $('#slider_sub_title').val(response.subtitle);
+                $('#btnText').val(response.btntext);
                 $('#slider_url').val(response.slider_url);
 
                 const outputImage = document.getElementById('output-image2');
@@ -123,7 +127,7 @@
         const data = new FormData(this);
         console.log(data);
         $.ajax({
-            url: '/dashboard/slider/update',
+            url: '{{route('slider.update')}}',
             method: 'post',
             data: data,
             cache: false,
@@ -131,8 +135,12 @@
             contentType: false,
             success: function (res) {
                 if (res.status == 200) {
+
                     // $("#sliderEditModal").modal('hide');
+
                     location.reload();
+
+                    // $.Notification.autoHideNotify('success', 'top right', 'Success', res.message);
                 }
                 else{
                     $.Notification.autoHideNotify('danger', 'top right', 'Danger', res);

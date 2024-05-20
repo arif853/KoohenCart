@@ -5,16 +5,11 @@
     <meta charset="utf-8">
     <title>@yield('title') - Koohen</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('admin/assets/imgs/favicon_48x48.ico')}}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('admin/assets/imgs/favicon_128x128.ico')}}">
     {{-- <link href="{{asset('admin/assets/css/summernote-bs4.min.css')}}" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/thinline.css">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
@@ -30,6 +25,8 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/vendors/jquery.toggleinput.css')}}">
     <!-- Template CSS -->
     <link href="{{asset('admin/assets/css/main.css')}}" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="{{asset('admin/assets/vendors/daterangepicker/daterangepicker.css')}}">
     {{-- Notification --}}
     <link href="{{asset('admin/assets/vendors/notifications/notification.css')}}" rel="stylesheet" />
 
@@ -60,18 +57,17 @@
                 <div class="col-sm-6">
                     <script>
                     document.write(new Date().getFullYear())
-                    </script> ©, Koohen  - Admin Dashboard  .
+                    </script> ©, Koohen - Admin Dashboard  .
                 </div>
                 <div class="col-sm-6">
                     <div class="text-sm-end">
-                        All rights reserved
+                        All rights reserved by Qbit E-Store.
                     </div>
                 </div>
             </div>
         </footer>
 
     </main>
-
 
 
     {{-- Jquery  --}}
@@ -112,36 +108,88 @@
     <script src="{{asset('admin/assets/vendors/form-wizard/gsdk-bootstrap-wizard.js')}}"></script>
     {{-- <script src="{{asset('admin/assets/vendors/form-wizard/step-init.js')}}"></script> --}}
 
+    <script src="{{asset('admin/assets/vendors/daterangepicker/moment.min.js')}}"></script>
+    <script src="{{asset('admin/assets/vendors/daterangepicker/daterangepicker.min.js')}}"></script>
     <!-- Main Script -->
     <script src="{{asset('admin/assets/js/main.js')}}" type="text/javascript"></script>
     <script src="{{asset('admin/assets/js/custom-chart.js')}}" type="text/javascript"></script>
     <script src="{{asset('admin/assets/js/deleteConfirm.js')}}"></script>
     {{-- <script src="{{asset('admin/assets/js/script.js')}}"></script> --}}
 
+
     @stack('product')
     @stack('varient')
     @stack('brand')
     @stack('category')
     @stack('subcategory')
-    @stack('order_status')
     @stack('supplier')
     @stack('zone')
-    @stack('coupons_type')
-    @stack('report')
+    @stack('order_status')
     @stack('products_search')
     @stack('customer_filter')
     @stack('product_features')
+    @stack('report')
+    @stack('coupons_type')
     @stack('offers')
-    @stack('transaction_filter')
+
     <script>
-         $(document).ready(function() {
-                $('.menu-item.has-submenu').click(function() {
-                    $(this).toggleClass('active');
-                });
-            });
-            
         $(document).ready(function() {
 
+            $('#notify-counter').click(function(e) {
+                e.preventDefault();
+                $('.notify-nav').slideToggle('slow');
+                e.stopPropagation(); // Prevent event from bubbling up to the document
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.notify-counter').length && !$(e.target).closest('.notify-nav').length) {
+                    $('.notify-nav').slideUp('slow'); // Slide up if clicked outside the notification area
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all notification items
+            var notificationItems = document.querySelectorAll('.notification-item');
+
+            // Add click event listener to each notification item
+            notificationItems.forEach(function(item) {
+                item.addEventListener('click', function(event) {
+                    // event.preventDefault();
+
+                    // Get the notification ID
+                    var notificationId = item.getAttribute('data-notification-id');
+
+                    // Send AJAX request to mark notification as read
+                    markNotificationAsRead(notificationId);
+                });
+            });
+
+            // Function to mark notification as read via AJAX
+            function markNotificationAsRead(notificationId) {
+                // Send AJAX request to mark notification as read
+                $.ajax({
+                    url: '{{route('markNotificationAsRead')}}', // Replace with your route URL
+                    type: 'POST',
+                    data: {
+                        id: notificationId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        // Update UI or perform any other actions
+                        location.reload();
+                        console.log('Notification marked as read');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
 
             $('.delete_all').on('click', function (e) {
                 var allVals = [];
@@ -250,19 +298,23 @@
 
 
             $('#summernote').summernote({
-            placeholder: 'Your Product Specification Here...',
-            tabsize: 2,
-            height: 150,
-            toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
-            ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
+                placeholder: 'Write Description Here...',
+                tabsize: 2,
+                height: 250,
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'],
+                fontSizeUnits: ['px', 'pt'],
+                toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                // ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
 
         $('#datatable').DataTable();
 

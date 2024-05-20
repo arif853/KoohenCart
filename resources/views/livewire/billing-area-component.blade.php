@@ -3,7 +3,7 @@
         <div class="">
             <label for="division" class="form-label">Division <span>*</span></label>
             <select required class="form-control mb-2" name="division" id="division" wire:model="selectedDivisions" wire:change="triggerUpdatedSelectedDivisions">
-                <option value="0">Select Division...</option>
+                <option value="">Select Division...</option>
                 @foreach($divisionss as $division)
                     <option value="{{ $division->id }}">{{ $division->name }}</option>
                 @endforeach
@@ -14,7 +14,7 @@
         <div class="">
             <label for="district" class="form-label">District <span>*</span></label>
             <select required class="form-control mb-2" name="district" id="district" wire:model="selectedDistricts" wire:change="triggerUpdatedSelectedDistricts">
-                <option value="0">Select District...</option>
+                <option value="">Select District...</option>
                 @foreach($districtss as $district)
                     <option value="{{ $district->id }}">{{ $district->name }}</option>
                 @endforeach
@@ -25,22 +25,11 @@
         <div class="">
             <label for="area" class="form-label">Area/ Postoffice</label>
             <select required class="form-control mb-2" name="area" id="area" wire:change="updateDeliveryCharge" wire:model="selectedPostOffices" >
-                <option value="0">Select Area/ Postoffice</option>
+                <option value="">Select Area/ Postoffice</option>
                 @foreach($postOfficess as $postOffice)
                     <option value="{{ $postOffice->id }}">{{ $postOffice->postOffice }} - {{$postOffice->postCode}}</option>
                 @endforeach
             </select>
         </div>
     </div>
-     {{-- <div class="col-lg-6">
-        <div class="">
-            <label for="shipping_zipcode" class="form-label">Postcode / ZIP <span>*</span></label>
-            <select name="shipping_zipcode" id="shipping_zipcode" class="form-control mb-2" wire:model="selectedPostOffice">
-                <option value="0">Select Postcode / ZIP</option>
-                @foreach($postOffices as $postOffice)
-                <option value="{{ $postOffice->postCode }}">{{ $postOffice->postCode }}</option>
-            @endforeach
-            </select>
-        </div>
-    </div> --}}
 </div>

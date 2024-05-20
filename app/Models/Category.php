@@ -45,9 +45,4 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class, 'parent_category', 'category_name');
     }
-
-    public function feature_item()
-    {
-        return $this->hasOne(Feature_category::class);
-    }
 }

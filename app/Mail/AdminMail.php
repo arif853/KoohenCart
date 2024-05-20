@@ -5,11 +5,11 @@ namespace App\Mail;
 use PDF;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\SerializesModels;
 
 class AdminMail extends Mailable
 {
@@ -37,14 +37,14 @@ class AdminMail extends Mailable
 
     public function build(){
         $pdf = $this->generateInvoicePDF($this->data->id);
+
         return $this->view('admin.email.adminmail',['order' => $this->data])
         ->attachData($pdf, 'invoice.pdf', [
             'mime' => 'application/pdf',
         ]);
 
     }
-
-
+    
     public function generateInvoicePDF($id)
     {
        // ini_set('max_execution_time',3600);
@@ -55,12 +55,10 @@ class AdminMail extends Mailable
         }
 
         $pdf= PDF::loadView('admin.order.invoice',['order'=>$order]);
-
-         $mpdf = $pdf->Output('', 'S');
+        $mpdf = $pdf->Output('', 'S');
 
         return $mpdf;
     }
-
 
     /**
      * Get the message content definition.

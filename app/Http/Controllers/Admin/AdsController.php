@@ -38,6 +38,8 @@ class AdsController extends Controller
         $rules = [
             'ads_header' => 'required|string',
             'ads_title' => 'required|string',
+            'btnText' => 'nullable|string',
+            'shop_url' => 'nullable|url',
             'ads_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
@@ -65,6 +67,7 @@ class AdsController extends Controller
             $ads = new Ads;
             $ads->header = $request->ads_header;
             $ads->title = $request->ads_title;
+            $ads->btntext = $request->btnText;
             $ads->shop_url = $request->shop_url;
             $ads->is_featured = $request->is_featured ? 1 : 0;
             $ads->is_feature_no = $request->is_feature_no;
@@ -108,6 +111,8 @@ class AdsController extends Controller
         $rules = [
             'ads_header' => 'required|string',
             'ads_title' => 'required|string',
+            'btnText' => 'nullable|string',
+            'shop_url' => 'nullable|url',
             'ads_image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
@@ -142,6 +147,7 @@ class AdsController extends Controller
 
             $ads->header = $request->ads_header;
             $ads->title = $request->ads_title;
+            $ads->btntext = $request->btnText;
             $ads->shop_url = $request->shop_url;
             $ads->is_featured = $request->is_featured ? 1 : 0;
             $ads->is_feature_no = $request->is_feature_no;
@@ -171,5 +177,22 @@ class AdsController extends Controller
                 // Log the exception or handle it in a way that makes sense for your application
                 return redirect()->back()->with('danger', 'This Banner can not removed.');
             }
+    }
+
+    public function UpdateStatus(Request $request)
+    {
+        $ads = Ads::find($request->id);
+
+        if ($ads) {
+            $ads->status = $ads->status == 1 ? 0 : 1;
+            $ads->save();
+
+            Session::flash('success', 'Status Updated.');
+        } else {
+            Session::flash('error', 'Ad not found.');
+        }
+
+        return redirect()->back();
+        // dd($ads);
     }
 }

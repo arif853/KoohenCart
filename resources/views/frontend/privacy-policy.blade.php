@@ -1,11 +1,11 @@
-﻿@extends('layouts.home')
+@extends('layouts.home')
 @section('title','Privacy and Policy')
 @section('main')
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow">Home</a>
+                    <a href="{{route('home')}}" rel="nofollow">Home</a>
                     <span></span> Pages
                     <span></span> Privacy policy
                 </div>

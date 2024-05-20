@@ -15,22 +15,15 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 class CheckoutComponent extends Component
 {
 
+
     public $deliveryCharge = 0;
-
-    public $delivery_charge = 0;
-
-    public function mount($delivery_charge)
-    {
-        $this->delivery_charge = $delivery_charge;
-    }
 
     #[On('postOfficeChanged')]
 
-    public function postOfficeChanged($selectedPostOffice)
+    public function postOfficeChanged($zoneCharge)
     {
-        // Fetch the delivery charge based on the selected post office's zone or any other criteria
-        $postOffice = Postcode::find($selectedPostOffice);// Get the post office details based on $selectedPostOffice
-        $this->deliveryCharge = $postOffice->zone_charge; // Adjust this based on your actual data structure
+        $this->deliveryCharge = $zoneCharge;
+        // dd($this->deliveryCharge);
     }
 
     public function increaseQuantity($rowId)
@@ -58,11 +51,13 @@ class CheckoutComponent extends Component
         // $this->dispatch('refresh')->to('checkout-component');
     }
 
-    // #[On('refresh')]
+    // #[On('postOfficeChanged')]
 
     public function render()
     {
-        return view('livewire.checkout-component');
+        return view('livewire.checkout-component', [
+            'deliveryCharge' => $this->deliveryCharge,
+        ]);
     }
 
 }

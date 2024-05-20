@@ -17,19 +17,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Notifications\LowStockNotification;
 
 class POSController extends Controller
 {
     public function index()
     {
         $products = Products::with([
-                            'sizes',
-                            'colors',
-                            'category',
-                            'product_price',
-                            'product_thumbnail',
-                            'product_stocks',
-                        ])->paginate(15);
+                'sizes',
+                'colors',
+                'category',
+                'product_price',
+                'product_thumbnail',
+                'product_stocks',
+            ])->get();
+
 
         foreach ($products as $product) {
             $stock = $product->product_stocks;
@@ -85,8 +87,8 @@ class POSController extends Controller
 
 
             $item_price = $request->input('price');
-            $color = $request->input('color');
-            $size = $request->input('size');
+            $color = $request->filled('color') ? $request->input('color') : null;
+            $size = $request->filled('size') ? $request->input('size') : null;
 
                 // $item_price = $product->regular_price;
             $item_slug = $product->slug;
@@ -208,16 +210,19 @@ class POSController extends Controller
         }
 
         $order = new Order();
-        $order->customer_id = $request->input('customer');
+        $order->customer_id = $customer_id;
         $order->invoice_no = $invoiceNo;
         $order->order_track_id = null;
         $order->subtotal = $request->input('subtotal');
         $order->delivery_charge = $request->input('delivery_charge');
         $order->discount = $request->input('discount');
         $order->total = $request->input('total');
+        $order->total_paid = $request->input('totalPaid') ;
+        $order->total_due = $request->input('totalDue');
         $order->is_shipping_different =  0;
         $order->order_from  = $request->input('orderFrom');
         $order->comment = "Pos order";
+        $order->is_pos = 1;
         $order->status = 'completed';
         $order->save();
 
@@ -245,14 +250,33 @@ class POSController extends Controller
                     'outStock' => \DB::raw("outStock + $cartItem->qty"), // Assuming outStock starts at 0
                 ]
             );
+            
+            $product = Products::find($cartItem->id);
+            $stock = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
+            if ($stock < 5) {
+                // Trigger the low stock notification
+                $product->notify(new LowStockNotification($product));
+            }
         }
 
-        $transaction = transactions::create([
+        $transaction_data = [
             'customer_id' => $customer_id,
             'order_id' => $order->id,
             'mode' => 'cash',
-            'status' => 'paid',
-        ]);
+        ];
+
+        if($order->total_due == 0){
+            $transaction_data += [
+                'status' => 'paid'
+            ];
+
+        }else{
+            $transaction_data += [
+                'status' => 'unpaid'
+            ];
+        }
+
+        transactions::create($transaction_data);
 
         Cart::instance('pos_cart')->destroy();
         Session::flash('success','Order has been created.');
@@ -261,7 +285,24 @@ class POSController extends Controller
         // $invoice = $this->Invoice($order->id)->stream();
 
         // dd($order);
-        return response()->json(route('order.invoice', ['id' => $order->id]));
+        return response()->json(route('pos.invoice', ['id' => $order->id]));
+    }
+    
+    public function orderInvoice($id)
+    {
+
+       // ini_set('max_execution_time',3600);
+        $order = Order::where('id', $id)->first();
+        if (!$order) {
+            return 'Order not found';
+        }
+        else{
+            $pdf= PDF::loadView('admin.pos.invoice',['order'=>$order]);
+            // $pdf->SetWatermarkText('DRAFT');
+            // $pdf->showWatermarkText = true;
+            return $pdf->stream('Koohen Invoice-'.$order->id.'.pdf');
+        }
+
     }
 
 }

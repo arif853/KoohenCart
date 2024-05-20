@@ -35,12 +35,12 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label for="firstname">First Name</label>
-                                            <input type="text" required name="firstname" id="firstname" class="form-control" placeholder="First Name">
+                                            <input type="text" required="" name="firstname" id="firstname" class="form-control" placeholder="First Name">
                                             <x-input-error :messages="$errors->get('firstname')" class="mt-2" />
                                         </div>
                                         <div class="col-6">
                                             <label for="lastname">Last Name</label>
-                                            <input type="text" required name="lastname" id="lastname" class="form-control" placeholder="Last Name">
+                                            <input type="text" required="" name="lastname" id="lastname" class="form-control" placeholder="Last Name">
                                             <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
                                         </div>
                                     </div>
@@ -48,24 +48,24 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="phone">Phone</label>
-                                    <input type="text" required name="phone" id="phone" class="form-control" placeholder="Phone">
+                                    <input type="text" required="" name="phone" id="phone" class="form-control" placeholder="Phone">
                                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
 
                                 </div>
                                 <div class="mb-4">
                                     <label for="email">Email</label>
-                                    <input type="email" required name="email" id="email" class="form-control" placeholder="Email">
+                                    <input type="email" required="" name="email" id="email" class="form-control" placeholder="Email">
                                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                 </div>
                                 <div class="mb-4">
                                     <label for="password">Password</label>
-                                    <input  type="password" name="password" class="form-control" required autocomplete="new-password" placeholder="Password">
+                                    <input type="password" name="password" class="form-control" required autocomplete="new-password" placeholder="Password">
                                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
                                 </div>
                                 <div class="mb-4">
                                     <label for="c_password">Confirm Password</label>
-                                    <input  type="password"
+                                    <input   type="password"
                                     name="c_password" required autocomplete="new-password"  class="form-control" placeholder="Confirm password">
                                     <x-input-error :messages="$errors->get('c_password')" class="mt-2" />
                                 </div>
@@ -74,15 +74,16 @@
                                          @captcha
                                     </label><br>
                                    <input type="text" required id="captcha" name="captcha" autocomplete="off" style="width: 200px;" placeholder="Enter image value here." >
+                                   <x-input-error :messages="$errors->get('captcha')" class="mt-2" />
                                 </div>
                                 <div class="login_footer form-group">
                                     <div class="chek-form">
                                         <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="termscondition" id="exampleCheckbox12" >
+                                            <input class="form-check-input" type="checkbox" name="termscondition" id="exampleCheckbox12" value="">
                                             <label class="form-check-label" for="exampleCheckbox12"><span>I agree to terms &amp; Policy.</span></label>
                                         </div>
                                     </div>
-                                    {{-- <a href="page-privacy-policy.html"><i class="fi-rs-book-alt mr-5 text-muted"></i>Lean more</a> --}}
+                                    <!--<a href="page-privacy-policy.html"><i class="fi-rs-book-alt mr-5 text-muted"></i>Lean more</a>-->
                                 </div>
                                 <div class="mb-2">
                                     <button type="submit" class="btn btn-fill-out w-50 m-auto" name="submit">Submit &amp; Register</button>

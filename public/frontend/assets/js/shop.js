@@ -7,17 +7,32 @@
             slidesToScroll: 1,
             arrows: false,
             fade: false,
+            vertical: true,
             asNavFor: '.slider-nav-thumbnails',
         });
 
         $('.slider-nav-thumbnails').slick({
-            slidesToShow: 5,
+            slidesToShow: 3,
             slidesToScroll: 1,
             asNavFor: '.product-image-slider',
             dots: false,
             focusOnSelect: true,
-            prevArrow: '<button type="button" class="slick-prev"><i class="fi-rs-angle-left"></i></button>',
-            nextArrow: '<button type="button" class="slick-next"><i class="fi-rs-angle-right"></i></button>'
+            arrows: false,
+            vertical: true,
+            verticalSwiping:true,
+            // prevArrow: '<button type="button" class="slick-prev"><i class="fi-rs-angle-left"></i></button>',
+            // nextArrow: '<button type="button" class="slick-next"><i class="fi-rs-angle-right"></i></button>'
+        });
+        
+        $('.slider-nav-thumbnails-sm').slick({
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            asNavFor: '.product-image-slider',
+            dots: false,
+            focusOnSelect: true,
+            arrows: false,
+            // prevArrow: '<button type="button" class="slick-prev"><i class="fi-rs-angle-left"></i></button>',
+            // nextArrow: '<button type="button" class="slick-next"><i class="fi-rs-angle-right"></i></button>'
         });
 
         // Remove active class from all thumbnail slides

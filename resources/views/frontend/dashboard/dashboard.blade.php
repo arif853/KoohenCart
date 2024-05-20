@@ -97,9 +97,9 @@
                                 <button class="nav-link text-primary fw-semibold position-relative" id="pills-orders-history-tab" data-bs-toggle="pill" data-bs-target="#pills-orders-history" type="button" role="tab" aria-controls="pills-orders-history" aria-selected="false">Orders History</button>
                             </li>
 
-                            <li class="nav-item" role="presentation">
-                              <button class="nav-link text-primary fw-semibold position-relative" id="pills-transaction-tab" data-bs-toggle="pill" data-bs-target="#pills-transaction" type="button" role="tab" aria-controls="pills-transaction" aria-selected="false">Transactions</button>
-                            </li>
+                            <!--<li class="nav-item" role="presentation">-->
+                            <!--  <button class="nav-link text-primary fw-semibold position-relative" id="pills-transaction-tab" data-bs-toggle="pill" data-bs-target="#pills-transaction" type="button" role="tab" aria-controls="pills-transaction" aria-selected="false">Transactions</button>-->
+                            <!--</li>-->
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link text-primary fw-semibold position-relative" id="pills-account-tab" data-bs-toggle="pill" data-bs-target="#pills-account" type="button" role="tab" aria-controls="pills-account" aria-selected="false">Account</button>
                             </li>

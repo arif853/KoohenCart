@@ -1,4 +1,5 @@
 
+
 @extends('layouts.home')
 @section('title', $product->product_name)
 @section('main')
@@ -7,9 +8,9 @@
     <div class="page-header breadcrumb-wrap">
        <div class="container">
           <div class="breadcrumb">
-             <a href="index.html" rel="nofollow">Home</a>
-             <span></span> Fashion
-             <span></span> Abstract Print Patchwork Dress
+             <a href="{{route('home')}}" rel="nofollow">Home</a>
+              <span></span><a href="{{route('shop')}}" rel="nofollow">Shop</a> 
+             <span></span>{{$product->product_name}}
           </div>
        </div>
     </div>
@@ -20,9 +21,12 @@
                 <div class="product-detail accordion-detail">
 
                     {{-- Product Component --}}
-
+                    
                     @livewire('product-component', ['slug' => $product->slug], key($product->slug))
 
+
+
+                  
                    <!--Related Product-->
                    <div class="row mt-60">
                       <div class="col-12">
@@ -101,6 +105,9 @@
                                     <div class="text-center">
 
                                         <a href="#" wire:click.prevent="store({{$r_product->id}})" onclick="cartNotify()"><button type="button" class="adto-cart-btn">Add To Cart</button></a>
+                                        <!--<a href="#" wire:click.prevent="store({{$r_product->id}})" onclick="cartNotify()" id="addToCartButton">-->
+                                        <!--    <button type="button" class="adto-cart-btn" onclick="enableAddToCart()">Add To Cart</button>-->
+                                        </a>
                                     </div>
                                 </div> --}}
                             </div>
@@ -114,7 +121,7 @@
                    </div>
                    <!--Related Product-->
                    <!--Advertise-->
-                   {{-- @foreach ($adsbanner as $ads)
+                   @foreach ($adsbanner as $ads)
 
                    @endforeach
                    @if($ads->is_featured == 1 )
@@ -130,7 +137,7 @@
                         </div>
                     </div>
 
-                    @endif --}}
+                    @endif
                    <!--Advertise-->
                 </div>
              </div>
@@ -138,4 +145,41 @@
        </div>
     </section>
 </main>
+
 @endsection
+
+@push('viewItem')
+<script>
+    // Assuming $product contains the product array from your Laravel backend
+    var product = @json($product);
+
+    // Clear the previous ecommerce object
+    dataLayer.push({ ecommerce: null });
+
+    // Push new ecommerce data to dataLayer
+    dataLayer.push({
+        event: "view_item",
+        ecommerce: {
+            currency: "BDT",
+            value: {{ $product['regular_price'] }}, // Assuming regular_price is present in your product array
+            items: [
+                {
+                    item_id: "{{ $product['sku'] }}", // Assuming sku is present in your product array
+                    item_name: "{{ $product['product_name'] }}", // Assuming product_name is present in your product array
+                    item_brand: "{{ $product['brand']['brand_name'] }}", // Assuming brand_name is present in your product array
+                    item_category: "{{ $product['category']['category_name'] }}", // Assuming category_name is present in your product array
+                    // Add other item properties as needed
+                    price: {{ $product['regular_price'] }}, // Assuming regular_price is present in your product array
+                    quantity: 1 // Assuming quantity is always 1 for view_item event
+                }
+            ]
+        }
+    });
+</script>
+
+@endpush
+
+
+
+
+

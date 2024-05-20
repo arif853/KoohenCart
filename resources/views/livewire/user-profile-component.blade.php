@@ -120,7 +120,7 @@
                                       <label for="" class="form-label text-dark">Address <span>*</span></label>
                                       <input type="text" class="form-control mb-2" name="billing_address" required
                                           placeholder="Address *" value="{{$user->customer->billing_address}}">
-                                        @error('billing_address')
+                                          @error('billing_address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                   </div>
@@ -128,13 +128,13 @@
                               <div class="col-lg-6">
                                   <div class="">
                                       <label for="b_division" class="form-label text-dark">Division <span>*</span></label>
-                                      <select class="form-control mb-2 division" name="b_division" id="b_division">
+                                      <select class="form-control mb-2 division" name="b_division" id="b_division" required>
                                           <option value="0">Select Division...</option>
                                           @foreach($divisions as $division)
                                               <option value="{{ $division->id }}" {{ $division->id == $user->customer->division ? 'selected' : '' }}>{{ $division->name }}</option>
                                           @endforeach
                                       </select>
-                                        @error('b_division')
+                                       @error('b_division')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                   </div>
@@ -142,29 +142,29 @@
                               <div class="col-lg-6">
                                   <div class="">
                                       <label for="b_district" class="form-label text-dark">District <span>*</span></label>
-                                      <select class="form-control mb-2 district" name="b_district" id="b_district">
+                                      <select class="form-control mb-2 district" name="b_district" id="b_district" required>
                                           <option value="0">Select District...</option>
                                           @foreach ($districts as $district)
                                           <option value="{{$district->id}}" {{$district->id == $user->customer->district ? 'selected' : ''}}>{{$district->name}}</option>
                                           @endforeach
                                       </select>
-                                    @error('b_district')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                       @error('b_district')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                               <div class="col-lg-6">
                                   <div class="">
                                       <label for="b_area" class="form-label text-dark">Area/ Postoffice</label>
-                                      <select class="form-control mb-2 area" name="b_area" id="b_area">
+                                      <select class="form-control mb-2 area" name="b_area" id="b_area" required>
                                           <option value="0">Select Area/ Postoffice</option>
                                           @foreach ($postOffices as $postOffice)
                                           <option value="{{$postOffice->id}}" {{$postOffice->id == $user->customer->area ? 'selected' : ''}}>{{$postOffice->postOffice}}</option>
                                           @endforeach
                                       </select>
-                                    @error('b_area')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                       @error('b_area')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
 
@@ -227,13 +227,19 @@
                                       <label for="" class="form-label text-dark">First name <span>*</span></label>
                                       <input type="text" class="form-control mb-2" required name="shipper_fname"
                                           placeholder="First name *" value="{{$shipping->first_name}}">
+                                          @error('shipper_fname')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                               <div class="col-lg-6">
                                   <div class="">
                                       <label for="" class="form-label text-dark">Last Name <span>*</span></label>
-                                      <input type="text" class="form-control mb-2" required name="shipper_lname"
+                                      <input type="text" class="form-control mb-2"  name="shipper_lname"
                                           placeholder="Last name *" value="{{$shipping->last_name}}">
+                                          @error('shipper_lname')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                           </div>
@@ -244,6 +250,9 @@
                                       <label for="" class="form-label text-dark">Phone <span>*</span></label>
                                       <input required class="form-control mb-2" type="text" name="shipper_phone"
                                           placeholder="Phone *" value="{{$shipping->s_phone}}">
+                                          @error('shipper_phone')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                               <div class="col-lg-6">
@@ -251,6 +260,9 @@
                                       <label for="" class="form-label text-dark">Email address <span>*</span></label>
                                       <input required class="form-control mb-2" type="text" name="shipper_email"
                                           placeholder="Email address *" value="{{$shipping->s_email}}">
+                                          @error('shipper_email')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                           </div>
@@ -261,6 +273,9 @@
                                       <label for="" class="form-label text-dark">Shipping Address <span>*</span></label>
                                       <input type="text" class="form-control mb-2" name="shipper_address" required
                                           placeholder="Address *" value="{{$shipping->shipping_add}}">
+                                          @error('shipper_address')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                               <div class="col-lg-6">
@@ -272,6 +287,9 @@
                                               <option value="{{ $division->id }}" {{$division->id == $shipping->division ? 'selected' : ''}}>{{ $division->name }}</option>
                                           @endforeach
                                       </select>
+                                      @error('s_division')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                               <div class="col-lg-6">
@@ -283,6 +301,9 @@
                                           <option value="{{$district->id}}" {{$district->id == $shipping->district ? 'selected' : ''}}>{{$district->name}}</option>
                                           @endforeach
                                       </select>
+                                      @error('s_district')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                               <div class="col-lg-6">
@@ -294,6 +315,9 @@
                                           <option value="{{$postOffice->id}}" {{$postOffice->id == $shipping->area ? 'selected' : ''}}>{{$postOffice->postOffice}} - {{$postOffice->postCode}}</option>
                                           @endforeach
                                       </select>
+                                      @error('s_area')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                   </div>
                               </div>
                           </div>
@@ -329,13 +353,19 @@
                                           <label for="" class="form-label text-dark">First name <span>*</span></label>
                                           <input type="text" class="form-control mb-2" required name="shipper_fname"
                                               placeholder="First name *">
+                                              @error('shipper_fname')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                       </div>
                                   </div>
                                   <div class="col-lg-6">
                                       <div class="">
-                                          <label for="" class="form-label text-dark">Last Name <span>*</span></label>
-                                          <input type="text" class="form-control mb-2" required name="shipper_lname"
-                                              placeholder="Last name *">
+                                          <label for="" class="form-label text-dark">Last Name </label>
+                                          <input type="text" class="form-control mb-2" name="shipper_lname"
+                                              placeholder="Last name ">
+                                              @error('shipper_lname')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                       </div>
                                   </div>
                               </div>
@@ -346,6 +376,9 @@
                                           <label for="" class="form-label text-dark">Phone <span>*</span></label>
                                           <input required class="form-control mb-2" type="text" name="shipper_phone"
                                               placeholder="Phone *">
+                                              @error('shipper_phone')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                       </div>
                                   </div>
                                   <div class="col-lg-6">
@@ -353,6 +386,9 @@
                                           <label for="" class="form-label text-dark">Email address <span>*</span></label>
                                           <input required class="form-control mb-2" type="text" name="shipper_email"
                                               placeholder="Email address *">
+                                              @error('shipper_email')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                       </div>
                                   </div>
                               </div>
@@ -363,6 +399,9 @@
                                           <label for="" class="form-label text-dark">Shipping Address <span>*</span></label>
                                           <input type="text" class="form-control mb-2" name="shipper_address" required
                                               placeholder="Address *">
+                                              @error('shipper_address')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                       </div>
                                   </div>
                               </div>

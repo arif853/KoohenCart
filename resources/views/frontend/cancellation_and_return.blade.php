@@ -6,7 +6,7 @@
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
-                <a href="index.html" rel="nofollow">Home</a>
+                <a href="{{route('home')}}" rel="nofollow">Home</a>
                 <span></span> Pages
                 <span></span> Cancellation and return policy
             </div>
@@ -28,7 +28,7 @@
                                 If for any reason you are unsatisfied with your order, you may return it as long as your item meets the following criteria:
                             </p>
                             <ol>
-                                <li><p>It is within 03 Days from the delivery date.</p></li>
+                                <li><p>It is within 7-10 working Days from the delivery date.</p></li>
                                 <li><p>All items to be returned or exchanged must be unused and in their original condition with all original tags and packaging intact and should not be broken or tampered with.</p></li>
                                 <li><p>If the item came with a free promotional item, the free item must also be returned.</p></li>
                                 <li><p>Refund/ replacement for products is subject to inspection and checking by Koohen team.</p></li>
@@ -53,7 +53,7 @@
                             <h4>Refund Policy</h4>
                             <ol>
                                 <li><p>
-                                    The refund will be processed after we have completed evaluating your return.
+                                    The refund will be processed  within <strong>(7-10 working days)</strong> after claiming for refund.
 
                                 </p></li>
 

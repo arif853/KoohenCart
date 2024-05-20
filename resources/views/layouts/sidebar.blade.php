@@ -1,7 +1,7 @@
 <aside class="navbar-aside" id="offcanvas_aside">
     <div class="aside-top">
-        <a href="index.html" class="brand-wrap">
-            <img src="{{asset('admin/assets/imgs/Kohen_Logo_Main.png')}}" class="logo" alt="Koohen">
+        <a href="{{url('/dashboard')}}" class="brand-wrap" style="margin:0 auto;">
+            <img src="{{asset('admin/assets/imgs/Kohen_Logo_Main.png')}}" class="logo" alt="Kohen_Logo_Main.png">
         </a>
         <div>
             <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
@@ -88,10 +88,18 @@
                 </div>
             </li>
 
-            <li class="menu-item {{ request()->is('dashboard/inventory') ? 'active' : '' }}">
-                <a class="menu-link" href="{{route('inventory')}}">
+           <li class="menu-item has-submenu {{ request()->is('dashboard/inventory/*') ? 'active' : '' }}">
+                <a class="menu-link" href="#">
                     <i class="icon material-icons md-store"></i>
-                    <span class="text">Inventory</span> </a>
+                    <span class="text">Inventory</span>
+                </a>
+                <div class="submenu">
+                    <a href="{{ route('inventory.item') }}">Item Wise</a>
+
+                    <a href="{{route('inventory.size')}}">
+                        <span class="text">Size Wise</span>
+                    </a>
+                </div>
             </li>
             <li class="menu-item {{ request()->is('dashboard/campaign') ? 'active' : '' }}">
                 <a class="menu-link" href="{{route('campaign')}}"> <i class="icon material-icons md-campaign"></i>
@@ -112,7 +120,6 @@
                 </a>
                 <div class="submenu">
                     <a href="{{route('sale.report')}}">Sales Report</a>
-
                 </div>
             </li>
             <li class="menu-item">
@@ -120,23 +127,57 @@
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('slider')}}">
-                    <i class="icon material-icons md-slideshow"></i><span class="text">Manage Slider</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('ads')}}">
-                    <i class="icon material-icons md-beenhere"></i><span class="text">Manage Ads</span>
-                </a>
-            </li>
-            <li class="menu-item has-submenu">
+            <li class="menu-item has-submenu {{ request()->is('dashboard/setting') ? 'active' : '' }}">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                    <span class="text">Settings</span>
+                    <span class="text">Web Settings</span>
                 </a>
                 <div class="submenu">
-                    <a href="{{ route('settings.index') }}">Website Settings</a>
-                    {{-- <a href="#">Contact Info</a> --}}
+                    <a href="{{route('aboutus.index')}}">
+                        <span class="text">About us</span>
+                    </a>
+                    <a href="{{route('slider')}}">
+                        <span class="text">Slider</span>
+                    </a>
+                    <a href="{{route('ads')}}">
+                        <span class="text">Advertisement</span>
+                    </a>
+                    <a href="{{ route('webinfo.index') }}">
+                        <span class="text">WebInfo</span>
+                    </a>
+                    <a href="{{route('contactinfo.index')}}">
+                        <span class="text">Contact Info</span>
+                    </a>
+
+                    <a href="{{route('socialinfo.index')}}">
+                        <span class="text">Social Info</span>
+                    </a>
+
+                    <a href="#">
+                        <span class="text">Shipping Method</span>
+                    </a>
+
+                    <a href="#">
+                        <span class="text">Subscriber</span>
+                    </a>
+                    <a href="{{route('webmessage.index')}}">
+                        <span class="text">Web Message</span>
+                    </a>
+
+                    <div class="sub-submenu"> <!-- New sub-submenu level -->
+                        <a href="#" class="menu-link">
+                            <span class="text">SEO Setting</span>
+                        </a>
+                        <div class="sub-submenu-content"> <!-- Sub-submenu content -->
+                            <a href="#">
+                                <i class="icon material-icons md-arrow_forward"></i>
+                                 <span class="text">Google Analytics</span>
+                            </a>
+                            <a href="#">
+                                <i class="icon material-icons md-arrow_forward"></i>
+                                <span class="text">Meta Setting</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </li>
 
@@ -171,15 +212,24 @@
         </ul>
         <hr>
         <ul class="menu-aside">
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('slider')}}">
-                    <i class="icon material-icons md-slideshow"></i><span class="text">Manage Slider</span>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Web Settings</span>
                 </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('ads')}}">
-                    <i class="icon material-icons md-beenhere"></i><span class="text">Manage Ads</span>
-                </a>
+                <div class="submenu">
+                    <a href="{{ route('settings.index') }}">WebInfo</a>
+
+                    <a href="{{route('slider')}}">
+                        <span class="text">Manage Slider</span>
+                    </a>
+
+                    <a href="{{route('ads')}}">
+                        <span class="text">Manage Ads</span>
+                    </a>
+                    <a href="{{url('/dashboard/aboutus')}}">
+                        <span class="text">Manage About us</span>
+                    </a>
+                </div>
             </li>
 
         </ul>
@@ -205,26 +255,6 @@
         </ul>
         @endif
         <br>
-         {{-- <li class="menu-item has-submenu">
-                <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
-                    <span class="text">Account</span>
-                </a> --}}
-                {{-- <div class="submenu">
-                    <a href="page-account-login.html">User login</a>
-                    <a href="page-account-register.html">User registration</a>
-                    <a href="page-error-404.html">Error 404</a>
-                </div> --}}
-            {{-- </li> --}}
-            {{-- <li class="menu-item">
-                <a class="menu-link" href="{{('reviews')}}"> <i class="icon material-icons md-comment"></i>
-                    <span class="text">Reviews</span>
-                </a>
-            </li> --}}
-
-            {{-- <li class="menu-item">
-                <a class="menu-link" href="{{route('media.index')}}"> <i class="icon material-icons md-stars"></i>
-                    <span class="text">Media</span> </a>
-            </li> --}}
     </nav>
 
 </aside>
