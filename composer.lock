@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be95c81e5bf43ea6d0f458d89cef34b8",
+    "content-hash": "185e7fd5030087a9895e0b621bf9baec",
     "packages": [
         {
             "name": "bonecms/laravel-captcha",
