@@ -39,7 +39,7 @@ class OrderController extends Controller
             'shipping',
             'transaction')
             ->latest('created_at')->get();
-
+        
         return view('admin.order.index',compact('orders'));
     }
 
@@ -115,14 +115,14 @@ class OrderController extends Controller
 
             $orderProducts->push($product);
         }
-
+        
         $items = Products::with(['sizes','colors'])->get();
         // $customer = $order->customer;
         return view('admin.order.order_details',compact('order','orderProducts','district','postOffice','items'));
     }
 
 
-// Multiple order status update
+// Multiple order status update 
   public function updateOrderStatus(Request $request)
     {
         $selectedStatus = $request->input('status');
@@ -177,11 +177,11 @@ class OrderController extends Controller
                     }
                 }
             }
-
+            
             if($newStatus == 'returned' && $order->is_pos == 1){
 
                 foreach($order->order_item as $item){
-
+    
                     if($item && $item->size_id){
                         Product_stock::updateOrCreate(
                             [
@@ -206,7 +206,7 @@ class OrderController extends Controller
     }
 
 
-
+    
     // Single Order status update
     public function updateOneOrderStatus(Request $request)
     {
@@ -226,7 +226,7 @@ class OrderController extends Controller
 
         // Update the OrderStatus table
         $statusColumn = $newStatus . '_date_time';
-
+        
         Orderstatus::updateOrCreate(['order_id' => $orderId], ['status' => $newStatus, $statusColumn => Carbon::now()]);
 
 
@@ -364,6 +364,17 @@ class OrderController extends Controller
                           ->orWhere('lastName', 'LIKE', '%' . $customerName . '%');
                 });
             }
+
+            if ($status) {
+                $query->where('status', 'LIKE', '%' . $status . '%');
+            }
+
+            if ($customerPhone) {
+                $query->whereHas('customer', function ($query) use ($customerPhone) {
+                    $query->where('phone', 'LIKE', '%' . $customerPhone . '%');
+                });
+            }
+            
             if ($productSize) {
                 $query->whereHas('order_item.product_sizes', function ($query) use ($productSize) {
                     $query->where('size', 'LIKE', '%' . $productSize . '%');
@@ -373,16 +384,6 @@ class OrderController extends Controller
             if ($sku) {
                 $query->whereHas('order_item.product', function ($query) use ($sku) {
                     $query->where('sku', 'LIKE', '%' . $sku . '%');
-                });
-            }
-
-            if ($status) {
-                $query->where('status', 'LIKE', '%' . $status . '%');
-            }
-
-            if ($customerPhone) {
-                $query->whereHas('customer', function ($query) use ($customerPhone) {
-                    $query->where('phone', 'LIKE', '%' . $customerPhone . '%');
                 });
             }
 
@@ -422,7 +423,7 @@ class OrderController extends Controller
             return response()->json($orders);
         }
     }
-
+    
     public function completedfilters( Request $request)
     {
         if($request->ajax()) {
@@ -460,7 +461,7 @@ class OrderController extends Controller
         $order_return = Order::with('customer')->where('status','returned')->get();
         return view('admin.order.order_return.index',compact('order_return'));
     }
-
+    
     // Order return confirmation
     public function return_confirm(string $id)
     {
@@ -477,8 +478,8 @@ class OrderController extends Controller
         Session::flash('success', ' Order return confirmation done.');
         return redirect()->back();
     }
-
-
+    
+    
     public function getColorOptions()
     {
         $colors = Color::all();
@@ -490,7 +491,7 @@ class OrderController extends Controller
         $sizes = Size::all();
         return response()->json($sizes);
     }
-
+    
      public function newProductDetails(Request $request){
 
         $productId = $request->input('id');
@@ -640,13 +641,29 @@ class OrderController extends Controller
                 'total_due' => $request->totalDue,
                 'delivery_charge' => $request->deliveryCharge,
             ]);
+            
+            $transaction = transactions::where('order_id',$order->id)->first();
+            
+            if($order->total_due == 0)
+            {
+                $transaction->update([
+                    'status' => 'paid',
+                ]);
+            }
+            else{
+                 $transaction->update([
+                    'status' => 'unpaid',
+                ]);
+            }
+            
+            
             Session::flash('success','Order updated successfully');
 
             return response()->json(['message' => 'Order item updated successfully'], 200);
         }
 
     }
-
+    
     public function deleteOrderItem(Request $request)
     {
         // Retrieve the order item ID from the request
@@ -699,6 +716,6 @@ class OrderController extends Controller
         }
     }
 
-
+    
 
 }

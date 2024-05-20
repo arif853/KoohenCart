@@ -48,6 +48,7 @@ use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AboutusController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\WebSettingController;
 
 /*
@@ -62,8 +63,10 @@ use App\Http\Controllers\Admin\WebSettingController;
 */
 Route::get('/cache_clear',function(){
     Artisan::call('route:clear');
-    Artisan::call('config:clear');
     Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    // Artisan::call('config:cache');
+    Artisan::call('optimize:clear');
     return redirect()->back()->with('success','Cache cleard!!');
 });
 
@@ -460,7 +463,11 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     // user role permission
     Route::resource('/dashboard/roles', RoleController::class);
     Route::post('/dashboard/roles/{role}', [RoleController::class, 'update']);
-    Route::delete('/dashboard/roles/{userId}/delete', [RoleController::class, 'destroy']);
+    Route::delete('/dashboard/roles/{id}/delete', [RoleController::class, 'destroy']);
+
+    Route::resource('/dashboard/permissions', PermissionController::class);
+    Route::post('/dashboard/permissions/{permission}',[PermissionController::class, 'update']);
+    Route::delete('/dashboard/permissions/{id}/delete',[PermissionController::class, 'destroy']);
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

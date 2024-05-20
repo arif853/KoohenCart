@@ -1,7 +1,23 @@
 @extends('layouts.admin')
 @section('title','Orders list')
 @section('content')
+<style>
+    .hidden-item {
+    display: none;
+}
 
+.show-more-container {
+    margin-top: 10px;
+}
+
+.show-more-btn {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+
+</style>
     <div class="content-header">
         <div>
             <h2 class="content-title card-title">Order List </h2>
@@ -21,16 +37,16 @@
                       <form id="orderFilterForm">
                         <div class="row order_live_search">
                             <div class="col-md-2 mb-4">
-                                <label for="Order" class="form-label">Order No</label>
-                                <input type="text" placeholder="Type Order No here" class="form-control" id="order_id">
+                                <label for="Order" class="form-label">Order ID</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="order_id">
                             </div>
                             <div class="col-md-2 mb-4">
                                 <label for="customer_name" class="form-label">Customer</label>
-                                <input type="text" placeholder="Type Customer Name here" class="form-control" id="customer_name">
+                                <input type="text" placeholder="Type here" class="form-control" id="customer_name">
                             </div>
                             <div class="col-md-2 mb-4">
                                 <label for="customerPhone" class="form-label">Phone</label>
-                                <input type="text" placeholder="Type Phone here" class="form-control" id="customerPhone">
+                                <input type="text" placeholder="Type here" class="form-control" id="customerPhone">
                             </div>
                             <div class="col-md-2 mb-4">
                                 <label for="productSKU" class="form-label">SKU</label>
@@ -117,15 +133,26 @@
                                     </td>
 
                                     <td>
-                                        @foreach ($order->order_item as $key => $item   )
-                                            {{$key+1}} .
-                                            <span class="text-brand">{{$item->product->product_name}}</span>,
-                                            <span > Size: {{$item->product_sizes->size_name}}</span>,
-                                            @if($item->product_colors)
-                                            <span> Color: {{$item->product_colors->color_name}}</span>,
-                                            @endif
-                                            <span>Quantiy: {{$item->quantity}}</span><br>
-                                        @endforeach
+                                        <div class="order-items-container">
+                                            @foreach ($order->order_item as $key => $item)
+                                                <div class="order-item {{ $key >= 3 ? 'hidden-item' : '' }}">
+                                                    {{ $key+1 }}.
+                                                    <span class="text-brand">{{ $item->product->product_name }}</span>,
+                                                    @if($item->product_sizes)
+                                                    <span>Size: {{ $item->product_sizes->size_name }}</span>,
+                                                    @endif
+                                                    @if($item->product_colors)
+                                                        <span>Color: {{ $item->product_colors->color_name }}</span>,
+                                                    @endif
+                                                    <span>Quantity: {{ $item->quantity }}</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @if(count($order->order_item) > 3)
+                                            <div class="show-more-container text-center">
+                                                <button class="show-more-btn">▼</button>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td>৳{{$order->total}}</td>
                                     <td>৳<span>{{ $order->total_due}}</span></td>
@@ -183,6 +210,12 @@
 @push('order_status')
 <script>
     $(document).ready(function() {
+
+        $('.show-more-btn').on('click', function() {
+            $(this).closest('td').find('.hidden-item').toggle();
+            $(this).text($(this).text() === '▼' ? '▲' : '▼');
+        });
+
         // Get references to the global and individual checkboxes
         const selectAllCheckbox = document.getElementById('select-all-checkbox');
         const individualCheckboxes = document.querySelectorAll('.order-checkbox');
@@ -301,10 +334,9 @@
                 var status = $('#orderStatus').val();
                 // console.log(status);
                 var customerPhone = $('#customerPhone').val();
+                // console.log(customerPhone);
                 var productSKU = $('#productSKU').val();
                 var size = $('#ProductSize').val();
-                // console.log(productSKU);
-                // console.log(size);
 
                 $.ajax({
                     url: "{{ route('order.filters') }}",

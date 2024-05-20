@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use PDF;
 use Carbon\Carbon;
-use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\Product_stock;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class InventoryController extends Controller
 {
@@ -86,6 +86,8 @@ class InventoryController extends Controller
     {
         $productId = $request->product_id;
         $newStock = $request->new_stock;
+        
+        $product = Products::find($productId);
 
         // Assuming you have an array of size IDs and quantities
         $sizes = $request->input('size');
@@ -116,6 +118,13 @@ class InventoryController extends Controller
                 ]
             );
         }
+        
+        $product->update([
+            
+                'raw_price' => $request->supplierPrice,
+                'regular_price' => $request->regularPrice,
+                
+            ]);
 
         // dd($sizes);
         // dd($quantities);
@@ -123,7 +132,6 @@ class InventoryController extends Controller
         Session::flash('success', 'New Stock added to the inventory.');
         return response()->json(['status' => 200, 'message' => 'New Stock added to the inventory!']);
     }
-
 
     public function CategoryWiseFilter(Request $request)
     {

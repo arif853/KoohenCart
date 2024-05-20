@@ -56,26 +56,31 @@ class CategoryController extends Controller
         }
         else{
 
-            $iconImage = $request->file('category_icon');
-            // create new manager instance with desired driver
-            $manager = new ImageManager(new Driver());
-
-            $iconName = 'icon_' . time() . '.' . $iconImage->getClientOriginalExtension();
-            // read image from filesystem
-            $img = $manager->read($iconImage);
-
-            // $img = $img->resize(150, 150);
-            // Save the original image
-
-            $iconPath = 'category_image/icons/' . $iconName;
-            Storage::disk('public')->put( $iconPath , (string)$img->encode());
-
             $category = new Category;
             $category->categories_id = $request->categories_id;
             $category->category_name = $request->category_name;
             $category->parent_category = $request->parent_category;
-            $category->category_icon = $iconPath;
             $category->status = $request->status ? 1 : 0;
+            
+            if($request->hasFile('category_icon')){
+                
+                 $iconImage = $request->file('category_icon');
+                // create new manager instance with desired driver
+                $manager = new ImageManager(new Driver());
+    
+                $iconName = 'icon_' . time() . '.' . $iconImage->getClientOriginalExtension();
+                // read image from filesystem
+                $img = $manager->read($iconImage);
+    
+                // $img = $img->resize(150, 150);
+                // Save the original image
+    
+                $iconPath = 'category_image/icons/' . $iconName;
+                Storage::disk('public')->put( $iconPath , (string)$img->encode());
+                
+                // save image to db
+                $category->category_icon = $iconPath;
+            }
 
             if ($request->hasFile('category_image')) {
                 $image = $request->file('category_image');
@@ -156,7 +161,7 @@ class CategoryController extends Controller
         }
         else{
 
-                        if($request->hasFile('category_icon'))
+            if($request->hasFile('category_icon'))
             {
                 $iconImage = $request->file('category_icon');
                 // create new manager instance with desired driver

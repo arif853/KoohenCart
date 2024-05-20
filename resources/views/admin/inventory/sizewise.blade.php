@@ -97,12 +97,6 @@
                             <i class="material-icons md-description"></i><span class="ml-2">Generate Report</span>
                         </a>
 
-                        {{-- <a href="{{route('sizewise.report',)}}" class="btn btn-info d-none" id="CatReportBtn" target="__blank">
-                            <i class="material-icons md-description"></i><span class="ml-2">Generate Report</span>
-                        </a>
-                        <a href="{{route('sizewise.report')}}" class="btn btn-info d-none" id="DateReportBtn" target="__blank">
-                            <i class="material-icons md-description"></i><span class="ml-2">Generate Report</span>
-                        </a> --}}
                     </div>
 
                 </div>
@@ -124,6 +118,9 @@
                                             <td>{{$key+1}}</td>
                                             <td class="item">
                                                 <a class="itemside" href="#">
+                                                    <div class="left">
+                                                        <img src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail->first()->product_thumbnail)}}" class="img-sm img-thumbnail" alt="{{$product->slug}}">
+                                                    </div>
                                                     <div class="info">
                                                         <h6 class="mb-0">{{$product->product_name}}</h6>
                                                     </div>
@@ -194,6 +191,7 @@
 $(document).ready(function() {
 
 
+    
     $('input[name="daterange"]').daterangepicker({
         "showDropdowns": true,
         "autoApply": true,

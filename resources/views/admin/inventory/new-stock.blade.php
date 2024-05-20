@@ -22,6 +22,16 @@
                       <label for="supplier" class="form-label">Supplier</label>
                       <input type="text" class="form-control" id="supplier" name="supplier" readonly>
                     </div>
+                    
+                    <div class="col-md-6 mb-2">
+                      <label for="supplierPrice" class="form-label">Supplier Price</label>
+                      <input type="text" class="form-control" id="supplierPrice" name="supplierPrice" >
+                    </div>
+                    
+                    <div class="col-md-6 mb-2">
+                      <label for="regularPrice" class="form-label">Regular Price</label>
+                      <input type="text" class="form-control" id="regularPrice" name="regularPrice" >
+                    </div>
 
                     <div class="col-md-12 mb-2">
                         <label for="purchase_date" class="form-label">Purchase Date</label>

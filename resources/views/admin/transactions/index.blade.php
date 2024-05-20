@@ -33,7 +33,7 @@
                         id="customer_email">
                 </div> --}}
             </div>
-        </header>
+        </header> 
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" id="datatable">
@@ -49,18 +49,18 @@
                             <th>Payment Method</th>
                             <th>Payment Status</th>
                             <th>Transaction Date</th>
-
+                          
                         </tr>
                     </thead>
                     <tbody id="transactionTable">
                         @foreach ($data as $key => $list)
                             <tr>
                                 <td>{{$key+1}}</td>
-                                <td>
+                                <td> 
                                 <span>Order ID: {{ $list->order->id }}</span> <br>
                                 Invoice no: <a href="{{route('order.details', ['id' => $list->order->id])}}" class="font-sm">{{$list->order->invoice_no}}</a>
                                 <!--<span style="color: #088178;"> </span>-->
-
+                                
                                 </td>
                                 <td>
                                     <a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">
@@ -111,7 +111,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $list->updated_at->format('d-m-Y') }}</td>
-
+                               
                             </tr>
                         @endforeach
                     </tbody>
@@ -124,7 +124,7 @@
     </div> <!-- card end// -->
 
 
-    <!-- Modal -->
+ <!-- Modal -->
     <div class="modal fade" id="makepament" tabindex="-1" aria-labelledby="makepamentLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -165,7 +165,7 @@
                         <div class="col-md-4">
                             <label for="total" class="form-label">Payment Method</label>
                             <select name="paymentMode" id="paymentMode" class="form-control">
-
+    
                                 <option value="cash">Cash</option>
                                 <option value="cod">Cash On Delivery</option>
                                 <option value="bkash">Bkash</option>
@@ -184,7 +184,6 @@
                             Payment:
                             </label>
                             <input type="number" class="form-control" min="0" id="payment" name="payment" value="0">
-
                         </div>
 
                     </div>
@@ -227,8 +226,8 @@
                     $('#total').val(response.order.total);
                     $('#paid').val(response.order.total_paid);
                     $('#due').val(response.order.total_due);
-
-
+                    
+                    
                     // Enable input field for payment
                     $('#payment').prop('disabled', false);
                     $('#payButton').prop('disabled', true);
@@ -282,7 +281,7 @@
                 }
             })
         });
-
+        
          $(document).ready(function() {
 
             function searchHandler() {
@@ -374,6 +373,6 @@
                 searchHandler();
             });
         });
-
+        
     </script>
 @endpush

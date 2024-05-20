@@ -33,10 +33,11 @@
             <div class="card-header">
                 <div class="left pull-left">
                     {{-- <a href="#" class="btn btn-warning rounded">Permission</a> --}}
-                    <a href="{{url('/dashboard/roles')}}" class="btn btn-info rounded">Manage Roles</a>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#userModal" class="btn btn-success rounded mr-5 btn-sm">Add User</button>
+                    <a href="{{url('/dashboard/roles')}}" class="btn btn-info rounded mr-5 btn-sm">Roles</a>
+                    {{-- <a href="#" class="btn btn-info rounded btn-sm">Permission</a> --}}
                 </div>
                 <div class="right pull-right">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#userModal" class="btn btn-success rounded">Add User</button>
                 </div>
 
             </div>

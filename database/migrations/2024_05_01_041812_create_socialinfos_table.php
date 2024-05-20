@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('socialinfos', function (Blueprint $table) {
             $table->id();
-            $table->string('social_title');
-            $table->string('title_value');
-            $table->string('status')->default(true);
+            $table->string('appPhone');
+            $table->string('appEmail');
+            $table->string('whatsapp');
+            $table->string('facebook')->nullable();
+            $table->string('instragram')->nullable();
+            $table->string('youtube')->nullable();
+            $table->string('copyright');
             $table->timestamps();
         });
     }

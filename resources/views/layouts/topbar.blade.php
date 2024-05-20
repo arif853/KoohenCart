@@ -91,20 +91,22 @@
                 </div>
             </li>
             @endif
-            <li class="nav-item">
-                <a class="nav-link btn-icon cache" href="{{url('/cache_clear')}}">
-                   <span class="icon"><i class=" material-icons md-cached mr-5"></i></span>Cache Clear
-                </a>
-            </li>
-            <!--<li class="nav-item">-->
-            <!--    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>-->
-            <!--</li>-->
+           
             <li class="nav-item">
                 <a class="nav-link btn-icon pos" href="{{route('pos')}}">
-                    <span class="icon"><i class=" material-icons md-point_of_sale"></i></span>
+                    <span class="icon"><i class=" material-icons md-point_of_sale mr-5"></i></span>
                     <span class="text">POS & Sales</span>
                 </a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link btn-icon pos" href="{{url('/cache_clear')}}">
+                   <span class="icon"><i class=" material-icons md-cached "></i></span>
+                   <span class="text">Cache Clear</span>
+                </a>
+            </li>
+             <!--<li class="nav-item">-->
+            <!--    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>-->
+            <!--</li>-->
 
             <li class="dropdown nav-item">
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{{asset('frontend/assets/imgs/favicon_128x128.ico')}}" alt="User"></a>

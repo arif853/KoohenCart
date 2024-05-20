@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 	//===== jquery code for sidebar menu
-    $('.menu-item.has-submenu .menu-link').on('click', function(e){
+	$('.menu-item.has-submenu .menu-link').on('click', function(e){
         e.preventDefault();
         var $submenu = $(this).next('.submenu');
         if($submenu.is(':hidden')){
@@ -15,7 +15,7 @@
         e.preventDefault();
         $(this).siblings('.sub-submenu-content').slideToggle(200);
     });
-
+    
 	// mobile offnavas triggerer for generic use
 	$("[data-trigger]").on("click", function(e){
 		e.preventDefault();
