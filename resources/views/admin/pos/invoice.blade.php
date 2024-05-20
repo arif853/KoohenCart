@@ -248,8 +248,7 @@ footer{
     </footer>
 
     <div class="bg-watermark">
-        <img class="watermark" style="opacity: 0.08;" src="{{ base_path('public/frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark">
-        {{-- <img class="watermark" style="opacity: 0.08;" src="{{ asset('frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark"> --}}
+        <img class="watermark" style="opacity: 0.08;" src="{{ asset('frontend/assets/imgs/Kohen_Favicon.png')}}" alt="Watermark">
     </div>
 </body>
 </html>
