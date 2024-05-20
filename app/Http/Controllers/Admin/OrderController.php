@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DB;
 use PDF;
+use Carbon\Carbon;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Order;
@@ -16,11 +16,11 @@ use App\Models\order_items;
 use App\Models\Orderstatus;
 use App\Models\transactions;
 use Illuminate\Http\Request;
+use App\Models\Product_stock;
 use Illuminate\Validation\Rule;
 use App\Models\Register_customer;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Product_stock;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -190,7 +190,7 @@ class OrderController extends Controller
                             ],
                             [
                                 // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                                'outStock' => \DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
+                                'outStock' => DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
                             ]
                         );
                     Session::flash('success','Order items returned to inventory.');
@@ -250,7 +250,7 @@ class OrderController extends Controller
                         ],
                         [
                             // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                            'outStock' => \DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
+                            'outStock' => DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
                         ]
                     );
                     Session::flash('warning','Items deducted from inventory.');
@@ -270,7 +270,7 @@ class OrderController extends Controller
                         ],
                         [
                             // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                            'outStock' => \DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
+                            'outStock' => DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
                         ]
                     );
                 Session::flash('success','Order items returned to inventory.');
