@@ -5,16 +5,18 @@ use Illuminate\Routing\Router;
 use App\Livewire\CartComponent;
 use App\Livewire\HomeComponent;
 use App\Livewire\ShopComponent;
+use App\Livewire\OfferComponent;
 use App\Models\Feature_category;
 use App\Livewire\ProductComponent;
 use App\Livewire\CheckoutComponent;
 use App\Livewire\PostOfficeSelector;
-use App\Livewire\OfferComponent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\POSController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\MediaController;
@@ -23,6 +25,8 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\AboutusController;
+use App\Http\Controllers\Admin\PrivacyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
 use App\Http\Controllers\Frontend\CartController;
@@ -36,19 +40,18 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\WebmessageController;
+use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Admin\DeliveryInfoController;
 use App\Http\Controllers\Frontend\TrackorderController;
+use App\Http\Controllers\Admin\TermsConditionController;
 use App\Http\Controllers\Admin\FeatureCategoryController;
 use App\Http\Controllers\Admin\FeatureProductsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AboutusController;
-use App\Http\Controllers\Admin\WebSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -499,7 +502,23 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
-    // Route::get('/contact/webmessage/destroy' ,  [WebmessageController::class,'destroy'])->name('webmessage.destroy');
+     // Delivery Info
+     Route::controller(DeliveryInfoController::class)->group(function(){
+        Route::get('/dashboard/delivery_info', 'index')->name('delivery_info.index');
+        Route::post('/dashboard/delivery_info/update', 'update')->name('delivery_info.update');
+    });
+
+     // Privacy Policy
+     Route::controller(PrivacyController::class)->group(function(){
+        Route::get('/dashboard/privacy_policy', 'index')->name('privacy_policy.index');
+        Route::post('/dashboard/privacy_policy/update', 'update')->name('privacy_policy.update');
+    });
+
+     // terms and Condition
+    Route::controller(TermsConditionController::class)->group(function(){
+        Route::get('/dashboard/terms_conditioin','index')->name('terms_conditioin.index');
+        Route::post('/dashboard/terms_conditioin/update', 'update')->name('terms_conditioin.update');
+    });
 
 
     // <========================= Backend Route End ========================>

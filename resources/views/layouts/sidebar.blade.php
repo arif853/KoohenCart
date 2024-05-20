@@ -144,6 +144,15 @@
                     <a href="{{ route('webinfo.index') }}">
                         <span class="text">WebInfo</span>
                     </a>
+                    <a href="{{ url('/dashboard/delivery_info') }}">
+                        <span class="text">Manage Delivery Information</span>
+                    </a>
+                    <a href="{{ route('privacy_policy.index') }}">
+                        <span class="text">Manage Privacy Policy</span>
+                    </a>
+                    <a href="{{ route('terms_conditioin.index') }}">
+                        <span class="text">Manage Terms & Conditions</span>
+                    </a>
                     <a href="{{route('contactinfo.index')}}">
                         <span class="text">Contact Info</span>
                     </a>
