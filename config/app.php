@@ -172,7 +172,7 @@ return [
         misterspelik\LaravelPdf\PdfServiceProvider::class,
         Igoshev\Captcha\Providers\CaptchaServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-
+        Milon\Barcode\BarcodeServiceProvider::class
     ])->toArray(),
 
     /*
