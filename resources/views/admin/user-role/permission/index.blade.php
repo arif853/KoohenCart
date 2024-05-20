@@ -1,15 +1,15 @@
 
 @extends('layouts.admin')
-@section('title','Manage Roles')
+@section('title','Manage Permissions')
 @section('content')
 
 <div class="content-header">
     <div>
-        <h2 class="content-title card-title">Manage Roles</h2>
+        <h2 class="content-title card-title">Manage Permissions</h2>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="{{'/dashborad'}}">Dashborad</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Roles</li>
+              <li class="breadcrumb-item active" aria-current="page">Permissions</li>
             </ol>
         </nav>
     </div>
@@ -33,9 +33,9 @@
             <div class="card-header">
                 <div class="left pull-left">
                     {{-- <a href="#" class="btn btn-warning rounded">Permission</a> --}}
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#roleModal" class="btn btn-info rounded mr-5 btn-sm">Add Role</button>
-                    <a href="{{url('/dashboard/users/index')}}" class="btn btn-success rounded mr-5 btn-sm">Users</a>
-                    <a href="{{url('/dashboard/permissions')}}" class="btn btn-success rounded btn-sm">Permissions</a>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#permissionModal" class="btn btn-info rounded mr-5 btn-sm">Add Permission</button>
+                    <a href="{{url('/dashboard/roles')}}" class="btn btn-success rounded mr-5 btn-sm">Roles</a>
+                    <a href="{{url('/dashboard/users/index')}}" class="btn btn-success rounded btn-sm">Users</a>
                 </div>
                 <div class="right pull-right">
                 </div>
@@ -46,26 +46,23 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Role Name</th>
+                            <th>Permission Name</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($roles as $key => $role)
+                        @foreach ($permissions as $key => $permission)
                         <tr>
                             <td>{{$key + 1}}</td>
-                            <td>{{$role->name}}</td>
+                            <td>{{$permission->name}}</td>
 
                             <td>
-                                @if($role->name =='Super Admin')
-                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
+                                @if($permission->name =='Super Admin')
+                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$permission->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="#" class="btn btn-sm font-sm btn-warning rounded mr-5">
-                                        Add / Edit Permissions
-                                    </a>
                                     <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
-                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
+                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-permission-id="{{ $permission->id}}">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
                                     <a href="#" class="btn btn-sm font-sm btn-light rounded delete d-none">
@@ -73,22 +70,15 @@
                                     </a>
                                 </form>
                                 @else
-                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
+                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$permission->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <a href="#" class="btn btn-sm font-sm btn-warning rounded mr-5">
                                         Add / Edit Permissions
                                     </a>
                                     <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit mr-5"
-                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
+                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-permission-id="{{ $permission->id}}">
                                         <i class="material-icons md-edit"></i> Edit
-                                    </a>
-                                    <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit"
-                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
-                                        <i class="material-icons md-edit"></i> Add Permission 
-                                    </a>
-                                    <a href="{{ url('roles/'.$role->id.'/give-permissions') }}" class="btn btn-warning">
-                                        Add / Edit Role Permission
                                     </a>
                                     <a href="#" class="btn btn-sm font-sm btn-light rounded delete">
                                         <i class="material-icons md-delete_forever"></i> Delete
@@ -100,15 +90,14 @@
                         @endforeach
 
                     </tbody>
-
                 </table>
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div>
 </div>
 
-@include('admin.user-role.role.edit')
-@include('admin.user-role.role.create')
+@include('admin.user-role.permission.edit')
+@include('admin.user-role.permission.create')
 
 @endsection
 @push('product')
@@ -144,7 +133,7 @@
     });
 
     //Store Roles
-    $("#roleStoreForm").submit(function (e) {
+    $("#permissionStoreForm").submit(function (e) {
         e.preventDefault();
 
         $.ajaxSetup({
@@ -174,7 +163,7 @@
             },
             error: function (xhr, textStatus, errorThrown) {
                 $.Notification.autoHideNotify('danger', 'top right', 'Danger', xhr.responseJSON.errors.name[0]);
-                $("#roleModal").modal('hide');
+                $("#permissionModal").modal('hide');
             }
         })
     });

@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\POSController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\MediaController;
@@ -25,7 +23,6 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Admin\AboutusController;
 use App\Http\Controllers\Admin\PrivacyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
@@ -40,7 +37,6 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\WebmessageController;
-use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Frontend\CheckoutController;
@@ -52,6 +48,11 @@ use App\Http\Controllers\Admin\FeatureProductsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AboutusController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\WebSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,8 +66,10 @@ use App\Http\Controllers\Frontend\CustomerDashboardController;
 */
 Route::get('/cache_clear',function(){
     Artisan::call('route:clear');
-    Artisan::call('config:clear');
     Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    // Artisan::call('config:cache');
+    Artisan::call('optimize:clear');
     return redirect()->back()->with('success','Cache cleard!!');
 });
 
@@ -464,7 +467,11 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     // user role permission
     Route::resource('/dashboard/roles', RoleController::class);
     Route::post('/dashboard/roles/{role}', [RoleController::class, 'update']);
-    Route::delete('/dashboard/roles/{userId}/delete', [RoleController::class, 'destroy']);
+    Route::delete('/dashboard/roles/{id}/delete', [RoleController::class, 'destroy']);
+
+    Route::resource('/dashboard/permissions', PermissionController::class);
+    Route::post('/dashboard/permissions/{permission}',[PermissionController::class, 'update']);
+    Route::delete('/dashboard/permissions/{id}/delete',[PermissionController::class, 'destroy']);
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

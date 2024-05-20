@@ -172,6 +172,7 @@ return [
         misterspelik\LaravelPdf\PdfServiceProvider::class,
         Igoshev\Captcha\Providers\CaptchaServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
 
     ])->toArray(),
 
@@ -192,6 +193,8 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF' => misterspelik\LaravelPdf\Facades\Pdf::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ])->toArray(),
 
 ];
