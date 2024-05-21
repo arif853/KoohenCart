@@ -123,7 +123,7 @@
             }
         });
         $.ajax({
-            url: '/dashboard/ads/edit',
+            url: '/dashboard/setting/ads/edit',
             method: 'GET',
             data: {
                 id: adsId,
@@ -158,7 +158,7 @@
         const data = new FormData(this);
         console.log(data);
         $.ajax({
-            url: '/dashboard/ads/update',
+            url: '/dashboard/setting/ads/update',
             method: 'post',
             data: data,
             cache: false,

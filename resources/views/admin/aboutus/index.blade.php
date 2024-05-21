@@ -101,14 +101,13 @@
         e.preventDefault();
         var aboutusId = $(this).data('aboutus-id');
         console.log(aboutusId);
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
         $.ajax({
-            url: '{{url('/dashboard/aboutus/edit')}}',
+            url: '{{url('/dashboard/setting/aboutus/edit')}}',
             method: 'GET',
             data: {
                 id: aboutusId,
@@ -117,21 +116,18 @@
                 console.log(response);
                 $('#aboutId').val(response.id);
                 $('#aboutusTitle').val(response.title);
-                $('#summernote').text(response.about_desc);
+                $('.details').val(response.about_desc);
             }
         });
     });
 
     //Update ads
     $("#aboutusEditForm").submit(function (e) {
-
         e.preventDefault();
         const data = new FormData(this);
-
         console.log(data);
-
         $.ajax({
-            url: '{{url('/dashboard/aboutus/update')}}',
+            url: '{{url('/dashboard/setting/aboutus/update')}}',
             method: 'post',
             data: data,
             cache: false,
