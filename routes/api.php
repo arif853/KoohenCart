@@ -19,6 +19,8 @@ Route::get('/products',function(){
     $products = Products::get();
     return $products;
 });
+Route::get('/order',[SteadfastController::class,'create']);
+Route::post('/create_order',[SteadfastController::class,'store'])->name('order.persel');
 Route::controller(SteadfastController::class)->group(function () {
     Route::post('/product_order', 'store');
 });
