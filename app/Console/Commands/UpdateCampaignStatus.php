@@ -29,7 +29,7 @@ class UpdateCampaignStatus extends Command
     public function handle()
     {
         $currentDateTime = Carbon::now('Asia/Dhaka');
-        Log::info('Running UpdateCampaignStatus command at ' . $currentDateTime);
+        // Log::info('Running UpdateCampaignStatus command at ' . $currentDateTime);
         $expiredCampaigns = Campaign::where('status', 'Published')
                                     ->where('end_date', '<', $currentDateTime)
                                     ->get();
@@ -42,6 +42,6 @@ class UpdateCampaignStatus extends Command
                 Log::info('Campaign statuses updated successfully.');
             }
         }
-        Log::info('Campaign status update command run successfully!');
+        // Log::info('Campaign status update command run successfully!');
     }
 }

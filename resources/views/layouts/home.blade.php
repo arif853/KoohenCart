@@ -9,6 +9,7 @@
         $userData = DB::table('web_infos')->first();
         $seoData = DB::table('seo_settings')->first();
         $socialinfos = DB::table('socialinfos')->get();
+        $contactinfo = DB::table('contactinfos')->first();
         // echo $description;
     @endphp
 
@@ -44,6 +45,8 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('storage/favicons/'.$userData->webfavicon)}}">
+    <link rel="manifest" href="{{asset('sitemap.xml')}}">
+
     <!--Font-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
 
@@ -75,8 +78,6 @@
 </head>
 
 <body>
-
-
     <header class="header-area header-style-4 header-height-2">
         <!--Top Header-->
         <div class="header-top header-top-ptb-1 d-none d-lg-block">
@@ -85,13 +86,10 @@
                     <div class="col-xl-3 col-lg-4">
                        <div class="header-info">
                         <ul>
-                            @foreach($socialinfos as $socialinfo)
-                                @if($socialinfo->social_title === 'Phone')
-                                    <li><i class="far fa-phone-alt"></i> <a href="tel:{{$socialinfo->title_value}}">{{$socialinfo->title_value}}</a></li>
-                                @elseif($socialinfo->social_title === 'Email')
-                                    <li><i class="fal fa-envelope"></i> <a href="mailto:{{$socialinfo->title_value}}">{{$socialinfo->title_value}}</a></li>
-                                @endif
-                            @endforeach
+                             @if($contactinfo)
+                                <li><i class="far fa-phone-alt"></i> <a href="tel:{{$contactinfo->phone}}">{{$contactinfo->phone}}</a></li>
+                                <li><i class="fal fa-envelope"></i> <a href="mailto:{{$contactinfo->email}}">{{$contactinfo->email}}</a></li>
+                            @endif
                         </ul>
                         </div>
                     </div>
@@ -169,10 +167,14 @@
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="{{route('home')}}"><img src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo"></a>
+                        <a href="{{route('home')}}">
+                        <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                        </a>
                     </div>
                      <div class="logo logo-width-1 d-block d-sm-none">
-                        <a href="{{route('home')}}"><img src="{{asset('')}}frontend/assets/imgs/Kohen_Logo_Main.png" alt="logo"></a>
+                        <a href="{{route('home')}}">
+                            <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                        </a>
                     </div>
 
                     <div class="header-nav d-none d-lg-flex" id="header-nav">
@@ -327,7 +329,9 @@
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="{{route('home')}}"><img src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo"></a>
+                    <a href="{{route('home')}}">
+                         <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                    </a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                     <button class="close-style search-close">
@@ -436,7 +440,9 @@
                     </div>
                     <div class="col-lg-4">
                         <!-- Subscribe Form -->
-                        <form class="form-subcriber d-flex wow fadeIn animated">
+                        <form class="form-subcriber d-flex wow fadeIn animated" action="#" method="post">
+                            @csrf
+                            @method('post')
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn text-white" type="submit">Subscribe</button>
                         </form>
@@ -497,29 +503,22 @@
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <h5 class="widget-title wow fadeIn animated">Contact</h5>
                             <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
-                            @foreach($socialinfos as $socialinfo)
-                                @if ($socialinfo->social_title === 'WhatsApp')
                                 <li>
-                                    <a href="https://wa.me/{{$socialinfo->title_value}}"><span><i class="fab fa-whatsapp"></i>
-                                    </span> {{$socialinfo->title_value}}
+                                    <a href="https://wa.me/{{ $contactinfo->whatsapp }}"><span><i class="fab fa-whatsapp"></i>
+                                    </span> {{ $contactinfo->whatsapp }}
                                     </a>
                                 </li>
-                                @elseif ($socialinfo->social_title === 'Phone')
                                 <li>
-                                    <a href="tel:{{$socialinfo->title_value}}" target="__blank"><span><i class="fal fa-phone-alt"></i>
-                                    </span> {{$socialinfo->title_value}}
+                                    <a href="tel:{{ $contactinfo->phone }}" target="__blank"><span><i class="fal fa-phone-alt"></i>
+                                    </span> {{ $contactinfo->phone }}
                                     </a>
                                 </li>
-                                @elseif ($socialinfo->social_title === 'Email')
                                 <li>
                                     <a href="mailto:{{$socialinfo->title_value}}" target="__blank"><span><i class="fal fa-envelope"></i>
-                                    </span> {{$socialinfo->title_value}}
+                                    </span> {{ $contactinfo->email }}
                                     </a>
                                 </li>
-                                @endif
-
-                            @endforeach
-                            <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{$userData->address}}</a></li>
+                            <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{ $contactinfo->address }}</a></li>
 
                         </ul>
 
@@ -613,7 +612,7 @@
     <script src="{{asset('')}}frontend/assets/js/main.js?v=3.4"></script>
     <script src="{{asset('')}}frontend/assets/js/shop.js?v=3.4"></script>
 
-    
+
 
 
     @stack('dashboard')
@@ -621,7 +620,7 @@
     @stack('shop')
     @stack('camp')
     @stack('order')
-    
+
 @livewireScripts
 
 <script>
@@ -737,7 +736,7 @@
 
 
         function searchHandel(searchInput, showProductDiv) {
-            
+
             var loadingIndicator = $('#loading-indicator');
             var searchTerm = searchInput.val().trim();
             console.log(searchTerm);
@@ -812,8 +811,8 @@
             searchHandel($('#search-input2'), $('#show-product2'));
         });
     });
-    
-    
+
+
 </script>
     @if(Session::has('success'))
     <script>

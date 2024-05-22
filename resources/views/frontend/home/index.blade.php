@@ -156,6 +156,23 @@
         </div>
     </section>
     <!--Best Sale (OK)-->
+    @endif
+    @endforeach
+
+    @endif
+
+
+    @if($campaign)
+    <!--Campaign (OK)-->
+    <section class="product-tabs section-padding position-relative wow fadeIn animated">
+        <div class="container">
+
+            @livewire('campaign-component')
+        </div>
+    </section>
+    <!--Campaign (OK)-->
+    @endif
+    
         <!--Advertise-->
     <section class="banner-2">
         <div class="container">
@@ -179,13 +196,6 @@
         </div>
     </section>
     <!--Advertise-->
-
-    @endif
-    @endforeach
-
-    @endif
-
-
 
     <!--All Products (OK)-->
     <section class="product-tabs section-padding position-relative wow fadeIn animated">
