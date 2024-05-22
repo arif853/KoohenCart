@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Products;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Campaign;
-use App\Models\Slider;
 use App\Models\Ads;
+use App\Models\Slider;
+use App\Models\Aboutus;
+use App\Models\Campaign;
+use App\Models\Category;
 use App\Models\Division;
+use App\Models\Products;
+use App\Models\DeliveryInfo;
+use Illuminate\Http\Request;
+use App\Models\PrivacyPolicy;
+use App\Models\TermsCondition;
 use App\Models\Feature_category;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Models\Aboutus;
 
 class HomeController extends Controller
 {
@@ -70,12 +73,9 @@ class HomeController extends Controller
                 return $totalStock > 0;
             });
         }
-
-
         $sliders = Slider::all();
         $adsbanner = Ads::all();
         $campaign = Campaign::where('status','Published')->first();
-
         return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign','cat_features'));
         // dd($cat_features);
     }
@@ -89,9 +89,18 @@ class HomeController extends Controller
         return view('frontend.about-us', ['aboutus' => $aboutus]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function deliveryInfo(){
+        $delivery_info = DeliveryInfo::first();
+        return view('frontend.delivery_information',compact('delivery_info'));
+    }
+    public function PrivacyPolicy(){
+        $privacy_policy = PrivacyPolicy::first();
+        return view('frontend.privacy-policy',compact('privacy_policy'));
+    }
+    public function termsCondition(){
+        $terms = TermsCondition::first();
+        return view('frontend.terms-and-condition',compact('terms'));
+    }
     public function contactus()
     {
         return view('frontend.contact-us');
@@ -209,15 +218,12 @@ class HomeController extends Controller
      public function searchBar(Request $request)
     {
         $searchTerm = $request->input('search');
-
         // Query the products table to find matching products along with their images
         $products = Products::where('product_name', 'like', '%' . $searchTerm . '%')
                             ->orWhere('sku', 'like', '%' . $searchTerm . '%')
                             ->with(['product_thumbnail','product_price']) // Eager load product images
                             // ->limit(5) // Limit the number of results
                             ->get();
-
-
         // Return the response as JSON
         return response()->json(['products' => $products]);
     }

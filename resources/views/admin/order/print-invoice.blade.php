@@ -43,7 +43,7 @@
 
                         <p class="date">
                             <span class="bold tera">Date :</span>&nbsp;&nbsp;
-                            <span>{{ date('j F y',strtotime($order->created_at)) }}</span>
+                            <span>{{ date('j F y',strtotime($order->created_at)) }} </span>
                         </p>
                         <p class="invoice_no">
                             <span class="bold tera">Invoice No :</span>&nbsp;&nbsp;

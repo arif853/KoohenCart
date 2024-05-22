@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('coupons_code');
             $table->string('start_date');
             $table->string('end_date');
-          //  $table->boolean('free_shipping',['0','1'])->default(0);
+            $table->tinyInteger('free_shipping')->nullable();
             $table->integer('quantity');
             $table->integer('percent_value')->nullable();
             $table->double('fixed')->nullable();
             $table->enum('discounts_type',['percent','fixed'])->default('percent');
-            $table->boolean('status',['0','1'])->default(0);
+            $table->enum('status',['0','1'])->default(0);
             $table->timestamps();
         });
     }

@@ -131,18 +131,15 @@
             },
             success: function (response) {
                 console.log(response);
-
                 $('#user_id').val(response.user.id);
                 $('#user_name').val(response.user.name);
                 $('#user_email').val(response.user.email);
-
-                $('#user_role').val([]);
+                $('#edit_user_roles_id option').prop('selected', false);
+                $('#edit_user_roles_id').val([]);
                 response.user.roles.forEach(function(role) {
-                    $('#user_role option[value="' + role.name + '"]').prop('selected', true);
+                    $('#edit_user_roles_id option[value="' + role.name + '"]').prop('selected', true);
                 });
-
-                $('#user_role').trigger('change');
-
+                $('#edit_user_roles_id').trigger('change');
             }
         });
     });

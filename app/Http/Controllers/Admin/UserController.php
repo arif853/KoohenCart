@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::where('name', '!=','Super Admin')->get();
         $roles = Role::all();
         return view('admin.user-role.user.index',['users' => $users, 'roles' =>$roles]);
     }
@@ -78,12 +78,12 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request)
-    {
-        $user = User::find($request->id);
+    {   
+        $userId = $request->id;
+        $user = User::find($userId);
         $user->roles = $user->getRoleNames();
-
-        // dd($user);
-        return response()->json(['status' => 200, 'user' => $user]);
+       //  dd(json_encode($user));
+       return response()->json(['status' => 200, 'user' => $user]);
     }
 
     /**

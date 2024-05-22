@@ -1,17 +1,17 @@
 <header class="main-header navbar">
     <div class="col-search">
-        <!--<form class="searchform">-->
-        <!--    <div class="input-group">-->
-        <!--        <input list="search_terms" type="text" class="form-control" placeholder="Search term">-->
-        <!--        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>-->
-        <!--    </div>-->
-        <!--    <datalist id="search_terms">-->
-        <!--        <option value="Products">-->
-        <!--        <option value="New orders">-->
-        <!--        <option value="Apple iphone">-->
-        <!--        <option value="Ahmed Hassan">-->
-        <!--    </datalist>-->
-        <!--</form>-->
+        <form class="searchform">
+            <div class="input-group">
+                <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+            </div>
+            <datalist id="search_terms">
+                <option value="Products">
+                <option value="New orders">
+                <option value="Apple iphone">
+                <option value="Ahmed Hassan">
+            </datalist>
+        </form>
     </div>
     <style>
         .nav-item .cache{
@@ -112,10 +112,11 @@
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{{asset('frontend/assets/imgs/favicon_128x128.ico')}}" alt="User"></a>
                 <span class="text-center">{{auth()->user()->name}}</span>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                    <a class="dropdown-item" href="{{route('profile.edit')}}"><i class="material-icons md-settings"></i>Account Settings</a>
-                    <!--<a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>-->
-                    <!--<a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>-->
-                    <!--<a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>-->
+                    <a class="dropdown-item" href="{{route('profile.edit')}}"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                    <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                    <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                    <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                    <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
                     <div class="dropdown-divider"></div>
                     {{-- <form method="POST" action="{{ route('logout') }}">
                         @csrf

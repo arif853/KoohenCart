@@ -5,11 +5,11 @@ use Illuminate\Routing\Router;
 use App\Livewire\CartComponent;
 use App\Livewire\HomeComponent;
 use App\Livewire\ShopComponent;
+use App\Livewire\OfferComponent;
 use App\Models\Feature_category;
 use App\Livewire\ProductComponent;
 use App\Livewire\CheckoutComponent;
 use App\Livewire\PostOfficeSelector;
-use App\Livewire\OfferComponent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\PrivacyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
 use App\Http\Controllers\Frontend\CartController;
@@ -39,7 +40,9 @@ use App\Http\Controllers\Admin\WebmessageController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Admin\DeliveryInfoController;
 use App\Http\Controllers\Frontend\TrackorderController;
+use App\Http\Controllers\Admin\TermsConditionController;
 use App\Http\Controllers\Admin\FeatureCategoryController;
 use App\Http\Controllers\Admin\FeatureProductsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
@@ -122,6 +125,9 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/cart', 'cart')->name('cart');
     Route::get('/home/quickview', 'quickview')->name('quickview');
     Route::get('/home/product_search', 'searchBar')->name('search');
+    Route::get('/delivery_information', 'deliveryInfo')->name('delivery_info');
+    Route::get('/privacy_and_policy', 'PrivacyPolicy')->name('privacy_policy');
+    Route::get('/terms-and-condition', 'termsCondition')->name('terms.condition');
 });
 
 // Route::get('/shop', [ShopController::class, 'index'])->name('shop');
@@ -209,9 +215,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/subcategory/edit', 'edit')->name('subcategory.edit');
         Route::post('/dashboard/subcategory/update', 'update')->name('subcategory.update');
         Route::delete('/dashboard/subcategory/destroy/{id}', 'destroy')->name('subcategory.destroy');
-
         Route::get('/dashboard/subcategory/get_subcategory/{id}', 'get_subcategory')->name('category.subcategory');
-
     });
 
 
@@ -506,7 +510,23 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
-    // Route::get('/contact/webmessage/destroy' ,  [WebmessageController::class,'destroy'])->name('webmessage.destroy');
+     // Delivery Info
+     Route::controller(DeliveryInfoController::class)->group(function(){
+        Route::get('/dashboard/delivery_info', 'index')->name('delivery_info.index');
+        Route::post('/dashboard/delivery_info/update', 'update')->name('delivery_info.update');
+    });
+
+     // Privacy Policy
+     Route::controller(PrivacyController::class)->group(function(){
+        Route::get('/dashboard/privacy_policy', 'index')->name('privacy_policy.index');
+        Route::post('/dashboard/privacy_policy/update', 'update')->name('privacy_policy.update');
+    });
+
+     // terms and Condition
+    Route::controller(TermsConditionController::class)->group(function(){
+        Route::get('/dashboard/terms_conditioin','index')->name('terms_conditioin.index');
+        Route::post('/dashboard/terms_conditioin/update', 'update')->name('terms_conditioin.update');
+    });
 
 
     // <========================= Backend Route End ========================>

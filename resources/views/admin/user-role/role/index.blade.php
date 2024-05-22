@@ -83,6 +83,13 @@
                                     data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
+                                    <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit"
+                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
+                                        <i class="material-icons md-edit"></i> Add Permission 
+                                    </a>
+                                    <a href="{{ url('roles/'.$role->id.'/give-permissions') }}" class="btn btn-warning">
+                                        Add / Edit Role Permission
+                                    </a>
                                     <a href="#" class="btn btn-sm font-sm btn-light rounded delete">
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>

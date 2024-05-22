@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('text')->nullable();
             $table->string('image');
             $table->enum('status',['Active','Inactive'])->default('Active');
+            $table->enum('is_featured',[1,2])->nullable();
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });

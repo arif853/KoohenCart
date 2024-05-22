@@ -225,7 +225,6 @@ class CategoryController extends Controller
     {
         try{
         $category = Category::find($id);
-
         Storage::delete('public/category_image/'.$category->category_image);
         Storage::delete('public/'.$category->category_icon);
         $category->delete();

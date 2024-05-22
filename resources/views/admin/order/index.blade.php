@@ -352,7 +352,7 @@
                     },
                     success: function(response) {
                         // Handle success, if needed
-                        // console.log(response);
+                         console.log(response);
 
                         var tableBody = $('#orderTableBody');
                         tableBody.empty(); // Clear existing table rows
