@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Steadfast;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -32,25 +33,27 @@ class SteadfastController extends Controller
         $data[] = $item;
 
         $response = SteadfastCourier::bulkCreateOrders($data);
-     // dd($response);
-     if ($response['status'] == 200) {
-    $responseData = $response['data']; 
-   
- $order = Order::find($request->id);
- 
-    $order->update([
-        'invoice_no' => $responseData[0]['invoice'], 
-        'consignment_id' => $responseData[0]['consignment_id'],
-        'tracking_code' => $responseData[0]['tracking_code'],
-        'delivery_charge' => $responseData[0]['cod_amount'] 
-    ]);
-    
+        // dd($response);
+        if ($response['status'] == 200) {
+            $responseData = $response['data'];
+         // dd($responseData);
+            //dd($responseData[0]['tracking_code']);
+           // dd($order);
+          $invoice =  $responseData[0]['invoice'];
+          $consignment_id =  $responseData[0]['consignment_id'];
+          $tracking_code = $responseData[0]['tracking_code'];
+          $cod_amount = $responseData[0]['cod_amount'];
+         $orders =   DB::table('orders')->where('id',$request->id)->update([
+              'invoice_no' =>  $invoice,
+                'consignment_id' =>$consignment_id, // it is not inseted in orders table
+                'tracking_code' => $tracking_code, // it is not inserted in orders table
+                'delivery_charge' => $cod_amount
+           ]);
+        
             return redirect()->back()->with('success', 'Courier sent successfully');
         } else {
             return redirect()->back()->with('error', 'Courier send failed');
         }
-     
-
     }
 
     public function index()
