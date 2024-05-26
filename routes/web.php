@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\POSController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\MediaController;
@@ -23,6 +25,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\AboutusController;
 use App\Http\Controllers\Admin\PrivacyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
@@ -36,7 +39,9 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\WebmessageController;
+use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Frontend\CheckoutController;
@@ -47,12 +52,8 @@ use App\Http\Controllers\Admin\FeatureCategoryController;
 use App\Http\Controllers\Admin\FeatureProductsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
+use App\Http\Controllers\Admin\Steadfast\SteadfastController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AboutusController;
-use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\WebSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,6 +137,7 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('
 
 //store checkout orders.
 Route::post('/customer/shop/checkout/store', [CheckoutController::class, 'store'])->name('order.store');
+Route::post('/customer/shop/checkout/courier', [CheckoutController::class, 'send_bulk_to_courier'])->name('order.courier');
 Route::post('/customer/shop/checkout/login', [CheckoutController::class, 'login'])->name('checkout.login');
 Route::post('/customer/shop/checkout/coupone', [CheckoutController::class, 'appliedCoupone'])->name('applied.coupone');
 
@@ -252,8 +254,12 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     //Order
+    Route::controller(SteadfastController::class)->middleware('auth')->group(function () {
+        Route::post('/dashboard/orders_bulk', 'send_bulk_to_courier')->name('order.bulk_order.curier');
+    });
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
+        Route::get('/dashboard/orders/bulk/{id}', 'bulk_order')->name('order.bulk_order');
         Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');

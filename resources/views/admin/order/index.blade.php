@@ -182,6 +182,7 @@
                                     
                                     <td class="text-end">
                                         <a href="{{route('order.details', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Detail</a>
+                                        <a href="{{route('order.bulk_order', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Place Order</a>
                                          @if($order->is_pos == 0 )
                                         <a class="btn btn-md rounded font-sm" href="{{route('order.track', ['id' => $order->id])}}">Track me</a>
                                         @endif
