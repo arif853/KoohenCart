@@ -1,7 +1,23 @@
 @extends('layouts.admin')
 @section('title','Orders list')
 @section('content')
+<style>
+    .hidden-item {
+    display: none;
+}
 
+.show-more-container {
+    margin-top: 10px;
+}
+
+.show-more-btn {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+
+</style>
     <div class="content-header">
         <div>
             <h2 class="content-title card-title">Order List </h2>
@@ -117,15 +133,26 @@
                                     </td>
 
                                     <td>
-                                        @foreach ($order->order_item as $key => $item   )
-                                            {{$key+1}} .
-                                            <span class="text-brand">{{$item->product->product_name}}</span>,
-                                            <span > Size: {{$item->product_sizes->size_name}}</span>,
-                                            @if($item->product_colors)
-                                            <span> Color: {{$item->product_colors->color_name}}</span>,
-                                            @endif
-                                            <span>Quantiy: {{$item->quantity}}</span><br>
-                                        @endforeach
+                                        <div class="order-items-container">
+                                            @foreach ($order->order_item as $key => $item)
+                                                <div class="order-item {{ $key >= 3 ? 'hidden-item' : '' }}">
+                                                    {{ $key+1 }}.
+                                                    <span class="text-brand">{{ $item->product->product_name }}</span>,
+                                                    @if($item->product_sizes)
+                                                    <span>Size: {{ $item->product_sizes->size_name }}</span>,
+                                                    @endif
+                                                    @if($item->product_colors)
+                                                        <span>Color: {{ $item->product_colors->color_name }}</span>,
+                                                    @endif
+                                                    <span>Quantity: {{ $item->quantity }}</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @if(count($order->order_item) > 3)
+                                            <div class="show-more-container text-center">
+                                                <button class="show-more-btn">▼</button>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td>৳{{$order->total}}</td>
                                     <td>৳<span>{{ $order->total_due}}</span></td>
@@ -155,6 +182,7 @@
                                     
                                     <td class="text-end">
                                         <a href="{{route('order.details', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Detail</a>
+                                        <a href="{{route('order.bulk_order', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Place Order</a>
                                          @if($order->is_pos == 0 )
                                         <a class="btn btn-md rounded font-sm" href="{{route('order.track', ['id' => $order->id])}}">Track me</a>
                                         @endif
@@ -183,6 +211,12 @@
 @push('order_status')
 <script>
     $(document).ready(function() {
+
+        $('.show-more-btn').on('click', function() {
+            $(this).closest('td').find('.hidden-item').toggle();
+            $(this).text($(this).text() === '▼' ? '▲' : '▼');
+        });
+
         // Get references to the global and individual checkboxes
         const selectAllCheckbox = document.getElementById('select-all-checkbox');
         const individualCheckboxes = document.querySelectorAll('.order-checkbox');
@@ -319,7 +353,7 @@
                     },
                     success: function(response) {
                         // Handle success, if needed
-                        // console.log(response);
+                         console.log(response);
 
                         var tableBody = $('#orderTableBody');
                         tableBody.empty(); // Clear existing table rows

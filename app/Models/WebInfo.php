@@ -9,5 +9,5 @@ class WebInfo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['appName','description','weblogo','webfavicon','marquee','copyright'];
+    protected $fillable = ['appName','description','weblogo','webfavicon','marquee','copyright','entitle','footerlogo'];
 }

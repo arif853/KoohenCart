@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 19, 2024 at 05:33 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: May 20, 2024 at 05:50 AM
+-- Server version: 10.6.17-MariaDB-cll-lve
+-- PHP Version: 8.1.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,8 +18,29 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `koohen`
+-- Database: `koohen_evara`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `aboutuses`
+--
+
+CREATE TABLE `aboutuses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `about_desc` longtext NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `aboutuses`
+--
+
+INSERT INTO `aboutuses` (`id`, `title`, `about_desc`, `created_at`, `updated_at`) VALUES
+(1, 'We are Building The Destination For Getting Things Done', '<p>Koohen offers a wide range of clothing, including T-shirts, hoodies, \ntraditional Panjabi and Sharee dresses. Orders are carefully handled \nfrom Dhaka and delivered across Bangladesh!<br>Registered Address: TRAD/DSCC/042967/2022</p>', '2024-03-30 01:15:58', '2024-03-30 13:40:03');
 
 -- --------------------------------------------------------
 
@@ -31,10 +52,12 @@ CREATE TABLE `ads` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `header` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
+  `btntext` varchar(255) DEFAULT NULL,
   `shop_url` varchar(255) DEFAULT NULL,
   `is_featured` varchar(255) DEFAULT NULL,
   `is_feature_no` varchar(255) NOT NULL DEFAULT '0',
   `image` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -43,8 +66,25 @@ CREATE TABLE `ads` (
 -- Dumping data for table `ads`
 --
 
-INSERT INTO `ads` (`id`, `header`, `title`, `shop_url`, `is_featured`, `is_feature_no`, `image`, `created_at`, `updated_at`) VALUES
-(4, 'Winter sale on', 'Be The First to Know About Our New Collections', 'https://koohen.com/products/mens-printed-panjabi-pr05', '1', '1', 'ads_banner/1708247229.png', '2024-02-18 03:07:11', '2024-02-18 03:07:11');
+INSERT INTO `ads` (`id`, `header`, `title`, `btntext`, `shop_url`, `is_featured`, `is_feature_no`, `image`, `status`, `created_at`, `updated_at`) VALUES
+(4, 'EID SALE 2024', 'Ramadan Special Collection', NULL, 'https://koohen.com/shop', '1', '1', 'ads_banner/1711140292.png', 1, '2024-02-08 09:02:16', '2024-05-05 11:42:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applied_coupones`
+--
+
+CREATE TABLE `applied_coupones` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `customer_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `order_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `coupone_id` bigint(20) UNSIGNED NOT NULL,
+  `coupone_code` varchar(255) NOT NULL,
+  `is_ordered` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -67,7 +107,7 @@ CREATE TABLE `brands` (
 --
 
 INSERT INTO `brands` (`id`, `brand_name`, `brand_image`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(2, 'কহেন - KOHEN', 'koohen_1707222230.png', 'koohen', '1', '2024-02-06 05:23:50', '2024-02-07 02:22:21');
+(2, 'কহেন - KOHEN', 'koohen_1707222230.png', 'koohen', '1', '2024-02-06 11:23:50', '2024-02-07 08:22:21');
 
 -- --------------------------------------------------------
 
@@ -88,13 +128,6 @@ CREATE TABLE `campaigns` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `campaigns`
---
-
-INSERT INTO `campaigns` (`id`, `camp_name`, `image`, `camp_offer`, `slug`, `status`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
-(7, 'Eid Sales', 'campaign/1710306725.jpg', '26', 'eid-sales', 'Published', '2024-03-14 00:01:00', '2024-04-09 23:59:00', '2024-03-12 23:12:07', '2024-03-12 23:12:07');
-
 -- --------------------------------------------------------
 
 --
@@ -113,16 +146,6 @@ CREATE TABLE `camp_products` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `camp_products`
---
-
-INSERT INTO `camp_products` (`id`, `campaign_id`, `product_id`, `regular_price`, `camp_price`, `camp_qty`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
-(16, 7, 18, 1750.00, 1295.00, 10.00, NULL, NULL, '2024-03-12 23:12:07', '2024-03-12 23:12:07'),
-(17, 7, 19, 1750.00, 1295.00, 88.00, NULL, NULL, '2024-03-12 23:12:07', '2024-03-12 23:12:07'),
-(18, 7, 20, 1950.00, 1443.00, 2.00, NULL, NULL, '2024-03-12 23:12:07', '2024-03-12 23:12:07'),
-(19, 7, 25, 1250.00, 925.00, 23.00, NULL, NULL, '2024-03-12 23:12:07', '2024-03-12 23:12:07');
 
 -- --------------------------------------------------------
 
@@ -147,7 +170,7 @@ CREATE TABLE `categories` (
   `categories_id` varchar(255) NOT NULL,
   `category_name` varchar(255) NOT NULL,
   `parent_category` varchar(255) DEFAULT NULL,
-  `category_icon` varchar(255) NOT NULL,
+  `category_icon` varchar(255) DEFAULT NULL,
   `category_image` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
   `status` varchar(255) NOT NULL,
@@ -160,9 +183,14 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `categories_id`, `category_name`, `parent_category`, `category_icon`, `category_image`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(10, 'GNdOMgmSQtp4', 'Premium Panjabi', NULL, 'category_image/icons/icon_1707296266.jpg', 'Premium Panjabi_1707296266.jpg', 'premium-panjabi', '1', '2024-02-07 01:57:46', '2024-02-07 01:57:46'),
-(11, 'S6JGf5LMBIvF', 'Classic Panjabi', NULL, 'category_image/icons/icon_1707296284.jpg', 'Classic Panjabi_1707296284.jpg', 'classic-panjabi', '1', '2024-02-07 01:58:04', '2024-02-07 01:58:04'),
-(12, '7a0il4xV6G3S', 'Printed Panjabi', NULL, 'category_image/icons/icon_1707296302.jpg', 'Printed Panjabi_1707296302.jpg', 'printed-panjabi', '1', '2024-02-07 01:58:22', '2024-02-07 01:58:22');
+(10, 'GNdOMgmSQtp4', 'Premium Panjabi', NULL, 'category_image/icons/icon_1707296266.jpg', 'Premium Panjabi_1707296266.jpg', 'premium-panjabi', '1', '2024-02-07 07:57:46', '2024-02-07 07:57:46'),
+(11, 'S6JGf5LMBIvF', 'Classic Panjabi', NULL, 'category_image/icons/icon_1707296284.jpg', 'Classic Panjabi_1707296284.jpg', 'classic-panjabi', '1', '2024-02-07 07:58:04', '2024-02-07 07:58:04'),
+(12, '7a0il4xV6G3S', 'Regular Panjabi', NULL, 'category_image/icons/icon_1707296302.jpg', 'Printed Panjabi_1707296302.jpg', 'printed-panjabi', '1', '2024-02-07 07:58:22', '2024-03-22 19:20:51'),
+(13, 'vqj9l267stce', 'standard Panjabi', NULL, 'category_image/icons/icon_1710958579.jpg', 'standard Panjabi_1710958579.jpg', 'standard-panjabi', '1', '2024-03-20 18:16:19', '2024-03-20 18:16:19'),
+(14, '382QucJAxURw', 'Premium Pajama', NULL, 'category_image/icons/icon_1711306633.jpg', 'Premium Pajama_1711306633.jpg', 'premium-pajama', '1', '2024-03-24 18:57:13', '2024-03-24 18:57:13'),
+(17, 'xYHdmAnXN2Pq', 'Women Collection', NULL, NULL, NULL, 'womens-collection', '1', '2024-05-13 07:18:25', '2024-05-16 09:40:20'),
+(18, 'mgA0qkSxKJQn', 'Co-Ords', 'Women Collection', NULL, NULL, 'co-ords', '1', '2024-05-13 07:26:46', '2024-05-16 09:40:30'),
+(19, 'Nidk6DFR3X0g', 'Kaftan Co-Ords', 'Women Collection', NULL, NULL, 'kaftan-co-ords', '1', '2024-05-13 07:27:12', '2024-05-16 09:40:36');
 
 -- --------------------------------------------------------
 
@@ -184,15 +212,52 @@ CREATE TABLE `colors` (
 --
 
 INSERT INTO `colors` (`id`, `color_name`, `color_code`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Red', 'rgba(245, 0, 0, 1)', 1, '2024-01-11 01:52:27', '2024-01-30 04:08:36'),
-(2, 'Blue', 'rgba(0, 34, 255, 1)', 1, '2024-01-11 01:53:35', '2024-01-11 01:53:35'),
-(5, 'Dark midnight blue', 'rgba(0, 51, 102, 1)', 1, '2024-02-07 02:01:17', '2024-02-07 02:01:28'),
-(6, 'Light Olive', 'rgba(155, 179, 143, 1)', 1, '2024-02-07 02:04:10', '2024-02-07 02:04:10'),
-(7, 'Chocolate Brown', 'rgba(65, 25, 0, 1)', 1, '2024-02-07 02:05:04', '2024-02-07 02:05:04'),
-(8, 'Cream', 'rgba(255, 253, 208, 1)', 1, '2024-02-07 02:05:49', '2024-02-07 02:05:49'),
-(9, 'Black Rainbow', 'rgba(0, 0, 0, 1)', 1, '2024-02-07 02:07:16', '2024-02-07 02:07:16'),
-(10, 'Black', 'rgba(0, 0, 0, 1)', 1, '2024-02-07 02:07:26', '2024-02-07 02:07:26'),
-(11, 'White', 'rgba(255, 255, 255, 1)', 1, '2024-02-07 02:07:35', '2024-02-07 02:07:35');
+(5, 'Dark midnight blue', 'rgba(0, 51, 102, 1)', 1, '2024-02-07 08:01:17', '2024-02-07 08:01:28'),
+(6, 'Light Olive', 'rgba(155, 179, 143, 1)', 1, '2024-02-07 08:04:10', '2024-02-07 08:04:10'),
+(7, 'Chocolate Brown', 'rgba(65, 25, 0, 1)', 1, '2024-02-07 08:05:04', '2024-02-07 08:05:04'),
+(8, 'Cream', 'rgba(255, 253, 208, 1)', 1, '2024-02-07 08:05:49', '2024-02-07 08:05:49'),
+(9, 'Black Rainbow', 'rgba(0, 0, 0, 1)', 1, '2024-02-07 08:07:16', '2024-02-07 08:07:16'),
+(10, 'Black', 'rgba(0, 0, 0, 1)', 1, '2024-02-07 08:07:26', '2024-02-07 08:07:26'),
+(11, 'White', 'rgba(255, 255, 255, 1)', 1, '2024-02-07 08:07:35', '2024-02-07 08:07:35'),
+(12, 'Irish Mint', 'rgba(224, 242, 238, 1)', 1, '2024-03-20 18:42:27', '2024-03-20 18:42:27'),
+(13, 'Sandstone', 'rgba(120, 109, 95, 1)', 1, '2024-03-21 05:43:18', '2024-03-21 05:43:18'),
+(14, 'Deep Tan', 'rgba(114, 103, 81, 1)', 1, '2024-03-21 05:45:26', '2024-03-21 14:29:21'),
+(15, 'Baby Blue', 'rgba(161, 202, 241, 1)', 1, '2024-03-21 14:21:10', '2024-03-21 14:21:10'),
+(16, 'Mountain Peak White', 'rgba(252, 249, 239, 1)', 1, '2024-03-21 14:22:13', '2024-03-21 14:22:13'),
+(17, 'Matt Midnight Blue', 'rgba(32, 68, 100, 1)', 1, '2024-03-21 14:23:44', '2024-03-21 14:23:44'),
+(18, 'Light Sky Blue', 'rgba(223, 253, 255, 1)', 1, '2024-03-21 14:27:29', '2024-03-21 14:27:29'),
+(19, 'Cream Color', 'rgba(253, 250, 226, 1)', 1, '2024-03-21 14:29:07', '2024-03-21 14:29:07'),
+(20, 'Maroon', 'rgba(101, 0, 0, 1)', 1, '2024-03-21 14:31:48', '2024-03-21 14:31:48'),
+(21, 'Mint Green', 'rgba(169, 200, 190, 1)', 1, '2024-03-21 14:34:07', '2024-03-21 14:34:07'),
+(22, 'Brown', 'rgba(102, 88, 77, 1)', 1, '2024-03-21 14:35:02', '2024-03-21 14:35:02'),
+(23, 'Teal', 'rgba(0, 128, 128, 1)', 1, '2024-03-21 14:35:49', '2024-03-21 14:35:49'),
+(24, 'Grayish blue', 'rgba(185, 190, 204, 1)', 1, '2024-05-09 12:40:21', '2024-05-09 12:40:31'),
+(25, 'Gray', 'rgba(182, 190, 195, 1)', 1, '2024-05-09 12:41:06', '2024-05-09 12:41:06'),
+(26, 'Printed', 'rgba(255, 255, 255, 1)', 1, '2024-05-13 06:42:58', '2024-05-13 06:42:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contactinfos`
+--
+
+CREATE TABLE `contactinfos` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `whatsapp` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `address` varchar(255) NOT NULL,
+  `officehour` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `contactinfos`
+--
+
+INSERT INTO `contactinfos` (`id`, `phone`, `whatsapp`, `email`, `address`, `officehour`, `created_at`, `updated_at`) VALUES
+(1, '01303638635', '01303638635', 'mail@email.com', '522/B North ShajahanPur, Dhaka.', 'Sat - Thu , 10AM to 6PM', '2024-05-06 01:11:04', '2024-05-06 02:00:37');
 
 -- --------------------------------------------------------
 
@@ -216,13 +281,6 @@ CREATE TABLE `coupons` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `coupons`
---
-
-INSERT INTO `coupons` (`id`, `coupons_title`, `coupons_code`, `start_date`, `end_date`, `free_shipping`, `quantity`, `percent_value`, `fixed`, `discounts_type`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'EID2024', 'KO2024EID', '2024-02-19 13:00:00', '2024-02-21 14:00:00', 1, 10, 10, NULL, 'percent', 1, '2024-02-17 23:01:04', '2024-02-18 01:45:56');
-
 -- --------------------------------------------------------
 
 --
@@ -234,7 +292,7 @@ CREATE TABLE `customers` (
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `billing_address` varchar(255) DEFAULT NULL,
   `division` varchar(255) DEFAULT NULL,
   `district` varchar(255) DEFAULT NULL,
@@ -250,20 +308,186 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `firstName`, `lastName`, `phone`, `email`, `billing_address`, `division`, `district`, `area`, `loyalty_point`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Walk ', 'In Customer', '', '', NULL, NULL, NULL, NULL, '0', 'not registerd', '2024-02-28 04:19:09', '2024-02-28 04:19:09'),
-(41, 'Arif', 'Hossen', '01795795441', 'arifhosse12@gmail.com', '522/B North Shajahanpur, Dhaka', '3', '1', '458', '10', 'registerd', '2024-02-07 00:22:46', '2024-02-07 00:22:46'),
-(42, 'Arif', 'Hossen', '01303638635', 'arifhossen853@yahoo.com', '522/B North Shajahanpur, Dhaka', '3', '1', '469', '10', 'registerd', '2024-02-15 06:25:22', '2024-02-15 06:25:23'),
-(43, 'Arif', 'Hossen', '01303638631', 'qbittech.dev1@gmail.com', '522/B North Shajahanpur, Dhaka', '3', '1', '463', '0', 'registerd', '2024-02-19 23:00:37', '2024-02-19 23:08:01'),
-(44, 'Badruzzaman', 'Ador', '01798985858', 'qbittech.dev1@gmail.com', '522/B North Shajahanpur, Dhaka', '3', '1', '469', '10', 'registerd', '2024-02-26 22:40:00', '2024-02-26 22:41:34'),
-(45, 'Himel', ' ', '01478569693', ' ', 'Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-03 00:22:19', '2024-03-03 00:22:19'),
-(46, 'Himel', ' ', '01478596969', ' ', 'Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-03 00:23:18', '2024-03-03 00:23:18'),
-(47, 'Arif Hossen', ' ', '01795795441', ' ', 'Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-03 00:31:04', '2024-03-03 00:31:04'),
-(48, 'Arif Hossen', ' ', '01795795441', ' ', 'Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-03 00:31:48', '2024-03-03 00:31:48'),
-(49, 'Arif Hossen', ' ', '01601958560', ' ', 'Shajahanpur, DHaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-03 03:56:20', '2024-03-03 03:56:20'),
-(50, 'Qbit tech', ' ', '0', ' ', NULL, NULL, NULL, NULL, '0', 'not registerd', '2024-03-04 04:48:59', '2024-03-04 04:48:59'),
-(51, 'Arif', ' ', '0147895632', ' ', NULL, NULL, NULL, NULL, '0', 'not registerd', '2024-03-04 05:41:03', '2024-03-04 05:41:03'),
-(52, 'afdfsa', ' ', '1111', ' ', NULL, NULL, NULL, NULL, '0', 'not registerd', '2024-03-04 05:51:29', '2024-03-04 05:51:29'),
-(53, 'Arnob', 'Gosh', '01729119658', 'arifhossen853@gmail.com', '1 Rasulpur, Jatrabari, Dhaka 1236.', '3', '1', '461', '0', 'registerd', '2024-03-13 00:45:18', '2024-03-17 23:50:30');
+(90, 'Md. Riyazul Islam', ' ', '01774998632', ' ', '522, North Shahjahanpur, Dhaka-1217', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 16:48:49', '2024-03-24 16:48:49'),
+(91, 'Md. Kazi Mehedi', ' ', '01914644706', ' ', 'Chowdhuri para, Mukharji Ghat, Chadpur Sador', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 19:36:40', '2024-03-24 19:36:40'),
+(92, 'Abu', 'Naim', '01771805956', NULL, 'Hat Chandra, Jamalpur Sador.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 19:49:14', '2024-03-25 07:04:54'),
+(93, 'Abu Sufian', ' ', '01703419528', ' ', '20th Floor, Rupayan Shelford, 23/6 Mirpur Road, Dhaka 1207.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 19:57:14', '2024-03-24 19:57:14'),
+(94, 'Abu Sufian', ' ', '01703419528', ' ', '20th Floor, Rupayan Shelford, 23/6 Mirpur Road, Dhaka 1207.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 19:57:23', '2024-03-24 19:57:23'),
+(95, 'Mr. Rifat Hossain', ' ', '01738758133', ' ', 'Madaripur', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:05:08', '2024-03-24 20:05:08'),
+(96, 'Masud Ahmed', ' ', '01751218778', ' ', '522/B, North Shahjahanpur, Dhaka-1217', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:14:40', '2024-03-24 20:14:40'),
+(97, 'Dipu Ray', ' ', '01704389890', ' ', 'Begum Rokeya University, Parker More,Rangpur, Bangladesh', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:41:02', '2024-03-24 20:41:02'),
+(98, 'Ismail Hossen', ' ', '01760442924', ' ', 'Nagorpur Govt. College Gate, Nagorpur, Tangail', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:43:08', '2024-03-24 20:43:08'),
+(99, 'Ismail Hossen', ' ', '01760442924', ' ', 'Nagorpur Govt. College Gate, Nagorpur, Tangail', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:43:14', '2024-03-24 20:43:14'),
+(100, 'Ismail Hossen', ' ', '01760442924', ' ', 'Nagorpur Govt. College Gate, Nagorpur, Tangail', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:43:23', '2024-03-24 20:43:23'),
+(101, 'Ismail Hossen', ' ', '01760442924', ' ', 'Nagorpur Govt. College Gate, Nagorpur, Tangail', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:45:55', '2024-03-24 20:45:55'),
+(102, 'Rubaiya', ' ', '01612535662', ' ', 'Nalonda school building 3rd floor, Modern mor, Rangpur.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:50:10', '2024-03-24 20:50:10'),
+(103, 'BODRUL SAIKAT', ' ', '01304519972', ' ', 'Hanail nomania kamil madrasha, joypurhat sadar, joypurhat', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:52:02', '2024-03-24 20:52:02'),
+(104, 'Kamrul Hossain', ' ', '01737386567', ' ', 'Norundi Bazar, Jamalpur Sadar, Jamalpur', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:53:58', '2024-03-24 20:53:58'),
+(105, 'Abir Hasan', ' ', '01782457649', ' ', 'বটতৈল মোড়,কুষ্টিয়া', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:55:47', '2024-03-24 20:55:47'),
+(106, 'Naim Abdullah', ' ', '01703052003', ' ', 'Eid-ga Road, Amtoli Upozila, Borguna', NULL, NULL, NULL, '0', 'not registerd', '2024-03-24 20:57:56', '2024-03-24 20:57:56'),
+(110, 'Watana Islam Neha', ' ', '01709054861', ' ', 'Girls Hostel, Sheikh Hasina Medical College Tangail Sadar', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 13:05:30', '2024-03-25 13:05:30'),
+(111, 'Watana Islam Neha', ' ', '01709054861', ' ', 'Girls Hostel,  Sheikh Hasina Medical College Tangail Sadar', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 13:18:06', '2024-03-25 13:18:06'),
+(112, 'Jebin sultana', ' ', '01939821382', ' ', 'Genda upozila,  savar dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 13:21:26', '2024-03-25 13:21:26'),
+(113, 'Mr. Rajib', ' ', '01672621826', ' ', 'Panthopath, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 13:31:02', '2024-03-25 13:31:02'),
+(114, 'MD Mazedur Rahman Tuhin', ' ', '01826740745', ' ', '453, Ashkona medical road, Hajjcamp, Dakshinkhan, Dhaka -1230', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 18:41:15', '2024-03-25 18:41:15'),
+(115, 'Mr. Rishad', ' ', '01586296647', ' ', 'Amdoi Bazar, Joypur Hat', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 18:43:49', '2024-03-25 18:43:49'),
+(116, 'Tarikul Islam Munna', ' ', '01988414806', ' ', 'House-102/1, Block-B, Road-4/6 , Mirpur-12, Dhaka 1216', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 18:45:27', '2024-03-25 18:45:27'),
+(117, 'Mr. Rishad', ' ', '01586296647', ' ', 'Amdoi Bazar, Joypur Hat', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 18:47:23', '2024-03-25 18:47:23'),
+(118, 'Mahbuba Rahman', ' ', '01794794592', ' ', 'Plot-1771, Boithakhalir Mor, Merul badda, Thana Road.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 19:06:49', '2024-03-25 19:06:49'),
+(119, 'Md. Foysal', ' ', '01300366407', ' ', '15th Floor Dormitory BPATC, Savar, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 19:18:12', '2024-03-25 19:18:12'),
+(120, 'Al Amin Islam', ' ', '01927607899', ' ', 'Konapara, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 19:25:16', '2024-03-25 19:25:16'),
+(121, 'Al Amin', ' ', '01713 545080', ' ', 'Kakkol, Rupsha, Ulail, Shibaloy, Manikganj', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 19:48:26', '2024-03-25 19:48:26'),
+(122, 'Abdullah Al Fahad', ' ', '01675665086', ' ', 'Demra, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 19:51:38', '2024-03-25 19:51:38'),
+(123, 'AKM Ashikuzzaman', ' ', '01776300277', ' ', 'Bangladesh Scouts', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 21:03:04', '2024-03-25 21:03:04'),
+(124, 'Advocate Ashif Ul Haque', ' ', '01756019132', ' ', 'JuryCase, Mirpur Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 21:05:14', '2024-03-25 21:05:14'),
+(125, 'Mr. Shamim', ' ', '01912268196', ' ', 'Al Amin Road, Rabeya Tower,', NULL, NULL, NULL, '0', 'not registerd', '2024-03-25 21:33:17', '2024-03-25 21:33:17'),
+(126, 'Mr. Ruhan', ' ', '01331151490', ' ', 'Patalkandi bazar, Bhuyapur, Tangail', NULL, NULL, NULL, '0', 'not registerd', '2024-03-26 18:28:48', '2024-03-26 18:28:48'),
+(127, 'MD Saikat Hossain', ' ', '01912534202', ' ', 'Shahadatpur, Khilari Tek, Badda', NULL, NULL, NULL, '0', 'not registerd', '2024-03-26 18:33:04', '2024-03-26 18:33:04'),
+(129, 'Mr. Ruhan', ' ', '01331151490', ' ', 'Patalkandi bazar, Bhuyapur, Tangail', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 13:11:32', '2024-03-27 13:11:32'),
+(130, 'A K M Ashiquzzaman', ' ', '01776300277', ' ', 'Bangladesh Scouts', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 14:13:25', '2024-03-27 14:13:25'),
+(131, 'Md. Miraj Hossain', ' ', '01930758968, 01789157882', ' ', 'বাংলাদেশ শিশু হাসপাতাল ও ইন্সটিটিউট, শ্যামলি, শেরে বাংলা নগর ঢাকা ১২০৭.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 14:19:35', '2024-03-27 14:19:35'),
+(132, 'Md. Tanvir', ' ', '01758569575', ' ', 'Jhikorgachai., Jessore.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 14:22:17', '2024-03-27 14:22:17'),
+(133, 'Md zahid', ' ', '01635152924', ' ', 'Raozan,  Amir Hat, Chittagong', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 19:18:19', '2024-03-27 19:18:19'),
+(134, 'Taslimuzzaman Akash', ' ', '01759157407', ' ', 'Binodiya Park er Pashe, Jessore Sadar', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 19:24:01', '2024-03-27 19:24:01'),
+(135, 'Shofiul Bari', ' ', '01728245883', ' ', 'Niyamotpur Bazar, Niyamotpur Bazar, Nowga', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 19:30:07', '2024-03-27 19:30:07'),
+(136, 'Md. Lokman', ' ', '01845355169', ' ', 'Najirhat Bazar, Fotiksori, Chottogram', NULL, NULL, NULL, '0', 'not registerd', '2024-03-27 19:35:01', '2024-03-27 19:35:01'),
+(137, 'Junayed Chowdhury', ' ', '01836307809', ' ', 'Bogar Bazar , Trishal, Mymenshingh', NULL, NULL, NULL, '0', 'not registerd', '2024-03-28 13:35:22', '2024-03-28 13:35:22'),
+(138, 'Nur A Towhid', ' ', '01706155636', ' ', 'Road-9, House-20, Rupnagar Abashik, Beside BUBT University, Mirpur-2, Dhaka-1216', NULL, NULL, NULL, '0', 'not registerd', '2024-03-28 13:39:37', '2024-03-28 13:39:37'),
+(139, 'Mr. Parvez Mosarrof', ' ', '01744563755', ' ', 'House: 770, Block: G, Road: 23 , Boshundhara, Dhaka.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-28 13:56:39', '2024-03-28 13:56:39'),
+(140, 'Tamjid ( Al- Amin Vai)', ' ', '01732042366', ' ', 'Alamin Road, Rabeya Tower, Demra konapara.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-28 15:12:39', '2024-03-28 15:12:39'),
+(141, 'Sabbir Hoshen Khan', ' ', '01559675554, 01829765460', ' ', 'Bashundhara R/A, North South University Gate-1', NULL, NULL, NULL, '0', 'not registerd', '2024-03-29 12:53:35', '2024-03-29 12:53:35'),
+(142, 'Md. Amzad', ' ', '01723981886', ' ', 'Jila: Nilfamari, District: Rongpur, Thana: Dimla', NULL, NULL, NULL, '0', 'not registerd', '2024-03-29 13:00:30', '2024-03-29 13:00:30'),
+(143, 'Khondokar Kholil', ' ', '01921412145', ' ', 'Pakdi Chowrasta, Madaripur', NULL, NULL, NULL, '0', 'not registerd', '2024-03-29 13:03:14', '2024-03-29 13:03:14'),
+(144, 'Mim', ' ', '01867032950', ' ', 'Changir Gao Bazar, Ramganj, Lakshmipur', NULL, NULL, NULL, '0', 'not registerd', '2024-03-29 13:10:00', '2024-03-29 13:10:00'),
+(145, 'Mr. Ruman ( Al- Amin)', ' ', '01515622264', ' ', 'Bashabo, Dhaka.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-29 15:42:40', '2024-03-29 15:42:40'),
+(146, 'Md. Rajib', ' ', '01308495788', ' ', 'Sylhet Housing Streat, Lane No: 2, Sylhet Sadar, Sylhet', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 12:50:13', '2024-03-30 12:50:13'),
+(147, 'Md. Jahirul Islam Mazumder', ' ', '01720382192', ' ', 'Haziganj Govt. Model Pilot High School And College, Hajiganj, Chandpur', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 12:55:28', '2024-03-30 12:55:28'),
+(148, 'Md. Mohin Khan', ' ', '01776567234', ' ', '55, Dhanmondi 9/a, Mina bazar er Pisone, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:05:10', '2024-03-30 13:05:10'),
+(149, 'Misbahul Fardin', ' ', '01623108619', ' ', 'Gholduba Bazar, Shahbajpur, Nobinogor, Hobiganj', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:09:10', '2024-03-30 13:09:10'),
+(150, 'Mahmudul Hasan Joy', ' ', '01758132081', ' ', 'Pach Rastar Mor , Jamalpur Shadar', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:35:57', '2024-03-30 13:35:57'),
+(151, 'Md Oliur Rahman', ' ', '01904822304', ' ', 'M A Rashid Hospital, Jamalpur', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:38:53', '2024-03-30 13:38:53'),
+(152, 'Mr. Rana', ' ', '01890817393', ' ', 'Vill: Fakirganj, Thana: Pirganj, Zilla: Thakurgao', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:41:43', '2024-03-30 13:41:43'),
+(153, 'Mr. Tahim', ' ', '01930880786', ' ', 'Vill: Bibirhat, Thana: Fatikchori Zilla: Chottogram', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:45:49', '2024-03-30 13:45:49'),
+(154, 'Sultana Zubaera', ' ', '01644826625', ' ', 'Koborastan Mosjid, Dilalpur, Muradnagar, Cumilla', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:52:42', '2024-03-30 13:52:42'),
+(155, 'Shorab Hossain', ' ', '01712013027', ' ', 'Hatchandra (Near BDR Camp), Jamalpur Shadar', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 13:58:31', '2024-03-30 13:58:31'),
+(156, 'Mr Rana', ' ', '01811565266', ' ', 'Vatiyari, Chottogram', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 14:03:41', '2024-03-30 14:03:41'),
+(157, 'Nurul Hasan', ' ', '01637920425', ' ', 'Village:Hasher Kandi-(Post Office Taltola Dakhil Madrasha, Union: Raj Nogor, Thana: Noria District: SoriyotPur.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 17:15:22', '2024-03-30 17:15:22'),
+(158, 'Mr. Moniruzzaman', ' ', '01631463748', ' ', 'Kazi lohagora hatchery, Chunoti, Lohagora, Chattogram', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 17:47:53', '2024-03-30 17:47:53'),
+(159, 'Abu Hasnat', ' ', '01760731966', ' ', 'Level:4, Culture Ceter, DOHS, Mirpur 12, Dhaka 1216.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 19:10:09', '2024-03-30 19:10:09'),
+(160, 'Mehedi hasan Shuvo', ' ', '01609507662', ' ', 'Chondrokona, KPM, KRC School, Kaptai.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 19:33:22', '2024-03-30 19:33:22'),
+(161, 'Md Sojib Islam', ' ', '01748320243', ' ', 'Rayan Khola Moshjid Gate, Mirpur 1, Dhaka.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 20:35:29', '2024-03-30 20:35:29'),
+(162, 'Jubaer', ' ', '01567891322', ' ', 'Mirpur 11, blck:D, Road:25House: 31', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 21:06:19', '2024-03-30 21:06:19'),
+(163, 'Babor Miayaji', ' ', '01998648745', ' ', 'comilla,Naggolkota,Banggadanga.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 22:25:04', '2024-03-30 22:25:04'),
+(164, 'Adiba', ' ', '01896293232', ' ', 'A-7, Dhaka Commerce College Teachers Quarter, Mirpur-2, Dhaka.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-30 22:34:41', '2024-03-30 22:34:41'),
+(165, 'Kazi Hridoy', ' ', '01634256538', ' ', 'Rabbani Market, Tin Mor, Moheshpur, 4no. dokkhin Khosbas Union, Borura, Cumilla', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 10:41:02', '2024-03-31 10:41:02'),
+(166, 'Hasna Shorif', ' ', '01844167627', ' ', 'Block - B, Road/Lane: 1/1, Mirpur-13, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 10:50:53', '2024-03-31 10:50:53'),
+(167, 'Faruk Hossain', ' ', '01304604868', ' ', 'Union:  Brobihanali ,Kalishur Gram, Thana: BagMara, Zila: Raajshahi.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 18:15:23', '2024-03-31 18:15:23'),
+(168, 'Md. Rifat', ' ', '0167286960', ' ', 'Mathertek, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 18:45:06', '2024-03-31 18:45:06'),
+(169, 'Sabbir Hossain', ' ', '01880482398', ' ', 'Dhaka gandariya Dupkhola math Riyazul jannah jame moshjid', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 19:54:27', '2024-03-31 19:54:27'),
+(170, 'Mr. Eyakub', ' ', '01614333943', ' ', 'Zamadar bazar,chan miyar dokan. Sonagazi, Feni.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 19:59:08', '2024-03-31 19:59:08'),
+(171, 'Mitu', ' ', '01621941595', ' ', 'Kodom toli,opposite to SP banglo, khagrachari sadar.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 20:05:39', '2024-03-31 20:05:39'),
+(172, 'Mehedi Hasan', 'Simul', '01824890845', NULL, 'BUBT C-36,Arambag 8 number Gate,Mirpur 6', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 20:17:39', '2024-03-31 20:25:34'),
+(173, 'Sizan Taimur', ' ', '01408587378', ' ', 'noyabati Putatol awamilig office khalishpur, khulna.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 20:31:38', '2024-03-31 20:31:38'),
+(174, 'Abdur rahim', ' ', '01612931928', ' ', ',Balughat Bazar, Ba Bi khati bongobondhu Gate, Mirpur Cantonment, Dhaka.', NULL, NULL, NULL, '0', 'not registerd', '2024-03-31 20:37:32', '2024-03-31 20:37:32'),
+(175, 'Ahammad Abdullah', 'Nayeem', '01764885783', NULL, 'Village : Kandarpodia (Kondorpodia), Post: Monohordia , Thana: Islamic University , Kushtia', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 11:12:41', '2024-04-01 13:05:03'),
+(176, 'Emon Mahbub', ' ', '01716708613', ' ', 'Bahubol Hospital Road, Mocca medical Pharmacy,  Thana: bahubol, Zila:  Hobigonj.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 11:41:13', '2024-04-01 11:41:13'),
+(177, 'Mohammad', 'Shahin', '01321198919', 'shahin229737@gmail.com', NULL, NULL, NULL, NULL, '0', 'registerd', '2024-04-01 12:05:35', '2024-04-01 12:05:35'),
+(178, 'Abudullah al mamun Titash ( Al-Amin)', ' ', '01754911571', ' ', 'Nobabpur bazar, Chandina,  Comilla.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 13:37:38', '2024-04-01 13:37:38'),
+(179, 'Abudullah al mamun Titash ( Al-Amin)', ' ', '01754911571', ' ', 'Nobabpur bazar, Chandina,  Comilla.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 13:37:44', '2024-04-01 13:37:44'),
+(180, 'Abudullah al mamun Titash ( Al-Amin)', ' ', '01754911571', ' ', 'Nobabpur bazar, Chandina,  Comilla.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 13:37:53', '2024-04-01 13:37:53'),
+(181, 'Abudullah al mamun Titash ( Al-Amin)', ' ', '01754911571', ' ', 'Nobabpur bazar, Chandina,  Comilla.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 13:37:58', '2024-04-01 13:37:58'),
+(182, 'Abudullah al mamun Titash ( Al-Amin)', ' ', '01754911571', ' ', 'Nobabpur bazar, Chandina,  Comilla.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 13:38:50', '2024-04-01 13:38:50'),
+(183, 'Abdullah Al mamun-( Al-Amin)', ' ', '01754911571', ' ', 'nobabpur bazar, Chandina, Comila.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 13:45:11', '2024-04-01 13:45:11'),
+(184, 'Rubel', ' ', '01744515883', ' ', 'post Office: Fulbarihat, Dinajpur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 14:13:42', '2024-04-01 14:13:42'),
+(185, 'Rubel', ' ', '01744515883', ' ', 'post Office: Fulbarihat, Dinajpur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 14:13:45', '2024-04-01 14:13:45'),
+(186, 'Rubel', ' ', '01744515883', ' ', 'post Office: Fulbarihat, Dinajpur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 14:13:58', '2024-04-01 14:13:58'),
+(187, 'Israt', ' ', '016084000565', ' ', 'DOHS, Road: 10, House no; 1280, Avenue: 2', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 15:15:17', '2024-04-01 15:15:17'),
+(188, 'Adrita Hasan adrita', ' ', '01846032111', ' ', 'Mujib Doctor Bari,Duaru, Mirsorai, Chattogram.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 19:28:41', '2024-04-01 19:28:41'),
+(189, 'Aiyub', ' ', 'Dinajpur Sador, Dinajpur.', ' ', '01407878154', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 19:32:03', '2024-04-01 19:32:03'),
+(190, 'Rabbi', ' ', '0167904053', ' ', 'Aqua Firoz Library Mor, Mymenshing Sador.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 20:13:29', '2024-04-01 20:13:29'),
+(191, 'Saifur Rahman', ' ', '01630580014', ' ', 'jurain koborostan, Dhaka.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-01 20:43:51', '2024-04-01 20:43:51'),
+(192, 'Rabbi', ' ', '01851855380', ' ', 'Village  beala, matrai Thana Kalai  Zilla joypurhat', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 08:46:26', '2024-04-02 08:46:26'),
+(193, 'Naim Uddin', ' ', '01858229424', ' ', 'BokhotPur,Santir hat bazar,Tana; Fotikchori, chittagong', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 08:50:36', '2024-04-02 08:50:36'),
+(194, 'Sakib', ' ', '01789151066', ' ', 'Bardi Bazar, Thana: Sonargaon,Narayanganj', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 09:04:55', '2024-04-02 09:04:55'),
+(195, 'Nusrat Amin Niha', ' ', '01989470138', ' ', 'যাত্রাবাড়ী কাজলা ব্রিজ এর ঢালে সরকারি স্কুল গলি থেকে ওয়াশা 30 ফুট রাস্তার শেষে ৩তালা বাড়ি, বাড়ি: ৯১৭', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 10:02:27', '2024-04-02 10:02:27'),
+(196, 'Ratul- ( Al-amin)', ' ', '01682449694', ' ', '522.B North Sajahalpur,Dhaka.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 11:18:51', '2024-04-02 11:18:51'),
+(197, 'Anik Munshi', ' ', '01603895544', ' ', 'Cumilla Chauddaream', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 13:05:16', '2024-04-02 13:05:16'),
+(198, 'BM Tanvir', ' ', '০১৬০৭৮৩৭৭৯৮', ' ', 'থানা : মহেশপুর..  জেলা : ঝিনাইদহ।', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 14:02:54', '2024-04-02 14:02:54'),
+(199, 'ফারহান তানভীর অভি', ' ', '01628009764  / 01628009764', ' ', 'ঠিকানা: রোয়াচালা, শ্রীকাইল ইউনিয়ন,মুরাদনগর, কুমিল্লা।', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 14:09:15', '2024-04-02 14:09:15'),
+(200, 'Muhammad Bin Haider', ' ', '01921117222', ' ', '1074/3, East Jurain Commisioner Road, Bagan bari, Jurain Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 14:47:07', '2024-04-02 14:47:07'),
+(201, 'Arif', 'Hossen', '01303638635', NULL, '522/B, North Shahjahanpur, Dhaka-1217', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 16:49:22', '2024-04-03 05:22:41'),
+(202, 'Al Amin Vai', ' ', '01927607899', ' ', 'Konapara, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 17:32:26', '2024-04-02 17:32:26'),
+(203, 'আরিফুল', ' ', '01757549835', ' ', 'উপজেলা রোড, গাইটাল, কিশোরগঞ্জ সদর .', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 18:49:35', '2024-04-02 18:49:35'),
+(204, 'Mr. Asif', ' ', '০১৬৭০১৮১৫৫৬', ' ', 'বাড়ি :৩৭,রোড :০৮,ব্লক :ডি,রামপুরা বনশ্রী', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 19:46:54', '2024-04-02 19:46:54'),
+(205, 'সামিউল আলিম', ' ', '০১৬০২৬০৮৯২১', ' ', 'যাত্রাপুর বাজার, বাগেরহাট  থানা,জেলা: বাগেরহাট', NULL, NULL, NULL, '0', 'not registerd', '2024-04-02 22:39:57', '2024-04-02 22:39:57'),
+(206, 'Arif', 'Hossen', '01601958560', 'arifhossen853@gmail.com', '1/86 East Rasulpur, Kajla, Jatrabari, Dhaka 1236', '3', '1', '461', '10', 'registerd', '2024-04-03 05:23:27', '2024-04-03 05:23:27'),
+(207, 'Shukanna', ' ', '01632837317', ' ', 'Musafir Bhaban (Kobi Bari)  Mosjid Road,  Hafiz Nagar Prodhan Sorok, Sonadanga Khulna', NULL, NULL, NULL, '0', 'not registerd', '2024-04-03 07:55:07', '2024-04-03 07:55:07'),
+(208, 'Hizbul Bahar', ' ', '01309904899', ' ', 'Mymensingh, Bhaloka, Shibgong', NULL, NULL, NULL, '0', 'not registerd', '2024-04-03 11:13:52', '2024-04-03 11:13:52'),
+(209, 'Ahad ali', ' ', '01765035302', ' ', 'Gaibandha, polashbri, dhaperhat, jaulabzr Recive point: jaulabzr', NULL, NULL, NULL, '0', 'not registerd', '2024-04-03 12:03:01', '2024-04-03 12:03:01'),
+(210, 'Md Shifat', ' ', '01760639070', ' ', 'Barundi;Manikganj;Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-04-03 13:25:33', '2024-04-03 13:25:33'),
+(211, 'Mukul Shekh', ' ', '01968410057', ' ', 'Nabinagar prodhan bari mosque,ponchoboti,fatullah, Narayanganj', NULL, NULL, NULL, '0', 'not registerd', '2024-04-03 14:24:12', '2024-04-03 14:24:12'),
+(212, 'Tasnim Tamanna', ' ', '01647591948', ' ', 'Central Medical College campus, Girls hostel, Paduar bazar, Bishwaroad, Cumilla', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 06:52:46', '2024-04-04 06:52:46'),
+(213, 'Md Atiar Rahman', ' ', '01740431368', ' ', 'Dugdugihat Ghoraghat Dinajpur.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 07:39:21', '2024-04-04 07:39:21'),
+(214, 'Sabiha', ' ', '01879468949', ' ', 'মগনামা(ফুলতলা স্টেশন ) উপজেলা - পেকুয়া,জেলা- কক্সবাজার।', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 07:49:59', '2024-04-04 07:49:59'),
+(215, 'Mohammed Salauddin', ' ', '01325877624', ' ', 'Charlakshya , Board Bazar, karna fully , chittagong', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 08:01:50', '2024-04-04 08:01:50'),
+(216, 'Tuhin', ' ', '01572079507', ' ', 'গ্রাম : উত্তর সুজাপুর,  পোস্ট  ও থানা ফুলবাড়ি, জেলা : দিনাজপুর', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 09:37:25', '2024-04-04 09:37:25'),
+(217, 'Mumitul islam', ' ', '01610429394', ' ', 'Khatley , Bhola sodor Bhola', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 10:12:15', '2024-04-04 10:12:15'),
+(218, 'Sharf uddin raihan', ' ', '01600142239', ' ', 'shapla kanon,kalibari, bashabo  dhaka 1214', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 10:30:55', '2024-04-04 10:30:55'),
+(219, 'তানিম', ' ', '০১৮৩০৪৭১৯৪৬', ' ', 'সোনাগাজি, ফেনি', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 11:05:27', '2024-04-04 11:05:27'),
+(220, 'Noman Abdullah', ' ', '01576589987', ' ', '202 East Goran Khilgaon, Dhaka- 1219.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 12:10:54', '2024-04-04 12:10:54'),
+(221, 'Sufian', ' ', '01607705300', ' ', 'jorpul, kashimpur, matlab south, chandpur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 13:59:26', '2024-04-04 13:59:26'),
+(222, 'শিশির মোহাম্মাদ আজাদ', ' ', '01713750345', ' ', 'সিটি গেইট, বিশ্ব ব‍্যাংক কলোনী, চট্টগ্রাম', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 14:25:50', '2024-04-04 14:25:50'),
+(223, 'অমিত হাসান', ' ', '০১৮২৪২৯৭১৩৫', ' ', 'ফেনী, দাগনভূঞা', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 14:49:49', '2024-04-04 14:49:49'),
+(224, 'মো:তুহিন', ' ', '01772751006', ' ', 'পয়াত প্রথমিক বিদ্যালয় থানা:বুড়িচং  জেলা :কুমিল্লা', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 18:51:29', '2024-04-04 18:51:29'),
+(225, 'umme khadija', ' ', '01771348722', ' ', '878,middle monipur mirpur 2,dhaka 1216 4.mirpur  thana', NULL, NULL, NULL, '0', 'not registerd', '2024-04-04 18:57:40', '2024-04-04 18:57:40'),
+(226, 'Md Munimul Islam', ' ', '01799846537', ' ', 'Dhaka Nodda Sohid Abdul Ajij Sarak  Jamuna Feature parker pase', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 07:41:54', '2024-04-05 07:41:54'),
+(227, 'ফয়সাল আহমেদ', ' ', '০১৬৩২৭৯১৩৬১', ' ', 'দোহার-নবাবগন্জ(নবাবগঞ্জ বাস স্টান্ট).  জেলা ঢাকা', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 07:44:01', '2024-04-05 07:44:01'),
+(228, 'আরমান', ' ', '০১৯৭৯০৯০৩৬৮', ' ', 'বঙ্গবন্ধু এভিনিউ হাটহাজারী চট্টগ্রাম', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 07:46:16', '2024-04-05 07:46:16'),
+(229, 'Johirul islam Jahid', ' ', 'Telghat Keraniganj', ' ', 'বিসিক ফকির মার্কেট হাজী সাঈদ ল্যাবরেটরী স্কুলের পাশে স্টেশন রোড থেকে ভিতরে টঙ্গী গাজীপুর।', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 07:56:51', '2024-04-05 07:56:51'),
+(230, 'Taher', 'tuhin', '0132697070', NULL, 'শাহবাজপুর (উমা টেলিকম) মধ্য বাজার, থাকাঃ বড়লেখা জেলাঃ মোলভিবাজার', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 07:59:19', '2024-04-05 10:48:28'),
+(231, 'Kamrul Hasan', ' ', '01316104633', ' ', 'Fulghar, Haidorabad, Bangor bazar thana, Cumilla.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 08:06:27', '2024-04-05 08:06:27'),
+(232, 'JU Rishad', ' ', '01834050372', ' ', 'khulna, khalispur, girls polytechnic,', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 08:15:35', '2024-04-05 08:15:35'),
+(233, 'টিটন মিয়া', ' ', '০১৭৪৪১৭২৬৯০', ' ', 'গ্রাম :বাজার গোপালপুর  থানা জেলা :ঝিনাইদহ সদর', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 08:33:24', '2024-04-05 08:33:24'),
+(234, 'MD Rifat', ' ', '01631163644', ' ', 'লক্ষীপুর, চন্দ্রগঞ্জ পশ্চিম বাজার', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 10:33:57', '2024-04-05 10:33:57'),
+(235, 'Rashed Uzzaman Thuhid', ' ', '01647637119', ' ', '312/A, Dali Bari, Apollo Link Road, Bashundhara,Vatara,Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 11:26:09', '2024-04-05 11:26:09'),
+(236, 'উৎস', ' ', '০১৩১৪৭৯৯২৬০', ' ', 'ডাক্তারের গাট মোর, মসুয়া, কটিয়াদি, কিশোরগঞ্জ', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:08:10', '2024-04-05 13:08:10'),
+(237, 'Md. Rashed', ' ', '01645354916', ' ', 'Noahali, Shonaimuri, Deoti', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:10:02', '2024-04-05 13:10:02'),
+(238, 'Md. Shakil', ' ', '01811017801', ' ', 'Dhamrai Bazar, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:11:51', '2024-04-05 13:11:51'),
+(239, 'খলিলুর রহমান', ' ', '01701376656', ' ', 'গ্রাম :মিরপুর,  উপজেলা: বাহুবল, জেলা :হবিগঞ্জ', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:16:36', '2024-04-05 13:16:36'),
+(240, 'Niloy Mahmud', ' ', '01994796186', ' ', 'গাজীপুর শ্রীপুর মাওনা কাওরান বাজার', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:21:43', '2024-04-05 13:21:43'),
+(241, 'Khan Parvej', ' ', '01313360743', ' ', 'Boropul, Rajshahi', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:31:44', '2024-04-05 13:31:44'),
+(242, 'Sahal Islam', ' ', '01799555920', ' ', 'Shah ji Bazar, Sylhet, Habiganj, madhabpur,', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:36:30', '2024-04-05 13:36:30'),
+(243, 'MD ABIR', ' ', '01903555540', ' ', 'নারায়ণগন্জ থানা,  ১ নং রেল গেইট, সুগন্দা বেকারি।', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:38:59', '2024-04-05 13:38:59'),
+(244, 'badhon', ' ', '01758445614', ' ', 'zohurimolla 33/4, shymoli, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:47:14', '2024-04-05 13:47:14'),
+(245, 'Nuruddin', ' ', '01789705322', ' ', 'feni sonagazi, sonagazi, Feni', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 13:57:40', '2024-04-05 13:57:40'),
+(246, 'Tuhin', ' ', '01572079507', ' ', 'গ্রাম : উত্তর সুজাপুর,  পোস্ট  ও থানা ফুলবাড়ি, জেলা : দিনাজপুর', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 14:01:16', '2024-04-05 14:01:16'),
+(247, 'Arif', ' ', '01762723364', ' ', '(Mochmail Bazar) Village: Paikpara, Post Office: Mochmail, Sub District: Bagmara, District: Rajshahi', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 15:12:46', '2024-04-05 15:12:46'),
+(248, 'ফরহাদ', ' ', '০১৮১২৬৮৪৯২৮', ' ', 'পুর্ব ডেঙ্গাপাড়া স্কুলের সামনে, পোস্ট -ডেঙ্গাপাড়া, থানা-পটিয়া, জেলা-চট্টগ্রাম।', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 15:34:13', '2024-04-05 15:34:13'),
+(249, 'Nahid', ' ', '01783909786', ' ', 'Barisal, muladi thana sadar.', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 15:49:39', '2024-04-05 15:49:39'),
+(250, 'জিসান', ' ', '01722998832', ' ', 'সোনালী ব্যাংক পিএলসি কলেজ রোড শাখা , বরিশাল', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 16:24:42', '2024-04-05 16:24:42'),
+(251, 'Saifuddin Tamim', ' ', '01304903918', ' ', 'District :Patuakhali,   Thana: Dhasmina', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 19:19:53', '2024-04-05 19:19:53'),
+(252, 'Sami', ' ', '01932401533', ' ', '522/B, North Shahjahanpur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 20:08:07', '2024-04-05 20:08:07'),
+(253, 'তনিমা রহমান', ' ', '01312683350', ' ', 'চন্দন বাড়ি কামিল মাদ্রাসা, জেলা: নরসিংদী,  উপজেলা : মনোহরদী', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 20:58:22', '2024-04-05 20:58:22'),
+(254, 'Mr. Shakib LMS', ' ', '01774822555', ' ', 'Japan', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 21:24:57', '2024-04-05 21:24:57'),
+(255, 'রেদওয়ান আহমেমেদ', ' ', '০১৮৮০১৩৪৮৩০', ' ', 'সাতক্ষীরা জেলার আশাশুনি থানার Brack office এর এখানে', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 22:40:08', '2024-04-05 22:40:08'),
+(256, 'শাহ আলম', ' ', '01600738412', ' ', 'থানা গৌরীপুর  বোড বাজার ,  জেলা ময়মনসিংহ', NULL, NULL, NULL, '0', 'not registerd', '2024-04-05 23:17:32', '2024-04-05 23:17:32'),
+(257, 'allan Nahid', ' ', '01913432620', ' ', 'Tongi chragali bustand molla supar market', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 10:15:52', '2024-04-06 10:15:52'),
+(258, 'Afsana Afroz', ' ', '01867499416', ' ', 'Matir Mosjid, Baipail,Savar Dhaka Thana : Ashulia', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 10:24:05', '2024-04-06 10:24:05'),
+(259, 'Saila pathan', ' ', '01580626957', ' ', 'ম ১০৫/৭ পশ্চিম মেরুল বাড্ডা,মদিনা টাওয়ার', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 10:36:02', '2024-04-06 10:36:02'),
+(260, 'নাহিদ হাসান', ' ', '০১৯৬৫৩৬৩৫৮০', ' ', 'উত্তরা , ৮ নং সেক্টর আইচি মেডিকেল ( তুরাগ নদীর সাথে)', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 13:15:34', '2024-04-06 13:15:34'),
+(261, 'Shila', ' ', '01914631126', ' ', 'Konapara', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 16:01:39', '2024-04-06 16:01:39'),
+(262, 'Md. Naim', ' ', '01935507616', ' ', 'Shomitir Hat, Muktar Mollar Madrasha, Kalkini, Madaripur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 17:06:40', '2024-04-06 17:06:40'),
+(263, 'Kotha', ' ', '01761086970', ' ', 'Shyamoli', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 17:53:46', '2024-04-06 17:53:46'),
+(264, 'Alvi Rahman', ' ', '0154003750', ' ', 'ECB, Mirpur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 18:17:12', '2024-04-06 18:17:12'),
+(265, 'Md. Shagor-Al Amin', ' ', '01786941583', ' ', 'Kuakata', NULL, NULL, NULL, '0', 'not registerd', '2024-04-06 20:45:00', '2024-04-06 20:45:00'),
+(266, 'Holi Apu (Naim)', ' ', '01794320704', ' ', 'Jamalpur, Mainpur', NULL, NULL, NULL, '0', 'not registerd', '2024-04-08 09:22:48', '2024-04-08 09:22:48'),
+(267, 'fdhd', ' ', '01764885783', ' ', 'wrt', NULL, NULL, NULL, '0', 'not registerd', '2024-04-28 16:24:56', '2024-04-28 16:24:56'),
+(268, 'br', ' ', '01764885783', ' ', 'df', NULL, NULL, NULL, '0', 'not registerd', '2024-04-29 11:19:07', '2024-04-29 11:19:07'),
+(269, 'Abdul Aziz Rony', ' ', '01981-316613', ' ', 'মীরহাজীরবাগ, (হাবু কমিশনের বাড়ির সামনে), যাত্রাবাড়ী।', NULL, NULL, NULL, '0', 'not registerd', '2024-05-13 10:05:41', '2024-05-13 10:05:41'),
+(270, 'Junayed Chowdhury', ' ', '01836307809', ' ', 'Bogar Bazar , Trishal ,Mymenshingh', NULL, NULL, NULL, '0', 'not registerd', '2024-05-13 11:29:07', '2024-05-13 11:29:07'),
+(271, 'Foysal (Al-Amin)', ' ', '01705567455', ' ', 'Konapara, Demra, Dhaka', NULL, NULL, NULL, '0', 'not registerd', '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(272, 'Sakib', ' ', '01780965781', ' ', 'Zila:Netrokona,  Upazila :Durgapur,  Union:Chandigor,Shatasi bazar.', NULL, NULL, NULL, '0', 'not registerd', '2024-05-18 07:51:12', '2024-05-18 07:51:12'),
+(273, 'Amir Hamza', ' ', '০১৭৭৯৫২৪২৮২', ' ', 'সিলেট, কানিশাইল,১নং রোড,প্রাতাশা ৫৪,তাহের শপ', NULL, NULL, NULL, '0', 'not registerd', '2024-05-19 08:16:52', '2024-05-19 08:16:52');
 
 -- --------------------------------------------------------
 
@@ -280,15 +504,6 @@ CREATE TABLE `delivery_zones` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `delivery_zones`
---
-
-INSERT INTO `delivery_zones` (`id`, `district_id`, `upazila`, `charge`, `status`, `created_at`, `updated_at`) VALUES
-(2, 1, 'Dhaka Cantt.', 80.00, 'Inactive', '2024-01-29 05:12:07', '2024-01-29 05:14:48'),
-(3, 1, 'Demra', 80.00, 'Active', '2024-01-29 05:13:05', '2024-02-04 04:05:25'),
-(5, 1, 'Khilgaon', 80.00, 'Active', '2024-01-30 01:20:54', '2024-01-30 01:24:24');
 
 -- --------------------------------------------------------
 
@@ -437,6 +652,7 @@ CREATE TABLE `feature_categories` (
   `text` varchar(255) DEFAULT NULL,
   `image` varchar(255) NOT NULL,
   `status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
+  `is_featured` varchar(10) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -445,9 +661,9 @@ CREATE TABLE `feature_categories` (
 -- Dumping data for table `feature_categories`
 --
 
-INSERT INTO `feature_categories` (`id`, `category_id`, `title`, `text`, `image`, `status`, `created_at`, `updated_at`) VALUES
-(5, 10, 'Premium Panjabi', NULL, 'feature/category/1710739121.jpg', 'Inactive', '2024-02-27 03:26:18', '2024-03-17 23:18:42'),
-(6, 11, 'Regular Panjabi', NULL, 'feature/category/1710739139.jpg', 'Inactive', '2024-02-27 03:26:31', '2024-03-18 00:34:05');
+INSERT INTO `feature_categories` (`id`, `category_id`, `title`, `text`, `image`, `status`, `is_featured`, `created_at`, `updated_at`) VALUES
+(7, 10, 'Summer Friendly Premium Panjabi', NULL, 'feature/category/1715587499.jpg', 'Active', '1', '2024-05-13 08:05:00', '2024-05-13 08:05:00'),
+(8, 13, 'Summer Panjabi Collection', NULL, 'feature/category/1715587662.jpg', 'Active', '2', '2024-05-13 08:07:43', '2024-05-13 08:07:43');
 
 -- --------------------------------------------------------
 
@@ -463,13 +679,6 @@ CREATE TABLE `feature_products` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `feature_products`
---
-
-INSERT INTO `feature_products` (`id`, `feature_products_title`, `image`, `status`, `created_at`, `updated_at`) VALUES
-(3, 'New Arrivals', 'feature/products/1710739183.jpg', 'Active', '2024-03-17 23:19:43', '2024-03-17 23:19:43');
 
 -- --------------------------------------------------------
 
@@ -550,24 +759,63 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (44, '2023_12_20_065612_create_categories_table', 11),
 (46, '2024_01_29_055920_create_delivery_zones_table', 12),
 (47, '2024_02_04_052438_create_feature_categories_table', 13),
-(48, '2024_02_06_072336_create_product_thumbnails_table', 14),
-(49, '2024_02_07_101403_create_sliders_table', 15),
-(50, '2024_02_08_054458_create_ads_table', 16),
-(51, '2024_02_12_115802_create_settings_table', 17),
-(52, '2024_02_13_074304_create_campaigns_table', 17),
-(53, '2024_02_13_074339_create_camp_products_table', 17),
-(54, '2023_12_27_070522_create_coupons_table', 18),
-(55, '2024_02_18_082822_create_password_resets_table', 19),
-(56, '2024_02_28_102456_create_feature_products_table', 20),
-(57, '2024_02_28_110813_create_feature_products_with_pivot_table', 20),
-(59, '2024_03_03_103228_create_product_stocks_table', 21),
-(60, '2024_03_04_061211_create_purchases_table', 22),
-(61, '2024_03_07_113058_create_sessions_table', 23),
-(62, '2024_03_13_070929_create_webmessages_table', 23),
-(64, '2023_12_26_112636_create_offers_table', 24),
-(65, '2024_03_03_044702_create_offer_types_table', 24),
-(66, '2024_03_03_044703_create_offers_table', 25),
-(67, '2024_03_03_055528_create_product_offer_types', 25);
+(48, '2024_02_06_072336_create_product_thumbnails_table', 14);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `model_has_permissions`
+--
+
+CREATE TABLE `model_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `model_has_roles`
+--
+
+CREATE TABLE `model_has_roles` (
+  `role_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `model_has_roles`
+--
+
+INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
+(2, 'App\\Models\\User', 1),
+(2, 'App\\Models\\User', 6),
+(3, 'App\\Models\\User', 1),
+(3, 'App\\Models\\User', 6),
+(4, 'App\\Models\\User', 4),
+(4, 'App\\Models\\User', 9),
+(5, 'App\\Models\\User', 3),
+(5, 'App\\Models\\User', 5),
+(5, 'App\\Models\\User', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` char(36) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `notifiable_type` varchar(255) NOT NULL,
+  `notifiable_id` bigint(20) UNSIGNED NOT NULL,
+  `data` text NOT NULL,
+  `read_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -587,14 +835,6 @@ CREATE TABLE `offers` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `offers`
---
-
-INSERT INTO `offers` (`id`, `offer_type_id`, `offer_name`, `offer_percent`, `to_date`, `from_date`, `day`, `created_at`, `updated_at`) VALUES
-(2, 2, 'Year End sale', 75, NULL, NULL, '0', '2024-03-18 03:31:39', '2024-03-18 03:31:39'),
-(3, 2, 'aaa', 10, NULL, NULL, '0', '2024-03-18 03:43:51', '2024-03-18 03:43:51');
-
 -- --------------------------------------------------------
 
 --
@@ -613,8 +853,7 @@ CREATE TABLE `offer_types` (
 --
 
 INSERT INTO `offer_types` (`id`, `offer_type_name`, `created_at`, `updated_at`) VALUES
-(1, 'Year End Offer', '2024-03-17 23:13:23', '2024-03-17 23:13:23'),
-(2, 'Year End Offer', '2024-03-18 03:31:15', '2024-03-18 03:31:15');
+(5, 'Summer', '2024-04-24 08:28:50', '2024-04-24 08:28:50');
 
 -- --------------------------------------------------------
 
@@ -631,13 +870,16 @@ CREATE TABLE `orders` (
   `discount` decimal(8,2) NOT NULL DEFAULT 0.00,
   `tax` decimal(8,2) DEFAULT NULL,
   `total` decimal(8,2) NOT NULL,
+  `total_paid` decimal(8,2) DEFAULT 0.00,
+  `total_due` decimal(8,2) DEFAULT 0.00,
   `delivery_charge` decimal(8,2) DEFAULT 0.00,
   `status` enum('pending','confirmed','delivered','completed','returned','cancelled','shipped') NOT NULL DEFAULT 'pending',
   `is_shipping_different` tinyint(1) NOT NULL DEFAULT 0,
   `order_from` varchar(255) DEFAULT NULL,
-  `order_by` varchar(255) DEFAULT NULL,
+  `canceled_date` date DEFAULT NULL,
   `return_confirm` tinyint(1) DEFAULT 0,
   `comment` longtext DEFAULT NULL,
+  `is_pos` tinyint(1) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -646,59 +888,15 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `invoice_no`, `order_track_id`, `customer_id`, `subtotal`, `discount`, `tax`, `total`, `delivery_charge`, `status`, `is_shipping_different`, `order_from`, `order_by`, `return_confirm`, `comment`, `created_at`, `updated_at`) VALUES
-(63, NULL, 'K24-0897', 41, 1450.00, 0.00, 50.00, 1480.00, 80.00, 'shipped', 0, NULL, NULL, 0, NULL, '2024-02-18 06:10:47', '2024-03-17 23:00:01'),
-(64, NULL, 'K24-9267', 41, 1900.00, 0.00, 50.00, 1930.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-02-18 22:18:16', '2024-03-17 22:59:25'),
-(65, NULL, 'K24-9043', 41, 1900.00, 0.00, 50.00, 1930.00, 80.00, 'pending', 0, NULL, NULL, 0, NULL, '2024-02-18 22:20:17', '2024-02-18 22:20:17'),
-(66, NULL, 'K24-5310', 41, 3600.00, 0.00, 50.00, 3630.00, 80.00, 'pending', 0, NULL, NULL, 0, NULL, '2024-02-18 22:25:10', '2024-02-18 22:25:10'),
-(67, NULL, 'K24-4850', 41, 1400.00, 0.00, 50.00, 1430.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-02-18 22:26:51', '2024-03-04 23:54:28'),
-(68, NULL, 'K24-2418', 41, 700.00, 0.00, 50.00, 730.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-02-18 22:28:50', '2024-03-04 23:56:53'),
-(69, NULL, 'K24-9223', 41, 700.00, 0.00, 50.00, 730.00, 80.00, 'pending', 0, NULL, NULL, 0, NULL, '2024-02-18 22:30:12', '2024-02-18 22:30:12'),
-(70, NULL, 'K24-3457', 41, 700.00, 0.00, 50.00, 730.00, 80.00, 'completed', 0, NULL, NULL, 0, NULL, '2024-02-18 22:32:22', '2024-03-07 02:37:27'),
-(71, NULL, 'K24-5266', 41, 700.00, 0.00, 50.00, 730.00, 80.00, 'completed', 0, NULL, NULL, 0, NULL, '2024-02-18 22:33:39', '2024-03-07 02:36:19'),
-(72, NULL, 'K24-1227', 41, 700.00, 0.00, 50.00, 730.00, 80.00, 'completed', 0, NULL, NULL, 0, NULL, '2024-02-18 22:36:36', '2024-03-07 02:41:34'),
-(73, NULL, 'K24-2058', 43, 1900.00, 0.00, 50.00, 1930.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-02-24 22:25:16', '2024-02-29 01:27:41'),
-(74, NULL, 'K24-9006', 43, 1400.00, 0.00, 50.00, 1430.00, 80.00, 'returned', 0, NULL, NULL, 1, NULL, '2024-02-24 22:26:48', '2024-03-04 23:10:29'),
-(75, NULL, 'K24-2462', 42, 1400.00, 0.00, NULL, 1450.00, 50.00, 'confirmed', 0, NULL, NULL, 0, 'Pos order', '2024-02-26 22:29:01', '2024-03-04 23:48:27'),
-(76, NULL, 'K24-7078', 42, 1400.00, 0.00, NULL, 1450.00, 50.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-26 22:29:19', '2024-02-26 22:29:19'),
-(77, NULL, 'K24-9246', 42, 1400.00, 0.00, NULL, 1450.00, 50.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-26 22:30:03', '2024-02-26 22:30:03'),
-(78, NULL, 'K24-0908', 42, 1400.00, 0.00, NULL, 1480.00, 80.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-26 22:30:30', '2024-02-26 22:30:30'),
-(79, NULL, 'K24-0541', 42, 1400.00, 0.00, NULL, 1480.00, 80.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-26 22:31:25', '2024-02-26 22:31:25'),
-(80, NULL, 'K24-1026', 44, 1560.00, 0.00, 50.00, 1590.00, 80.00, 'pending', 0, NULL, NULL, 0, NULL, '2024-02-26 22:40:00', '2024-02-26 22:40:00'),
-(82, NULL, 'K24-7754', 1, 4250.00, 330.00, NULL, 4000.00, 80.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-26 23:23:09', '2024-02-26 23:23:09'),
-(83, NULL, 'K24-2748', 1, 12150.00, 270.00, NULL, 12000.00, 120.00, 'delivered', 0, NULL, NULL, 0, 'Pos order', '2024-02-26 23:31:34', '2024-03-03 04:04:44'),
-(84, NULL, 'K24-9313', 1, 1750.00, 0.00, NULL, 1830.00, 80.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-27 03:11:18', '2024-02-27 03:11:18'),
-(85, NULL, 'K24-7896', 41, 1950.00, 80.00, NULL, 2000.00, 130.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 04:55:39', '2024-02-29 04:55:39'),
-(86, NULL, 'K24-8629', 1, 1750.00, 0.00, NULL, 1750.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 07:07:11', '2024-02-29 07:07:11'),
-(87, NULL, 'K24-0322', 1, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 07:10:07', '2024-02-29 07:10:07'),
-(88, NULL, 'K24-5555', 1, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 07:12:36', '2024-02-29 07:12:36'),
-(89, NULL, 'K24-9333', 1, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 07:13:06', '2024-02-29 07:13:06'),
-(90, NULL, 'K24-6902', 1, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 07:14:20', '2024-02-29 07:14:20'),
-(91, NULL, 'K24-4754', 1, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 07:18:22', '2024-02-29 07:18:22'),
-(92, NULL, 'K24-1468', 1, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-02-29 07:22:01', '2024-02-29 07:22:01'),
-(93, NULL, 'K24-3116', 41, 1750.00, 80.00, NULL, 1800.00, 130.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-02 23:43:40', '2024-03-02 23:43:40'),
-(94, NULL, 'K24-9160', 44, 5650.00, 80.00, NULL, 5700.00, 130.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-02 23:44:47', '2024-03-02 23:44:47'),
-(95, NULL, 'K24-6832', 45, 3700.00, 0.00, NULL, 3700.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 00:22:19', '2024-03-03 00:22:19'),
-(96, NULL, 'K24-3254', 46, 3700.00, 0.00, NULL, 3700.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 00:23:18', '2024-03-03 00:23:18'),
-(97, '032484', ' ', 44, 3700.00, 500.00, NULL, 3280.00, 80.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 00:29:08', '2024-03-03 00:29:08'),
-(99, '032445', NULL, 48, 1450.00, 230.00, NULL, 1300.00, 80.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 00:31:48', '2024-03-03 00:31:48'),
-(100, '032447', NULL, 43, 1250.00, 0.00, NULL, 1250.00, 0.00, 'returned', 0, NULL, NULL, 1, 'Pos order', '2024-03-03 03:14:42', '2024-03-17 23:02:51'),
-(101, '032485', NULL, 43, 1250.00, 0.00, NULL, 1250.00, 0.00, 'returned', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 03:16:47', '2024-03-17 22:39:02'),
-(102, '032404', NULL, 41, 1250.00, 0.00, NULL, 1250.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 03:18:09', '2024-03-03 03:18:09'),
-(103, '032486', NULL, 41, 1250.00, 0.00, NULL, 1250.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 03:21:09', '2024-03-03 03:21:09'),
-(104, '032464', NULL, 42, 1750.00, 0.00, NULL, 1750.00, 0.00, 'completed', 0, NULL, NULL, 0, 'Pos order', '2024-03-03 03:21:31', '2024-03-03 03:21:31'),
-(105, '032458', NULL, 49, 4450.00, 500.00, NULL, 4070.00, 120.00, 'completed', 0, 'Facebook', NULL, 0, 'Pos order', '2024-03-03 03:56:20', '2024-03-03 03:56:20'),
-(106, '032480', NULL, 50, 1750.00, 0.00, NULL, 1750.00, 0.00, 'completed', 0, 'WalkInCustomer', NULL, 0, 'Pos order', '2024-03-04 04:48:59', '2024-03-04 04:48:59'),
-(107, '032488', NULL, 51, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, 'WalkInCustomer', NULL, 0, 'Pos order', '2024-03-04 05:41:03', '2024-03-04 05:41:03'),
-(108, '032474', NULL, 52, 1950.00, 0.00, NULL, 1950.00, 0.00, 'completed', 0, 'WalkInCustomer', NULL, 0, 'Pos order', '2024-03-04 05:51:29', '2024-03-04 05:51:29'),
-(109, '032481', NULL, 49, 2500.00, 0.00, NULL, 2500.00, 0.00, 'completed', 0, 'WalkInCustomer', NULL, 0, 'Pos order', '2024-03-04 23:05:58', '2024-03-04 23:05:58'),
-(112, '032452', 'K24-4774', 43, 700.00, 0.00, 0.00, 780.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-03-05 05:25:50', '2024-03-17 23:37:11'),
-(113, '032487', 'K24-8020', 43, 1295.00, 0.00, 0.00, 1375.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-03-13 02:29:33', '2024-03-17 23:37:35'),
-(114, '032424', 'K24-5005', 53, 1443.00, 0.00, 0.00, 1523.00, 80.00, 'pending', 0, NULL, NULL, 0, NULL, '2024-03-17 23:46:23', '2024-03-17 23:46:23'),
-(115, '032494', 'K24-8751', 53, 1443.00, 0.00, 0.00, 1523.00, 80.00, 'pending', 0, NULL, NULL, 0, NULL, '2024-03-17 23:47:25', '2024-03-17 23:47:25'),
-(116, '032471', 'K24-5666', 53, 4329.00, 0.00, 0.00, 4409.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-03-17 23:53:30', '2024-03-17 23:54:46'),
-(117, '032406', NULL, 44, 5250.00, 0.00, NULL, 5250.00, 0.00, 'completed', 0, 'WalkInCustomer', NULL, 0, 'Pos order', '2024-03-18 00:05:39', '2024-03-18 00:05:39'),
-(118, '032456', 'K24-2108', 43, 1850.00, 0.00, 0.00, 1930.00, 80.00, 'confirmed', 0, NULL, NULL, 0, NULL, '2024-03-18 01:04:09', '2024-03-18 01:06:12');
+INSERT INTO `orders` (`id`, `invoice_no`, `order_track_id`, `customer_id`, `subtotal`, `discount`, `tax`, `total`, `total_paid`, `total_due`, `delivery_charge`, `status`, `is_shipping_different`, `order_from`, `canceled_date`, `return_confirm`, `comment`, `is_pos`, `created_at`, `updated_at`) VALUES
+(6, '052425', NULL, 269, 1230.00, 0.00, NULL, 1300.00, 0.00, 1300.00, 70.00, 'completed', 0, 'Facebook', NULL, 0, 'Pos order', 1, '2024-05-13 10:05:41', '2024-05-13 10:05:41'),
+(7, '052402', NULL, 270, 880.00, 0.00, NULL, 1000.00, 0.00, 1000.00, 120.00, 'completed', 0, 'Facebook', NULL, 0, 'Pos order', 1, '2024-05-13 11:29:07', '2024-05-13 11:29:07'),
+(8, '052401', NULL, 271, 6550.00, 0.00, NULL, 6550.00, 6550.00, 0.00, 0.00, 'completed', 0, 'Koohen', NULL, 0, 'Pos order', 1, '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(9, '052438', NULL, 271, 8200.00, 0.00, NULL, 8200.00, 8200.00, 0.00, 0.00, 'completed', 0, 'Koohen', NULL, 0, 'Pos order', 1, '2024-05-15 08:09:44', '2024-05-15 10:12:44'),
+(10, '052459', NULL, 271, 3075.00, 0.00, NULL, 3075.00, 0.00, 3075.00, 0.00, 'completed', 0, 'Koohen', NULL, 0, 'Pos order', 1, '2024-05-15 08:11:11', '2024-05-15 08:11:11'),
+(11, '052489', NULL, 271, 7175.00, 0.00, NULL, 7175.00, 0.00, 7175.00, 0.00, 'completed', 0, 'Koohen', NULL, 0, 'Pos order', 1, '2024-05-15 08:12:57', '2024-05-15 08:12:57'),
+(12, '052406', NULL, 272, 1130.00, 0.00, NULL, 1250.00, 0.00, 1250.00, 120.00, 'completed', 0, 'Koohen', NULL, 0, 'Pos order', 1, '2024-05-18 07:51:12', '2024-05-18 07:51:12'),
+(13, '052416', NULL, 273, 2160.00, 0.00, NULL, 2300.00, 0.00, 2300.00, 140.00, 'completed', 0, 'Facebook', NULL, 0, 'Pos order', 1, '2024-05-19 08:16:52', '2024-05-19 08:16:52');
 
 -- --------------------------------------------------------
 
@@ -720,35 +918,6 @@ CREATE TABLE `orderstatuses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `orderstatuses`
---
-
-INSERT INTO `orderstatuses` (`id`, `order_id`, `status`, `confirmed_date_time`, `shipped_date_time`, `delivered_date_time`, `completed_date_time`, `returned_date_time`, `cancelled_date_time`, `created_at`, `updated_at`) VALUES
-(40, 63, 'shipped', '2024-03-18 04:59:25', '2024-03-18 05:00:01', '2024-03-18 04:59:04', NULL, NULL, NULL, '2024-02-18 06:10:47', '2024-03-17 23:00:01'),
-(41, 64, 'confirmed', '2024-03-18 04:59:25', NULL, NULL, NULL, NULL, NULL, '2024-02-18 22:18:16', '2024-03-17 22:59:25'),
-(42, 65, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, '2024-02-18 22:20:17', '2024-02-18 22:20:17'),
-(43, 66, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, '2024-02-18 22:25:10', '2024-02-18 22:25:10'),
-(44, 67, 'confirmed', '2024-03-05 05:54:28', NULL, NULL, NULL, NULL, NULL, '2024-02-18 22:26:51', '2024-03-04 23:54:28'),
-(45, 68, 'confirmed', '2024-03-05 05:56:53', NULL, NULL, NULL, NULL, NULL, '2024-02-18 22:28:50', '2024-03-04 23:56:53'),
-(46, 69, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, '2024-02-18 22:30:12', '2024-02-18 22:30:12'),
-(47, 70, 'completed', NULL, NULL, NULL, '2024-03-07 08:37:27', NULL, NULL, '2024-02-18 22:32:22', '2024-03-07 02:37:27'),
-(48, 71, 'completed', NULL, NULL, NULL, '2024-03-07 08:36:19', NULL, NULL, '2024-02-18 22:33:39', '2024-03-07 02:36:19'),
-(49, 72, 'completed', NULL, NULL, NULL, '2024-03-07 08:41:34', NULL, NULL, '2024-02-18 22:36:36', '2024-03-07 02:41:34'),
-(50, 73, 'confirmed', '2024-02-29 07:27:41', NULL, NULL, NULL, NULL, NULL, '2024-02-24 22:25:16', '2024-02-29 01:27:41'),
-(51, 74, 'returned', '2024-02-29 10:18:18', '2024-02-29 09:52:59', NULL, NULL, '2024-02-29 10:23:10', NULL, '2024-02-24 22:26:48', '2024-02-29 04:23:10'),
-(52, 80, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, '2024-02-26 22:40:00', '2024-02-26 22:40:00'),
-(53, 83, 'delivered', NULL, NULL, '2024-03-03 10:04:44', NULL, NULL, NULL, '2024-03-03 04:04:44', '2024-03-03 04:04:44'),
-(54, 75, 'confirmed', '2024-03-05 05:48:27', NULL, NULL, NULL, NULL, NULL, '2024-03-04 23:48:27', '2024-03-04 23:48:27'),
-(57, 112, 'confirmed', '2024-03-18 05:37:11', NULL, NULL, '2024-03-07 09:15:51', NULL, NULL, '2024-03-05 05:25:50', '2024-03-17 23:37:11'),
-(58, 113, 'confirmed', '2024-03-18 05:37:35', NULL, NULL, NULL, NULL, NULL, '2024-03-13 02:29:33', '2024-03-17 23:37:35'),
-(59, 101, 'returned', NULL, NULL, NULL, NULL, '2024-03-18 04:39:02', NULL, '2024-03-17 22:39:02', '2024-03-17 22:39:02'),
-(60, 100, 'returned', NULL, NULL, NULL, NULL, '2024-03-18 04:39:16', NULL, '2024-03-17 22:39:16', '2024-03-17 22:39:16'),
-(61, 114, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, '2024-03-17 23:46:23', '2024-03-17 23:46:23'),
-(62, 115, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, '2024-03-17 23:47:25', '2024-03-17 23:47:25'),
-(63, 116, 'confirmed', '2024-03-18 05:54:46', NULL, NULL, NULL, NULL, NULL, '2024-03-17 23:53:30', '2024-03-17 23:54:46'),
-(64, 118, 'confirmed', '2024-03-18 07:06:12', NULL, NULL, NULL, NULL, NULL, '2024-03-18 01:04:09', '2024-03-18 01:06:12');
-
 -- --------------------------------------------------------
 
 --
@@ -763,7 +932,6 @@ CREATE TABLE `order_items` (
   `size_id` bigint(20) UNSIGNED DEFAULT NULL,
   `price` decimal(8,2) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `comment` longtext DEFAULT NULL,
   `rstatus` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -773,96 +941,27 @@ CREATE TABLE `order_items` (
 -- Dumping data for table `order_items`
 --
 
-INSERT INTO `order_items` (`id`, `product_id`, `order_id`, `color_id`, `size_id`, `price`, `quantity`, `comment`, `rstatus`, `created_at`, `updated_at`) VALUES
-(98, 21, 63, NULL, NULL, 1450.00, 1, NULL, 0, '2024-02-18 06:10:47', '2024-02-18 06:10:47'),
-(99, 26, 64, NULL, NULL, 950.00, 1, NULL, 0, '2024-02-18 22:18:16', '2024-02-18 22:18:16'),
-(100, 25, 64, NULL, NULL, 950.00, 1, NULL, 0, '2024-02-18 22:18:16', '2024-02-18 22:18:16'),
-(101, 26, 65, NULL, NULL, 950.00, 1, NULL, 0, '2024-02-18 22:20:17', '2024-02-18 22:20:17'),
-(102, 25, 65, NULL, NULL, 950.00, 1, NULL, 0, '2024-02-18 22:20:17', '2024-02-18 22:20:17'),
-(103, 22, 66, NULL, NULL, 700.00, 1, NULL, 0, '2024-02-18 22:25:10', '2024-02-18 22:25:10'),
-(104, 23, 66, NULL, NULL, 1450.00, 2, NULL, 0, '2024-02-18 22:25:10', '2024-02-18 22:25:10'),
-(105, 19, 67, 6, 5, 700.00, 2, NULL, 0, '2024-02-18 22:26:51', '2024-02-18 22:26:51'),
-(106, 19, 68, NULL, NULL, 700.00, 1, NULL, 0, '2024-02-18 22:28:50', '2024-02-18 22:28:50'),
-(107, 19, 69, NULL, NULL, 700.00, 1, NULL, 0, '2024-02-18 22:30:12', '2024-02-18 22:30:12'),
-(108, 19, 70, NULL, NULL, 700.00, 1, NULL, 0, '2024-02-18 22:32:22', '2024-02-18 22:32:22'),
-(109, 19, 71, NULL, NULL, 700.00, 1, NULL, 0, '2024-02-18 22:33:39', '2024-02-18 22:33:39'),
-(110, 19, 72, NULL, NULL, 700.00, 1, NULL, 0, '2024-02-18 22:36:36', '2024-02-18 22:36:36'),
-(111, 25, 73, NULL, NULL, 950.00, 2, NULL, 0, '2024-02-24 22:25:16', '2024-02-24 22:25:16'),
-(112, 19, 74, 6, 5, 700.00, 2, NULL, 0, '2024-02-24 22:26:48', '2024-02-24 22:26:48'),
-(113, 18, 75, 5, 6, 1400.00, 1, NULL, 0, '2024-02-26 22:29:01', '2024-02-26 22:29:01'),
-(114, 18, 76, 5, 6, 1400.00, 1, NULL, 0, '2024-02-26 22:29:19', '2024-02-26 22:29:19'),
-(115, 18, 77, 5, 6, 1400.00, 1, NULL, 0, '2024-02-26 22:30:03', '2024-02-26 22:30:03'),
-(116, 18, 78, 5, 6, 1400.00, 1, NULL, 0, '2024-02-26 22:30:30', '2024-02-26 22:30:30'),
-(117, 18, 79, 5, 6, 1400.00, 1, NULL, 0, '2024-02-26 22:31:25', '2024-02-26 22:31:25'),
-(118, 20, 80, 7, 5, 780.00, 2, NULL, 0, '2024-02-26 22:40:00', '2024-02-26 22:40:00'),
-(119, 18, 82, 5, 6, 1250.00, 2, NULL, 0, '2024-02-26 23:23:09', '2024-02-26 23:23:09'),
-(120, 19, 82, 6, 6, 1750.00, 1, NULL, 0, '2024-02-26 23:23:09', '2024-02-26 23:23:09'),
-(121, 18, 83, 5, 6, 1750.00, 1, NULL, 0, '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(122, 19, 83, 6, 6, 1750.00, 1, NULL, 0, '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(123, 20, 83, 7, 6, 1950.00, 1, NULL, 0, '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(124, 21, 83, 8, 6, 1950.00, 1, NULL, 0, '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(125, 22, 83, 10, 6, 1750.00, 1, NULL, 0, '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(126, 23, 83, 11, 6, 1750.00, 1, NULL, 0, '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(127, 24, 83, 9, 5, 1250.00, 1, NULL, 0, '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(128, 18, 84, 5, 5, 1750.00, 1, NULL, 0, '2024-02-27 03:11:18', '2024-02-27 03:11:18'),
-(129, 21, 85, 8, 5, 1950.00, 1, NULL, 0, '2024-02-29 04:55:39', '2024-02-29 04:55:39'),
-(130, 18, 86, 5, 5, 1750.00, 1, NULL, 0, '2024-02-29 07:07:11', '2024-02-29 07:07:11'),
-(131, 20, 87, 7, 6, 1950.00, 1, NULL, 0, '2024-02-29 07:10:07', '2024-02-29 07:10:07'),
-(132, 20, 88, 7, 6, 1950.00, 1, NULL, 0, '2024-02-29 07:12:36', '2024-02-29 07:12:36'),
-(133, 20, 89, 7, 6, 1950.00, 1, NULL, 0, '2024-02-29 07:13:06', '2024-02-29 07:13:06'),
-(134, 20, 90, 7, 6, 1950.00, 1, NULL, 0, '2024-02-29 07:14:20', '2024-02-29 07:14:20'),
-(135, 20, 91, 7, 8, 1950.00, 1, NULL, 0, '2024-02-29 07:18:22', '2024-02-29 07:18:22'),
-(136, 20, 92, 7, 8, 1950.00, 1, NULL, 0, '2024-02-29 07:22:01', '2024-02-29 07:22:01'),
-(137, 19, 93, 6, 6, 1750.00, 1, NULL, 0, '2024-03-02 23:43:40', '2024-03-02 23:43:40'),
-(138, 19, 94, 6, 6, 1750.00, 1, NULL, 0, '2024-03-02 23:44:47', '2024-03-02 23:44:47'),
-(139, 20, 94, 7, 6, 1950.00, 1, NULL, 0, '2024-03-02 23:44:47', '2024-03-02 23:44:47'),
-(140, 21, 94, 8, 5, 1950.00, 1, NULL, 0, '2024-03-02 23:44:47', '2024-03-02 23:44:47'),
-(141, 19, 95, 6, 6, 1750.00, 1, NULL, 0, '2024-03-03 00:22:19', '2024-03-03 00:22:19'),
-(142, 20, 95, 7, 6, 1950.00, 1, NULL, 0, '2024-03-03 00:22:19', '2024-03-03 00:22:19'),
-(143, 19, 96, 6, 6, 1750.00, 1, NULL, 0, '2024-03-03 00:23:18', '2024-03-03 00:23:18'),
-(144, 20, 96, 7, 6, 1950.00, 1, NULL, 0, '2024-03-03 00:23:18', '2024-03-03 00:23:18'),
-(145, 18, 97, 5, 6, 1750.00, 1, NULL, 0, '2024-03-03 00:29:08', '2024-03-03 00:29:08'),
-(146, 20, 97, 7, 5, 1950.00, 1, NULL, 0, '2024-03-03 00:29:08', '2024-03-03 00:29:08'),
-(147, 18, 99, 5, 6, 1450.00, 1, NULL, 0, '2024-03-03 00:31:48', '2024-03-03 00:31:48'),
-(149, 26, 103, NULL, 5, 1250.00, 1, NULL, 0, '2024-03-03 03:21:09', '2024-03-03 03:21:09'),
-(150, 18, 104, NULL, NULL, 1750.00, 1, NULL, 0, '2024-03-03 03:21:31', '2024-03-03 03:21:31'),
-(151, 18, 105, 5, 6, 1750.00, 1, NULL, 0, '2024-03-03 03:56:20', '2024-03-03 03:56:20'),
-(152, 19, 105, 6, 7, 1250.00, 1, NULL, 0, '2024-03-03 03:56:20', '2024-03-03 03:56:20'),
-(153, 20, 105, 7, 7, 1450.00, 1, NULL, 0, '2024-03-03 03:56:20', '2024-03-03 03:56:20'),
-(154, 18, 106, 5, 5, 1750.00, 1, NULL, 0, '2024-03-04 04:48:59', '2024-03-04 04:48:59'),
-(155, 20, 107, 7, 5, 1950.00, 1, NULL, 0, '2024-03-04 05:41:03', '2024-03-04 05:41:03'),
-(156, 20, 108, 7, 6, 1950.00, 1, NULL, 0, '2024-03-04 05:51:29', '2024-03-04 05:51:29'),
-(157, 25, 109, NULL, 6, 1250.00, 2, NULL, 0, '2024-03-04 23:05:58', '2024-03-04 23:05:58'),
-(160, 18, 112, 5, 6, 700.00, 1, NULL, 0, '2024-03-05 05:25:50', '2024-03-05 05:25:50'),
-(161, 18, 113, 5, 6, 1295.00, 1, NULL, 0, '2024-03-13 02:29:33', '2024-03-13 02:29:33'),
-(162, 20, 114, 7, 7, 1443.00, 1, NULL, 0, '2024-03-17 23:46:23', '2024-03-17 23:46:23'),
-(163, 20, 115, 7, 7, 1443.00, 1, NULL, 0, '2024-03-17 23:47:25', '2024-03-17 23:47:25'),
-(164, 20, 116, NULL, 7, 1443.00, 3, NULL, 0, '2024-03-17 23:53:30', '2024-03-17 23:53:30'),
-(165, 19, 117, 6, 5, 1750.00, 3, NULL, 0, '2024-03-18 00:05:39', '2024-03-18 00:05:39'),
-(166, 25, 118, NULL, 7, 925.00, 2, NULL, 0, '2024-03-18 01:04:09', '2024-03-18 01:04:09');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `password_resets`
---
-
-CREATE TABLE `password_resets` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `password_resets`
---
-
-INSERT INTO `password_resets` (`id`, `email`, `token`, `created_at`, `updated_at`) VALUES
-(4, 'qbittech.dev1@gmail.com', 'kHPRtQsJOpfi8aD5XFAllUtdoCVynAP17YZYJbAi', '2024-02-29 04:31:35', '2024-02-29 04:31:35'),
-(5, 'qbittech.dev1@gmail.com', 'nTsJrsqNbyIHwuc8HpBtCzknb3erQNYuoF3uveYv', '2024-02-29 04:34:12', '2024-02-29 04:34:12'),
-(6, 'arifhossen853@yahoo.com', 'K0wOm3EQxiLNo83C11rrPvTx0jfJoLRaThWjpNbn', '2024-02-29 04:36:57', '2024-02-29 04:36:57');
+INSERT INTO `order_items` (`id`, `product_id`, `order_id`, `color_id`, `size_id`, `price`, `quantity`, `rstatus`, `created_at`, `updated_at`) VALUES
+(14, 36, 6, 20, 6, 1230.00, 1, 0, '2024-05-13 10:05:41', '2024-05-13 10:05:41'),
+(15, 48, 7, 14, 6, 880.00, 1, 0, '2024-05-13 11:29:07', '2024-05-13 11:29:07'),
+(16, 71, 8, 11, 7, 1500.00, 1, 0, '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(17, 71, 8, 11, 8, 1500.00, 1, 0, '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(18, 71, 8, 11, 18, 1500.00, 1, 0, '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(19, 49, 8, 5, 8, 1025.00, 1, 0, '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(20, 49, 8, 5, 18, 1025.00, 1, 0, '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(21, 58, 9, 20, 8, 1025.00, 3, 0, '2024-05-15 08:09:44', '2024-05-15 08:17:52'),
+(22, 58, 9, 20, 7, 1025.00, 3, 0, '2024-05-15 08:09:44', '2024-05-15 08:09:44'),
+(24, 58, 9, 20, 18, 1025.00, 1, 0, '2024-05-15 08:09:44', '2024-05-15 08:09:44'),
+(25, 57, 10, 23, 7, 1025.00, 2, 0, '2024-05-15 08:11:11', '2024-05-15 08:11:11'),
+(26, 57, 10, 23, 8, 1025.00, 1, 0, '2024-05-15 08:11:11', '2024-05-15 08:11:11'),
+(27, 48, 11, 14, 6, 1025.00, 1, 0, '2024-05-15 08:12:57', '2024-05-15 08:12:57'),
+(28, 48, 11, 14, 7, 1025.00, 2, 0, '2024-05-15 08:12:57', '2024-05-15 08:12:57'),
+(29, 48, 11, 14, 8, 1025.00, 3, 0, '2024-05-15 08:12:57', '2024-05-15 08:12:57'),
+(30, 48, 11, 14, 18, 1025.00, 1, 0, '2024-05-15 08:12:57', '2024-05-15 08:12:57'),
+(31, 58, 9, 20, 8, 1025.00, 3, 0, '2024-05-15 08:16:38', '2024-05-15 08:16:38'),
+(32, 38, 12, 5, 7, 1130.00, 1, 0, '2024-05-18 07:51:12', '2024-05-18 07:51:12'),
+(33, 34, 13, 11, 6, 1080.00, 1, 0, '2024-05-19 08:16:52', '2024-05-19 08:16:52'),
+(34, 34, 13, 11, 7, 1080.00, 1, 0, '2024-05-19 08:16:52', '2024-05-19 08:16:52');
 
 -- --------------------------------------------------------
 
@@ -874,6 +973,20 @@ CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `guard_name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1372,7 +1485,7 @@ INSERT INTO `postcodes` (`id`, `division_id`, `district_id`, `upazila`, `zone_ch
 (452, 3, 1, 'Demra', 80, 'Demra', '1360', NULL, '2024-01-29 05:15:04'),
 (453, 3, 1, 'Demra', 80, 'Matuail', '1362', NULL, '2024-01-29 05:15:04'),
 (454, 3, 1, 'Demra', 80, 'Sarulia', '1361', NULL, '2024-01-29 05:15:04'),
-(455, 3, 1, 'Dhaka Cantt.', 80, 'Dhaka CantonmentTSO', '1206', NULL, '2024-01-29 05:14:48'),
+(455, 3, 1, 'Dhaka Cantt.', 80, 'Dhaka CantonmentTSO', '1206', NULL, '2024-02-20 05:20:09'),
 (456, 3, 1, 'Dhamrai', 80, 'Dhamrai', '1350', NULL, NULL),
 (457, 3, 1, 'Dhamrai', 80, 'Kamalpur', '1351', NULL, NULL),
 (458, 3, 1, 'Dhanmondi', 80, 'Jigatala TSO', '1209', NULL, NULL),
@@ -2285,7 +2398,6 @@ CREATE TABLE `products` (
   `regular_price` varchar(255) DEFAULT NULL,
   `description` longtext NOT NULL,
   `sku` varchar(255) NOT NULL,
-  `stock` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
   `status` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -2296,16 +2408,48 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `product_name`, `brand_id`, `category_id`, `supplier_id`, `raw_price`, `regular_price`, `description`, `sku`, `stock`, `slug`, `status`, `created_at`, `updated_at`) VALUES
-(18, 'Men\'s Classic Panjabi - SA01', 2, 11, 2, '795', '1750', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHPP-SA01', '40', 'mens-classic-panjabi-sa01', 'active', '2024-02-07 03:55:00', '2024-03-12 23:39:08'),
-(19, 'Men\'s Classic Panjabi - SA02', 2, 11, 2, '800', '1750', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHPP-SA02', '37', 'mens-classic-panjabi-sa02', 'active', '2024-02-07 03:59:14', '2024-02-07 11:16:39'),
-(20, 'Men\'s Premium Panjabi - SA09', 2, 10, 2, '800', '1950', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHPP-SA09', '73', 'mens-premium-panjabi-sa09', 'active', '2024-02-07 04:05:37', '2024-02-07 11:18:22'),
-(21, 'Men\'s Premium Panjabi - SA10', 2, 10, 2, '835', '1950', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHPP-SA10', '21', 'mens-premium-panjabi-sa10', 'active', '2024-02-07 04:09:56', '2024-02-07 11:19:04'),
-(22, 'Men\'s Premium Panjabi - SA07', 2, 10, 2, '935', '1750', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHPP-SA07', '40', 'mens-premium-panjabi-sa07', 'active', '2024-02-07 04:13:35', '2024-02-07 11:21:02'),
-(23, 'Men\'s Premium Panjabi - SA06', 2, 10, 2, '970', '1750', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHPP-SA06', '26', 'mens-premium-panjabi-sa06', 'active', '2024-02-07 04:15:46', '2024-03-12 02:55:19'),
-(24, 'Men\'s Printed Panjabi - PR05', 2, 12, 2, '610', '1250', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHRP-PR05', '27', 'mens-printed-panjabi-pr05', 'active', '2024-02-07 04:20:35', '2024-02-07 11:22:03'),
-(25, 'Men\'s Printed Panjabi - PR04', 2, 12, 2, '660', '1250', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHRP-PR04', '27', 'mens-printed-panjabi-pr04', 'active', '2024-02-07 04:31:34', '2024-02-07 11:22:40'),
-(26, 'Men\'s Printed Panjabi - PR03', 2, 12, 2, '660', '1250', '<table border=\"1\" cellpadding=\"5\" style=\"box-sizing: inherit; background: rgb(243, 243, 243); border-color: rgb(255, 255, 255); border-style: solid; width: 670px; color: rgb(55, 58, 60); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;\"><thead style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Size</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Chest Round</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Length</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Shoulder</th><th style=\"box-sizing: inherit; text-align: left; border-top-style: none; border-left-style: none;\">Sleeve</th></tr></thead><tbody style=\"box-sizing: inherit;\"><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38 (S)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">38.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">17</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">40 (M)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">41.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">42 (L)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">43.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">18.5</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">24.75</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">44 (XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">45.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">19</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25</td></tr><tr style=\"box-sizing: inherit; border-style: none solid solid none;\"><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">46 (2XL)</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">47.25</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">48</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">20</td><td style=\"box-sizing: inherit; border-top-style: none; border-left-style: none;\">25.5</td></tr></tbody></table>', 'KHRP-PR03', '27', 'mens-printed-panjabi-pr03', 'active', '2024-02-07 04:38:18', '2024-02-07 11:23:55');
+INSERT INTO `products` (`id`, `product_name`, `brand_id`, `category_id`, `supplier_id`, `raw_price`, `regular_price`, `description`, `sku`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(27, 'Koohen Premium Punjabi - SA01', 2, 10, 2, '1157', '1750', '<p><span style=\"font-size: 16px; font-weight: 400;\">Fabric Type: Cotton</span></p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable </p><p>Durability: Durable and long-lasting<br></p>', 'KHPP - SA01', 'koohen-premium-punjabi-sa01', 'active', '2024-03-22 20:12:00', '2024-05-13 11:49:16'),
+(28, 'Koohen Premium Punjabi - SA02', 2, 10, 2, '157', '1750', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHPP - SA02', 'koohen-premium-punjabi-sa02', 'active', '2024-03-22 20:19:25', '2024-05-13 11:49:38'),
+(29, 'Koohen Premium Punjabi - SA03', 2, 10, 2, '1291', '2250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHPP - SA03', 'koohen-premium-punjabi-sa03', 'active', '2024-03-22 20:23:44', '2024-05-13 11:50:05'),
+(31, 'Koohen Premium Punjabi - SA04', 2, 10, 2, '831', '1450', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHPP - SA04', 'koohen-premium-punjabi-sa04', 'active', '2024-03-22 20:49:37', '2024-05-13 11:50:23'),
+(32, 'Koohen Premium Punjabi - SA05', 2, 10, 2, '831', '1450', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHPP - SA05', 'koohen-premium-punjabi-sa05', 'active', '2024-03-22 20:53:24', '2024-05-13 11:50:39'),
+(33, 'Koohen Premium Punjabi - SA06', 2, 10, 2, '791', '1750', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHPP - SA06', 'koohen-premium-punjabi-sa06', 'active', '2024-03-22 20:59:12', '2024-05-13 11:51:02'),
+(34, 'Koohen Standard Punjabi - SA07', 2, 13, 2, '925.56', '1450', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - SA07', 'koohen-standard-punjabi-sa07', 'active', '2024-03-22 21:02:47', '2024-05-13 11:47:56'),
+(35, 'Koohen Standard Punjabi - SA08', 2, 13, 2, '889', '1450', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - SA08', 'koohen-standard-punjabi-sa08', 'active', '2024-03-22 21:12:59', '2024-05-13 11:48:03'),
+(36, 'Koohen Standard Punjabi - SA09', 2, 13, 2, '753.22', '1750', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - SA09', 'koohen-standard-punjabi-sa09', 'active', '2024-03-22 21:15:33', '2024-05-13 11:51:59'),
+(37, 'Koohen Standard Punjabi - SA10', 2, 13, 2, '753.61', '1450', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - SA10', 'koohen-standard-punjabi-sa10', 'active', '2024-03-22 21:18:35', '2024-05-13 11:48:17'),
+(38, 'Koohen Standard Punjabi - SA11', 2, 13, 2, '749.22', '1450', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - SA11', 'koohen-standard-punjabi-sa11', 'active', '2024-03-22 21:21:24', '2024-05-13 11:48:26'),
+(39, 'Koohen Standard Punjabi - SA12', 2, 13, 2, '781.72', '1450', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - SA12', 'koohen-standard-punjabi-sa12', 'active', '2024-03-22 21:28:28', '2024-05-13 11:52:49'),
+(40, 'Koohen Regular Punjabi - PR07', 2, 12, 2, '662', '1250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHRP - PR07', 'koohen-regular-punjabi-pr07', 'active', '2024-03-22 21:35:16', '2024-05-13 11:53:25'),
+(41, 'Koohen Regular Punjabi - PR06', 2, 12, 2, '662', '1250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHRP - PR06', 'koohen-regular-punjabi-pr06', 'active', '2024-03-22 21:38:40', '2024-05-13 11:58:02'),
+(42, 'Koohen Standard Punjabi - PR05', 2, 13, 2, '663', '1250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - PR05', 'koohen-standard-punjabi-pr05', 'active', '2024-03-22 21:43:38', '2024-05-13 11:45:50'),
+(43, 'Koohen Standard Punjabi - PR04', 2, 13, 2, '663', '1250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - PR04', 'koohen-standard-punjabi-pr04', 'active', '2024-03-22 22:37:35', '2024-05-13 11:45:41'),
+(44, 'Koohen Standard Punjabi - PR01', 2, 13, 2, '642', '1250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - PR01', 'koohen-standard-punjabi-pr01', 'active', '2024-03-22 22:46:38', '2024-05-13 11:45:30'),
+(45, 'Koohen Standard Punjabi - PR02', 2, 13, 2, '642', '1250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - PR02', 'koohen-standard-punjabi-pr02', 'active', '2024-03-22 22:48:06', '2024-05-13 11:45:23'),
+(46, 'Koohen Standard Punjabi - PR03', 2, 13, 2, '642', '1250', '<p>Fabric Type: Cotton</p><p>Type: Regular Fit</p><p>Breathability: Highly breathable and comfortable</p><p>Durability: Durable and long-lasting</p>', 'KHSP - PR03', 'koohen-standard-punjabi-pr03', 'active', '2024-03-22 22:49:07', '2024-05-13 11:45:04'),
+(47, 'Koohen Regular Punjabi - PR08', 2, 12, 2, '567', '1250', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHRP - PR08', 'koohen-regular-punjabi-pr08', 'active', '2024-03-23 20:46:05', '2024-05-11 15:15:36'),
+(48, 'Koohen Regular Punjabi - PR09', 2, 12, 2, '613.13', '1250', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHRP - PR09', 'koohen-regular-punjabi-pr09', 'active', '2024-03-23 20:49:10', '2024-05-11 15:16:02'),
+(49, 'Koohen Regular Punjabi - PR10', 2, 12, 2, '613.2', '1250', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHRP - PR10', 'koohen-regular-punjabi-pr10', 'active', '2024-03-23 20:50:39', '2024-05-11 15:16:28'),
+(50, 'Men\'s Premium Pajama - SW01', 2, 14, 2, '429.67', '950', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHMP-SW01', 'mens-premium-pajama-sw01', 'active', '2024-03-24 19:03:33', '2024-05-11 15:17:15'),
+(52, 'Men\'s Standard Punjabi - SA14', 2, 13, 2, '920', '1750', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHSP-SA14', 'mens-standard-punjabi-sa14', 'active', '2024-05-09 12:50:38', '2024-05-15 07:49:26'),
+(53, 'Men\'s Standard Punjabi - SA15', 2, 13, 2, '920', '1750', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHSP-SA15', 'mens-standard-punjabi-sa15', 'active', '2024-05-09 12:53:12', '2024-05-15 07:49:43'),
+(55, 'Men\'s Premium Punjabi - SA16', 2, 10, 2, '970', '2250', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHPP-SA16', 'mens-premium-punjabi-sa16', 'active', '2024-05-09 13:10:20', '2024-05-15 07:50:07'),
+(56, 'Men\'s Premium Punjabi - SA17', 2, 10, 2, '920', '1750', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHPP - SA17', 'mens-premium-punjabi-sa17', 'active', '2024-05-09 13:15:58', '2024-05-15 07:50:33'),
+(57, 'Men\'s Standard Punjabi - PR11', 2, 13, 2, '702', '1250', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHSP - PR11', 'mens-standard-punjabi-pr11', 'active', '2024-05-09 13:30:29', '2024-05-15 07:50:53'),
+(58, 'Men\'s Standard Punjabi - PR12', 2, 13, 2, '692', '1250', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHSP - PR12', 'koohen-standard-punjabi-pr12', 'active', '2024-05-09 17:03:10', '2024-05-15 07:51:20'),
+(59, 'Women\'s Co-Ords Set - CRDS01', 2, 18, 2, '850', '1099', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-CRDS01', 'womens-co-ords-set-crds01', 'active', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(60, 'Women\'s Co-Ords Set - CRDS02', 2, 18, 2, '850', '1099', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-CRDS02', 'womens-co-ords-set-crds02', 'active', '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(61, 'Women\'s Co-Ords Set - CRDS03', 2, 18, 2, '850', '1099', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-CRDS03', 'womens-co-ords-set-crds03', 'active', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(62, 'Women\'s Co-Ords Set - CRDS04', 2, 18, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-CRDS04', 'womens-co-ords-set-crds04', 'active', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(63, 'Women\'s Co-Ords Set - CRDS05', 2, 18, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-CRDS05', 'womens-co-ords-set-crds05', 'active', '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(64, 'Women\'s Co-Ords Set - CRDS06', 2, 18, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-CRDS06', 'womens-co-ords-set-crds06', 'active', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(65, 'Women\'s Kaftan Set - KFTN01', 2, 19, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-KFTN01', 'womens-kaftan-set-kftn01', 'active', '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(67, 'Women\'s Kaftan Set - KFTN02', 2, 19, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-KFTN02', 'womens-kaftan-set-kftn02', 'active', '2024-05-13 07:56:08', '2024-05-13 07:56:08'),
+(68, 'Women\'s Kaftan Set - KFTN03', 2, 19, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-KFTN03', 'womens-kaftan-set-kftn03', 'active', '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(69, 'Women\'s Kaftan Set - KFTN04', 2, 19, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-KFTN04', 'womens-kaftan-set-kftn04', 'active', '2024-05-13 08:00:48', '2024-05-13 08:00:48'),
+(70, 'Women\'s Kaftan Set - KFTN06', 2, 19, 2, '950', '1350', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHLD-KFTN05', 'womens-kaftan-set-kftn06', 'active', '2024-05-13 08:03:03', '2024-05-13 08:03:03'),
+(71, 'Men\'s Premium Punjabi - SA13', 2, 10, 2, '1400', '2250', '<p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Fabric Type: Cotton</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Type: Regular Fit</p><p style=\"font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Breathability: Highly breathable and comfortable</p><p style=\"margin-bottom: 5px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-size: 1rem; line-height: 24px; font-family: Roboto, sans-serif; color: rgb(70, 91, 82);\">Durability: Durable and long-lasting</p>', 'KHPP-SA13', 'mens-premium-punjabi-sa13', 'active', '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2326,22 +2470,47 @@ CREATE TABLE `products_colors` (
 --
 
 INSERT INTO `products_colors` (`id`, `product_id`, `color_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(2, 1, 2, '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(5, 3, 1, '2024-01-14 02:11:57', '2024-01-14 02:11:57'),
-(6, 3, 2, '2024-01-14 02:11:57', '2024-01-14 02:11:57'),
-(7, 4, 1, '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(8, 6, 2, '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(10, 9, 1, '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(11, 9, 2, '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(12, 13, 2, '2024-02-06 02:22:43', '2024-02-06 02:22:43'),
-(17, 18, 5, '2024-02-07 03:55:00', '2024-02-07 03:55:00'),
-(18, 19, 6, '2024-02-07 03:59:14', '2024-02-07 03:59:14'),
-(19, 20, 7, '2024-02-07 04:05:37', '2024-02-07 04:05:37'),
-(20, 21, 8, '2024-02-07 04:09:56', '2024-02-07 04:09:56'),
-(21, 22, 10, '2024-02-07 04:13:35', '2024-02-07 04:13:35'),
-(22, 23, 11, '2024-02-07 04:15:46', '2024-02-07 04:15:46'),
-(23, 24, 9, '2024-02-07 04:20:35', '2024-02-07 04:20:35');
+(24, 27, 16, '2024-03-22 20:12:00', '2024-03-22 20:12:00'),
+(25, 28, 6, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(26, 29, 11, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(27, 31, 15, '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(28, 32, 14, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(29, 33, 19, '2024-03-22 20:59:12', '2024-03-22 20:59:12'),
+(30, 34, 11, '2024-03-22 21:02:47', '2024-03-22 21:02:47'),
+(31, 35, 10, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(32, 36, 20, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(33, 37, 21, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(34, 38, 5, '2024-03-22 21:21:24', '2024-03-22 21:21:24'),
+(35, 39, 16, '2024-03-22 21:28:28', '2024-03-22 21:28:28'),
+(36, 40, 18, '2024-03-22 21:35:16', '2024-03-22 21:35:16'),
+(37, 41, 19, '2024-03-22 21:38:40', '2024-03-22 21:38:40'),
+(38, 42, 9, '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(39, 43, 20, '2024-03-22 22:37:35', '2024-03-22 22:37:35'),
+(40, 44, 23, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(41, 45, 22, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(42, 46, 20, '2024-03-22 22:49:07', '2024-03-22 22:49:07'),
+(43, 47, 9, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(44, 48, 14, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(45, 49, 5, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(46, 50, 11, '2024-03-24 19:03:33', '2024-03-24 19:03:33'),
+(48, 52, 25, '2024-05-09 12:50:38', '2024-05-09 12:50:38'),
+(49, 53, 24, '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(51, 55, 18, '2024-05-09 13:10:20', '2024-05-09 13:10:20'),
+(52, 56, 7, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(53, 57, 23, '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(54, 58, 20, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(55, 59, 26, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(56, 60, 26, '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(57, 61, 26, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(58, 62, 26, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(59, 63, 26, '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(60, 64, 26, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(61, 65, 26, '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(62, 67, 26, '2024-05-13 07:56:08', '2024-05-13 07:56:08'),
+(63, 68, 26, '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(64, 69, 26, '2024-05-13 08:00:48', '2024-05-13 08:00:48'),
+(65, 70, 26, '2024-05-13 08:03:03', '2024-05-13 08:03:03'),
+(66, 71, 11, '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2362,52 +2531,162 @@ CREATE TABLE `products_sizes` (
 --
 
 INSERT INTO `products_sizes` (`id`, `product_id`, `size_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(2, 1, 2, '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(5, 3, 1, '2024-01-14 02:11:57', '2024-01-14 02:11:57'),
-(6, 3, 2, '2024-01-14 02:11:57', '2024-01-14 02:11:57'),
-(7, 4, 1, '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(8, 6, 1, '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(10, 9, 1, '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(11, 9, 2, '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(12, 13, 2, '2024-02-06 02:22:43', '2024-02-06 02:22:43'),
-(13, 13, 3, NULL, NULL),
-(21, 18, 5, '2024-02-07 03:55:00', '2024-02-07 03:55:00'),
-(22, 18, 6, '2024-02-07 03:55:00', '2024-02-07 03:55:00'),
-(23, 18, 7, '2024-02-07 03:55:00', '2024-02-07 03:55:00'),
-(24, 18, 8, '2024-02-07 03:55:00', '2024-02-07 03:55:00'),
-(25, 19, 5, '2024-02-07 03:59:14', '2024-02-07 03:59:14'),
-(26, 19, 6, '2024-02-07 03:59:14', '2024-02-07 03:59:14'),
-(27, 19, 7, '2024-02-07 03:59:14', '2024-02-07 03:59:14'),
-(28, 19, 8, '2024-02-07 03:59:14', '2024-02-07 03:59:14'),
-(29, 20, 5, '2024-02-07 04:05:37', '2024-02-07 04:05:37'),
-(30, 20, 6, '2024-02-07 04:05:37', '2024-02-07 04:05:37'),
-(31, 20, 7, '2024-02-07 04:05:37', '2024-02-07 04:05:37'),
-(32, 20, 8, '2024-02-07 04:05:37', '2024-02-07 04:05:37'),
-(33, 21, 5, '2024-02-07 04:09:56', '2024-02-07 04:09:56'),
-(34, 21, 6, '2024-02-07 04:09:56', '2024-02-07 04:09:56'),
-(35, 21, 7, '2024-02-07 04:09:56', '2024-02-07 04:09:56'),
-(36, 21, 8, '2024-02-07 04:09:56', '2024-02-07 04:09:56'),
-(37, 22, 5, '2024-02-07 04:13:35', '2024-02-07 04:13:35'),
-(38, 22, 6, '2024-02-07 04:13:35', '2024-02-07 04:13:35'),
-(39, 22, 7, '2024-02-07 04:13:35', '2024-02-07 04:13:35'),
-(40, 22, 8, '2024-02-07 04:13:35', '2024-02-07 04:13:35'),
-(41, 23, 5, '2024-02-07 04:15:46', '2024-02-07 04:15:46'),
-(42, 23, 6, '2024-02-07 04:15:46', '2024-02-07 04:15:46'),
-(43, 23, 7, '2024-02-07 04:15:46', '2024-02-07 04:15:46'),
-(44, 23, 8, '2024-02-07 04:15:46', '2024-02-07 04:15:46'),
-(45, 24, 5, '2024-02-07 04:20:35', '2024-02-07 04:20:35'),
-(46, 24, 6, '2024-02-07 04:20:35', '2024-02-07 04:20:35'),
-(47, 24, 7, '2024-02-07 04:20:35', '2024-02-07 04:20:35'),
-(48, 24, 8, '2024-02-07 04:20:35', '2024-02-07 04:20:35'),
-(49, 25, 5, '2024-02-07 04:31:34', '2024-02-07 04:31:34'),
-(50, 25, 6, '2024-02-07 04:31:34', '2024-02-07 04:31:34'),
-(51, 25, 7, '2024-02-07 04:31:34', '2024-02-07 04:31:34'),
-(52, 25, 8, '2024-02-07 04:31:34', '2024-02-07 04:31:34'),
-(53, 26, 5, '2024-02-07 04:38:18', '2024-02-07 04:38:18'),
-(54, 26, 6, '2024-02-07 04:38:18', '2024-02-07 04:38:18'),
-(55, 26, 7, '2024-02-07 04:38:18', '2024-02-07 04:38:18'),
-(56, 26, 8, '2024-02-07 04:38:18', '2024-02-07 04:38:18');
+(46, 24, 6, '2024-02-07 10:20:35', '2024-02-07 10:20:35'),
+(47, 24, 7, '2024-02-07 10:20:35', '2024-02-07 10:20:35'),
+(48, 24, 8, '2024-02-07 10:20:35', '2024-02-07 10:20:35'),
+(49, 25, 5, '2024-02-07 10:31:34', '2024-02-07 10:31:34'),
+(50, 25, 6, '2024-02-07 10:31:34', '2024-02-07 10:31:34'),
+(51, 25, 7, '2024-02-07 10:31:34', '2024-02-07 10:31:34'),
+(52, 25, 8, '2024-02-07 10:31:34', '2024-02-07 10:31:34'),
+(53, 26, 5, '2024-02-07 10:38:18', '2024-02-07 10:38:18'),
+(54, 26, 6, '2024-02-07 10:38:18', '2024-02-07 10:38:18'),
+(55, 26, 7, '2024-02-07 10:38:18', '2024-02-07 10:38:18'),
+(56, 26, 8, '2024-02-07 10:38:18', '2024-02-07 10:38:18'),
+(57, 27, 5, '2024-03-22 20:12:00', '2024-03-22 20:12:00'),
+(58, 27, 6, '2024-03-22 20:12:00', '2024-03-22 20:12:00'),
+(59, 27, 7, '2024-03-22 20:12:00', '2024-03-22 20:12:00'),
+(60, 27, 8, '2024-03-22 20:12:00', '2024-03-22 20:12:00'),
+(63, 28, 5, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(64, 28, 6, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(65, 28, 7, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(66, 28, 8, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(69, 29, 5, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(70, 29, 6, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(71, 29, 7, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(72, 29, 8, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(75, 31, 5, '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(76, 31, 6, '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(77, 31, 7, '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(78, 31, 8, '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(81, 32, 5, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(82, 32, 6, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(83, 32, 7, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(84, 32, 8, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(87, 33, 5, '2024-03-22 20:59:12', '2024-03-22 20:59:12'),
+(88, 33, 6, '2024-03-22 20:59:12', '2024-03-22 20:59:12'),
+(89, 33, 7, '2024-03-22 20:59:12', '2024-03-22 20:59:12'),
+(90, 33, 8, '2024-03-22 20:59:12', '2024-03-22 20:59:12'),
+(93, 34, 5, '2024-03-22 21:02:47', '2024-03-22 21:02:47'),
+(94, 34, 6, '2024-03-22 21:02:47', '2024-03-22 21:02:47'),
+(95, 34, 7, '2024-03-22 21:02:47', '2024-03-22 21:02:47'),
+(96, 34, 8, '2024-03-22 21:02:47', '2024-03-22 21:02:47'),
+(99, 35, 5, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(100, 35, 6, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(101, 35, 7, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(102, 35, 8, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(105, 36, 5, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(106, 36, 6, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(107, 36, 7, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(108, 36, 8, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(111, 37, 5, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(112, 37, 6, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(113, 37, 7, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(114, 37, 8, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(117, 38, 5, '2024-03-22 21:21:24', '2024-03-22 21:21:24'),
+(118, 38, 6, '2024-03-22 21:21:24', '2024-03-22 21:21:24'),
+(119, 38, 7, '2024-03-22 21:21:24', '2024-03-22 21:21:24'),
+(120, 38, 8, '2024-03-22 21:21:24', '2024-03-22 21:21:24'),
+(123, 39, 5, '2024-03-22 21:28:28', '2024-03-22 21:28:28'),
+(124, 39, 6, '2024-03-22 21:28:28', '2024-03-22 21:28:28'),
+(125, 39, 7, '2024-03-22 21:28:28', '2024-03-22 21:28:28'),
+(126, 39, 8, '2024-03-22 21:28:28', '2024-03-22 21:28:28'),
+(129, 40, 5, '2024-03-22 21:35:16', '2024-03-22 21:35:16'),
+(130, 40, 6, '2024-03-22 21:35:16', '2024-03-22 21:35:16'),
+(131, 40, 7, '2024-03-22 21:35:16', '2024-03-22 21:35:16'),
+(132, 40, 8, '2024-03-22 21:35:16', '2024-03-22 21:35:16'),
+(135, 41, 5, '2024-03-22 21:38:40', '2024-03-22 21:38:40'),
+(136, 41, 6, '2024-03-22 21:38:40', '2024-03-22 21:38:40'),
+(137, 41, 7, '2024-03-22 21:38:40', '2024-03-22 21:38:40'),
+(138, 41, 8, '2024-03-22 21:38:40', '2024-03-22 21:38:40'),
+(141, 42, 5, '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(142, 42, 6, '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(143, 42, 7, '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(144, 42, 8, '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(148, 43, 6, '2024-03-22 22:37:35', '2024-03-22 22:37:35'),
+(149, 43, 7, '2024-03-22 22:37:35', '2024-03-22 22:37:35'),
+(150, 43, 8, '2024-03-22 22:37:35', '2024-03-22 22:37:35'),
+(153, 44, 5, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(154, 44, 6, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(155, 44, 7, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(156, 44, 8, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(159, 45, 5, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(160, 45, 6, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(161, 45, 7, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(162, 45, 8, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(165, 46, 5, '2024-03-22 22:49:07', '2024-03-22 22:49:07'),
+(166, 46, 6, '2024-03-22 22:49:07', '2024-03-22 22:49:07'),
+(167, 46, 7, '2024-03-22 22:49:07', '2024-03-22 22:49:07'),
+(168, 46, 8, '2024-03-22 22:49:07', '2024-03-22 22:49:07'),
+(171, 47, 5, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(172, 47, 6, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(173, 47, 7, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(174, 47, 8, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(175, 48, 5, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(176, 48, 6, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(177, 48, 7, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(178, 48, 8, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(179, 49, 5, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(180, 49, 6, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(181, 49, 7, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(182, 49, 8, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(183, 50, 5, '2024-03-24 19:03:33', '2024-03-24 19:03:33'),
+(184, 50, 6, '2024-03-24 19:03:33', '2024-03-24 19:03:33'),
+(185, 50, 7, '2024-03-24 19:03:33', '2024-03-24 19:03:33'),
+(190, 52, 5, '2024-05-09 12:50:38', '2024-05-09 12:50:38'),
+(191, 52, 6, '2024-05-09 12:50:38', '2024-05-09 12:50:38'),
+(192, 52, 7, '2024-05-09 12:50:38', '2024-05-09 12:50:38'),
+(193, 52, 8, '2024-05-09 12:50:38', '2024-05-09 12:50:38'),
+(194, 53, 5, '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(195, 53, 6, '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(196, 53, 7, '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(197, 53, 8, '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(202, 55, 5, '2024-05-09 13:10:20', '2024-05-09 13:10:20'),
+(203, 55, 6, '2024-05-09 13:10:20', '2024-05-09 13:10:20'),
+(204, 55, 7, '2024-05-09 13:10:20', '2024-05-09 13:10:20'),
+(205, 55, 8, '2024-05-09 13:10:20', '2024-05-09 13:10:20'),
+(206, 56, 5, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(207, 56, 6, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(208, 56, 7, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(209, 56, 8, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(210, 57, 5, '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(211, 57, 6, '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(212, 57, 7, '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(213, 57, 8, '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(214, 43, 18, NULL, NULL),
+(215, 58, 6, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(216, 58, 7, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(217, 58, 8, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(218, 58, 18, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(219, 48, 18, NULL, NULL),
+(220, 49, 18, NULL, NULL),
+(221, 59, 26, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(222, 59, 27, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(223, 59, 28, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(224, 60, 26, '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(225, 60, 27, '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(226, 60, 28, '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(227, 61, 26, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(228, 61, 27, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(229, 61, 28, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(230, 62, 26, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(231, 62, 27, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(232, 62, 28, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(233, 63, 26, '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(234, 63, 27, '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(235, 63, 28, '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(236, 64, 26, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(237, 64, 27, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(238, 64, 28, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(251, 70, 31, '2024-05-13 08:03:03', '2024-05-13 08:03:03'),
+(252, 69, 31, NULL, NULL),
+(253, 68, 31, NULL, NULL),
+(254, 67, 31, NULL, NULL),
+(255, 65, 31, NULL, NULL),
+(256, 71, 6, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(257, 71, 7, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(258, 71, 8, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(259, 71, 18, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(260, 71, 19, '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2429,84 +2708,241 @@ CREATE TABLE `product_additionalinfos` (
 --
 
 INSERT INTO `product_additionalinfos` (`id`, `product_id`, `additional_name`, `additional_value`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Frame :', 'aa', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(2, 1, 'Weight Capacity :', 'bb', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(3, 1, 'Width :', 'cc', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(4, 1, 'Height :', 'dd', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(5, 1, 'Wheels :', 'ee', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(11, 3, 'Frame :', 'aa', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(12, 3, 'Weight Capacity :', '✅ Covered 100% cotton waistband (woven fabric)', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(13, 3, 'Width :', '✅ Covered 100% cotton waistband (woven fabric)', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(14, 3, 'Height :', '✅ Covered 100% cotton waistband (woven fabric)', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(15, 3, 'Wheels :', '✅ Covered 100% cotton waistband (woven fabric)', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(16, 4, 'Frame :', 'award', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(17, 4, 'Weight Capacity :', '1.kg', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(18, 4, 'Width :', '1.8', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(19, 4, 'Height :', '1.5', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(20, 4, 'Wheels :', '25', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(26, 6, 'Frame :', 'uygm,njd', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(27, 6, 'Weight Capacity :', '215', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(28, 6, 'Width :', '561230', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(29, 6, 'Height :', '5656', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(30, 6, 'Wheels :', '7845', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(36, 9, 'Frame :', 'Approx.', '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(37, 9, 'Weight Capacity :', '35cm x 27cm', '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(38, 9, 'Width :', '19.84\"', '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(39, 9, 'Height :', '10.63\"', '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(42, 12, 'Weight Capacity :', '35cm x 27cm', '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(43, 12, 'Width :', '9.84\"', '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(44, 12, 'Height :', '10.63\"', '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(45, 12, 'Wheels :', '1', '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(46, 13, 'Frame :', NULL, '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(47, 13, 'Weight Capacity :', NULL, '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(48, 13, 'Width :', NULL, '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(49, 13, 'Height :', NULL, '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(50, 13, 'Wheels :', NULL, '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(71, 18, 'Frame :', NULL, '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(72, 18, 'Weight Capacity :', NULL, '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(73, 18, 'Width :', NULL, '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(74, 18, 'Height :', NULL, '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(75, 18, 'Wheels :', NULL, '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(76, 19, 'Frame :', NULL, '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(77, 19, 'Weight Capacity :', NULL, '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(78, 19, 'Width :', NULL, '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(79, 19, 'Height :', NULL, '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(80, 19, 'Wheels :', NULL, '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(81, 20, 'Frame :', NULL, '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(82, 20, 'Weight Capacity :', NULL, '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(83, 20, 'Width :', NULL, '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(84, 20, 'Height :', NULL, '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(85, 20, 'Wheels :', NULL, '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(86, 21, 'Frame :', NULL, '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(87, 21, 'Weight Capacity :', NULL, '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(88, 21, 'Width :', NULL, '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(89, 21, 'Height :', NULL, '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(90, 21, 'Wheels :', NULL, '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(91, 22, 'Frame :', NULL, '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(92, 22, 'Weight Capacity :', NULL, '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(93, 22, 'Width :', NULL, '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(94, 22, 'Height :', NULL, '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(95, 22, 'Wheels :', NULL, '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(96, 23, 'Frame :', NULL, '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(97, 23, 'Weight Capacity :', NULL, '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(98, 23, 'Width :', NULL, '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(99, 23, 'Height :', NULL, '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(100, 23, 'Wheels :', NULL, '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(101, 24, 'Frame :', NULL, '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(102, 24, 'Weight Capacity :', NULL, '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(103, 24, 'Width :', NULL, '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(104, 24, 'Height :', NULL, '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(105, 24, 'Wheels :', NULL, '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(106, 25, 'Frame :', NULL, '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(107, 25, 'Weight Capacity :', NULL, '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(108, 25, 'Width :', NULL, '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(109, 25, 'Height :', NULL, '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(110, 25, 'Wheels :', NULL, '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(111, 26, 'Frame :', NULL, '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(112, 26, 'Weight Capacity :', NULL, '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(113, 26, 'Width :', NULL, '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(114, 26, 'Height :', NULL, '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(115, 26, 'Wheels :', NULL, '2024-02-07 04:38:23', '2024-02-07 04:38:23');
+(86, 21, 'Frame :', NULL, '2024-02-07 10:10:00', '2024-02-07 10:10:00'),
+(87, 21, 'Weight Capacity :', NULL, '2024-02-07 10:10:00', '2024-02-07 10:10:00'),
+(88, 21, 'Width :', NULL, '2024-02-07 10:10:00', '2024-02-07 10:10:00'),
+(89, 21, 'Height :', NULL, '2024-02-07 10:10:00', '2024-02-07 10:10:00'),
+(90, 21, 'Wheels :', NULL, '2024-02-07 10:10:00', '2024-02-07 10:10:00'),
+(91, 22, 'Frame :', NULL, '2024-02-07 10:13:39', '2024-02-07 10:13:39'),
+(92, 22, 'Weight Capacity :', NULL, '2024-02-07 10:13:39', '2024-02-07 10:13:39'),
+(93, 22, 'Width :', NULL, '2024-02-07 10:13:39', '2024-02-07 10:13:39'),
+(94, 22, 'Height :', NULL, '2024-02-07 10:13:39', '2024-02-07 10:13:39'),
+(95, 22, 'Wheels :', NULL, '2024-02-07 10:13:39', '2024-02-07 10:13:39'),
+(96, 23, 'Frame :', NULL, '2024-02-07 10:15:50', '2024-02-07 10:15:50'),
+(97, 23, 'Weight Capacity :', NULL, '2024-02-07 10:15:50', '2024-02-07 10:15:50'),
+(98, 23, 'Width :', NULL, '2024-02-07 10:15:50', '2024-02-07 10:15:50'),
+(99, 23, 'Height :', NULL, '2024-02-07 10:15:50', '2024-02-07 10:15:50'),
+(100, 23, 'Wheels :', NULL, '2024-02-07 10:15:50', '2024-02-07 10:15:50'),
+(101, 24, 'Frame :', NULL, '2024-02-07 10:20:40', '2024-02-07 10:20:40'),
+(102, 24, 'Weight Capacity :', NULL, '2024-02-07 10:20:40', '2024-02-07 10:20:40'),
+(103, 24, 'Width :', NULL, '2024-02-07 10:20:40', '2024-02-07 10:20:40'),
+(104, 24, 'Height :', NULL, '2024-02-07 10:20:40', '2024-02-07 10:20:40'),
+(105, 24, 'Wheels :', NULL, '2024-02-07 10:20:40', '2024-02-07 10:20:40'),
+(106, 25, 'Frame :', NULL, '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(107, 25, 'Weight Capacity :', NULL, '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(108, 25, 'Width :', NULL, '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(109, 25, 'Height :', NULL, '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(110, 25, 'Wheels :', NULL, '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(111, 26, 'Frame :', NULL, '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(112, 26, 'Weight Capacity :', NULL, '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(113, 26, 'Width :', NULL, '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(114, 26, 'Height :', NULL, '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(115, 26, 'Wheels :', NULL, '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(116, 27, 'Frame :', NULL, '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(117, 27, 'Weight Capacity :', NULL, '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(118, 27, 'Width :', NULL, '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(119, 27, 'Height :', NULL, '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(120, 27, 'Wheels :', NULL, '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(121, 28, 'Frame :', NULL, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(122, 28, 'Weight Capacity :', NULL, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(123, 28, 'Width :', NULL, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(124, 28, 'Height :', NULL, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(125, 28, 'Wheels :', NULL, '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(126, 29, 'Frame :', NULL, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(127, 29, 'Weight Capacity :', NULL, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(128, 29, 'Width :', NULL, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(129, 29, 'Height :', NULL, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(130, 29, 'Wheels :', NULL, '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(131, 31, 'Frame :', NULL, '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(132, 31, 'Weight Capacity :', NULL, '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(133, 31, 'Width :', NULL, '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(134, 31, 'Height :', NULL, '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(135, 31, 'Wheels :', NULL, '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(136, 32, 'Frame :', NULL, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(137, 32, 'Weight Capacity :', NULL, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(138, 32, 'Width :', NULL, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(139, 32, 'Height :', NULL, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(140, 32, 'Wheels :', NULL, '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(141, 33, 'Frame :', NULL, '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(142, 33, 'Weight Capacity :', NULL, '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(143, 33, 'Width :', NULL, '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(144, 33, 'Height :', NULL, '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(145, 33, 'Wheels :', NULL, '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(146, 34, 'Frame :', NULL, '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(147, 34, 'Weight Capacity :', NULL, '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(148, 34, 'Width :', NULL, '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(149, 34, 'Height :', NULL, '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(150, 34, 'Wheels :', NULL, '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(151, 35, 'Frame :', NULL, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(152, 35, 'Weight Capacity :', NULL, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(153, 35, 'Width :', NULL, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(154, 35, 'Height :', NULL, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(155, 35, 'Wheels :', NULL, '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(156, 36, 'Frame :', NULL, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(157, 36, 'Weight Capacity :', NULL, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(158, 36, 'Width :', NULL, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(159, 36, 'Height :', NULL, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(160, 36, 'Wheels :', NULL, '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(161, 37, 'Frame :', NULL, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(162, 37, 'Weight Capacity :', NULL, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(163, 37, 'Width :', NULL, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(164, 37, 'Height :', NULL, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(165, 37, 'Wheels :', NULL, '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(166, 38, 'Frame :', NULL, '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(167, 38, 'Weight Capacity :', NULL, '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(168, 38, 'Width :', NULL, '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(169, 38, 'Height :', NULL, '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(170, 38, 'Wheels :', NULL, '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(171, 39, 'Frame :', NULL, '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(172, 39, 'Weight Capacity :', NULL, '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(173, 39, 'Width :', NULL, '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(174, 39, 'Height :', NULL, '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(175, 39, 'Wheels :', NULL, '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(176, 40, 'Frame :', NULL, '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(177, 40, 'Weight Capacity :', NULL, '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(178, 40, 'Width :', NULL, '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(179, 40, 'Height :', NULL, '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(180, 40, 'Wheels :', NULL, '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(181, 41, 'Frame :', NULL, '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(182, 41, 'Weight Capacity :', NULL, '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(183, 41, 'Width :', NULL, '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(184, 41, 'Height :', NULL, '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(185, 41, 'Wheels :', NULL, '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(186, 42, 'Frame :', NULL, '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(187, 42, 'Weight Capacity :', NULL, '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(188, 42, 'Width :', NULL, '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(189, 42, 'Height :', NULL, '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(190, 42, 'Wheels :', NULL, '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(191, 43, 'Frame :', NULL, '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(192, 43, 'Weight Capacity :', NULL, '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(193, 43, 'Width :', NULL, '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(194, 43, 'Height :', NULL, '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(195, 43, 'Wheels :', NULL, '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(196, 44, 'Frame :', NULL, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(197, 44, 'Weight Capacity :', NULL, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(198, 44, 'Width :', NULL, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(199, 44, 'Height :', NULL, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(200, 44, 'Wheels :', NULL, '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(201, 45, 'Frame :', NULL, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(202, 45, 'Weight Capacity :', NULL, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(203, 45, 'Width :', NULL, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(204, 45, 'Height :', NULL, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(205, 45, 'Wheels :', NULL, '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(206, 46, 'Frame :', NULL, '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(207, 46, 'Weight Capacity :', NULL, '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(208, 46, 'Width :', NULL, '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(209, 46, 'Height :', NULL, '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(210, 46, 'Wheels :', NULL, '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(211, 47, 'Frame :', NULL, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(212, 47, 'Weight Capacity :', NULL, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(213, 47, 'Width :', NULL, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(214, 47, 'Height :', NULL, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(215, 47, 'Wheels :', NULL, '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(216, 48, 'Frame :', NULL, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(217, 48, 'Weight Capacity :', NULL, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(218, 48, 'Width :', NULL, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(219, 48, 'Height :', NULL, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(220, 48, 'Wheels :', NULL, '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(221, 49, 'Frame :', NULL, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(222, 49, 'Weight Capacity :', NULL, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(223, 49, 'Width :', NULL, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(224, 49, 'Height :', NULL, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(225, 49, 'Wheels :', NULL, '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(226, 50, NULL, NULL, '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(227, 50, NULL, NULL, '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(228, 50, NULL, NULL, '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(229, 50, NULL, NULL, '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(230, 50, NULL, NULL, '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(236, 52, 'Frame :', NULL, '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(237, 52, 'Weight Capacity :', NULL, '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(238, 52, 'Width :', NULL, '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(239, 52, 'Height :', NULL, '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(240, 52, 'Wheels :', NULL, '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(241, 53, 'Frame :', NULL, '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(242, 53, 'Weight Capacity :', NULL, '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(243, 53, 'Width :', NULL, '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(244, 53, 'Height :', NULL, '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(245, 53, 'Wheels :', NULL, '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(251, 55, 'Frame :', NULL, '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(252, 55, 'Weight Capacity :', NULL, '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(253, 55, 'Width :', NULL, '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(254, 55, 'Height :', NULL, '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(255, 55, 'Wheels :', NULL, '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(256, 56, 'Frame :', NULL, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(257, 56, 'Weight Capacity :', NULL, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(258, 56, 'Width :', NULL, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(259, 56, 'Height :', NULL, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(260, 56, 'Wheels :', NULL, '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(261, 57, 'Frame :', NULL, '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(262, 57, 'Weight Capacity :', NULL, '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(263, 57, 'Width :', NULL, '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(264, 57, 'Height :', NULL, '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(265, 57, 'Wheels :', NULL, '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(266, 58, 'Frame :', NULL, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(267, 58, 'Weight Capacity :', NULL, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(268, 58, 'Width :', NULL, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(269, 58, 'Height :', NULL, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(270, 58, 'Wheels :', NULL, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(271, 59, 'Frame :', NULL, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(272, 59, 'Weight Capacity :', NULL, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(273, 59, 'Width :', NULL, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(274, 59, 'Height :', NULL, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(275, 59, 'Wheels :', NULL, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(276, 60, 'Frame :', NULL, '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(277, 60, 'Weight Capacity :', NULL, '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(278, 60, 'Width :', NULL, '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(279, 60, 'Height :', NULL, '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(280, 60, 'Wheels :', NULL, '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(281, 61, 'Frame :', NULL, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(282, 61, 'Weight Capacity :', NULL, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(283, 61, 'Width :', NULL, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(284, 61, 'Height :', NULL, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(285, 61, 'Wheels :', NULL, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(286, 62, 'Frame :', NULL, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(287, 62, 'Weight Capacity :', NULL, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(288, 62, 'Width :', NULL, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(289, 62, 'Height :', NULL, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(290, 62, 'Wheels :', NULL, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(291, 63, 'Frame :', NULL, '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(292, 63, 'Weight Capacity :', NULL, '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(293, 63, 'Width :', NULL, '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(294, 63, 'Height :', NULL, '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(295, 63, 'Wheels :', NULL, '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(296, 64, 'Frame :', NULL, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(297, 64, 'Weight Capacity :', NULL, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(298, 64, 'Width :', NULL, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(299, 64, 'Height :', NULL, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(300, 64, 'Wheels :', NULL, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(301, 65, 'Frame :', NULL, '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(302, 65, 'Weight Capacity :', NULL, '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(303, 65, 'Width :', NULL, '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(304, 65, 'Height :', NULL, '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(305, 65, 'Wheels :', NULL, '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(306, 67, 'Frame :', NULL, '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(307, 67, 'Weight Capacity :', NULL, '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(308, 67, 'Width :', NULL, '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(309, 67, 'Height :', NULL, '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(310, 67, 'Wheels :', NULL, '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(311, 68, 'Frame :', NULL, '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(312, 68, 'Weight Capacity :', NULL, '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(313, 68, 'Width :', NULL, '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(314, 68, 'Height :', NULL, '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(315, 68, 'Wheels :', NULL, '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(316, 69, 'Frame :', NULL, '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(317, 69, 'Weight Capacity :', NULL, '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(318, 69, 'Width :', NULL, '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(319, 69, 'Height :', NULL, '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(320, 69, 'Wheels :', NULL, '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(321, 70, 'Frame :', NULL, '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(322, 70, 'Weight Capacity :', NULL, '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(323, 70, 'Width :', NULL, '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(324, 70, 'Height :', NULL, '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(325, 70, 'Wheels :', NULL, '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(326, 71, 'Frame :', NULL, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(327, 71, 'Weight Capacity :', NULL, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(328, 71, 'Width :', NULL, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(329, 71, 'Height :', NULL, '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(330, 71, 'Wheels :', NULL, '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2530,22 +2966,47 @@ CREATE TABLE `product_extras` (
 --
 
 INSERT INTO `product_extras` (`id`, `product_id`, `warranty_type`, `return_policy`, `delivery_type`, `emi`, `created_at`, `updated_at`) VALUES
-(1, 1, '1 Year Brand Warranty', '7 days return policy (No change of mind applicable)', '1', 'Available', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(3, 3, 'No Warranty', 'Non returnable', '1', 'Not Available', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(4, 4, '1 years', '3 days', '1', 'Available', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(6, 6, '5year', '7days', '1', 'Available', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(8, 9, NULL, NULL, '0', 'Available', '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(9, 12, NULL, NULL, '0', 'Available', '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(10, 13, NULL, NULL, '1', 'Available', '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(15, 18, NULL, NULL, '1', 'Not Available', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(16, 19, NULL, NULL, '1', 'Not Available', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(17, 20, NULL, NULL, '1', 'Not Available', '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(18, 21, NULL, NULL, '1', 'Not Available', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(19, 22, NULL, NULL, '1', 'Not Available', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(20, 23, NULL, NULL, '1', 'Not Available', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(21, 24, NULL, NULL, '1', 'Not Available', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(22, 25, NULL, NULL, '1', 'Not Available', '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(23, 26, NULL, NULL, '1', 'Not Available', '2024-02-07 04:38:23', '2024-02-07 04:38:23');
+(24, 27, NULL, NULL, '1', 'Not Available', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(25, 28, NULL, NULL, '1', 'Not Available', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(26, 29, NULL, NULL, '1', 'Not Available', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(27, 31, NULL, NULL, '1', 'Not Available', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(28, 32, NULL, NULL, '1', 'Not Available', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(29, 33, NULL, NULL, '1', 'Not Available', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(30, 34, NULL, NULL, '1', 'Not Available', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(31, 35, NULL, NULL, '1', 'Not Available', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(32, 36, NULL, NULL, '1', 'Not Available', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(33, 37, NULL, NULL, '1', 'Not Available', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(34, 38, NULL, NULL, '1', 'Not Available', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(35, 39, NULL, NULL, '1', 'Not Available', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(36, 40, NULL, NULL, '1', 'Not Available', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(37, 41, NULL, NULL, '1', 'Not Available', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(38, 42, NULL, NULL, '1', 'Not Available', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(39, 43, NULL, NULL, '1', 'Not Available', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(40, 44, NULL, NULL, '1', 'Not Available', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(41, 45, NULL, NULL, '1', 'Not Available', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(42, 46, NULL, NULL, '1', 'Not Available', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(43, 47, NULL, NULL, '1', 'Not Available', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(44, 48, NULL, NULL, '1', 'Not Available', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(45, 49, NULL, NULL, '1', 'Not Available', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(46, 50, NULL, NULL, '1', 'Not Available', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(48, 52, NULL, NULL, '1', 'Not Available', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(49, 53, NULL, NULL, '1', 'Not Available', '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(51, 55, NULL, NULL, '1', 'Not Available', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(52, 56, NULL, NULL, '1', 'Not Available', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(53, 57, NULL, NULL, '1', 'Not Available', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(54, 58, NULL, NULL, '1', 'Not Available', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(55, 59, NULL, NULL, '1', 'Not Available', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(56, 60, NULL, NULL, '1', 'Not Available', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(57, 61, NULL, NULL, '1', 'Not Available', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(58, 62, NULL, NULL, '1', 'Not Available', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(59, 63, NULL, NULL, '1', 'Not Available', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(60, 64, NULL, NULL, '1', 'Not Available', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(61, 65, NULL, NULL, '1', 'Not Available', '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(62, 67, NULL, NULL, '1', 'Not Available', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(63, 68, NULL, NULL, '1', 'Not Available', '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(64, 69, NULL, NULL, '1', 'Not Available', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(65, 70, NULL, NULL, '1', 'Not Available', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(66, 71, NULL, NULL, '1', 'Not Available', '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2567,72 +3028,161 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`id`, `product_id`, `product_image`, `slug`, `created_at`, `updated_at`) VALUES
-(1, 1, 'new-year-t-shirt_0_1704959817.webp', '', '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(2, 1, 'new-year-t-shirt_1_1704959817.webp', '', '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(3, 1, 'new-year-t-shirt_2_1704959817.webp', '', '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(4, 1, 'new-year-t-shirt_3_1704959817.webp', '', '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(5, 1, 'new-year-t-shirt_4_1704959817.webp', '', '2024-01-11 01:56:57', '2024-01-11 01:56:57'),
-(6, 1, 'new-year-t-shirt_5_1704959817.webp', '', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(7, 1, 'new-year-t-shirt_6_1704959818.webp', '', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(8, 1, 'new-year-t-shirt_7_1704959818.webp', '', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(14, 3, 'special-cozy-cotton-pants_0_1705219917.webp', '', '2024-01-14 02:11:57', '2024-01-14 02:11:57'),
-(15, 3, 'special-cozy-cotton-pants_1_1705219917.webp', '', '2024-01-14 02:11:57', '2024-01-14 02:11:57'),
-(16, 3, 'special-cozy-cotton-pants_2_1705219917.webp', '', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(17, 3, 'special-cozy-cotton-pants_3_1705219918.webp', '', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(18, 3, 'special-cozy-cotton-pants_4_1705219918.webp', '', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(19, 3, 'special-cozy-cotton-pants_5_1705219918.webp', '', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(20, 4, 'award-crest_0_1705560330.png', '', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(22, 6, 'cristal-crest_0_1705561128.png', '', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(23, 6, 'cristal-crest_1_1705561128.jpg', '', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(25, 9, 'fabrilife-mens-multi-shades-hoodie-stormy-sea_0_1705563377.png', '', '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(26, 12, 'city-boy-premium-printed-mens-winter-jacket_0_1705564566.png', '', '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(28, 13, 'aaa_1.webp', '', '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(29, 13, 'aaa_2.webp', '', '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(43, 18, 'mens-classic-panjabi-sa01_0.jpg', '', '2024-02-07 03:55:01', '2024-02-07 03:55:01'),
-(44, 18, 'mens-classic-panjabi-sa01_1.jpg', '', '2024-02-07 03:55:02', '2024-02-07 03:55:02'),
-(45, 18, 'mens-classic-panjabi-sa01_2.jpg', '', '2024-02-07 03:55:03', '2024-02-07 03:55:03'),
-(46, 18, 'mens-classic-panjabi-sa01_3.jpg', '', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(47, 18, 'mens-classic-panjabi-sa01_4.jpg', '', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(48, 19, 'mens-classic-panjabi-sa02_0.jpg', '', '2024-02-07 03:59:15', '2024-02-07 03:59:15'),
-(49, 19, 'mens-classic-panjabi-sa02_1.jpg', '', '2024-02-07 03:59:16', '2024-02-07 03:59:16'),
-(50, 19, 'mens-classic-panjabi-sa02_2.jpg', '', '2024-02-07 03:59:17', '2024-02-07 03:59:17'),
-(51, 19, 'mens-classic-panjabi-sa02_3.jpg', '', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(52, 19, 'mens-classic-panjabi-sa02_4.jpg', '', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(53, 20, 'mens-premium-panjabi-sa09_0.jpg', '', '2024-02-07 04:05:38', '2024-02-07 04:05:38'),
-(54, 20, 'mens-premium-panjabi-sa09_1.jpg', '', '2024-02-07 04:05:39', '2024-02-07 04:05:39'),
-(55, 20, 'mens-premium-panjabi-sa09_2.jpg', '', '2024-02-07 04:05:40', '2024-02-07 04:05:40'),
-(56, 20, 'mens-premium-panjabi-sa09_3.jpg', '', '2024-02-07 04:05:41', '2024-02-07 04:05:41'),
-(57, 20, 'mens-premium-panjabi-sa09_4.jpg', '', '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(58, 21, 'mens-premium-panjabi-sa10_0.jpg', '', '2024-02-07 04:09:57', '2024-02-07 04:09:57'),
-(59, 21, 'mens-premium-panjabi-sa10_1.jpg', '', '2024-02-07 04:09:58', '2024-02-07 04:09:58'),
-(60, 21, 'mens-premium-panjabi-sa10_2.jpg', '', '2024-02-07 04:09:59', '2024-02-07 04:09:59'),
-(61, 21, 'mens-premium-panjabi-sa10_3.jpg', '', '2024-02-07 04:09:59', '2024-02-07 04:09:59'),
-(62, 21, 'mens-premium-panjabi-sa10_4.jpg', '', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(63, 22, 'mens-premium-panjabi-sa07_0.jpg', '', '2024-02-07 04:13:36', '2024-02-07 04:13:36'),
-(64, 22, 'mens-premium-panjabi-sa07_1.jpg', '', '2024-02-07 04:13:37', '2024-02-07 04:13:37'),
-(65, 22, 'mens-premium-panjabi-sa07_2.jpg', '', '2024-02-07 04:13:38', '2024-02-07 04:13:38'),
-(66, 22, 'mens-premium-panjabi-sa07_3.jpg', '', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(67, 22, 'mens-premium-panjabi-sa07_4.jpg', '', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(68, 23, 'mens-premium-panjabi-sa06_0.jpg', '', '2024-02-07 04:15:47', '2024-02-07 04:15:47'),
-(69, 23, 'mens-premium-panjabi-sa06_1.jpg', '', '2024-02-07 04:15:48', '2024-02-07 04:15:48'),
-(70, 23, 'mens-premium-panjabi-sa06_2.jpg', '', '2024-02-07 04:15:49', '2024-02-07 04:15:49'),
-(71, 23, 'mens-premium-panjabi-sa06_3.jpg', '', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(72, 23, 'mens-premium-panjabi-sa06_4.jpg', '', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(73, 24, 'mens-printed-panjabi-pr05_0.jpg', '', '2024-02-07 04:20:36', '2024-02-07 04:20:36'),
-(74, 24, 'mens-printed-panjabi-pr05_1.jpg', '', '2024-02-07 04:20:37', '2024-02-07 04:20:37'),
-(75, 24, 'mens-printed-panjabi-pr05_2.jpg', '', '2024-02-07 04:20:38', '2024-02-07 04:20:38'),
-(76, 24, 'mens-printed-panjabi-pr05_3.jpg', '', '2024-02-07 04:20:39', '2024-02-07 04:20:39'),
-(77, 24, 'mens-printed-panjabi-pr05_4.jpg', '', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(78, 25, 'mens-printed-panjabi-pr04_0.jpg', '', '2024-02-07 04:31:35', '2024-02-07 04:31:35'),
-(79, 25, 'mens-printed-panjabi-pr04_1.jpg', '', '2024-02-07 04:31:36', '2024-02-07 04:31:36'),
-(80, 25, 'mens-printed-panjabi-pr04_2.jpg', '', '2024-02-07 04:31:37', '2024-02-07 04:31:37'),
-(81, 25, 'mens-printed-panjabi-pr04_3.jpg', '', '2024-02-07 04:31:38', '2024-02-07 04:31:38'),
-(82, 25, 'mens-printed-panjabi-pr04_4.jpg', '', '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(83, 26, 'mens-printed-panjabi-pr03_0.jpg', '', '2024-02-07 04:38:20', '2024-02-07 04:38:20'),
-(84, 26, 'mens-printed-panjabi-pr03_1.jpg', '', '2024-02-07 04:38:21', '2024-02-07 04:38:21'),
-(85, 26, 'mens-printed-panjabi-pr03_2.jpg', '', '2024-02-07 04:38:22', '2024-02-07 04:38:22'),
-(86, 26, 'mens-printed-panjabi-pr03_3.jpg', '', '2024-02-07 04:38:22', '2024-02-07 04:38:22'),
-(87, 26, 'mens-printed-panjabi-pr03_4.jpg', '', '2024-02-07 04:38:23', '2024-02-07 04:38:23');
+(68, 23, 'mens-premium-panjabi-sa06_0.jpg', '', '2024-02-07 10:15:47', '2024-02-07 10:15:47'),
+(69, 23, 'mens-premium-panjabi-sa06_1.jpg', '', '2024-02-07 10:15:48', '2024-02-07 10:15:48'),
+(70, 23, 'mens-premium-panjabi-sa06_2.jpg', '', '2024-02-07 10:15:49', '2024-02-07 10:15:49'),
+(71, 23, 'mens-premium-panjabi-sa06_3.jpg', '', '2024-02-07 10:15:50', '2024-02-07 10:15:50'),
+(72, 23, 'mens-premium-panjabi-sa06_4.jpg', '', '2024-02-07 10:15:50', '2024-02-07 10:15:50'),
+(73, 24, 'mens-printed-panjabi-pr05_0.jpg', '', '2024-02-07 10:20:36', '2024-02-07 10:20:36'),
+(74, 24, 'mens-printed-panjabi-pr05_1.jpg', '', '2024-02-07 10:20:37', '2024-02-07 10:20:37'),
+(75, 24, 'mens-printed-panjabi-pr05_2.jpg', '', '2024-02-07 10:20:38', '2024-02-07 10:20:38'),
+(76, 24, 'mens-printed-panjabi-pr05_3.jpg', '', '2024-02-07 10:20:39', '2024-02-07 10:20:39'),
+(77, 24, 'mens-printed-panjabi-pr05_4.jpg', '', '2024-02-07 10:20:40', '2024-02-07 10:20:40'),
+(78, 25, 'mens-printed-panjabi-pr04_0.jpg', '', '2024-02-07 10:31:35', '2024-02-07 10:31:35'),
+(79, 25, 'mens-printed-panjabi-pr04_1.jpg', '', '2024-02-07 10:31:36', '2024-02-07 10:31:36'),
+(80, 25, 'mens-printed-panjabi-pr04_2.jpg', '', '2024-02-07 10:31:37', '2024-02-07 10:31:37'),
+(81, 25, 'mens-printed-panjabi-pr04_3.jpg', '', '2024-02-07 10:31:38', '2024-02-07 10:31:38'),
+(82, 25, 'mens-printed-panjabi-pr04_4.jpg', '', '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(83, 26, 'mens-printed-panjabi-pr03_0.jpg', '', '2024-02-07 10:38:20', '2024-02-07 10:38:20'),
+(84, 26, 'mens-printed-panjabi-pr03_1.jpg', '', '2024-02-07 10:38:21', '2024-02-07 10:38:21'),
+(85, 26, 'mens-printed-panjabi-pr03_2.jpg', '', '2024-02-07 10:38:22', '2024-02-07 10:38:22'),
+(86, 26, 'mens-printed-panjabi-pr03_3.jpg', '', '2024-02-07 10:38:22', '2024-02-07 10:38:22'),
+(87, 26, 'mens-printed-panjabi-pr03_4.jpg', '', '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(88, 27, 'koohen-premium-punjabi-sa01_0.jpg', '', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(89, 27, 'koohen-premium-punjabi-sa01_1.jpg', '', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(90, 27, 'koohen-premium-punjabi-sa01_2.jpg', '', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(91, 28, 'koohen-premium-punjabi-sa02_0.jpg', '', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(92, 28, 'koohen-premium-punjabi-sa02_1.jpg', '', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(93, 28, 'koohen-premium-punjabi-sa02_2.jpg', '', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(94, 29, 'koohen-premium-punjabi-sa03_0.jpg', '', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(95, 29, 'koohen-premium-punjabi-sa03_1.jpg', '', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(96, 29, 'koohen-premium-punjabi-sa03_2.jpg', '', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(97, 31, 'koohen-premium-punjabi-sa04_0.jpg', '', '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(98, 31, 'koohen-premium-punjabi-sa04_1.jpg', '', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(99, 31, 'koohen-premium-punjabi-sa04_2.jpg', '', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(100, 32, 'koohen-premium-punjabi-sa05_0.jpg', '', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(101, 32, 'koohen-premium-punjabi-sa05_1.jpg', '', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(102, 32, 'koohen-premium-punjabi-sa05_2.jpg', '', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(103, 33, 'koohen-premium-punjabi-sa06_0.jpg', '', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(104, 33, 'koohen-premium-punjabi-sa06_1.jpg', '', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(105, 33, 'koohen-premium-punjabi-sa06_2.jpg', '', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(106, 34, 'koohen-standard-punjabi-sa07_0.jpg', '', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(107, 34, 'koohen-standard-punjabi-sa07_1.jpg', '', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(108, 34, 'koohen-standard-punjabi-sa07_2.jpg', '', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(109, 35, 'koohen-standard-punjabi-sa08_0.jpg', '', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(110, 36, 'koohen-standard-punjabi-sa09_0.jpg', '', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(111, 36, 'koohen-standard-punjabi-sa09_1.jpg', '', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(112, 36, 'koohen-standard-punjabi-sa09_2.jpg', '', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(113, 37, 'koohen-standard-punjabi-sa10_0.jpg', '', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(114, 37, 'koohen-standard-punjabi-sa10_1.jpg', '', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(115, 37, 'koohen-standard-punjabi-sa10_2.jpg', '', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(116, 38, 'koohen-standard-punjabi-sa11_0.jpg', '', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(117, 38, 'koohen-standard-punjabi-sa11_1.jpg', '', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(118, 38, 'koohen-standard-punjabi-sa11_2.jpg', '', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(119, 39, 'koohen-standard-punjabi-sa12_0.jpg', '', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(120, 39, 'koohen-standard-punjabi-sa12_1.jpg', '', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(121, 39, 'koohen-standard-punjabi-sa12_2.jpg', '', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(122, 40, 'koohen-regular-punjabi-pr07_0.jpg', '', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(123, 40, 'koohen-regular-punjabi-pr07_1.jpg', '', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(124, 40, 'koohen-regular-punjabi-pr07_2.jpg', '', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(125, 41, 'koohen-regular-punjabi-pr06_0.jpg', '', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(126, 41, 'koohen-regular-punjabi-pr06_1.jpg', '', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(127, 41, 'koohen-regular-punjabi-pr06_2.jpg', '', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(128, 42, 'koohen-standard-punjabi-pr05_0.jpg', '', '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(129, 42, 'koohen-standard-punjabi-pr05_1.jpg', '', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(130, 42, 'koohen-standard-punjabi-pr05_2.jpg', '', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(131, 43, 'koohen-standard-punjabi-pr04_0.jpg', '', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(132, 43, 'koohen-standard-punjabi-pr04_1.jpg', '', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(133, 43, 'koohen-standard-punjabi-pr04_2.jpg', '', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(134, 44, 'koohen-standard-punjabi-pr01_0.jpg', '', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(135, 44, 'koohen-standard-punjabi-pr01_1.jpg', '', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(136, 44, 'koohen-standard-punjabi-pr01_2.jpg', '', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(137, 45, 'koohen-standard-punjabi-pr02_0.jpg', '', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(138, 45, 'koohen-standard-punjabi-pr02_1.jpg', '', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(139, 45, 'koohen-standard-punjabi-pr02_2.jpg', '', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(140, 46, 'koohen-standard-punjabi-pr03_0.jpg', '', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(141, 46, 'koohen-standard-punjabi-pr03_1.jpg', '', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(142, 46, 'koohen-standard-punjabi-pr03_2.jpg', '', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(143, 47, 'koohen-regular-punjabi-pr08_0.jpg', '', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(144, 47, 'koohen-regular-punjabi-pr08_1.jpg', '', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(145, 48, 'koohen-regular-punjabi-pr09_0.jpg', '', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(146, 48, 'koohen-regular-punjabi-pr09_1.jpg', '', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(147, 49, 'koohen-regular-punjabi-pr10_0.jpg', '', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(148, 49, 'koohen-regular-punjabi-pr10_1.jpg', '', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(149, 50, 'mens-premium-pajama-sw01_0.jpg', '', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(151, 52, 'mens-standard-punjabi-sa14_0.jpg', '', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(152, 52, 'mens-standard-punjabi-sa14_1.jpg', '', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(153, 52, 'mens-standard-punjabi-sa14_2.jpg', '', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(154, 52, 'mens-standard-punjabi-sa14_3.jpg', '', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(155, 53, 'mens-standard-punjabi-sa15_0.jpg', '', '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(156, 53, 'mens-standard-punjabi-sa15_1.jpg', '', '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(157, 53, 'mens-standard-punjabi-sa15_2.jpg', '', '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(163, 55, 'mens-premium-punjabi-sa16_0.jpg', '', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(164, 55, 'mens-premium-punjabi-sa16_1.jpg', '', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(165, 55, 'mens-premium-punjabi-sa16_2.jpg', '', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(166, 55, 'mens-premium-punjabi-sa16_3.jpg', '', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(167, 56, 'mens-premium-punjabi-sa17_0.jpg', '', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(168, 56, 'mens-premium-punjabi-sa17_1.jpg', '', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(169, 56, 'mens-premium-punjabi-sa17_2.jpg', '', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(170, 57, 'mens-standard-punjabi-pr11_0.jpg', '', '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(171, 57, 'mens-standard-punjabi-pr11_1.jpg', '', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(172, 57, 'mens-standard-punjabi-pr11_2.jpg', '', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(173, 57, 'mens-standard-punjabi-pr11_3.jpg', '', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(174, 58, 'koohen-standard-punjabi-pr12_0.jpg', '', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(175, 58, 'koohen-standard-punjabi-pr12_1.jpg', '', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(176, 59, 'womens-co-ords-set-crds01_0.jpg', '', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(177, 59, 'womens-co-ords-set-crds01_1.jpg', '', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(178, 59, 'womens-co-ords-set-crds01_2.jpg', '', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(179, 59, 'womens-co-ords-set-crds01_3.jpg', '', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(180, 60, 'womens-co-ords-set-crds02_0.jpg', '', '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(181, 60, 'womens-co-ords-set-crds02_1.jpg', '', '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(182, 60, 'womens-co-ords-set-crds02_2.jpg', '', '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(183, 60, 'womens-co-ords-set-crds02_3.jpg', '', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(184, 60, 'womens-co-ords-set-crds02_4.jpg', '', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(185, 61, 'womens-co-ords-set-crds03_0.jpg', '', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(186, 61, 'womens-co-ords-set-crds03_1.jpg', '', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(187, 61, 'womens-co-ords-set-crds03_2.jpg', '', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(188, 61, 'womens-co-ords-set-crds03_3.jpg', '', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(189, 62, 'womens-co-ords-set-crds04_0.jpg', '', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(190, 62, 'womens-co-ords-set-crds04_1.jpg', '', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(191, 62, 'womens-co-ords-set-crds04_2.jpg', '', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(192, 62, 'womens-co-ords-set-crds04_3.jpg', '', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(193, 63, 'womens-co-ords-set-crds05_0.jpg', '', '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(194, 63, 'womens-co-ords-set-crds05_1.jpg', '', '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(195, 63, 'womens-co-ords-set-crds05_2.jpg', '', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(196, 63, 'womens-co-ords-set-crds05_3.jpg', '', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(197, 63, 'womens-co-ords-set-crds05_4.jpg', '', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(198, 64, 'womens-co-ords-set-crds06_0.jpg', '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(199, 64, 'womens-co-ords-set-crds06_1.jpg', '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(200, 64, 'womens-co-ords-set-crds06_2.jpg', '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(201, 64, 'womens-co-ords-set-crds06_3.jpg', '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(202, 64, 'womens-co-ords-set-crds06_4.jpg', '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(203, 65, 'womens-kaftan-set-kftn01_0.jpg', '', '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(204, 65, 'womens-kaftan-set-kftn01_1.jpg', '', '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(205, 65, 'womens-kaftan-set-kftn01_2.jpg', '', '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(206, 65, 'womens-kaftan-set-kftn01_3.jpg', '', '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(207, 65, 'womens-kaftan-set-kftn01_4.jpg', '', '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(208, 67, 'womens-kaftan-set-kftn02_0.jpg', '', '2024-05-13 07:56:08', '2024-05-13 07:56:08'),
+(209, 67, 'womens-kaftan-set-kftn02_1.jpg', '', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(210, 67, 'womens-kaftan-set-kftn02_2.jpg', '', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(211, 67, 'womens-kaftan-set-kftn02_3.jpg', '', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(212, 67, 'womens-kaftan-set-kftn02_4.jpg', '', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(213, 68, 'womens-kaftan-set-kftn03_0.jpg', '', '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(214, 68, 'womens-kaftan-set-kftn03_1.jpg', '', '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(215, 68, 'womens-kaftan-set-kftn03_2.jpg', '', '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(216, 68, 'womens-kaftan-set-kftn03_3.jpg', '', '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(217, 68, 'womens-kaftan-set-kftn03_4.jpg', '', '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(218, 69, 'womens-kaftan-set-kftn04_0.jpg', '', '2024-05-13 08:00:48', '2024-05-13 08:00:48'),
+(219, 69, 'womens-kaftan-set-kftn04_1.jpg', '', '2024-05-13 08:00:48', '2024-05-13 08:00:48'),
+(220, 69, 'womens-kaftan-set-kftn04_2.jpg', '', '2024-05-13 08:00:48', '2024-05-13 08:00:48'),
+(221, 69, 'womens-kaftan-set-kftn04_3.jpg', '', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(222, 69, 'womens-kaftan-set-kftn04_4.jpg', '', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(223, 70, 'womens-kaftan-set-kftn06_0.jpg', '', '2024-05-13 08:03:03', '2024-05-13 08:03:03'),
+(224, 70, 'womens-kaftan-set-kftn06_1.jpg', '', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(225, 70, 'womens-kaftan-set-kftn06_2.jpg', '', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(226, 70, 'womens-kaftan-set-kftn06_3.jpg', '', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(227, 70, 'womens-kaftan-set-kftn06_4.jpg', '', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(228, 71, 'mens-premium-punjabi-sa13_0.jpg', '', '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2647,24 +3197,6 @@ CREATE TABLE `product_offer_types` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `product_offer_types`
---
-
-INSERT INTO `product_offer_types` (`id`, `offer_id`, `offer_product_id`, `created_at`, `updated_at`) VALUES
-(7, 2, 26, NULL, NULL),
-(8, 2, 25, NULL, NULL),
-(9, 2, 24, NULL, NULL),
-(10, 2, 23, NULL, NULL),
-(11, 2, 22, NULL, NULL),
-(12, 2, 21, NULL, NULL),
-(13, 2, 20, NULL, NULL),
-(14, 2, 19, NULL, NULL),
-(15, 2, 18, NULL, NULL),
-(16, 3, 25, NULL, NULL),
-(17, 3, 24, NULL, NULL),
-(18, 3, 23, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2686,49 +3218,178 @@ CREATE TABLE `product_overviews` (
 --
 
 INSERT INTO `product_overviews` (`id`, `product_id`, `overview_name`, `overview_value`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Packing :', 'Pack', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(2, 1, 'Color:', 'Multicolor', '2024-01-11 01:56:58', '2024-01-11 01:56:58'),
-(5, 3, 'Fabric', 'Made of 100% cotton', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(6, 3, 'Fabric type', 'Texture fabric', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(7, 4, 'Type Of Packing :', 'Arifuzzaman', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(8, 4, 'badrujjaman', 'badrujjaman', '2024-01-18 00:45:30', '2024-01-18 00:45:30'),
-(10, 6, 'Type Of Packing :', 'masud vai', '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(12, 9, 'Type Of Packing :', 'Paper Box', '2024-01-18 01:36:17', '2024-01-18 01:36:17'),
-(13, 12, 'Type Of Packing :', 'Paper Box', '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(14, 13, 'Type Of Packing :', 'sdsd', '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(24, 18, 'Fabric Type :', 'Cotton Slub', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(25, 18, 'Type :', 'Regular Fit', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(26, 18, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(27, 18, 'Durability :', 'Durable and long-lasting', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(28, 19, 'Fabric Type :', 'Cotton Slub', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(29, 19, 'Type :', 'Regular Fit', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(30, 19, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(31, 19, 'Durability :', 'Durable and long-lasting', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(32, 20, 'Fabric Type :', 'Fancy Cotton', '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(33, 21, 'Fabric Type :', 'Herringbone Cotton', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(34, 21, 'Type :', 'Regular Fit', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(35, 21, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(36, 21, 'Durability :', 'Durable and long-lasting', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(37, 22, 'Fabric Type :', 'Fancy Cotton', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(38, 22, 'Type :', 'Regular Fit', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(39, 22, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(40, 22, 'Durability :', 'Durable and long-lasting', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(41, 23, 'Fabric Type :', 'Fancy Cotton', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(42, 23, 'Type :', 'Regular Fit', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(43, 23, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(44, 23, 'Durability :', 'Durable and long-lasting', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(45, 24, 'Fabric Type :', 'Micro Bizcoch', '2024-02-07 04:20:40', '2024-02-07 05:04:41'),
-(46, 24, 'Type :', 'Regular Fit', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(47, 24, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(48, 24, 'Durability :', 'Durable and long-lasting', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(49, 25, 'Fabric Type :', 'Cotton + Polyester', '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(50, 25, 'Type :', 'Regular Fit', '2024-02-07 04:31:39', '2024-02-07 11:22:40'),
-(51, 25, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(52, 25, 'Durability :', 'Durable and long-lasting', '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(53, 26, 'Fabric Type :', 'Cotton + Polyester', '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(54, 26, 'Type :', 'Regular Fit', '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(55, 26, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(56, 26, 'Durability :', 'Durable and long-lasting', '2024-02-07 04:38:23', '2024-02-07 04:38:23');
+(49, 25, 'Fabric Type :', 'Cotton + Polyester', '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(50, 25, 'Type :', 'Regular Fit', '2024-02-07 10:31:39', '2024-02-07 17:22:40'),
+(51, 25, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(52, 25, 'Durability :', 'Durable and long-lasting', '2024-02-07 10:31:39', '2024-02-07 10:31:39'),
+(53, 26, 'Fabric Type :', 'Cotton + Polyester', '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(54, 26, 'Type :', 'Regular Fit', '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(55, 26, 'Breathability :', 'Highly breathable and comfortable', '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(56, 26, 'Durability :', 'Durable and long-lasting', '2024-02-07 10:38:23', '2024-02-07 10:38:23'),
+(57, 27, 'Fabric Type:', 'Cotton', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(58, 27, 'Type:', 'Regular Fit', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(59, 27, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(60, 27, 'Durability:', 'Durable and long-lasting', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(61, 28, 'Fabric Type:', 'Cotton', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(62, 28, 'Type:', 'Regular Fit', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(63, 28, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(64, 28, 'Durability:', 'Durable and long-lasting', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(65, 29, 'Fabric Type:', 'Cotton', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(66, 29, 'Type:', 'Regular Fit', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(67, 29, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(68, 29, 'Durability:', 'Durable and long-lasting', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(69, 31, 'Fabric Type:', 'Cotton', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(70, 31, 'Type:', 'Regular Fit', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(71, 31, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(72, 31, 'Durability:', 'Durable and long-lasting', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(73, 32, 'Fabric Type:', 'Cotton', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(74, 32, 'Type:', 'Regular Fit', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(75, 32, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(76, 32, 'Durability:', 'Durable and long-lasting', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(77, 33, 'Fabric Type:', 'Cotton', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(78, 33, 'Type:', 'Regular Fit', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(79, 33, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(80, 33, 'Durability:', 'Durable and long-lasting', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(81, 34, 'Fabric Type:', 'Cotton', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(82, 34, 'Type:', 'Regular Fit', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(83, 34, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(84, 34, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(85, 35, 'Fabric Type:', 'Cotton', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(86, 35, 'Type:', 'Regular Fit', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(87, 35, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(88, 35, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(89, 36, 'Fabric Type:', 'Cotton', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(90, 36, 'Type:', 'Regular Fit', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(91, 36, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(92, 36, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(93, 37, 'Fabric Type:', 'Cotton', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(94, 37, 'Type:', 'Regular Fit', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(95, 37, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(96, 37, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(97, 38, 'Fabric Type:', 'Cotton', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(98, 38, 'Type:', 'Regular Fit', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(99, 38, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(100, 38, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(101, 39, 'Fabric Type:', 'Cotton', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(102, 39, 'Type:', 'Regular Fit', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(103, 39, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(104, 39, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(105, 40, 'Fabric Type:', 'Cotton', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(106, 40, 'Type:', 'Regular Fit', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(107, 40, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(108, 40, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(109, 41, 'Fabric Type:', 'Cotton', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(110, 41, 'Type:', 'Regular Fit', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(111, 41, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(112, 41, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(113, 42, 'Fabric Type:', 'Cotton', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(114, 42, 'Type:', 'Regular Fit', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(115, 42, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(116, 42, 'Durability:', 'Durable and long-lasting', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(117, 43, 'Fabric Type:', 'Cotton', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(118, 43, 'Type:', 'Regular Fit', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(119, 43, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(120, 43, 'Durability:', 'Durable and long-lasting', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(121, 44, 'Fabric Type:', 'Cotton', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(122, 44, 'Type:', 'Regular Fit', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(123, 44, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(124, 44, 'Durability:', 'Durable and long-lasting', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(125, 45, 'Fabric Type:', 'Cotton', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(126, 45, 'Type:', 'Regular Fit', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(127, 45, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(128, 45, 'Durability:', 'Durable and long-lasting', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(129, 46, 'Fabric Type:', 'Cotton', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(130, 46, 'Type:', 'Regular Fit', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(131, 46, 'Breathability:', 'Highly breathable and comfortable', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(132, 46, 'Durability:', 'Durable and long-lasting', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(133, 47, 'Fabric Type:', 'Cotton', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(134, 47, 'Type:', 'Regular Fit', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(135, 47, 'Breathability:', 'Highly breathable and comfortable', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(136, 47, 'Durability:', 'Durable and long-lasting', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(137, 48, 'Fabric Type:', 'Cotton', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(138, 48, 'Type:', 'Regular Fit', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(139, 48, 'Breathability:', 'Highly breathable and comfortable', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(140, 48, 'Durability:', 'Durable and long-lasting', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(141, 49, 'Fabric Type:', 'Cotton', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(142, 49, 'Type:', 'Regular Fit', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(143, 49, 'Breathability:', 'Highly breathable and comfortable', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(144, 49, 'Durability:', 'Durable and long-lasting', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(145, 50, 'Fabric Type:', 'Tencil Cotton', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(146, 50, 'Type:', 'Regular Fit', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(147, 50, 'Breathability:', 'Highly breathable and comfortable', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(148, 50, 'Durability:', 'Durable and long-lasting', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(150, 52, 'Fabric Type:', 'Cotton', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(151, 52, 'Type:', 'Regular Fit', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(152, 52, 'Breathability:', 'Highly breathable and comfortable', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(153, 52, 'Durability:', 'Durable and long-lasting', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(154, 53, 'Fabric Type:', 'Cotton', '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(155, 53, 'Type:', 'Regular Fit', '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(156, 53, 'Breathability:', 'Highly breathable and comfortable', '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(157, 53, 'Durability:', 'Durable and long-lasting', '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(162, 55, 'Fabric Type:', 'Cotton', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(163, 55, 'Type:', 'Regular Fit', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(164, 55, 'Breathability:', 'Highly breathable and comfortable', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(165, 55, 'Durability:', 'Durable and long-lasting', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(166, 56, 'Fabric Type:', 'Cotton', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(167, 56, 'Type:', 'Regular Fit', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(168, 56, 'Breathability:', 'Highly breathable and comfortable', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(169, 56, 'Durability:', 'Durable and long-lasting', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(170, 57, 'Fabric Type:', 'Cotton', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(171, 57, 'Type:', 'Regular Fit', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(172, 57, 'Breathability:', 'Highly breathable and comfortable', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(173, 57, 'Durability:', 'Durable and long-lasting', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(174, 58, 'Fabric Type:', 'Cotton', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(175, 58, 'Type:', 'Regular Fit', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(176, 58, 'Breathability:', 'Highly breathable and comfortable', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(177, 58, 'Durability:', 'Durable and long-lasting', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(178, 59, 'Fabric Type:', 'Cotton', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(179, 59, 'Type:', 'Regular Fit', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(180, 59, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(181, 59, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(182, 60, 'Fabric Type:', 'Cotton', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(183, 60, 'Type:', 'Regular Fit', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(184, 60, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(185, 60, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(186, 61, 'Fabric Type:', 'Cotton', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(187, 61, 'Type:', 'Regular Fit', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(188, 61, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(189, 61, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(190, 62, 'Fabric Type:', 'China Georgette', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(191, 62, 'Type:', 'Regular Fit', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(192, 62, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(193, 62, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(194, 63, 'Fabric Type:', 'China Georgette', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(195, 63, 'Type:', 'Regular Fit', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(196, 63, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(197, 63, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(198, 64, 'Fabric Type:', 'China Georgette', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(199, 64, 'Type:', 'Regular Fit', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(200, 64, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(201, 64, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(202, 65, 'Fabric Type:', 'Cotton', '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(203, 65, 'Type:', 'Regular Fit', '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(204, 65, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(205, 65, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(206, 67, 'Fabric Type:', 'Cotton', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(207, 67, 'Type:', 'Regular Fit', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(208, 67, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(209, 67, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(210, 68, 'Fabric Type:', 'China Georgette', '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(211, 68, 'Type:', 'Regular Fit', '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(212, 68, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(213, 68, 'Durability:', 'Durable and long-lasting', '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(214, 69, 'Fabric Type:', 'China Georgette', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(215, 69, 'Type:', 'Regular Fit', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(216, 69, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(217, 69, 'Durability:', 'Durable and long-lasting', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(218, 70, 'Fabric Type:', 'China Georgette', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(219, 70, 'Type:', 'Regular Fit', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(220, 70, 'Breathability:', 'Highly breathable and comfortable', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(221, 70, 'Durability:', 'Durable and long-lasting', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(222, 71, 'Fabric Type:', 'Cotton', '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(223, 71, 'Type:', 'Regular Fit', '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(224, 71, 'Breathability:', 'Highly breathable and comfortable', '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(225, 71, 'Durability:', 'Durable and long-lasting', '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2751,22 +3412,47 @@ CREATE TABLE `product_prices` (
 --
 
 INSERT INTO `product_prices` (`id`, `product_id`, `offer_price`, `percentage`, `amount`, `created_at`, `updated_at`) VALUES
-(1, 1, '15225', '13', '2275', '2024-01-11 01:56:58', '2024-01-11 04:50:45'),
-(2, 3, '902.5', '5', '47.5', '2024-01-14 02:11:58', '2024-01-14 02:11:58'),
-(3, 4, '0', '0', NULL, '2024-01-18 00:45:30', '2024-01-18 00:50:20'),
-(4, 6, '0', NULL, NULL, '2024-01-18 00:58:48', '2024-01-18 00:58:48'),
-(5, 12, '0', NULL, NULL, '2024-01-18 01:56:06', '2024-01-18 01:56:06'),
-(6, 9, '0', NULL, NULL, NULL, NULL),
-(7, 13, '588', '2', '12', '2024-02-06 02:22:45', '2024-02-06 02:22:45'),
-(12, 18, '1347.5', '23', '402.5', '2024-02-07 03:55:04', '2024-03-12 02:39:26'),
-(13, 19, '1350', '23', '400', '2024-02-07 03:59:18', '2024-02-07 11:16:39'),
-(14, 20, '1450', '26', '500', '2024-02-07 04:05:42', '2024-02-07 11:18:22'),
-(15, 21, '1450', '26', '500', '2024-02-07 04:10:00', '2024-02-07 11:19:04'),
-(16, 22, '1450', '17', '300', '2024-02-07 04:13:39', '2024-02-07 11:21:02'),
-(17, 23, '1452.5', '17', '297.5', '2024-02-07 04:15:50', '2024-03-12 02:55:19'),
-(18, 24, '900', '28', '350', '2024-02-07 04:20:40', '2024-02-07 11:22:03'),
-(19, 25, '950', '24', '300', '2024-02-07 04:31:39', '2024-02-07 11:22:40'),
-(20, 26, '950', '24', '300', '2024-02-07 04:38:23', '2024-02-07 11:23:55');
+(21, 27, '1350', '23', '560', '2024-03-22 20:12:01', '2024-05-13 11:49:16'),
+(22, 28, '1350', '23', '560', '2024-03-22 20:19:25', '2024-05-13 11:49:38'),
+(23, 29, '1450', '36', '675', '2024-03-22 20:23:44', '2024-05-13 11:50:05'),
+(24, 31, '1250', '14', '420.5', '2024-03-22 20:49:38', '2024-05-13 11:50:23'),
+(25, 32, '1250', '14', '420.5', '2024-03-22 20:53:24', '2024-05-13 11:50:39'),
+(26, 33, '1450', '17', '245', '2024-03-22 20:59:13', '2024-05-13 11:51:03'),
+(27, 34, '1250', '14', '420.5', '2024-03-22 21:02:48', '2024-05-13 11:51:19'),
+(28, 35, '1250', '14', '420.5', '2024-03-22 21:12:59', '2024-05-13 11:51:30'),
+(29, 36, '1450', '17', '507.5', '2024-03-22 21:15:33', '2024-05-13 11:51:59'),
+(30, 37, '1250', '14', '420.5', '2024-03-22 21:18:35', '2024-05-13 11:52:10'),
+(31, 38, '1250', '14', '1247', '2024-03-22 21:21:25', '2024-05-13 11:53:56'),
+(32, 39, '1150', '21', '435', '2024-03-22 21:28:29', '2024-05-13 11:52:49'),
+(33, 40, '1099', '12', '150', '2024-03-22 21:35:17', '2024-05-13 11:55:13'),
+(34, 41, '1099', '12', '250', '2024-03-22 21:38:41', '2024-05-13 11:58:02'),
+(35, 42, '1099', '12', '250', '2024-03-22 21:43:39', '2024-05-13 11:55:28'),
+(36, 43, '1099', '12', '250', '2024-03-22 22:37:36', '2024-05-13 11:55:43'),
+(37, 44, '1099', '12', '250', '2024-03-22 22:46:38', '2024-05-13 11:55:56'),
+(38, 45, '1099', '12', '250', '2024-03-22 22:48:06', '2024-05-13 11:56:09'),
+(39, 46, '1099', '12', '250', '2024-03-22 22:49:08', '2024-05-13 11:56:24'),
+(40, 47, '1099', '12', '250', '2024-03-23 20:46:05', '2024-05-13 11:56:41'),
+(41, 48, '1099', '12', '250', '2024-03-23 20:49:10', '2024-05-13 11:56:55'),
+(42, 49, '1099', '12', '250', '2024-03-23 20:50:39', '2024-05-13 11:57:09'),
+(43, 50, '600', '37', '418', '2024-03-24 19:03:34', '2024-05-11 15:17:15'),
+(45, 52, '1450', '17', '297.5', '2024-05-09 12:50:39', '2024-05-15 07:49:26'),
+(46, 53, '1450', '17', '297.5', '2024-05-09 12:53:13', '2024-05-15 07:49:43'),
+(48, 55, '1450', '36', '810', '2024-05-09 13:10:21', '2024-05-15 07:50:07'),
+(49, 56, '1450', '17', '297.5', '2024-05-09 13:15:58', '2024-05-15 07:50:33'),
+(50, 57, '0', NULL, NULL, '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(51, 58, '0', NULL, NULL, '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(52, 59, '0', NULL, NULL, '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(53, 60, '0', NULL, NULL, '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(54, 61, '0', NULL, NULL, '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(55, 62, '0', NULL, NULL, '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(56, 63, '0', NULL, NULL, '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(57, 64, '0', NULL, NULL, '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(58, 65, '0', NULL, NULL, '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(59, 67, '0', NULL, NULL, '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(60, 68, '0', NULL, NULL, '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(61, 69, '0', NULL, NULL, '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(62, 70, '0', NULL, NULL, '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(63, 71, '1500', '33.3', '750', '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2791,22 +3477,129 @@ CREATE TABLE `product_stocks` (
 --
 
 INSERT INTO `product_stocks` (`id`, `product_id`, `size_id`, `inStock`, `outStock`, `price`, `purchase_date`, `created_at`, `updated_at`) VALUES
-(5, 18, 5, '5', '0', NULL, '2024-03-18', '2024-03-04 02:11:54', '2024-03-17 23:24:36'),
-(6, 18, 6, '5', '2', NULL, '2024-03-18', '2024-03-04 02:11:54', '2024-03-17 23:37:35'),
-(7, 18, 7, '5', '0', NULL, '2024-03-18', '2024-03-04 02:11:55', '2024-03-17 23:24:36'),
-(8, 18, 8, '5', '0', NULL, '2024-03-18', '2024-03-04 02:11:55', '2024-03-17 23:24:36'),
-(9, 19, 5, '20', '3', NULL, '2024-03-18', '2024-03-04 02:12:49', '2024-03-18 00:05:39'),
-(10, 19, 6, '10', '0', NULL, '2024-03-18', '2024-03-04 02:12:49', '2024-03-17 23:25:38'),
-(11, 19, 7, '20', '0', NULL, '2024-03-18', '2024-03-04 02:12:49', '2024-03-17 23:25:38'),
-(12, 19, 8, '40', '0', NULL, '2024-03-18', '2024-03-04 02:12:49', '2024-03-17 23:25:38'),
-(13, 20, 5, '1', '0', NULL, NULL, '2024-03-04 03:36:28', '2024-03-17 23:59:46'),
-(14, 20, 6, '1', '0', NULL, NULL, '2024-03-04 03:36:28', '2024-03-17 23:59:46'),
-(15, 20, 7, '3', '3', NULL, NULL, '2024-03-04 03:36:28', '2024-03-17 23:59:46'),
-(16, 20, 8, '1', '0', NULL, NULL, '2024-03-04 03:36:28', '2024-03-17 23:59:46'),
-(17, 25, 5, '10', '0', NULL, NULL, '2024-03-04 22:47:19', '2024-03-18 00:00:22'),
-(18, 25, 6, '7', '2', NULL, NULL, '2024-03-04 22:47:19', '2024-03-18 00:00:22'),
-(19, 25, 7, '10', '2', NULL, NULL, '2024-03-04 22:47:19', '2024-03-18 01:06:12'),
-(20, 25, 8, '5', '0', NULL, NULL, '2024-03-04 22:47:19', '2024-03-18 00:00:22');
+(9, 33, 5, '2', '0', NULL, '2024-05-02', '2024-05-02 07:07:02', '2024-05-11 16:10:43'),
+(10, 33, 6, '7', '0', NULL, '2024-05-02', '2024-05-02 07:07:02', '2024-05-11 16:10:43'),
+(11, 33, 7, '2', '0', NULL, '2024-05-02', '2024-05-02 07:07:02', '2024-05-11 16:10:43'),
+(12, 33, 8, '0', '0', NULL, '2024-05-02', '2024-05-02 07:07:02', '2024-05-11 16:10:43'),
+(13, 34, 5, '5', '0', NULL, '2024-05-02', '2024-05-02 07:07:18', '2024-05-13 11:47:56'),
+(14, 34, 6, '7', '1', NULL, '2024-05-02', '2024-05-02 07:07:18', '2024-05-19 08:16:52'),
+(15, 34, 7, '4', '1', NULL, '2024-05-02', '2024-05-02 07:07:18', '2024-05-19 08:16:52'),
+(16, 34, 8, '0', '0', NULL, '2024-05-02', '2024-05-02 07:07:18', '2024-05-13 11:47:56'),
+(17, 35, 5, '3', '0', NULL, '2024-05-02', '2024-05-02 07:07:37', '2024-05-13 11:48:03'),
+(18, 35, 6, '7', '0', NULL, '2024-05-02', '2024-05-02 07:07:37', '2024-05-13 11:48:03'),
+(19, 35, 7, '7', '0', NULL, '2024-05-02', '2024-05-02 07:07:37', '2024-05-13 11:48:03'),
+(20, 35, 8, '0', '0', NULL, '2024-05-02', '2024-05-02 07:07:37', '2024-05-13 11:48:03'),
+(21, 36, 5, '4', '0', NULL, '2024-05-02', '2024-05-02 07:08:09', '2024-05-13 11:48:10'),
+(22, 36, 6, '4', '1', NULL, '2024-05-02', '2024-05-02 07:08:09', '2024-05-13 11:48:10'),
+(23, 36, 7, '5', '0', NULL, '2024-05-02', '2024-05-02 07:08:09', '2024-05-13 11:48:10'),
+(24, 36, 8, '3', '0', NULL, '2024-05-02', '2024-05-02 07:08:09', '2024-05-13 11:48:10'),
+(25, 37, 5, '3', '0', NULL, '2024-05-02', '2024-05-02 07:08:49', '2024-05-13 11:48:17'),
+(26, 37, 6, '7', '0', NULL, '2024-05-02', '2024-05-02 07:08:49', '2024-05-13 11:48:17'),
+(27, 37, 7, '1', '0', NULL, '2024-05-02', '2024-05-02 07:08:49', '2024-05-13 11:48:17'),
+(28, 37, 8, '0', '0', NULL, '2024-05-02', '2024-05-02 07:08:49', '2024-05-13 11:48:17'),
+(29, 38, 5, '4', '0', NULL, '2024-05-02', '2024-05-02 07:09:46', '2024-05-13 11:48:26'),
+(30, 38, 6, '5', '0', NULL, '2024-05-02', '2024-05-02 07:09:46', '2024-05-13 11:48:26'),
+(31, 38, 7, '1', '1', NULL, '2024-05-02', '2024-05-02 07:09:46', '2024-05-18 07:51:12'),
+(32, 38, 8, '1', '0', NULL, '2024-05-02', '2024-05-02 07:09:46', '2024-05-13 11:48:26'),
+(33, 27, 5, '0', '0', NULL, '2024-05-05', '2024-05-02 07:14:16', '2024-05-13 11:34:31'),
+(34, 27, 6, '2', '0', NULL, '2024-05-05', '2024-05-02 07:14:16', '2024-05-13 11:34:31'),
+(35, 27, 7, '1', '0', NULL, '2024-05-05', '2024-05-02 07:14:16', '2024-05-13 11:34:31'),
+(36, 27, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:14:16', '2024-05-13 11:34:31'),
+(37, 28, 5, '0', '0', NULL, '2024-05-05', '2024-05-02 07:14:29', '2024-05-13 11:34:53'),
+(38, 28, 6, '3', '0', NULL, '2024-05-05', '2024-05-02 07:14:29', '2024-05-13 11:34:53'),
+(39, 28, 7, '2', '0', NULL, '2024-05-05', '2024-05-02 07:14:29', '2024-05-13 11:34:53'),
+(40, 28, 8, '2', '0', NULL, '2024-05-05', '2024-05-02 07:14:29', '2024-05-13 11:34:53'),
+(41, 29, 5, '0', '0', NULL, '2024-05-05', '2024-05-02 07:15:09', '2024-05-13 11:36:48'),
+(42, 29, 6, '1', '0', NULL, '2024-05-05', '2024-05-02 07:15:09', '2024-05-13 11:36:48'),
+(43, 29, 7, '1', '0', NULL, '2024-05-05', '2024-05-02 07:15:09', '2024-05-13 11:36:48'),
+(44, 29, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:15:09', '2024-05-13 11:36:48'),
+(45, 31, 5, '1', '0', NULL, '2024-05-05', '2024-05-02 07:16:08', '2024-05-13 11:36:40'),
+(46, 31, 6, '0', '0', NULL, '2024-05-05', '2024-05-02 07:16:08', '2024-05-13 11:36:40'),
+(47, 31, 7, '1', '0', NULL, '2024-05-05', '2024-05-02 07:16:08', '2024-05-13 11:36:40'),
+(48, 31, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:16:08', '2024-05-13 11:36:40'),
+(49, 32, 5, '1', '0', NULL, '2024-05-05', '2024-05-02 07:17:20', '2024-05-13 11:36:28'),
+(50, 32, 6, '2', '0', NULL, '2024-05-05', '2024-05-02 07:17:20', '2024-05-13 11:36:28'),
+(51, 32, 7, '1', '0', NULL, '2024-05-05', '2024-05-02 07:17:20', '2024-05-13 11:36:28'),
+(52, 32, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:17:20', '2024-05-13 11:36:28'),
+(53, 44, 5, '1', '0', NULL, '2024-05-05', '2024-05-02 07:17:45', '2024-05-13 11:45:30'),
+(54, 44, 6, '2', '0', NULL, '2024-05-05', '2024-05-02 07:17:45', '2024-05-13 11:45:30'),
+(55, 44, 7, '0', '0', NULL, '2024-05-05', '2024-05-02 07:17:45', '2024-05-13 11:45:30'),
+(56, 44, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:17:45', '2024-05-13 11:45:30'),
+(57, 45, 5, '2', '0', NULL, '2024-05-05', '2024-05-02 07:18:06', '2024-05-13 11:45:23'),
+(58, 45, 6, '2', '0', NULL, '2024-05-05', '2024-05-02 07:18:06', '2024-05-13 11:45:23'),
+(59, 45, 7, '1', '0', NULL, '2024-05-05', '2024-05-02 07:18:06', '2024-05-13 11:45:23'),
+(60, 45, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:18:06', '2024-05-13 11:45:23'),
+(61, 46, 5, '2', '0', NULL, '2024-05-05', '2024-05-02 07:20:06', '2024-05-13 11:45:04'),
+(62, 46, 6, '3', '0', NULL, '2024-05-05', '2024-05-02 07:20:06', '2024-05-13 11:45:04'),
+(63, 46, 7, '3', '0', NULL, '2024-05-05', '2024-05-02 07:20:06', '2024-05-13 11:45:04'),
+(64, 46, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:20:06', '2024-05-13 11:45:04'),
+(65, 43, 5, '0', '0', NULL, NULL, '2024-05-02 07:20:26', '2024-05-09 13:39:47'),
+(66, 43, 6, '0', '0', NULL, '2024-05-05', '2024-05-02 07:20:26', '2024-05-13 11:45:41'),
+(67, 43, 7, '1', '0', NULL, '2024-05-05', '2024-05-02 07:20:26', '2024-05-13 11:45:41'),
+(68, 43, 8, '2', '0', NULL, '2024-05-05', '2024-05-02 07:20:26', '2024-05-13 11:45:41'),
+(69, 42, 5, '2', '0', NULL, '2024-05-05', '2024-05-02 07:20:59', '2024-05-13 11:45:50'),
+(70, 42, 6, '0', '0', NULL, '2024-05-05', '2024-05-02 07:20:59', '2024-05-13 11:45:50'),
+(71, 42, 7, '0', '0', NULL, '2024-05-05', '2024-05-02 07:20:59', '2024-05-13 11:45:50'),
+(72, 42, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:20:59', '2024-05-13 11:45:50'),
+(73, 41, 5, '2', '0', NULL, '2024-05-05', '2024-05-02 07:21:34', '2024-05-13 11:42:54'),
+(74, 41, 6, '0', '0', NULL, '2024-05-05', '2024-05-02 07:21:34', '2024-05-13 11:42:54'),
+(75, 41, 7, '4', '0', NULL, '2024-05-05', '2024-05-02 07:21:34', '2024-05-13 11:42:54'),
+(76, 41, 8, '2', '0', NULL, '2024-05-05', '2024-05-02 07:21:34', '2024-05-13 11:42:54'),
+(77, 40, 5, '2', '0', NULL, '2024-05-05', '2024-05-02 07:21:58', '2024-05-13 11:43:21'),
+(78, 40, 6, '3', '0', NULL, '2024-05-05', '2024-05-02 07:21:58', '2024-05-13 11:43:21'),
+(79, 40, 7, '4', '0', NULL, '2024-05-05', '2024-05-02 07:21:58', '2024-05-13 11:43:21'),
+(80, 40, 8, '0', '0', NULL, '2024-05-05', '2024-05-02 07:21:58', '2024-05-13 11:43:21'),
+(81, 50, 5, '2', '0', NULL, '2024-05-02', '2024-05-02 09:15:52', '2024-05-11 16:16:07'),
+(82, 50, 6, '9', '0', NULL, '2024-05-02', '2024-05-02 09:15:52', '2024-05-11 16:16:07'),
+(83, 50, 7, '12', '0', NULL, '2024-05-02', '2024-05-02 09:15:52', '2024-05-11 16:16:07'),
+(84, 48, 5, '5', '0', NULL, NULL, '2024-05-04 18:33:33', '2024-05-12 16:15:07'),
+(85, 48, 6, '2', '2', NULL, NULL, '2024-05-04 18:33:33', '2024-05-15 08:12:57'),
+(86, 48, 7, '6', '2', NULL, NULL, '2024-05-04 18:33:33', '2024-05-15 08:12:57'),
+(87, 48, 8, '4', '3', NULL, NULL, '2024-05-04 18:33:33', '2024-05-15 08:12:57'),
+(88, 47, 5, '4', '0', NULL, '2024-05-02', '2024-05-04 18:34:23', '2024-05-11 16:13:25'),
+(89, 47, 6, '5', '0', NULL, '2024-05-02', '2024-05-04 18:34:23', '2024-05-11 16:13:25'),
+(90, 47, 7, '8', '0', NULL, '2024-05-02', '2024-05-04 18:34:23', '2024-05-11 16:13:25'),
+(91, 47, 8, '1', '0', NULL, '2024-05-02', '2024-05-04 18:34:23', '2024-05-11 16:13:25'),
+(92, 49, 5, '3', '0', NULL, NULL, '2024-05-04 18:35:38', '2024-05-12 16:16:23'),
+(93, 49, 6, '7', '0', NULL, NULL, '2024-05-04 18:35:38', '2024-05-12 16:16:23'),
+(94, 49, 7, '9', '0', NULL, NULL, '2024-05-04 18:35:38', '2024-05-12 16:16:23'),
+(95, 49, 8, '6', '1', NULL, NULL, '2024-05-04 18:35:38', '2024-05-15 08:05:47'),
+(96, 39, 5, '2', '0', NULL, '2024-05-02', '2024-05-04 18:36:50', '2024-05-11 16:13:04'),
+(97, 39, 6, '2', '0', NULL, '2024-05-02', '2024-05-04 18:36:50', '2024-05-11 16:13:04'),
+(98, 39, 7, '4', '0', NULL, '2024-05-02', '2024-05-04 18:36:50', '2024-05-11 16:13:04'),
+(99, 39, 8, '1', '0', NULL, '2024-05-02', '2024-05-04 18:36:50', '2024-05-11 16:13:04'),
+(100, 55, 5, '0', '0', NULL, '2024-05-10', '2024-05-09 13:11:27', '2024-05-12 16:00:35'),
+(101, 55, 6, '5', '0', NULL, '2024-05-10', '2024-05-09 13:11:27', '2024-05-12 16:00:35'),
+(102, 55, 7, '10', '0', NULL, '2024-05-10', '2024-05-09 13:11:27', '2024-05-12 16:00:35'),
+(103, 55, 8, '6', '0', NULL, '2024-05-10', '2024-05-09 13:11:27', '2024-05-12 16:00:35'),
+(104, 56, 5, '0', '0', NULL, '2024-05-10', '2024-05-09 13:17:08', '2024-05-12 16:02:37'),
+(105, 56, 6, '4', '0', NULL, '2024-05-10', '2024-05-09 13:17:08', '2024-05-12 16:02:37'),
+(106, 56, 7, '15', '0', NULL, '2024-05-10', '2024-05-09 13:17:08', '2024-05-12 16:02:37'),
+(107, 56, 8, '8', '0', NULL, '2024-05-10', '2024-05-09 13:17:08', '2024-05-12 16:02:37'),
+(108, 52, 5, '0', '0', NULL, '2024-05-10', '2024-05-09 13:19:39', '2024-05-12 15:59:04'),
+(109, 52, 6, '5', '0', NULL, '2024-05-10', '2024-05-09 13:19:39', '2024-05-12 15:59:04'),
+(110, 52, 7, '1', '0', NULL, '2024-05-10', '2024-05-09 13:19:39', '2024-05-12 15:59:04'),
+(111, 52, 8, '7', '0', NULL, '2024-05-10', '2024-05-09 13:19:39', '2024-05-12 15:59:04'),
+(112, 53, 5, '0', '0', NULL, '2024-05-10', '2024-05-09 13:19:57', '2024-05-12 15:59:43'),
+(113, 53, 6, '0', '0', NULL, '2024-05-10', '2024-05-09 13:19:57', '2024-05-12 15:59:43'),
+(114, 53, 7, '13', '0', NULL, '2024-05-10', '2024-05-09 13:19:57', '2024-05-12 15:59:43'),
+(115, 53, 8, '0', '0', NULL, '2024-05-10', '2024-05-09 13:19:57', '2024-05-12 15:59:43'),
+(116, 57, 5, '0', '0', NULL, '2024-05-10', '2024-05-09 13:32:35', '2024-05-13 11:44:33'),
+(117, 57, 6, '3', '0', NULL, '2024-05-10', '2024-05-09 13:32:35', '2024-05-13 11:44:33'),
+(118, 57, 7, '9', '2', NULL, '2024-05-10', '2024-05-09 13:32:35', '2024-05-15 08:11:11'),
+(119, 57, 8, '4', '1', NULL, '2024-05-10', '2024-05-09 13:32:35', '2024-05-15 08:11:11'),
+(120, 43, 18, '1', '0', NULL, '2024-05-05', '2024-05-09 13:39:47', '2024-05-13 11:45:41'),
+(121, 48, 18, '1', '1', NULL, NULL, '2024-05-11 16:15:29', '2024-05-15 08:12:57'),
+(122, 49, 18, '1', '1', NULL, NULL, '2024-05-11 16:15:49', '2024-05-15 08:05:47'),
+(123, 58, 6, '5', '0', NULL, '2024-05-10', '2024-05-12 16:10:14', '2024-05-15 08:17:52'),
+(124, 58, 7, '18', '3', NULL, '2024-05-10', '2024-05-12 16:10:14', '2024-05-15 08:09:44'),
+(125, 58, 8, '10', '6', NULL, '2024-05-10', '2024-05-12 16:10:14', '2024-05-15 08:17:52'),
+(126, 58, 18, '1', '1', NULL, '2024-05-10', '2024-05-12 16:10:14', '2024-05-15 08:09:44'),
+(127, 71, 6, '0', '0', NULL, '2024-05-10', '2024-05-15 08:02:29', '2024-05-15 08:02:29'),
+(128, 71, 7, '1', '1', NULL, '2024-05-10', '2024-05-15 08:02:29', '2024-05-15 08:05:47'),
+(129, 71, 8, '6', '1', NULL, '2024-05-10', '2024-05-15 08:02:29', '2024-05-15 08:05:47'),
+(130, 71, 18, '1', '1', NULL, '2024-05-10', '2024-05-15 08:02:29', '2024-05-15 08:05:47'),
+(131, 71, 19, '1', '0', NULL, '2024-05-10', '2024-05-15 08:02:29', '2024-05-15 08:02:29');
 
 -- --------------------------------------------------------
 
@@ -2827,39 +3620,72 @@ CREATE TABLE `product_tags` (
 --
 
 INSERT INTO `product_tags` (`id`, `product_id`, `tag`, `created_at`, `updated_at`) VALUES
-(25, 18, 'classic', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(26, 18, 'panjabi', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(27, 18, 'premium', '2024-02-07 03:55:04', '2024-02-07 03:55:04'),
-(28, 19, 'classic', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(29, 19, 'panjabi', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(30, 19, 'premium', '2024-02-07 03:59:18', '2024-02-07 03:59:18'),
-(31, 20, 'premium', '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(32, 20, 'panjabi', '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(33, 20, 'classic', '2024-02-07 04:05:42', '2024-02-07 04:05:42'),
-(34, 21, 'premium', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(35, 21, 'panjabi', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(36, 21, 'classic', '2024-02-07 04:10:00', '2024-02-07 04:10:00'),
-(37, 22, 'premium', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(38, 22, 'panjabi', '2024-02-07 04:13:39', '2024-02-07 04:13:39'),
-(39, 23, 'premium', '2024-02-07 04:15:50', '2024-02-07 04:15:50'),
-(40, 24, 'printed', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(41, 24, 'panjabi', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(42, 24, 'print', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(43, 24, 'skin', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(44, 24, 'skinprint', '2024-02-07 04:20:40', '2024-02-07 04:20:40'),
-(45, 25, 'printed', '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(46, 25, 'panjabi', '2024-02-07 04:31:39', '2024-02-07 04:31:39'),
-(47, 26, 'printed', '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(48, 26, 'panjabi', '2024-02-07 04:38:23', '2024-02-07 04:38:23'),
-(49, 24, '', '2024-02-07 05:04:41', '2024-02-07 05:04:41'),
-(50, 18, '', '2024-02-07 11:15:42', '2024-02-07 11:15:42'),
-(51, 19, '', '2024-02-07 11:16:39', '2024-02-07 11:16:39'),
-(52, 20, '', '2024-02-07 11:18:22', '2024-02-07 11:18:22'),
-(53, 21, '', '2024-02-07 11:19:04', '2024-02-07 11:19:04'),
-(54, 23, '', '2024-02-07 11:19:53', '2024-02-07 11:19:53'),
-(55, 22, '', '2024-02-07 11:21:02', '2024-02-07 11:21:02'),
-(56, 25, '', '2024-02-07 11:22:40', '2024-02-07 11:22:40'),
-(57, 26, '', '2024-02-07 11:23:55', '2024-02-07 11:23:55');
+(58, 27, 'Premium Punjabi', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(59, 28, 'Premium Punjabi', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(60, 29, 'Premium Punjabi', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(61, 31, '', '2024-03-22 20:49:38', '2024-03-22 20:49:38'),
+(62, 32, 'Premium Punjabi', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(63, 33, 'Premium Punjabi', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(64, 34, 'Standard Punjabi', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(65, 35, 'Standard Punjabi', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(66, 36, 'Standard Punjabi', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(67, 37, 'Standard Punjabi', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(68, 38, 'Standard Punjabi', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(69, 39, 'Standard Punjabi', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(70, 40, 'Regular Punjabi', '2024-03-22 21:35:17', '2024-03-22 21:35:17'),
+(71, 41, 'Regular Punjabi', '2024-03-22 21:38:41', '2024-03-22 21:38:41'),
+(72, 42, 'Standard Punjabi', '2024-03-22 21:43:39', '2024-03-22 21:43:39'),
+(73, 43, 'Standard Punjabi', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(74, 44, 'Standard Punjabi', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(75, 45, 'Standard Punjabi', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(76, 46, 'Standard Punjabi', '2024-03-22 22:49:08', '2024-03-22 22:49:08'),
+(77, 27, '', '2024-03-23 10:31:04', '2024-03-23 10:31:04'),
+(78, 47, 'Regular Punjabi', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(79, 48, 'Regular Punjabi', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(80, 49, 'Regular Punjabi', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(81, 36, '', '2024-03-23 21:23:55', '2024-03-23 21:23:55'),
+(82, 50, 'pajama', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(83, 50, 'payjama', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(84, 50, 'trouser', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(85, 28, '', '2024-03-24 19:09:36', '2024-03-24 19:09:36'),
+(86, 29, '', '2024-03-24 19:10:29', '2024-03-24 19:10:29'),
+(87, 32, '', '2024-03-24 19:11:43', '2024-03-24 19:11:43'),
+(88, 33, '', '2024-03-24 19:12:26', '2024-03-24 19:12:26'),
+(89, 34, '', '2024-03-24 19:13:01', '2024-03-24 19:13:01'),
+(90, 35, '', '2024-03-24 19:13:46', '2024-03-24 19:13:46'),
+(91, 37, '', '2024-03-24 19:15:26', '2024-03-24 19:15:26'),
+(92, 38, '', '2024-03-24 19:16:01', '2024-03-24 19:16:01'),
+(93, 39, '', '2024-03-24 19:17:12', '2024-03-24 19:17:12'),
+(94, 40, '', '2024-03-24 19:18:36', '2024-03-24 19:18:36'),
+(95, 41, '', '2024-03-24 19:19:03', '2024-03-24 19:19:03'),
+(96, 42, '', '2024-03-24 19:20:15', '2024-03-24 19:20:15'),
+(97, 43, '', '2024-03-24 19:20:35', '2024-03-24 19:20:35'),
+(98, 44, '', '2024-03-24 19:21:03', '2024-03-24 19:21:03'),
+(99, 45, '', '2024-03-24 19:21:29', '2024-03-24 19:21:29'),
+(100, 46, '', '2024-03-24 19:21:49', '2024-03-24 19:21:49'),
+(101, 47, '', '2024-03-24 19:22:31', '2024-03-24 19:22:31'),
+(102, 48, '', '2024-03-24 19:23:01', '2024-03-24 19:23:01'),
+(103, 49, '', '2024-03-24 19:23:51', '2024-03-24 19:23:51'),
+(105, 50, '', '2024-04-25 14:48:38', '2024-04-25 14:48:38'),
+(106, 52, 'PANJABI', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(107, 53, '', '2024-05-09 12:53:13', '2024-05-09 12:53:13'),
+(109, 55, '', '2024-05-09 13:10:21', '2024-05-09 13:10:21'),
+(110, 56, '', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(111, 57, '', '2024-05-09 13:30:30', '2024-05-09 13:30:30'),
+(112, 58, '', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(113, 59, '', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(114, 60, '', '2024-05-13 07:38:06', '2024-05-13 07:38:06'),
+(115, 61, '', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(116, 62, '', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(117, 63, '', '2024-05-13 07:45:08', '2024-05-13 07:45:08'),
+(118, 64, '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(119, 65, '', '2024-05-13 07:49:13', '2024-05-13 07:49:13'),
+(120, 67, '', '2024-05-13 07:56:09', '2024-05-13 07:56:09'),
+(121, 68, '', '2024-05-13 07:59:16', '2024-05-13 07:59:16'),
+(122, 69, '', '2024-05-13 08:00:49', '2024-05-13 08:00:49'),
+(123, 70, '', '2024-05-13 08:03:04', '2024-05-13 08:03:04'),
+(124, 52, '', '2024-05-13 11:58:40', '2024-05-13 11:58:40'),
+(125, 71, '', '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2881,40 +3707,91 @@ CREATE TABLE `product_thumbnails` (
 --
 
 INSERT INTO `product_thumbnails` (`id`, `product_id`, `product_thumbnail`, `slug`, `created_at`, `updated_at`) VALUES
-(11, 18, 'mens-classic-panjabi-sa01_0.jpg', '', '2024-02-07 03:55:00', '2024-02-07 03:55:00'),
-(12, 18, 'mens-classic-panjabi-sa01_1.jpg', '', '2024-02-07 03:55:00', '2024-02-07 03:55:00'),
-(13, 19, 'mens-classic-panjabi-sa02_0.jpg', '', '2024-02-07 03:59:14', '2024-02-07 03:59:14'),
-(14, 19, 'mens-classic-panjabi-sa02_1.jpg', '', '2024-02-07 03:59:14', '2024-02-07 03:59:14'),
-(15, 20, 'mens-premium-panjabi-sa09_0.jpg', '', '2024-02-07 04:05:37', '2024-02-07 04:05:37'),
-(16, 20, 'mens-premium-panjabi-sa09_1.jpg', '', '2024-02-07 04:05:38', '2024-02-07 04:05:38'),
-(17, 21, 'mens-premium-panjabi-sa10_0.jpg', '', '2024-02-07 04:09:56', '2024-02-07 04:09:56'),
-(18, 21, 'mens-premium-panjabi-sa10_1.jpg', '', '2024-02-07 04:09:57', '2024-02-07 04:09:57'),
-(19, 22, 'mens-premium-panjabi-sa07_0.jpg', '', '2024-02-07 04:13:35', '2024-02-07 04:13:35'),
-(20, 22, 'mens-premium-panjabi-sa07_1.jpg', '', '2024-02-07 04:13:36', '2024-02-07 04:13:36'),
-(21, 23, 'mens-premium-panjabi-sa06_0.jpg', '', '2024-02-07 04:15:46', '2024-02-07 04:15:46'),
-(22, 23, 'mens-premium-panjabi-sa06_1.jpg', '', '2024-02-07 04:15:46', '2024-02-07 04:15:46'),
-(23, 24, 'mens-printed-panjabi-pr05_0.jpg', '', '2024-02-07 04:20:35', '2024-02-07 04:20:35'),
-(24, 24, 'mens-printed-panjabi-pr05_1.jpg', '', '2024-02-07 04:20:36', '2024-02-07 04:20:36'),
-(25, 25, 'mens-printed-panjabi-pr04_0.jpg', '', '2024-02-07 04:31:34', '2024-02-07 04:31:34'),
-(26, 25, 'mens-printed-panjabi-pr04_1.jpg', '', '2024-02-07 04:31:35', '2024-02-07 04:31:35'),
-(27, 26, 'mens-printed-panjabi-pr03_0.jpg', '', '2024-02-07 04:38:19', '2024-02-07 04:38:19'),
-(28, 26, 'mens-printed-panjabi-pr03_1.jpg', '', '2024-02-07 04:38:19', '2024-02-07 04:38:19');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `purchases`
---
-
-CREATE TABLE `purchases` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `supplier_id` bigint(20) UNSIGNED NOT NULL,
-  `reference` varchar(255) DEFAULT NULL,
-  `purchase_date` varchar(255) NOT NULL,
-  `total` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(29, 27, 'koohen-premium-punjabi-sa01_0.jpg', '', '2024-03-22 20:12:00', '2024-03-22 20:12:00'),
+(30, 27, 'koohen-premium-punjabi-sa01_1.jpg', '', '2024-03-22 20:12:01', '2024-03-22 20:12:01'),
+(31, 28, 'koohen-premium-punjabi-sa02_0.jpg', '', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(32, 28, 'koohen-premium-punjabi-sa02_1.jpg', '', '2024-03-22 20:19:25', '2024-03-22 20:19:25'),
+(33, 29, 'koohen-premium-punjabi-sa03_0.jpg', '', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(34, 29, 'koohen-premium-punjabi-sa03_1.jpg', '', '2024-03-22 20:23:44', '2024-03-22 20:23:44'),
+(35, 31, 'koohen-premium-punjabi-sa04_0.jpg', '', '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(36, 31, 'koohen-premium-punjabi-sa04_1.jpg', '', '2024-03-22 20:49:37', '2024-03-22 20:49:37'),
+(37, 32, 'koohen-premium-punjabi-sa05_0.jpg', '', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(38, 32, 'koohen-premium-punjabi-sa05_1.jpg', '', '2024-03-22 20:53:24', '2024-03-22 20:53:24'),
+(39, 33, 'koohen-premium-punjabi-sa06_0.jpg', '', '2024-03-22 20:59:12', '2024-03-22 20:59:12'),
+(40, 33, 'koohen-premium-punjabi-sa06_1.jpg', '', '2024-03-22 20:59:13', '2024-03-22 20:59:13'),
+(41, 34, 'koohen-standard-punjabi-sa07_0.jpg', '', '2024-03-22 21:02:47', '2024-03-22 21:02:47'),
+(42, 34, 'koohen-standard-punjabi-sa07_1.jpg', '', '2024-03-22 21:02:48', '2024-03-22 21:02:48'),
+(43, 35, 'koohen-standard-punjabi-sa08_0.jpg', '', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(44, 35, 'koohen-standard-punjabi-sa08_1.jpg', '', '2024-03-22 21:12:59', '2024-03-22 21:12:59'),
+(45, 36, 'koohen-standard-punjabi-sa09_0.jpg', '', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(46, 36, 'koohen-standard-punjabi-sa09_1.jpg', '', '2024-03-22 21:15:33', '2024-03-22 21:15:33'),
+(47, 37, 'koohen-standard-punjabi-sa10_0.jpg', '', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(48, 37, 'koohen-standard-punjabi-sa10_1.jpg', '', '2024-03-22 21:18:35', '2024-03-22 21:18:35'),
+(49, 38, 'koohen-standard-punjabi-sa11_0.jpg', '', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(50, 38, 'koohen-standard-punjabi-sa11_1.jpg', '', '2024-03-22 21:21:25', '2024-03-22 21:21:25'),
+(51, 39, 'koohen-standard-punjabi-sa12_0.jpg', '', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(52, 39, 'koohen-standard-punjabi-sa12_1.jpg', '', '2024-03-22 21:28:29', '2024-03-22 21:28:29'),
+(53, 40, 'koohen-regular-punjabi-pr07_0.jpg', '', '2024-03-22 21:35:16', '2024-03-22 21:35:16'),
+(54, 40, 'koohen-regular-punjabi-pr07_1.jpg', '', '2024-03-22 21:35:16', '2024-03-22 21:35:16'),
+(55, 41, 'koohen-regular-punjabi-pr06_0.jpg', '', '2024-03-22 21:38:40', '2024-03-22 21:38:40'),
+(56, 41, 'koohen-regular-punjabi-pr06_1.jpg', '', '2024-03-22 21:38:40', '2024-03-22 21:38:40'),
+(57, 42, 'koohen-standard-punjabi-pr05_0.jpg', '', '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(58, 42, 'koohen-standard-punjabi-pr05_1.jpg', '', '2024-03-22 21:43:38', '2024-03-22 21:43:38'),
+(59, 43, 'koohen-standard-punjabi-pr04_0.jpg', '', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(60, 43, 'koohen-standard-punjabi-pr04_1.jpg', '', '2024-03-22 22:37:36', '2024-03-22 22:37:36'),
+(61, 44, 'koohen-standard-punjabi-pr01_0.jpg', '', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(62, 44, 'koohen-standard-punjabi-pr01_1.jpg', '', '2024-03-22 22:46:38', '2024-03-22 22:46:38'),
+(63, 45, 'koohen-standard-punjabi-pr02_0.jpg', '', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(64, 45, 'koohen-standard-punjabi-pr02_1.jpg', '', '2024-03-22 22:48:06', '2024-03-22 22:48:06'),
+(65, 46, 'koohen-standard-punjabi-pr03_0.jpg', '', '2024-03-22 22:49:07', '2024-03-22 22:49:07'),
+(66, 46, 'koohen-standard-punjabi-pr03_1.jpg', '', '2024-03-22 22:49:07', '2024-03-22 22:49:07'),
+(67, 47, 'koohen-regular-punjabi-pr08_0.jpg', '', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(68, 47, 'koohen-regular-punjabi-pr08_1.jpg', '', '2024-03-23 20:46:05', '2024-03-23 20:46:05'),
+(69, 48, 'koohen-regular-punjabi-pr09_0.jpg', '', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(70, 48, 'koohen-regular-punjabi-pr09_1.jpg', '', '2024-03-23 20:49:10', '2024-03-23 20:49:10'),
+(71, 49, 'koohen-regular-punjabi-pr10_0.jpg', '', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(72, 49, 'koohen-regular-punjabi-pr10_1.jpg', '', '2024-03-23 20:50:39', '2024-03-23 20:50:39'),
+(73, 50, 'mens-premium-pajama-sw01_0.jpg', '', '2024-03-24 19:03:33', '2024-03-24 19:03:33'),
+(74, 50, 'mens-premium-pajama-sw01_1.jpg', '', '2024-03-24 19:03:34', '2024-03-24 19:03:34'),
+(75, 51, 'koohen-premium-punjabi-sa03354654_0.png', '', '2024-04-24 16:38:32', '2024-04-24 16:38:32'),
+(76, 52, 'mens-standard-punjabi-sa14_0.jpg', '', '2024-05-09 12:50:38', '2024-05-09 12:50:38'),
+(77, 52, 'mens-standard-punjabi-sa14_1.jpg', '', '2024-05-09 12:50:39', '2024-05-09 12:50:39'),
+(78, 53, 'mens-standard-punjabi-sa15_0.jpg', '', '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(79, 53, 'mens-standard-punjabi-sa15_1.jpg', '', '2024-05-09 12:53:12', '2024-05-09 12:53:12'),
+(80, 54, 'mens-standard-punjabi-sa16_0.jpg', '', '2024-05-09 12:55:40', '2024-05-09 12:55:40'),
+(81, 54, 'mens-standard-punjabi-sa16_1.jpg', '', '2024-05-09 12:55:40', '2024-05-09 12:55:40'),
+(82, 55, 'mens-premium-punjabi-sa16_0.jpg', '', '2024-05-09 13:10:20', '2024-05-09 13:10:20'),
+(83, 55, 'mens-premium-punjabi-sa16_1.jpg', '', '2024-05-09 13:10:20', '2024-05-09 13:10:20'),
+(84, 56, 'mens-premium-punjabi-sa17_0.jpg', '', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(85, 56, 'mens-premium-punjabi-sa17_1.jpg', '', '2024-05-09 13:15:58', '2024-05-09 13:15:58'),
+(86, 57, 'mens-standard-punjabi-pr11_0.jpg', '', '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(87, 57, 'mens-standard-punjabi-pr11_1.jpg', '', '2024-05-09 13:30:29', '2024-05-09 13:30:29'),
+(88, 58, 'koohen-standard-punjabi-pr12_0.jpg', '', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(89, 58, 'koohen-standard-punjabi-pr12_1.jpg', '', '2024-05-09 17:03:10', '2024-05-09 17:03:10'),
+(90, 59, 'womens-co-ords-set-crds01_0.jpg', '', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(91, 59, 'womens-co-ords-set-crds01_1.jpg', '', '2024-05-13 07:36:00', '2024-05-13 07:36:00'),
+(92, 60, 'womens-co-ords-set-crds02_0.jpg', '', '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(93, 60, 'womens-co-ords-set-crds02_1.jpg', '', '2024-05-13 07:38:05', '2024-05-13 07:38:05'),
+(94, 61, 'womens-co-ords-set-crds03_0.jpg', '', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(95, 61, 'womens-co-ords-set-crds03_1.jpg', '', '2024-05-13 07:39:59', '2024-05-13 07:39:59'),
+(96, 62, 'womens-co-ords-set-crds04_0.jpg', '', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(97, 62, 'womens-co-ords-set-crds04_1.jpg', '', '2024-05-13 07:42:31', '2024-05-13 07:42:31'),
+(98, 63, 'womens-co-ords-set-crds05_0.jpg', '', '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(99, 63, 'womens-co-ords-set-crds05_1.jpg', '', '2024-05-13 07:45:07', '2024-05-13 07:45:07'),
+(100, 64, 'womens-co-ords-set-crds06_0.jpg', '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(101, 64, 'womens-co-ords-set-crds06_1.jpg', '', '2024-05-13 07:46:42', '2024-05-13 07:46:42'),
+(102, 65, 'womens-kaftan-set-kftn01_0.jpg', '', '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(103, 65, 'womens-kaftan-set-kftn01_1.jpg', '', '2024-05-13 07:49:12', '2024-05-13 07:49:12'),
+(104, 67, 'womens-kaftan-set-kftn02_0.jpg', '', '2024-05-13 07:56:08', '2024-05-13 07:56:08'),
+(105, 67, 'womens-kaftan-set-kftn02_1.jpg', '', '2024-05-13 07:56:08', '2024-05-13 07:56:08'),
+(106, 68, 'womens-kaftan-set-kftn03_0.jpg', '', '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(107, 68, 'womens-kaftan-set-kftn03_1.jpg', '', '2024-05-13 07:59:15', '2024-05-13 07:59:15'),
+(108, 69, 'womens-kaftan-set-kftn04_0.jpg', '', '2024-05-13 08:00:48', '2024-05-13 08:00:48'),
+(109, 69, 'womens-kaftan-set-kftn04_1.jpg', '', '2024-05-13 08:00:48', '2024-05-13 08:00:48'),
+(110, 70, 'womens-kaftan-set-kftn06_0.jpg', '', '2024-05-13 08:03:03', '2024-05-13 08:03:03'),
+(111, 70, 'womens-kaftan-set-kftn06_1.jpg', '', '2024-05-13 08:03:03', '2024-05-13 08:03:03'),
+(112, 71, 'mens-premium-punjabi-sa13_0.jpg', '', '2024-05-15 07:48:52', '2024-05-15 07:48:52'),
+(113, 71, 'mens-premium-punjabi-sa13_1.jpg', '', '2024-05-15 07:48:52', '2024-05-15 07:48:52');
 
 -- --------------------------------------------------------
 
@@ -2939,26 +3816,72 @@ CREATE TABLE `register_customers` (
 --
 
 INSERT INTO `register_customers` (`id`, `customer_id`, `phone`, `email`, `password`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(9, 41, '01795795441', 'arifhosse12@gmail.com', '$2y$12$UR4aRWslWlmIVZwYE3o0NOqjZ/75C5g7DXf6lrR7dADtlPj8x6.2a', 'registerd', NULL, '2024-02-07 00:22:46', '2024-02-07 00:22:46'),
-(10, 42, '01303638635', 'arifhossen853@yahoo.com', '$2y$12$U8D3L6BvfLSwO6jc/lV2hOSxdaR5stT8UGjqEAmvWrxvOXKq/euqa', 'registerd', NULL, '2024-02-15 06:25:23', '2024-02-15 06:25:23'),
-(11, 43, '01303638631', 'qbittech.dev1@gmail.com', '$2y$12$QuHLw7LLuA0z/ndTx7XD1Okywk9jwillIU1aeuAG31q5ck.cYTOUO', 'registerd', NULL, '2024-02-19 23:00:37', '2024-02-19 23:53:21'),
-(12, 44, '01798985858', 'ador@gmail.com', '$2y$12$3SbCeuxwoMXvBvr15A7H5.qbVIQOGrCQdevvcS0GxPgWyM5JCA8NS', 'registerd', NULL, '2024-02-26 22:40:00', '2024-02-26 22:40:00'),
-(13, 53, '01729119658', 'arnobghosh.go@gmail.com', '$2y$12$r6dUhtOXo/jYxbtNqCdzyuqja4P.w0tBAFJghlWl265KD9F7bWBz.', 'registerd', NULL, '2024-03-13 00:45:19', '2024-03-13 00:45:19');
+(25, 88, '01738758133', 'rifatakhon@gmail.com', '$2y$12$xY1igSkwKfn80Pkx01KbQuNtszX42MOcSQOiEhW9tz0xrdCn1Q02W', 'registerd', NULL, '2024-03-24 16:38:57', '2024-03-24 16:38:57'),
+(26, 89, '01844674502', 'admin@koohen.com', '$2y$12$AZSjq25ykEsOVj4ZUdGjneugblX/CQvS0maVCPNhs7.dh0fFyKjwm', 'registerd', NULL, '2024-03-24 16:40:58', '2024-03-24 16:40:58'),
+(27, 109, '01640357386', 'kohenlifestyle@gmail.com', '$2y$12$rIZKMfgMs9ODkWWrvKghG..yxYu7R8aso4kh8OmNmY0aOMhm/hVcm', 'registerd', NULL, '2024-03-25 08:14:21', '2024-03-25 08:14:21'),
+(28, 128, '01884238552', 'mdashikmia1765@gmail.com', '$2y$12$2KYnetETrjDcxwUGzWPYzuqUNTUEl6n4uVYXy5sw1wFv/Whppwkoa', 'registerd', NULL, '2024-03-27 04:56:36', '2024-03-27 04:56:36'),
+(29, 177, '01321198919', 'shahin229737@gmail.com', '$2y$12$Yanq.WsVeDoXmvAWrCWV/OAFtl9b6Ys9O0Yg4sz.5ksBI.iN6VgZC', 'registerd', NULL, '2024-04-01 12:05:35', '2024-04-01 12:05:35'),
+(30, 206, '01601958560', 'arifhossen853@gmail.com', '$2y$12$Xab0jSdxG.lqlgThYg1ce.vYy2db5NEhwmAExpe0DPLoe69enxExS', 'registerd', NULL, '2024-04-03 05:23:27', '2024-04-03 05:23:27');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sessions`
+-- Table structure for table `roles`
 --
 
-CREATE TABLE `sessions` (
-  `id` varchar(255) NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
-  `user_agent` text DEFAULT NULL,
-  `payload` longtext NOT NULL,
-  `last_activity` int(11) NOT NULL
+CREATE TABLE `roles` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `guard_name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(2, 'Super Admin', 'web', '2024-03-21 04:41:50', '2024-03-21 12:06:04'),
+(3, 'Admin', 'web', '2024-03-21 04:41:55', '2024-03-21 04:41:55'),
+(4, 'Manager', 'web', '2024-03-21 04:42:02', '2024-03-21 04:42:02'),
+(5, 'User', 'web', '2024-03-21 04:42:08', '2024-03-21 04:42:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role_has_permissions`
+--
+
+CREATE TABLE `role_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `role_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seo_settings`
+--
+
+CREATE TABLE `seo_settings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `seoTitle` varchar(255) NOT NULL,
+  `seoLogo` varchar(255) NOT NULL,
+  `seoDescription` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `seo_settings`
+--
+
+INSERT INTO `seo_settings` (`id`, `seoTitle`, `seoLogo`, `seoDescription`, `created_at`, `updated_at`) VALUES
+(2, 'Koohen', '1714553583.png', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', '2024-05-01 02:53:03', '2024-05-01 02:53:03'),
+(3, 'Koohen', '1714554658.png', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', '2024-05-01 09:10:58', '2024-05-01 09:10:58'),
+(4, 'Koohen', '1714554671.png', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', '2024-05-01 09:11:11', '2024-05-01 09:11:11'),
+(5, 'Koohen', '1714554732.png', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', '2024-05-01 09:12:12', '2024-05-01 09:12:12');
 
 -- --------------------------------------------------------
 
@@ -2983,7 +3906,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `primary_mobile_no`, `secondary_mobile_no`, `whatsapp_url`, `email`, `company_address`, `company_short_details`, `created_at`, `updated_at`) VALUES
-(1, '+880 9639 174 502', '+880 1751218778', 'https://wa.link/3qi05h', 'support@koohen.com', '522/B, North Shahjahanpur, Dhaka-1217', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', NULL, '2024-02-17 22:51:02');
+(1, '+880 1751218778', '+8809639174502', 'https://wa.link/3qi05h', 'support@koohen.com', '522/B, North Shahjahanpur, Dhaka-1217', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', NULL, '2024-02-18 08:14:45');
 
 -- --------------------------------------------------------
 
@@ -2996,7 +3919,7 @@ CREATE TABLE `shippings` (
   `customer_id` bigint(20) UNSIGNED NOT NULL,
   `order_id` bigint(20) UNSIGNED DEFAULT NULL,
   `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
   `s_phone` varchar(255) NOT NULL,
   `s_email` varchar(255) NOT NULL,
   `shipping_add` text NOT NULL,
@@ -3012,9 +3935,11 @@ CREATE TABLE `shippings` (
 --
 
 INSERT INTO `shippings` (`id`, `customer_id`, `order_id`, `first_name`, `last_name`, `s_phone`, `s_email`, `shipping_add`, `division`, `district`, `area`, `created_at`, `updated_at`) VALUES
-(24, 43, NULL, 'Arif', 'Hossen', '01303638635', 'arifhossen853@gmail.com', '1/86 East Rasulpur, Jatrabari, Dhaka', '3', '1', 471, '2024-02-19 23:07:43', '2024-02-19 23:07:43'),
-(25, 44, 80, 'Badruzzaman', 'Ador', '01795795441', 'qbittech.dev1@gmail.com', '522/B North Shajahanpur, Dhaka', '3', '1', 469, '2024-02-26 22:40:00', '2024-02-26 22:41:08'),
-(26, 53, NULL, 'Arif', 'Hossen', '01601958560', 'qbittech.dev1@gmail.com', '1/86 East Rasulpur, Jatrabari, Dhaka', '3', '1', 461, '2024-03-17 23:39:37', '2024-03-17 23:39:37');
+(33, 88, 99, 'MD RIFAT', 'HOSSAIN', '01738758133', 'rifatakhon@gmail.com', '522/B, North Sahjahanpur', '3', '1', 455, '2024-03-24 16:38:57', '2024-03-24 16:38:57'),
+(34, 89, 100, 'Rifat', 'Hossain', '01844674502', 'admin@koohen.com', 'Dhaka', '3', '6', 582, '2024-03-24 16:40:58', '2024-03-24 16:40:58'),
+(35, 109, 123, 'fdsaf', 'fdsaf', '01640357386', 'kohenlifestyle@gmail.com', 'satkhira', '4', '64', 991, '2024-03-25 08:14:21', '2024-03-25 08:14:21'),
+(36, 128, 142, 'Ashik', 'Hossen', '01884238552', 'mdashikmia1765@gmail.com', 'Rajshai road', '5', '24', 1093, '2024-03-27 04:56:36', '2024-03-27 04:56:36'),
+(37, 206, 224, 'Arif', 'Hossen', '01601958560', 'arifhossen853@gmail.com', '1/86 East Rasulpur, Kajla, Jatrabari, Dhaka 1236', '3', '1', 461, '2024-04-03 05:23:27', '2024-04-03 05:23:27');
 
 -- --------------------------------------------------------
 
@@ -3029,17 +3954,6 @@ CREATE TABLE `shoppingcart` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `shoppingcart`
---
-
-INSERT INTO `shoppingcart` (`identifier`, `instance`, `content`, `created_at`, `updated_at`) VALUES
-('ador@gmail.com', 'wishlist', 'O:29:\"Illuminate\\Support\\Collection\":2:{s:8:\"\0*\0items\";a:0:{}s:28:\"\0*\0escapeWhenCastingToString\";b:0;}', '2024-02-26 23:48:31', NULL),
-('arifhosse12@gmail.com', 'wishlist', 'O:29:\"Illuminate\\Support\\Collection\":2:{s:8:\"\0*\0items\";a:0:{}s:28:\"\0*\0escapeWhenCastingToString\";b:0;}', '2024-02-18 22:42:00', NULL),
-('arifhossen853@yahoo.com', 'wishlist', 'O:29:\"Illuminate\\Support\\Collection\":2:{s:8:\"\0*\0items\";a:1:{s:32:\"5d2aadd8014a9ab062c6bb239cb2b3e4\";O:32:\"Gloudemans\\Shoppingcart\\CartItem\":9:{s:5:\"rowId\";s:32:\"5d2aadd8014a9ab062c6bb239cb2b3e4\";s:2:\"id\";i:18;s:3:\"qty\";i:1;s:4:\"name\";s:28:\"Men\'s Classic Panjabi - SA01\";s:5:\"price\";d:700;s:7:\"options\";O:39:\"Gloudemans\\Shoppingcart\\CartItemOptions\":2:{s:8:\"\0*\0items\";a:1:{s:4:\"slug\";s:25:\"mens-classic-panjabi-sa01\";}s:28:\"\0*\0escapeWhenCastingToString\";b:0;}s:49:\"\0Gloudemans\\Shoppingcart\\CartItem\0associatedModel\";N;s:41:\"\0Gloudemans\\Shoppingcart\\CartItem\0taxRate\";i:5;s:41:\"\0Gloudemans\\Shoppingcart\\CartItem\0isSaved\";b:0;}}s:28:\"\0*\0escapeWhenCastingToString\";b:0;}', '2024-02-15 06:27:29', NULL),
-('arnobghosh.go@gmail.com', 'wishlist', 'O:29:\"Illuminate\\Support\\Collection\":2:{s:8:\"\0*\0items\";a:0:{}s:28:\"\0*\0escapeWhenCastingToString\";b:0;}', '2024-03-17 23:53:44', NULL),
-('qbittech.dev1@gmail.com', 'wishlist', 'O:29:\"Illuminate\\Support\\Collection\":2:{s:8:\"\0*\0items\";a:0:{}s:28:\"\0*\0escapeWhenCastingToString\";b:0;}', '2024-03-18 03:28:28', NULL);
 
 -- --------------------------------------------------------
 
@@ -3061,17 +3975,18 @@ CREATE TABLE `sizes` (
 --
 
 INSERT INTO `sizes` (`id`, `size_name`, `size`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Large', 'L', '1', '2024-01-11 01:52:38', '2024-01-11 01:52:38'),
-(2, 'Medium', 'M', '1', '2024-01-11 01:53:49', '2024-01-30 04:08:41'),
-(3, 'Small', 'S', '1', '2024-01-30 04:18:41', '2024-01-30 04:18:41'),
-(5, '38', '38', '1', '2024-02-07 02:17:02', '2024-02-07 02:17:02'),
-(6, '40', '40', '1', '2024-02-07 02:17:10', '2024-02-07 02:17:10'),
-(7, '42', '42', '1', '2024-02-07 02:17:18', '2024-02-07 02:17:18'),
-(8, '44', '44', '1', '2024-02-07 02:17:26', '2024-02-07 02:17:26'),
-(9, 'Small', 'S', '1', '2024-02-07 04:40:45', '2024-02-07 04:40:45'),
-(10, 'Medium', 'M', '1', '2024-02-07 04:40:56', '2024-02-07 04:40:56'),
-(11, 'Large', 'L', '1', '2024-02-07 04:41:05', '2024-02-07 04:41:05'),
-(12, 'Extra Large', 'XL', '1', '2024-02-07 04:41:15', '2024-02-07 04:41:15');
+(5, '38', '38', '1', '2024-02-07 08:17:02', '2024-02-07 08:17:02'),
+(6, '40', '40', '1', '2024-02-07 08:17:10', '2024-02-07 08:17:10'),
+(7, '42', '42', '1', '2024-02-07 08:17:18', '2024-02-07 08:17:18'),
+(8, '44', '44', '1', '2024-02-07 08:17:26', '2024-02-07 08:17:26'),
+(18, '48', '48', '1', '2024-05-09 13:36:52', '2024-05-09 13:36:52'),
+(19, '46', '46', '1', '2024-05-11 16:15:01', '2024-05-11 16:15:01'),
+(26, 'S', 'Small', '1', '2024-05-13 06:40:25', '2024-05-13 06:40:25'),
+(27, 'M', 'Medium', '1', '2024-05-13 06:40:37', '2024-05-13 06:40:37'),
+(28, 'L', 'Large', '1', '2024-05-13 06:40:48', '2024-05-13 06:40:48'),
+(29, 'XL', 'Extra Large', '1', '2024-05-13 06:41:09', '2024-05-13 06:41:09'),
+(30, 'XXL', 'Double Extra Large', '1', '2024-05-13 06:41:26', '2024-05-13 06:41:26'),
+(31, 'Free Size', 'Free Size', '1', '2024-05-13 06:42:09', '2024-05-13 06:42:09');
 
 -- --------------------------------------------------------
 
@@ -3081,8 +3996,9 @@ INSERT INTO `sizes` (`id`, `size_name`, `size`, `status`, `created_at`, `updated
 
 CREATE TABLE `sliders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `subtitle` varchar(255) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `subtitle` varchar(255) DEFAULT NULL,
+  `btntext` varchar(255) DEFAULT NULL,
   `slider_url` varchar(255) DEFAULT NULL,
   `image` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -3093,9 +4009,38 @@ CREATE TABLE `sliders` (
 -- Dumping data for table `sliders`
 --
 
-INSERT INTO `sliders` (`id`, `title`, `subtitle`, `slider_url`, `image`, `created_at`, `updated_at`) VALUES
-(5, 'New Arrivals', 'Men\'s Collection 2024', 'https://koohen.com/shop', 'slider/1707386438.jpg', '2024-02-08 04:00:38', '2024-02-08 04:00:38'),
-(6, 'New Arrivals', 'Men\'s Collection 2024', 'https://koohen.com/shop', 'slider/1707394541.jpg', '2024-02-08 06:15:41', '2024-02-08 06:15:41');
+INSERT INTO `sliders` (`id`, `title`, `subtitle`, `btntext`, `slider_url`, `image`, `created_at`, `updated_at`) VALUES
+(5, 'New Arrivals', 'Summer Collection 2024', 'View More', 'https://koohen.com/shop', 'slider/1715242980.jpg', '2024-02-08 08:56:27', '2024-05-09 08:23:00'),
+(8, 'New Arrivals', 'Summer Collection 2024', 'View More', 'https://koohen.com/shop', 'slider/1715243000.jpg', '2024-05-09 08:23:20', '2024-05-09 08:23:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `socialinfos`
+--
+
+CREATE TABLE `socialinfos` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `social_title` varchar(255) NOT NULL,
+  `title_value` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `socialinfos`
+--
+
+INSERT INTO `socialinfos` (`id`, `social_title`, `title_value`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Phone', '+8809639174502', '1', '2024-05-05 00:05:57', '2024-05-05 11:35:58'),
+(2, 'Email', 'support@koohen.com', '1', '2024-05-05 00:05:57', '2024-05-05 01:41:43'),
+(3, 'WhatsApp', '01844674502', '1', '2024-05-05 00:05:57', '2024-05-05 11:52:53'),
+(4, 'Facebook', 'https://www.facebook.com/koohen', '1', '2024-05-05 00:05:57', '2024-05-05 11:43:05'),
+(5, 'Instagram', 'https://www.instagram.com', '1', '2024-05-05 00:05:57', '2024-05-05 00:05:57'),
+(6, 'LinkedIn', 'https://www.linkedin.com', '1', '2024-05-05 00:05:57', '2024-05-05 00:05:57'),
+(7, 'YouTube', 'https://www.youtube.com', '1', '2024-05-05 00:05:57', '2024-05-05 00:05:57'),
+(8, 'Twitter', 'https://www.twitter.com', '1', '2024-05-05 00:05:57', '2024-05-07 06:48:42');
 
 -- --------------------------------------------------------
 
@@ -3137,8 +4082,7 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`id`, `supplier_name`, `phone`, `email`, `address`, `balance`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Home Tex..', '01795795443', 'home.tex@gmail.com', '123 Hallway', 0.00, 'Active', '2024-01-28 22:01:35', '2024-02-29 06:14:22'),
-(2, 'Haji Embroidery', '01827313588', NULL, 'Kamrangirchor, Nobinagar', 0.00, 'Active', '2024-02-07 02:21:22', '2024-02-07 02:21:22');
+(2, 'Haji Embroidery', '01827313588', NULL, 'Kamrangirchor, Nobinagar', 0.00, 'Active', '2024-02-07 08:21:22', '2024-02-07 08:21:22');
 
 -- --------------------------------------------------------
 
@@ -3149,9 +4093,10 @@ INSERT INTO `suppliers` (`id`, `supplier_name`, `phone`, `email`, `address`, `ba
 CREATE TABLE `transactions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `customer_id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `mode` enum('cod','card','online','cash') NOT NULL,
-  `status` enum('unpaid','paid','declined','refunded') NOT NULL DEFAULT 'unpaid',
+  `order_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `mode` enum('cod','card','online','cash','bkash','nagad','rocket') NOT NULL,
+  `transaction_no` varchar(255) DEFAULT NULL,
+  `status` enum('paid','unpaid','declined','refunded') DEFAULT 'unpaid',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3160,51 +4105,15 @@ CREATE TABLE `transactions` (
 -- Dumping data for table `transactions`
 --
 
-INSERT INTO `transactions` (`id`, `customer_id`, `order_id`, `mode`, `status`, `created_at`, `updated_at`) VALUES
-(50, 41, 63, 'cod', '', '2024-02-18 06:10:47', '2024-02-18 06:10:47'),
-(51, 41, 64, 'cod', '', '2024-02-18 22:18:16', '2024-02-18 22:18:16'),
-(52, 41, 65, 'cod', '', '2024-02-18 22:20:17', '2024-02-18 22:20:17'),
-(53, 41, 66, 'cod', '', '2024-02-18 22:25:10', '2024-02-18 22:25:10'),
-(54, 41, 67, 'cod', '', '2024-02-18 22:26:51', '2024-02-18 22:26:51'),
-(55, 41, 68, 'cod', '', '2024-02-18 22:28:50', '2024-02-18 22:28:50'),
-(56, 41, 69, 'cod', '', '2024-02-18 22:30:12', '2024-02-18 22:30:12'),
-(57, 41, 70, 'cod', '', '2024-02-18 22:32:22', '2024-02-18 22:32:22'),
-(58, 41, 71, 'cod', '', '2024-02-18 22:33:39', '2024-02-18 22:33:39'),
-(59, 41, 72, 'cod', 'paid', '2024-02-18 22:36:36', '2024-03-07 02:41:34'),
-(60, 43, 73, 'cod', '', '2024-02-24 22:25:16', '2024-02-24 22:25:16'),
-(61, 43, 74, 'cod', '', '2024-02-24 22:26:48', '2024-02-24 22:26:48'),
-(62, 42, 79, 'cash', '', '2024-02-26 22:31:25', '2024-02-26 22:31:25'),
-(63, 44, 80, 'cod', '', '2024-02-26 22:40:00', '2024-02-26 22:40:00'),
-(64, 1, 82, 'cash', '', '2024-02-26 23:23:09', '2024-02-26 23:23:09'),
-(65, 1, 83, 'cash', '', '2024-02-26 23:31:34', '2024-02-26 23:31:34'),
-(66, 1, 84, 'cash', '', '2024-02-27 03:11:18', '2024-02-27 03:11:18'),
-(67, 41, 85, 'cash', '', '2024-02-29 04:55:39', '2024-02-29 04:55:39'),
-(68, 1, 86, 'cash', '', '2024-02-29 07:07:11', '2024-02-29 07:07:11'),
-(69, 1, 87, 'cash', '', '2024-02-29 07:10:07', '2024-02-29 07:10:07'),
-(70, 1, 88, 'cash', '', '2024-02-29 07:12:36', '2024-02-29 07:12:36'),
-(71, 1, 89, 'cash', '', '2024-02-29 07:13:06', '2024-02-29 07:13:06'),
-(72, 1, 90, 'cash', '', '2024-02-29 07:14:20', '2024-02-29 07:14:20'),
-(73, 1, 91, 'cash', '', '2024-02-29 07:18:22', '2024-02-29 07:18:22'),
-(74, 1, 92, 'cash', '', '2024-02-29 07:22:01', '2024-02-29 07:22:01'),
-(75, 41, 93, 'cash', '', '2024-03-02 23:43:40', '2024-03-02 23:43:40'),
-(76, 44, 94, 'cash', '', '2024-03-02 23:44:47', '2024-03-02 23:44:47'),
-(77, 46, 96, 'cash', '', '2024-03-03 00:23:18', '2024-03-03 00:23:18'),
-(78, 44, 97, 'cash', '', '2024-03-03 00:29:08', '2024-03-03 00:29:08'),
-(79, 48, 99, 'cash', '', '2024-03-03 00:31:48', '2024-03-03 00:31:48'),
-(80, 41, 103, 'cash', '', '2024-03-03 03:21:09', '2024-03-03 03:21:09'),
-(81, 42, 104, 'cash', '', '2024-03-03 03:21:31', '2024-03-03 03:21:31'),
-(82, 49, 105, 'cash', '', '2024-03-03 03:56:20', '2024-03-03 03:56:20'),
-(83, 50, 106, 'cash', '', '2024-03-04 04:48:59', '2024-03-04 04:48:59'),
-(84, 51, 107, 'cash', '', '2024-03-04 05:41:03', '2024-03-04 05:41:03'),
-(85, 52, 108, 'cash', '', '2024-03-04 05:51:29', '2024-03-04 05:51:29'),
-(86, 49, 109, 'cash', '', '2024-03-04 23:05:58', '2024-03-04 23:05:58'),
-(88, 43, 112, 'cod', 'paid', '2024-03-05 05:25:50', '2024-03-07 03:15:51'),
-(89, 43, 113, 'cod', 'unpaid', '2024-03-13 02:29:33', '2024-03-13 02:29:33'),
-(90, 53, 114, 'cod', 'unpaid', '2024-03-17 23:46:23', '2024-03-17 23:46:23'),
-(91, 53, 115, 'cod', 'unpaid', '2024-03-17 23:47:25', '2024-03-17 23:47:25'),
-(92, 53, 116, 'cod', 'unpaid', '2024-03-17 23:53:30', '2024-03-17 23:53:30'),
-(93, 44, 117, 'cash', 'unpaid', '2024-03-18 00:05:39', '2024-03-18 00:05:39'),
-(94, 43, 118, 'cod', 'unpaid', '2024-03-18 01:04:09', '2024-03-18 01:04:09');
+INSERT INTO `transactions` (`id`, `customer_id`, `order_id`, `mode`, `transaction_no`, `status`, `created_at`, `updated_at`) VALUES
+(6, 269, 6, 'cash', NULL, 'unpaid', '2024-05-13 10:05:41', '2024-05-13 10:05:41'),
+(7, 270, 7, 'cash', NULL, 'unpaid', '2024-05-13 11:29:07', '2024-05-13 11:29:07'),
+(8, 271, 8, 'cash', NULL, 'paid', '2024-05-15 08:05:47', '2024-05-15 08:05:47'),
+(9, 271, 9, 'cash', NULL, 'paid', '2024-05-15 08:09:44', '2024-05-15 10:12:44'),
+(10, 271, 10, 'cash', NULL, 'unpaid', '2024-05-15 08:11:11', '2024-05-15 08:11:11'),
+(11, 271, 11, 'cash', NULL, 'unpaid', '2024-05-15 08:12:57', '2024-05-15 08:12:57'),
+(12, 272, 12, 'cash', NULL, 'unpaid', '2024-05-18 07:51:12', '2024-05-18 07:51:12'),
+(13, 273, 13, 'cash', NULL, 'unpaid', '2024-05-19 08:16:52', '2024-05-19 08:16:52');
 
 -- --------------------------------------------------------
 
@@ -3744,8 +4653,39 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@koohen.com', NULL, '$2y$12$LYwVhmz7qzsHVZ7YrDhXnuDsLIJ7WvgJitmJ9rVjj8Hs84Wm9Tgxy', 'sAVflPPxW199qwi0TIHrTfMkh0yJuU4Y0GdfHGT8L6uTxzjYJlFOWJmSxtGQ', '2024-01-11 01:33:04', '2024-02-05 01:56:41'),
-(3, 'Arif Hossen', 'qbittech.dev1@gmail.com', NULL, '$2y$12$UYeGhL2.TsbzoO75xniZ3ufVDsdJQWHBbvhMMs5J9Yas1YSU9piGS', 'NyTWzn6keXTmCmcLczRdyUOrWl2tN6GZFFQQY3e0y3hLloeGzMO6COLZr67B', '2024-02-18 05:02:30', '2024-02-18 05:09:31');
+(1, 'SuperAdmin', 'admin@koohen.com', NULL, '$2y$12$s6TdvHBXLPIytJnk3w1kp.WAH6ZgXJ90oBD8haOFLBFkPvIga3Dxq', '0rwFoGv0o4E4eatHokz6xrw7J7ecgw1DJ2iX4PcPUtxK4Yh4SkIm6aUc33Ne', '2024-01-11 01:33:04', '2024-03-27 06:12:11'),
+(3, 'Koohen', 'user@koohen.com', NULL, '$2y$12$j9OsoWA9IBKpe6EK/N6AcuQn7kJxKbWCbtmx7EOwKA7XLa9eLZlEW', NULL, '2024-02-08 09:05:30', '2024-02-08 09:05:30'),
+(4, 'Product Manager', 'support@koohen.com', NULL, '$2y$12$4yOgh89nVZJDAmKYknucxO1Hq2gdSUf.2frEeQeRqXxYNcj4biznK', NULL, '2024-03-27 06:11:50', '2024-03-27 06:11:50'),
+(5, 'Order User', 'sales@koohen.com', NULL, '$2y$12$B7ZvArt7tn0JqTlQUQcThuKwy7X/A1mG8r0/QHcjVs1r6sIbm9pHq', 'IgUiSZgSpQIf7MK0aIuXGaOgA2LPTwH3chGpJh6fO4swtoF8Q5JUkXUNL7uv', '2024-03-27 06:12:44', '2024-03-28 11:00:17'),
+(6, 'Arif Hossen', 'arifhossen853@gmail.com', NULL, '$2y$12$YWS0kw.afh3igoNyExBdv.qkWG1V.KqJUvZVwwECOlVPsUDFcT55W', 'VgQ2UNHvYjWGaXaGTvK3dEtzxugFBtxFIR6m5eWFqHkHxiVO3Q37YhJJ0CZJ', '2024-03-29 06:36:32', '2024-03-29 06:36:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_profiles`
+--
+
+CREATE TABLE `user_profiles` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `appName` varchar(255) NOT NULL,
+  `ownerName` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `startDate` date DEFAULT NULL,
+  `weblogo` varchar(255) DEFAULT NULL,
+  `webfavicon` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_profiles`
+--
+
+INSERT INTO `user_profiles` (`id`, `appName`, `ownerName`, `email`, `phone`, `address`, `description`, `startDate`, `weblogo`, `webfavicon`, `created_at`, `updated_at`) VALUES
+(1, 'Koohen', 'Masud Ahemd', 'support@koohen.com', '01795795441', '522/B, North Shahjahanpur, Dhaka-1217', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', '2024-03-01', '1714554640.png', '1714554640.png', '2024-04-30 19:57:22', '2024-05-01 16:52:43');
 
 -- --------------------------------------------------------
 
@@ -3783,17 +4723,65 @@ CREATE TABLE `webmessages` (
 INSERT INTO `webmessages` (`id`, `name`, `email`, `phone`, `subject`, `message`, `created_at`, `updated_at`) VALUES
 (1, 'Test', 'Test@gmail.com', '0147859635', 'Test', 'Test', '2024-03-13 01:49:27', '2024-03-13 01:49:27'),
 (2, 'test2', 'test2@gmail.com', '0147852369', 'Testing', 'Testing message', '2024-03-13 02:14:47', '2024-03-13 02:14:47'),
-(3, 'a', 'a@gmailcom', '12345566576', 'test', 'sadfsafe', '2024-03-13 02:55:17', '2024-03-13 02:55:17');
+(3, 'a', 'a@gmailcom', '12345566576', 'test', 'sadfsafe', '2024-03-13 02:55:17', '2024-03-13 02:55:17'),
+(4, 'Arif', 'qbittech.dev1@gmail.com', '01795795441', 'Test', 'Test', '2024-03-14 04:37:08', '2024-03-14 04:37:08'),
+(5, 'Mike Allford', 'mikeAnally@gmail.com', '82467977575', 'NEW: Semrush Backlinks', 'Howdy \r\n \r\nThis is Mike Allford\r\n \r\nLet me show you our latest research results from our constant SEO feedbacks that we have from our plans: \r\n \r\nhttps://www.strictlydigital.net/product/semrush-backlinks/ \r\n \r\nThe new Semrush Backlinks, which will make your koohen.com SEO trend have an immediate push. \r\nThe method is actually very simple, we are building links from domains that have a high number of keywords ranking for them.  \r\n \r\nForget about the SEO metrics or any other factors that so many tools try to teach you that is good. The most valuable link is the one that comes from a website that has a healthy trend and lots of ranking keywords. \r\nWe thought about that, so we have built this plan for you \r\n \r\nCheck in detail here: \r\nhttps://www.strictlydigital.net/product/semrush-backlinks/ \r\n \r\nCheap and effective \r\n \r\nTry it anytime soon \r\n \r\nRegards \r\nMike Allford\r\n \r\nmike@strictlydigital.net', '2024-03-24 01:33:59', '2024-03-24 01:33:59'),
+(6, 'Mike Goldman', 'mikeVEINDLOPYOWEDO@gmail.com', '82988711221', 'Increase sales for your local business', 'This service is perfect for boosting your local business\' visibility on the map in a specific location. \r\n \r\nWe provide Google Maps listing management, optimization, and promotion services that cover everything needed to rank in the Google 3-Pack. \r\n \r\nMore info: \r\nhttps://www.speed-seo.net/ranking-in-the-maps-means-sales/ \r\n \r\n \r\nThanks and Regards \r\nMike Goldman\r\n \r\n \r\nPS: Want a ONE-TIME comprehensive local plan that covers everything? \r\nhttps://www.speed-seo.net/product/local-seo-bundle/', '2024-03-28 02:34:11', '2024-03-28 02:34:11'),
+(7, 'Mike Ralphs', 'mikeVEINDLOPYOWEDO@gmail.com', '85854367133', 'Increase sales for your local business', 'This service is perfect for boosting your local business\' visibility on the map in a specific location. \r\n \r\nWe provide Google Maps listing management, optimization, and promotion services that cover everything needed to rank in the Google 3-Pack. \r\n \r\nMore info: \r\nhttps://www.speed-seo.net/ranking-in-the-maps-means-sales/ \r\n \r\n \r\nThanks and Regards \r\nMike Ralphs\r\n \r\n \r\nPS: Want a ONE-TIME comprehensive local plan that covers everything? \r\nhttps://www.speed-seo.net/product/local-seo-bundle/', '2024-04-28 03:18:01', '2024-04-28 03:18:01'),
+(8, 'Mike Bosworth', 'mikeAnally@gmail.com', '81311155888', 'NEW: Semrush Backlinks', 'Greetings \r\n \r\nThis is Mike Bosworth\r\n \r\nLet me introduce to you our latest research results from our constant SEO feedbacks that we have from our plans: \r\n \r\nhttps://www.strictlydigital.net/product/semrush-backlinks/ \r\n \r\nThe new Semrush Backlinks, which will make your koohen.com SEO trend have an immediate push. \r\nThe method is actually very simple, we are building links from domains that have a high number of keywords ranking for them.  \r\n \r\nForget about the SEO metrics or any other factors that so many tools try to teach you that is good. The most valuable link is the one that comes from a website that has a healthy trend and lots of ranking keywords. \r\nWe thought about that, so we have built this plan for you \r\n \r\nCheck in detail here: \r\nhttps://www.strictlydigital.net/product/semrush-backlinks/ \r\n \r\nCheap and effective \r\n \r\nTry it anytime soon \r\n \r\nRegards \r\nMike Bosworth\r\n \r\nmike@strictlydigital.net', '2024-05-17 03:27:49', '2024-05-17 03:27:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `web_infos`
+--
+
+CREATE TABLE `web_infos` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `appName` varchar(255) NOT NULL,
+  `ownerName` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `startDate` date DEFAULT NULL,
+  `weblogo` varchar(255) NOT NULL,
+  `webfavicon` varchar(255) NOT NULL,
+  `marquee` varchar(255) DEFAULT NULL,
+  `copyright` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `web_infos`
+--
+
+INSERT INTO `web_infos` (`id`, `appName`, `ownerName`, `address`, `description`, `startDate`, `weblogo`, `webfavicon`, `marquee`, `copyright`, `created_at`, `updated_at`) VALUES
+(1, 'Koohen', 'Mr Koohen', '522/B, North Shahjahanpur, Dhaka-1217', 'Koohen offers a wide range of clothing, including T-shirts, hoodies, traditional Panjabi and Sharee dresses. Orders are carefully handled from Dhaka and delivered across Bangladesh!', NULL, '1714909402.png', '1714909402.png', NULL, '2024 © All rights reserved', '2024-05-05 05:14:15', '2024-05-05 11:43:22');
 
 --
 -- Indexes for dumped tables
 --
 
 --
+-- Indexes for table `aboutuses`
+--
+ALTER TABLE `aboutuses`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `ads`
 --
 ALTER TABLE `ads`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `applied_coupones`
+--
+ALTER TABLE `applied_coupones`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `applied_coupones_coupone_id_foreign` (`coupone_id`),
+  ADD KEY `applied_coupones_customer_id_foreign` (`customer_id`),
+  ADD KEY `applied_coupones_order_id_foreign` (`order_id`);
 
 --
 -- Indexes for table `brands`
@@ -3834,6 +4822,12 @@ ALTER TABLE `categories`
 -- Indexes for table `colors`
 --
 ALTER TABLE `colors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contactinfos`
+--
+ALTER TABLE `contactinfos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3908,6 +4902,27 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
+-- Indexes for table `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD PRIMARY KEY (`role_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`);
+
+--
 -- Indexes for table `offers`
 --
 ALTER TABLE `offers`
@@ -3926,6 +4941,7 @@ ALTER TABLE `offer_types`
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `order_track_id` (`order_track_id`),
+  ADD UNIQUE KEY `invoice no` (`invoice_no`),
   ADD KEY `orders_customer_id_foreign` (`customer_id`);
 
 --
@@ -3946,17 +4962,17 @@ ALTER TABLE `order_items`
   ADD KEY `order_items_size_id_foreign` (`size_id`);
 
 --
--- Indexes for table `password_resets`
---
-ALTER TABLE `password_resets`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `password_resets_email_index` (`email`);
-
---
 -- Indexes for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`);
 
 --
 -- Indexes for table `personal_access_tokens`
@@ -4067,13 +5083,6 @@ ALTER TABLE `product_thumbnails`
   ADD KEY `product_thumbnails_product_id_foreign` (`product_id`);
 
 --
--- Indexes for table `purchases`
---
-ALTER TABLE `purchases`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `purchases_supplier_id_foreign` (`supplier_id`);
-
---
 -- Indexes for table `register_customers`
 --
 ALTER TABLE `register_customers`
@@ -4082,12 +5091,24 @@ ALTER TABLE `register_customers`
   ADD KEY `register_customers_customer_id_foreign` (`customer_id`);
 
 --
--- Indexes for table `sessions`
+-- Indexes for table `roles`
 --
-ALTER TABLE `sessions`
+ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `sessions_user_id_index` (`user_id`),
-  ADD KEY `sessions_last_activity_index` (`last_activity`);
+  ADD UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`);
+
+--
+-- Indexes for table `role_has_permissions`
+--
+ALTER TABLE `role_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`role_id`),
+  ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
+
+--
+-- Indexes for table `seo_settings`
+--
+ALTER TABLE `seo_settings`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `settings`
@@ -4120,6 +5141,12 @@ ALTER TABLE `sizes`
 -- Indexes for table `sliders`
 --
 ALTER TABLE `sliders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `socialinfos`
+--
+ALTER TABLE `socialinfos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -4159,6 +5186,12 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
+-- Indexes for table `user_profiles`
+--
+ALTER TABLE `user_profiles`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `varients`
 --
 ALTER TABLE `varients`
@@ -4171,14 +5204,32 @@ ALTER TABLE `webmessages`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `web_infos`
+--
+ALTER TABLE `web_infos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `aboutuses`
+--
+ALTER TABLE `aboutuses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ads`
 --
 ALTER TABLE `ads`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `applied_coupones`
+--
+ALTER TABLE `applied_coupones`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `brands`
@@ -4190,13 +5241,13 @@ ALTER TABLE `brands`
 -- AUTO_INCREMENT for table `campaigns`
 --
 ALTER TABLE `campaigns`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `camp_products`
 --
 ALTER TABLE `camp_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `carts`
@@ -4208,31 +5259,37 @@ ALTER TABLE `carts`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `colors`
 --
 ALTER TABLE `colors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `contactinfos`
+--
+ALTER TABLE `contactinfos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
 
 --
 -- AUTO_INCREMENT for table `delivery_zones`
 --
 ALTER TABLE `delivery_zones`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `divisions`
@@ -4250,19 +5307,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `feature_categories`
 --
 ALTER TABLE `feature_categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `feature_products`
 --
 ALTER TABLE `feature_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `feature_products_with_pivot`
 --
 ALTER TABLE `feature_products_with_pivot`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `media`
@@ -4274,43 +5331,43 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `offers`
 --
 ALTER TABLE `offers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `offer_types`
 --
 ALTER TABLE `offer_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `orderstatuses`
 --
 ALTER TABLE `orderstatuses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT for table `password_resets`
+-- AUTO_INCREMENT for table `permissions`
 --
-ALTER TABLE `password_resets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `permissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -4328,85 +5385,91 @@ ALTER TABLE `postcodes`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `products_colors`
 --
 ALTER TABLE `products_colors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `products_sizes`
 --
 ALTER TABLE `products_sizes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
 
 --
 -- AUTO_INCREMENT for table `product_additionalinfos`
 --
 ALTER TABLE `product_additionalinfos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=331;
 
 --
 -- AUTO_INCREMENT for table `product_extras`
 --
 ALTER TABLE `product_extras`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=229;
 
 --
 -- AUTO_INCREMENT for table `product_offer_types`
 --
 ALTER TABLE `product_offer_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `product_overviews`
 --
 ALTER TABLE `product_overviews`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
 
 --
 -- AUTO_INCREMENT for table `product_prices`
 --
 ALTER TABLE `product_prices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `product_stocks`
 --
 ALTER TABLE `product_stocks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `product_tags`
 --
 ALTER TABLE `product_tags`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
 -- AUTO_INCREMENT for table `product_thumbnails`
 --
 ALTER TABLE `product_thumbnails`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
-
---
--- AUTO_INCREMENT for table `purchases`
---
-ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT for table `register_customers`
 --
 ALTER TABLE `register_customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `seo_settings`
+--
+ALTER TABLE `seo_settings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -4418,19 +5481,25 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `shippings`
 --
 ALTER TABLE `shippings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `sizes`
 --
 ALTER TABLE `sizes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `sliders`
 --
 ALTER TABLE `sliders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `socialinfos`
+--
+ALTER TABLE `socialinfos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `subcategories`
@@ -4448,7 +5517,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `upazillas`
@@ -4460,7 +5529,13 @@ ALTER TABLE `upazillas`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `user_profiles`
+--
+ALTER TABLE `user_profiles`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `varients`
@@ -4472,11 +5547,25 @@ ALTER TABLE `varients`
 -- AUTO_INCREMENT for table `webmessages`
 --
 ALTER TABLE `webmessages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `web_infos`
+--
+ALTER TABLE `web_infos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `applied_coupones`
+--
+ALTER TABLE `applied_coupones`
+  ADD CONSTRAINT `applied_coupones_coupone_id_foreign` FOREIGN KEY (`coupone_id`) REFERENCES `coupons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `applied_coupones_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `applied_coupones_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `camp_products`
@@ -4503,6 +5592,18 @@ ALTER TABLE `feature_categories`
 ALTER TABLE `feature_products_with_pivot`
   ADD CONSTRAINT `feature_products_with_pivot_feature_products_id_foreign` FOREIGN KEY (`feature_products_id`) REFERENCES `feature_products` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `feature_products_with_pivot_products_id_foreign` FOREIGN KEY (`products_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `offers`
@@ -4542,41 +5643,9 @@ ALTER TABLE `postcodes`
 -- Constraints for table `products`
 --
 ALTER TABLE `products`
-  ADD CONSTRAINT `products_brand_id_foreign` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `products_brand_id_foreign` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `products_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `products_colors`
---
-ALTER TABLE `products_colors`
-  ADD CONSTRAINT `products_colors_color_id_foreign` FOREIGN KEY (`color_id`) REFERENCES `colors` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `products_colors_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `products_sizes`
---
-ALTER TABLE `products_sizes`
-  ADD CONSTRAINT `products_sizes_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `products_sizes_size_id_foreign` FOREIGN KEY (`size_id`) REFERENCES `sizes` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_additionalinfos`
---
-ALTER TABLE `product_additionalinfos`
-  ADD CONSTRAINT `product_additionalinfos_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_extras`
---
-ALTER TABLE `product_extras`
-  ADD CONSTRAINT `product_extras_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_images`
---
-ALTER TABLE `product_images`
-  ADD CONSTRAINT `product_images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `product_offer_types`
@@ -4586,18 +5655,6 @@ ALTER TABLE `product_offer_types`
   ADD CONSTRAINT `product_offer_types_offer_product_id_foreign` FOREIGN KEY (`offer_product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `product_overviews`
---
-ALTER TABLE `product_overviews`
-  ADD CONSTRAINT `product_overviews_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_prices`
---
-ALTER TABLE `product_prices`
-  ADD CONSTRAINT `product_prices_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `product_stocks`
 --
 ALTER TABLE `product_stocks`
@@ -4605,43 +5662,18 @@ ALTER TABLE `product_stocks`
   ADD CONSTRAINT `product_stocks_size_id_foreign` FOREIGN KEY (`size_id`) REFERENCES `sizes` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `product_tags`
+-- Constraints for table `role_has_permissions`
 --
-ALTER TABLE `product_tags`
-  ADD CONSTRAINT `product_tags_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_thumbnails`
---
-ALTER TABLE `product_thumbnails`
-  ADD CONSTRAINT `product_thumbnails_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `purchases`
---
-ALTER TABLE `purchases`
-  ADD CONSTRAINT `purchases_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `register_customers`
---
-ALTER TABLE `register_customers`
-  ADD CONSTRAINT `register_customers_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `shippings`
---
-ALTER TABLE `shippings`
-  ADD CONSTRAINT `shippings_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `shippings_ibfk_1` FOREIGN KEY (`area`) REFERENCES `postcodes` (`id`),
-  ADD CONSTRAINT `shippings_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
+ALTER TABLE `role_has_permissions`
+  ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `transactions`
 --
 ALTER TABLE `transactions`
-  ADD CONSTRAINT `transactions_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `transactions_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

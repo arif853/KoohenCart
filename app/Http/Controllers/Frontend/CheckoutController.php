@@ -26,28 +26,27 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Notifications\NewPendingOrderNotification;
+use SteadFast\SteadFastCourierLaravelPackage\Facades\SteadfastCourier;
 
 class CheckoutController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      */
 
     public function generateCode()
     {
-    do {
-        // Generate a 4-digit random number
-        $randomNumber = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+        do {
+            // Generate a 4-digit random number
+            $randomNumber = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
 
-        // Get the current year
-        $currentYear = date('y');
-        // Concatenate the components to create the final code
-        $generatedCode = 'K'.$currentYear.'-'.$randomNumber;
-        // Check if the generated code already exists in the database
-        $codeExists = DB::table('orders')->where('order_track_id', $generatedCode)->exists();
-
-    } while ($codeExists);
+            // Get the current year
+            $currentYear = date('y');
+            // Concatenate the components to create the final code
+            $generatedCode = 'K' . $currentYear . '-' . $randomNumber;
+            // Check if the generated code already exists in the database
+            $codeExists = DB::table('orders')->where('order_track_id', $generatedCode)->exists();
+        } while ($codeExists);
 
         // Concatenate the components to create the final code
 
@@ -56,21 +55,19 @@ class CheckoutController extends Controller
 
     public function generateInvoiceNo()
     {
+        do {
+            // Generate a 2-digit random number
+            $randomNumber = str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT);
 
-    do {
-        // Generate a 2-digit random number
-        $randomNumber = str_pad(mt_rand(1, 99), 2, '0', STR_PAD_LEFT);
+            // Get the current year
+            $currentYear = date('y');
+            $currentMonth = date('m');
 
-        // Get the current year
-        $currentYear = date('y');
-        $currentMonth = date('m');
-
-        // Concatenate the components to create the final code
-        $invoiceNo= $currentMonth.$currentYear.$randomNumber;
-        // Check if the generated code already exists in the database
-        $codeExists = DB::table('orders')->where('invoice_no', $invoiceNo)->exists();
-
-    } while ($codeExists);
+            // Concatenate the components to create the final code
+            $invoiceNo = $currentMonth . $currentYear . $randomNumber;
+            // Check if the generated code already exists in the database
+            $codeExists = DB::table('orders')->where('invoice_no', $invoiceNo)->exists();
+        } while ($codeExists);
 
         // Concatenate the components to create the final code
 
@@ -84,14 +81,12 @@ class CheckoutController extends Controller
         // Initialize an empty array to store purchase event data
         $purchaseEventData = [];
         if (Auth::guard('customer')->check()) {
-
             $user = Auth::guard('customer')->user();
             $customer_id = $user->customer->id;
             $couponCode = $request->input('coupon_code');
 
-
             // order details store to order
-            $order = new Order;
+            $order = new Order();
             $order->customer_id = $customer_id;
             $order->invoice_no = $invoiceNo;
             $order->order_track_id = $track_id;
@@ -108,19 +103,18 @@ class CheckoutController extends Controller
                 'order_id' => $order->id,
             ]);
             //Transaction details
-                $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
-                $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
-                $purchaseEventData['tax'] = $request->tax; // Tax amount
-                $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
-                $purchaseEventData['currency'] = "BDT"; // Currency
-                $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ""; // Coupon code
-                $purchaseEventData['items'] = [];
-                
+            $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
+            $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
+            $purchaseEventData['tax'] = $request->tax; // Tax amount
+            $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
+            $purchaseEventData['currency'] = 'BDT'; // Currency
+            $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ''; // Coupon code
+            $purchaseEventData['items'] = [];
+
             $cartItems = Cart::instance('cart')->content();
 
             // Loop through the cart items and save them to the order item table
             foreach ($cartItems as $cartItem) {
-
                 // Save $cartItem to your order item table
                 //order item store in order item item table.
                 order_items::create([
@@ -138,7 +132,7 @@ class CheckoutController extends Controller
                     'price' => $cartItem->price,
                     'quantity' => $cartItem->qty,
                 ];
-            $purchaseEventData['items'][] = $item;
+                $purchaseEventData['items'][] = $item;
             }
 
             $transaction = transactions::create([
@@ -147,12 +141,10 @@ class CheckoutController extends Controller
                 'mode' => $request->payment_mode,
             ]);
 
-            if($couponCode){
+            if ($couponCode) {
                 // Check if the customer has previously used the coupon
-                $appliedCoupon = AppliedCoupone::where('customer_id', $customer_id)
-                                                ->where('coupone_code', $couponCode)
-                                                ->first();
-                    if ($appliedCoupon) {
+                $appliedCoupon = AppliedCoupone::where('customer_id', $customer_id)->where('coupone_code', $couponCode)->first();
+                if ($appliedCoupon) {
                     // Show error message if coupon has already been used by this customer
                     $appliedCoupon->update([
                         'order_id' => $order->id,
@@ -163,14 +155,13 @@ class CheckoutController extends Controller
             }
 
             $customer = Customer::find($customer_id);
-            
+
             // auth()->user()->notify(new NewPendingOrderNotification($order));
 
-            Session::flash('warning','Check your order in dashboard.');
-            Mail::to($customer->email)->send( new customerMail($order));
-
-        }
-        else{
+            Session::flash('warning', 'Check your order in dashboard.');
+           
+          //  Mail::to($customer->email)->send(new customerMail($order));
+        } else {
             $rules = [
                 'fname' => 'required|string',
                 'lname' => 'required|string',
@@ -197,17 +188,14 @@ class CheckoutController extends Controller
 
             // Validate the request
             if ($validator->fails()) {
-
                 // Session::flash('danger', $validator->messages()->toArray());
                 return redirect()->back()->withErrors($validator)->withInput();
-            }
-            else{
-
+            } else {
                 // save new customer.
                 // Check if customer with the given email or phone already exists
                 $existingCustomer = Customer::where('email', $request->email)
-                ->orWhere('phone', $request->phone)
-                ->first();
+                    ->orWhere('phone', $request->phone)
+                    ->first();
 
                 if ($existingCustomer) {
                     // Customer with the same email or phone already exists
@@ -215,8 +203,8 @@ class CheckoutController extends Controller
                     return redirect()->back()->with('warning', 'The same email or phone already exists. Please login first.');
                 } else {
                     // Customer does not exist, create a new one
-                    $customer = new Customer;
-                    $customer->firstName  = $request->fname;
+                    $customer = new Customer();
+                    $customer->firstName = $request->fname;
                     $customer->lastName = $request->lname;
                     $customer->phone = $request->phone;
                     $customer->email = $request->email;
@@ -233,8 +221,8 @@ class CheckoutController extends Controller
                 $customerEmail = $customer->email;
 
                 // if new customer registration store.
-                if($request->is_createaccount){
-                    $customer_reg = new Register_customer;
+                if ($request->is_createaccount) {
+                    $customer_reg = new Register_customer();
                     $customer_reg->customer_id = $customer_id;
                     $customer_reg->phone = $customerPhone;
                     $customer_reg->email = $customerEmail;
@@ -245,13 +233,12 @@ class CheckoutController extends Controller
                     $registration_status = $customer_reg->status;
                     $register_customer = Customer::find($customer_reg->customer_id);
                     $register_customer->update([
-                    'status' => $registration_status,
+                        'status' => $registration_status,
                     ]);
 
-                    Session::flash('warning','Your registration complete successfully, Please login to user dashboard.');
-                }
-                else{
-                    $customer_reg = new Register_customer;
+                    Session::flash('warning', 'Your registration complete successfully, Please login to user dashboard.');
+                } else {
+                    $customer_reg = new Register_customer();
                     $customer_reg->customer_id = $customer_id;
                     $customer_reg->phone = $customerPhone;
                     $customer_reg->email = $customerEmail;
@@ -262,15 +249,15 @@ class CheckoutController extends Controller
                     $registration_status = $customer_reg->status;
                     $register_customer = Customer::find($customer_reg->customer_id);
                     $register_customer->update([
-                    'status' => $registration_status,
+                        'status' => $registration_status,
                     ]);
 
-                    Session::flash('warning','Use your Phone number as password to login.');
+                    Session::flash('warning', 'Use your Phone number as password to login.');
                 }
 
                 // $product = Cart::get();
                 // order details store to order
-                $order = new Order;
+                $order = new Order();
                 $order->customer_id = $customer_id;
                 $order->invoice_no = $invoiceNo;
                 $order->order_track_id = $track_id;
@@ -291,17 +278,14 @@ class CheckoutController extends Controller
                 $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
                 $purchaseEventData['tax'] = $request->tax; // Tax amount
                 $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
-                $purchaseEventData['currency'] = "BDT"; // Currency
-                $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ""; // Coupon code
+                $purchaseEventData['currency'] = 'BDT'; // Currency
+                $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ''; // Coupon code
                 $purchaseEventData['items'] = [];
-                
-                
-                
+
                 $cartItems = Cart::instance('cart')->content();
 
                 // Loop through the cart items and save them to the order item table
                 foreach ($cartItems as $cartItem) {
-
                     // Save $cartItem to your order item table
                     //order item store in order item item table.
                     order_items::create([
@@ -312,21 +296,21 @@ class CheckoutController extends Controller
                         'price' => $cartItem->price,
                         'quantity' => $cartItem->qty,
                     ]);
-                    
+
                     $item = [
-                            'item_id' => $cartItem->id,
-                            'item_name' => $cartItem->name, // Assuming you have a 'name' property for the item
-                            'price' => $cartItem->price,
-                            'quantity' => $cartItem->qty,
-                        ];
+                        'item_id' => $cartItem->id,
+                        'item_name' => $cartItem->name, // Assuming you have a 'name' property for the item
+                        'price' => $cartItem->price,
+                        'quantity' => $cartItem->qty,
+                    ];
                     $purchaseEventData['items'][] = $item;
                 }
 
-                if($request->is_shipping){
+                if ($request->is_shipping) {
                     // shipping addres different from billing address. get shipping data.
                     // $existingCustomer_shipping = shipping::where('customer_id', $customer_id);
 
-                    $shipping_info = new shipping;
+                    $shipping_info = new shipping();
                     $shipping_info->customer_id = $customer_id;
                     $shipping_info->order_id = $order->id;
                     $shipping_info->first_name = $request->shipper_fname;
@@ -338,22 +322,21 @@ class CheckoutController extends Controller
                     $shipping_info->district = $request->s_district;
                     $shipping_info->area = $request->s_area;
                     $shipping_info->save();
-                }
-                else{
+                } else {
                     // shipping address and billing address same. billing address save to shipping table.
 
-                        $shipping_info = new shipping;
-                        $shipping_info->customer_id = $customer_id;
-                        $shipping_info->order_id = $order->id;
-                        $shipping_info->first_name = $request->fname;
-                        $shipping_info->last_name = $request->lname;
-                        $shipping_info->s_phone = $request->phone;
-                        $shipping_info->s_email = $request->email;
-                        $shipping_info->shipping_add = $request->billing_address;
-                        $shipping_info->division = $request->division;
-                        $shipping_info->district = $request->district;
-                        $shipping_info->area = $request->area;
-                        $shipping_info->save();
+                    $shipping_info = new shipping();
+                    $shipping_info->customer_id = $customer_id;
+                    $shipping_info->order_id = $order->id;
+                    $shipping_info->first_name = $request->fname;
+                    $shipping_info->last_name = $request->lname;
+                    $shipping_info->s_phone = $request->phone;
+                    $shipping_info->s_email = $request->email;
+                    $shipping_info->shipping_add = $request->billing_address;
+                    $shipping_info->division = $request->division;
+                    $shipping_info->district = $request->district;
+                    $shipping_info->area = $request->area;
+                    $shipping_info->save();
                 }
                 $transaction = transactions::create([
                     'customer_id' => $customer_id,
@@ -361,26 +344,25 @@ class CheckoutController extends Controller
                     'mode' => $request->payment_mode,
                 ]);
             }
-            
+
             // auth()->user()->notify(new NewPendingOrderNotification($order));
-            Mail::to( $customer->email)->send( new customerMail($order));
-
+           // Mail::to($customer->email)->send(new customerMail($order));
         }
-        
+
         // Clear the cart after saving to the order item table
-        Mail::to('masudszone.design@gmail.com')->send( new AdminMail($order));
+      //  Mail::to('masudszone.design@gmail.com')->send(new AdminMail($order));
         // masudszone.design@gmail.com
-        
+
         Cart::instance('cart')->destroy();
-        
-        return redirect()->route('thankyou')->with([
-            'success' => 'Your order has been placed',
-            'purchaseEventData' => $purchaseEventData
-        ]);
-
+      
+        return redirect()
+            ->route('thankyou')
+            ->with([
+                'success' => 'Your order has been placed',
+                'purchaseEventData' => $purchaseEventData,
+            ]);
     }
-
-
+  
     public function login(Request $request)
     {
         $request->validate([
@@ -395,9 +377,8 @@ class CheckoutController extends Controller
 
         // Attempt to authenticate the customer
         if (Auth::guard('customer')->attempt([$fieldType => $loginIdentifier, 'password' => $request->password])) {
-
             // Authentication successful
-            return redirect()->route('checkout')->with('success','Successfully Login.');
+            return redirect()->route('checkout')->with('success', 'Successfully Login.');
         }
 
         // Authentication failed
@@ -406,7 +387,6 @@ class CheckoutController extends Controller
             'login_identifier' => [trans('auth.failed')],
         ]);
     }
-
 
     public function appliedCoupone(Request $request)
     {
@@ -420,23 +400,20 @@ class CheckoutController extends Controller
             $customerId = $user->customer->id;
 
             // Check if the customer has previously used the coupon
-            $appliedCoupon = AppliedCoupone::where('customer_id', $customerId)
-                                            ->where('coupone_code', $couponCode)
-                                            ->first();
+            $appliedCoupon = AppliedCoupone::where('customer_id', $customerId)->where('coupone_code', $couponCode)->first();
 
             if ($appliedCoupon) {
                 // Show error message if coupon has already been used by this customer
                 Session::flash('success', 'You have already used this coupon.');
                 // return redirect()->route('checkout');
                 return response()->json(['status' => 402, 'message' => 'You have already used this coupon.']);
-            }
-            else{
+            } else {
                 // Find the coupon with the provided code
                 $coupon = Coupon::where('coupons_code', $couponCode)
-                                ->where('status', 1) // Check if the coupon is active
-                                ->where('quantity', '>', 0) // Check if there are available coupons
-                                ->whereDate('end_date', '>=', now()) // Check if the coupon is not expired
-                                ->first();
+                    ->where('status', 1) // Check if the coupon is active
+                    ->where('quantity', '>', 0) // Check if there are available coupons
+                    ->whereDate('end_date', '>=', now()) // Check if the coupon is not expired
+                    ->first();
                 if ($coupon) {
                     // Reduce coupon quantity
                     $coupon->decrement('quantity');
@@ -444,28 +421,23 @@ class CheckoutController extends Controller
                     AppliedCoupone::create([
                         'customer_id' => $customerId,
                         'coupone_id' => $coupon->id,
-                        'coupone_code' => $coupon->coupons_code
-                ]);
+                        'coupone_code' => $coupon->coupons_code,
+                    ]);
 
                     // Show success message
                     // Session::flash('success', 'Coupon applied successfully!');
                     return response()->json(['status' => 200, 'coupon' => $coupon, 'message' => 'Coupon applied successfully!']);
-                }
-                else {
+                } else {
                     // Show error message if coupon not found or invalid
                     // Session::flash('danger', 'Invalid coupon code or expired!');
                     return response()->json(['status' => 402, 'message' => 'Invalid coupon code or expired.']);
                 }
             }
-
         } else {
             // Show error message if user is not logged in
             // Session::flash('danger', 'Please log in to apply the coupon.');
             // Redirect back to the previous page
-            return response()->json(['status' => 402,'message' => 'Please log in to apply the coupon.']);
+            return response()->json(['status' => 402, 'message' => 'Please log in to apply the coupon.']);
         }
-
-
     }
-
 }

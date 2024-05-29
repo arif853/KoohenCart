@@ -33,10 +33,11 @@
             <div class="card-header">
                 <div class="left pull-left">
                     {{-- <a href="#" class="btn btn-warning rounded">Permission</a> --}}
-                    <a href="{{url('/dashboard/roles')}}" class="btn btn-info rounded">Manage Roles</a>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#userModal" class="btn btn-success rounded mr-5 btn-sm">Add User</button>
+                    <a href="{{url('/dashboard/roles')}}" class="btn btn-info rounded mr-5 btn-sm">Roles</a>
+                    {{-- <a href="#" class="btn btn-info rounded btn-sm">Permission</a> --}}
                 </div>
                 <div class="right pull-right">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#userModal" class="btn btn-success rounded">Add User</button>
                 </div>
 
             </div>
@@ -130,18 +131,15 @@
             },
             success: function (response) {
                 console.log(response);
-
                 $('#user_id').val(response.user.id);
                 $('#user_name').val(response.user.name);
                 $('#user_email').val(response.user.email);
-
-                $('#user_role').val([]);
+                $('#edit_user_roles_id option').prop('selected', false);
+                $('#edit_user_roles_id').val([]);
                 response.user.roles.forEach(function(role) {
-                    $('#user_role option[value="' + role.name + '"]').prop('selected', true);
+                    $('#edit_user_roles_id option[value="' + role.name + '"]').prop('selected', true);
                 });
-
-                $('#user_role').trigger('change');
-
+                $('#edit_user_roles_id').trigger('change');
             }
         });
     });

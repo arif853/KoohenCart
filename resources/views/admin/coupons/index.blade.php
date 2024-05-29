@@ -79,7 +79,7 @@
                                             <form class="deleteForm" action="{{route('coupon.destroy', ['id' => $item->id])}}" method="post" class="d-inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <a href="{{ route('coupon.edit', ['id' => $item->id]) }}" class="btn btn-sm btn-info rounded font-sm mt-3">Edit</a>
+                                                <a href="{{ route('coupon.edit', ['id' => $item->id]) }}" class="btn btn-sm btn-primary pt-1 mt-3">Edit</a>
                                                 <a href="#" class="btn btn-sm btn-danger rounded font-sm mt-15 delete_coupon">Delete</a>
                                             </form>
                                         </td>
