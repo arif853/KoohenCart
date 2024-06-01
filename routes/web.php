@@ -137,7 +137,7 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('
 
 //store checkout orders.
 Route::post('/customer/shop/checkout/store', [CheckoutController::class, 'store'])->name('order.store');
-Route::post('/customer/shop/checkout/courier', [CheckoutController::class, 'send_bulk_to_courier'])->name('order.courier');
+//oute::post('/customer/shop/checkout/courier', [CheckoutController::class, 'send_bulk_to_courier'])->name('order.courier');
 Route::post('/customer/shop/checkout/login', [CheckoutController::class, 'login'])->name('checkout.login');
 Route::post('/customer/shop/checkout/coupone', [CheckoutController::class, 'appliedCoupone'])->name('applied.coupone');
 
@@ -256,10 +256,14 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     //Order
     Route::controller(SteadfastController::class)->middleware('auth')->group(function () {
         Route::post('/dashboard/orders_bulk', 'send_bulk_to_courier')->name('order.bulk_order.curier');
+        Route::post('/dashboard/place_order/curier', 'place_order')->name('order.place_order.curier');
+        Route::get('/dashboard/delivery/status/{consignmentId}', 'checkingDeliveryStatus')->name('order.delivery.status');
+        Route::get('/dashboard/get/balance','getCurrentBalance');
     });
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
         Route::get('/dashboard/orders/bulk/{id}', 'bulk_order')->name('order.bulk_order');
+        Route::get('/dashboard/orders/place_order/{id}', 'place_order')->name('order.place_order');
         Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');
