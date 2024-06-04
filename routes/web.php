@@ -542,8 +542,8 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     // <========================= Backend Route End ========================>
 
-    Route::get('/google/redirect', [SocialAuthController::class, 'redirect']);
-    Route::get('/google/callback', [SocialAuthController::class, 'callback']);
+    Route::get('/{provider}/redirect', [SocialAuthController::class, 'redirect']);
+    Route::get('/{provider}/callback', [SocialAuthController::class, 'callback']);
 
 Route::get('/thankyou',function(){
     return view('frontend.thankyou');

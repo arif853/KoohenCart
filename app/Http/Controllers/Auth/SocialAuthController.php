@@ -16,15 +16,15 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
 {
-    public function redirect() {
-        return Socialite::driver('google')->redirect();
+    public function redirect($provider) {
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function callback()
+    public function callback($provider)
     {
         try {
             // Retrieve Google user information
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver($provider)->user();
 
             // Check if the user already exists in the `Register_customer` table
             $customer = Register_customer::where('email', $googleUser->email)->first();

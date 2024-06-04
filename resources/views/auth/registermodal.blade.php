@@ -101,11 +101,11 @@
                                         <path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z" fill="#EA4335"></path>
                                     </svg> Sign in using Google
                                 </a>
-                                <a href="#" class="btn w-50 btn-light font-sm m-auto">
+                                {{-- <a href="#" class="btn w-50 btn-light font-sm m-auto">
                                     <svg aria-hidden="true" class="icon-svg" width="20" height="20" viewBox="0 0 20 20">
                                         <path d="M3 1a2 2 0 00-2 2v12c0 1.1.9 2 2 2h12a2 2 0 002-2V3a2 2 0 00-2-2H3zm6.55 16v-6.2H7.46V8.4h2.09V6.61c0-2.07 1.26-3.2 3.1-3.2.88 0 1.64.07 1.87.1v2.16h-1.29c-1 0-1.19.48-1.19 1.18V8.4h2.39l-.31 2.42h-2.08V17h-2.5z" fill="#4167B2"></path>
                                     </svg> Sign in using Facebook
-                                </a>
+                                </a> --}}
                             </div>
                             <div class="text-muted text-center">Already have an account?
                                 <a href="#" data-bs-target="#login" data-bs-toggle="modal" data-bs-dismiss="modal">Sign in now</a></div>
