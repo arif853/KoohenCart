@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\WebmessageController;
 use App\Http\Controllers\Admin\WebSettingController;
@@ -541,7 +542,8 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     // <========================= Backend Route End ========================>
 
-
+    Route::get('/google/redirect', [SocialAuthController::class, 'redirect']);
+    Route::get('/google/callback', [SocialAuthController::class, 'callback']);
 
 Route::get('/thankyou',function(){
     return view('frontend.thankyou');
@@ -554,7 +556,5 @@ Route::get('/dashboard/reviews', function () {
 
 
 
-// Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);
-// Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
 
 require __DIR__.'/auth.php';
