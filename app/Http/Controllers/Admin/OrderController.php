@@ -42,6 +42,27 @@ class OrderController extends Controller
         
         return view('admin.order.index',compact('orders'));
     }
+    public function bulk_order($id)
+    {
+        $order = Order::with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->where('id',$id)->first();
+        return view('admin.order.create_bulk_order',compact('order'));
+    }
+    public function place_order($id)
+    {
+        $order = Order::with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->where('id',$id)->first();
+        
+        return view('admin.order.place_order',compact('order'));
+    }
 
     public function order_track(Request $request)
     {

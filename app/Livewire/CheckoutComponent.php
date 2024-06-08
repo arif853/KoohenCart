@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Customer;
 use Livewire\Component;
 use App\Models\District;
 use App\Models\Division;
@@ -14,7 +15,6 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 class CheckoutComponent extends Component
 {
-
 
     public $deliveryCharge = 0;
 
@@ -55,6 +55,14 @@ class CheckoutComponent extends Component
 
     public function render()
     {
+        if(auth()->guard('customer')->check())
+        {
+            $user = auth()->guard('customer')->user();
+            $customer = Customer::find($user->customer_id);
+            $postOffice = Postcode::find($customer->area);
+            $this->deliveryCharge = $postOffice->zone_charge;
+        }
+
         return view('livewire.checkout-component', [
             'deliveryCharge' => $this->deliveryCharge,
         ]);

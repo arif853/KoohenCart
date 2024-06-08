@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\SizeChartController;
+use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\WebmessageController;
 use App\Http\Controllers\Admin\WebSettingController;
@@ -53,6 +54,7 @@ use App\Http\Controllers\Admin\FeatureCategoryController;
 use App\Http\Controllers\Admin\FeatureProductsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
+use App\Http\Controllers\Admin\Steadfast\SteadfastController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
 
 /*
@@ -137,6 +139,7 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('
 
 //store checkout orders.
 Route::post('/customer/shop/checkout/store', [CheckoutController::class, 'store'])->name('order.store');
+//oute::post('/customer/shop/checkout/courier', [CheckoutController::class, 'send_bulk_to_courier'])->name('order.courier');
 Route::post('/customer/shop/checkout/login', [CheckoutController::class, 'login'])->name('checkout.login');
 Route::post('/customer/shop/checkout/coupone', [CheckoutController::class, 'appliedCoupone'])->name('applied.coupone');
 
@@ -253,8 +256,16 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     //Order
+    Route::controller(SteadfastController::class)->middleware('auth')->group(function () {
+        Route::post('/dashboard/orders_bulk', 'send_bulk_to_courier')->name('order.bulk_order.curier');
+        Route::post('/dashboard/place_order/curier', 'place_order')->name('order.place_order.curier');
+        Route::get('/dashboard/delivery/status/{consignmentId}', 'checkingDeliveryStatus')->name('order.delivery.status');
+        Route::get('/dashboard/get/balance','getCurrentBalance');
+    });
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
+        Route::get('/dashboard/orders/bulk/{id}', 'bulk_order')->name('order.bulk_order');
+        Route::get('/dashboard/orders/place_order/{id}', 'place_order')->name('order.place_order');
         Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');
@@ -539,7 +550,8 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     // <========================= Backend Route End ========================>
 
-
+    Route::get('/{provider}/redirect', [SocialAuthController::class, 'redirect']);
+    Route::get('/{provider}/callback', [SocialAuthController::class, 'callback']);
 
 Route::get('/thankyou',function(){
     return view('frontend.thankyou');
@@ -552,7 +564,5 @@ Route::get('/dashboard/reviews', function () {
 
 
 
-// Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);
-// Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
 
 require __DIR__.'/auth.php';
