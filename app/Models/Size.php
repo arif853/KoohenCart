@@ -18,4 +18,11 @@ class Size extends Model
     {
         return $this->products()->count();
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_size_headers')
+                    ->withPivot('size_header_id', 'value')
+                    ->withTimestamps();
+    }
 }

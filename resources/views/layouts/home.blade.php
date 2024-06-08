@@ -199,11 +199,8 @@
                         </div>
                         <!--Main Menu Bar-->
                     </div>
-
                     <div class="hotline d-none d-lg-block">
                         <div class="header-action-2 header">
-
-
                             <div class="searchbar">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                                  <div class="togglesearch">
@@ -236,44 +233,6 @@
                             @livewire('wishlist-icon-component')
 
                             @livewire('cart-icon-component')
-
-                                {{-- <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="#">
-                                        <img alt="Evara" src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-cart.svg">
-                                        <span class="pro-count blue">{{Cart::count()}}</span>
-                                    </a> --}}
-
-                                    {{-- @if(Cart::count() > 0)
-                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                        <ul>
-                                            @foreach (Cart::content() as $item)
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="{{route('shop.cart')}}"><img alt="{{$item->options->slug}}" src="{{asset('storage/product_images/').$item->options->image->product_image}}"></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="{{route('shop.cart')}}">{{substr($item->name,0,20)}}</a></h4>
-                                                    <h3><span>{{$item->qty}} × </span>${{$item->price}}</h3>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="{{route('remove.cart',$item->rowId)}}"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                        <div class="shopping-cart-footer">
-                                            <div class="shopping-cart-total">
-                                                <h4>Total <span>${{Cart::subtotal()}}</span></h4>
-                                            </div>
-                                            <div class="shopping-cart-button">
-                                                <a href="{{route('shop.cart')}}" class="outline">View cart</a>
-                                                <a href="checkout.php">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endif --}}
-                                {{-- </div> --}}
-                                {{-- @livewire('cart-icon-component') --}}
 
                         </div>
                     </div>
@@ -402,15 +361,19 @@
                             @endauth
                     </div>
                    <div class="single-mobile-header-info">
-                    @foreach($socialinfos as $socialinfo)
+                    {{-- @foreach($socialinfos as $socialinfo)
                         @if($socialinfo->social_title === 'Phone')
                         <a href="tel:{{$socialinfo->title_value}}">{{$socialinfo->title_value}}</a>
                         @endif
-                    @endforeach
+                    @endforeach --}}
+                    @if($contactinfo)
+                        <a href="tel:{{$contactinfo->phone}}">{{$contactinfo->phone}}</a>
+                        <a href="mailto:{{$contactinfo->email}}">{{$contactinfo->email}}</a>
+                    @endif
 
                     </div>
-                    <div class="single-mobile-header-info mt-30">
-                        <a  href="{{route('contactus')}}"> Our location: <p>{{$userData->address}}</p></a>
+                    <div class="single-mobile-header-info mt-10">
+                        <a  href="{{route('contactus')}}"> Our location: <p>{{$contactinfo->address}}</p></a>
                     </div>
                 </div>
 
@@ -557,12 +520,13 @@
                 </div>
                 <div class="col-lg-6">
                     <p class="float-md-left font-sm text-muted mb-0 d-flex">
-                    {{-- <script>document.write(new Date().getFullYear())</script> &copy; All rights reserved, --}}
-                    {{$userData->copyright}},
+
+                    <script>document.write(new Date().getFullYear())</script> &copy; <strong class="mr-5 ml-5">{{$userData->appName}}</strong>
+                    All rights reserved,
+
                     <strong class="text-brand mr-10 ml-10">
-                        <!--<img width="40" src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo">-->
                         <img width="40" src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="logo">
-                    </strong><span style="text-transform:uppercase"> - Your ultimate Lifestyle.</span> </p>
+                    </strong><span style="text-transform:uppercase"> - {{$userData->entitle}}</span> </p>
                 </div>
                 <div class="col-lg-6">
                     <p class="text-lg-end text-start font-sm text-muted mb-0">

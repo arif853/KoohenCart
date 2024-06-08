@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\POSController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\MediaController;
@@ -23,6 +25,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\AboutusController;
 use App\Http\Controllers\Admin\PrivacyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
@@ -36,7 +39,10 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Admin\SizeChartController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\WebmessageController;
+use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Frontend\CheckoutController;
@@ -48,11 +54,6 @@ use App\Http\Controllers\Admin\FeatureProductsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AboutusController;
-use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\WebSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -504,14 +505,13 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     Route::controller(WebmessageController::class)->middleware('auth')->group(function(){
         Route::get('/dashboard/setting/webmessage','index')->name('webmessage.index');
-
         Route::delete('/dashboard/setting/webmessage/destroy/{id}', 'destroy')->name('webmessage.destroy');
-
     });
 
     Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
+
      // Delivery Info
-     Route::controller(DeliveryInfoController::class)->group(function(){
+    Route::controller(DeliveryInfoController::class)->group(function(){
         Route::get('/dashboard/delivery_info', 'index')->name('delivery_info.index');
         Route::post('/dashboard/delivery_info/update', 'update')->name('delivery_info.update');
     });
@@ -526,6 +526,14 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     Route::controller(TermsConditionController::class)->group(function(){
         Route::get('/dashboard/terms_conditioin','index')->name('terms_conditioin.index');
         Route::post('/dashboard/terms_conditioin/update', 'update')->name('terms_conditioin.update');
+    });
+
+    Route::controller(SizeChartController::class)->middleware('auth')->group(function(){
+        Route::get('/dashboard/varient/size_chart','index')->name('sizechart.index');
+        Route::post('/dashboard/size_chart', 'store')->name('size_chart.store');
+        Route::get('/dashboard/size_chart/{id}/edit', 'edit')->name('size_chart.edit');
+        Route::put('/dashboard/size_chart/{id}', 'update')->name('size_chart.update');
+        Route::delete('/dashboard/size_chart/{id}', 'destroy')->name('size_chart.destroy');
     });
 
 
