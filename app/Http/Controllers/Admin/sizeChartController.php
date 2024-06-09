@@ -16,12 +16,14 @@ class SizeChartController extends Controller
      */
     public function index()
     {
+
         $categories = Category::whereHas('categorySizeHeaders')->get();
 
         $sizes = Size::all();
         $sizeHeaders = SizeHeader::all();
         $sizeChartData = [];
 
+        $categoryHeaders = [];
         foreach ($categories as $category) {
             $categorySizeHeaders = CategorySizeHeader::where('category_id', $category->id)
                 ->with(['size', 'sizeHeader'])
@@ -32,6 +34,7 @@ class SizeChartController extends Controller
                 $sizeChartData[$category->id][$entry->size->size_name][$entry->sizeHeader->name] = $entry->value;
                 $headers[$entry->sizeHeader->id] = $entry->sizeHeader->name;
             }
+
             $categoryHeaders[$category->id] = $headers;
         }
 
