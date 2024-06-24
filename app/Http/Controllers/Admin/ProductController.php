@@ -51,13 +51,13 @@ class ProductController extends Controller
             'category',
             'product_stocks',
         ])->get();
-        
-        
+
+
         foreach($products as $product)
         {
             $product->balance = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');
         }
-        
+
         return view('admin.products.index',compact('products'));
     }
 
@@ -651,6 +651,33 @@ class ProductController extends Controller
             return response()->json(['error' => 'Product image not found'], Response::HTTP_NOT_FOUND);
         }
     }
+
+    public function sizeChartUpdate(string $id)
+    {
+        $product = Products::findOrFail($id);
+
+        if($product)
+        {
+            $product->is_sizechart = !$product->is_sizechart;
+            $product->save();
+        }
+        Session::flash('success','Size chart status updated for '.$product->sku);
+        return redirect()->back();
+    }
+
+    public function productStatusUpdate(string $id)
+    {
+        $product = Products::findOrFail($id);
+
+        if($product)
+        {
+            $product->status = $product->status == 'active' ? 'inactive' : 'active';
+            $product->save();
+        }
+        Session::flash('success','Status updated for '.$product->sku);
+        return redirect()->back();
+    }
+
 
     public function ProductFilter(Request $request)
     {

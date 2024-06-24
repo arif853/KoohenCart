@@ -8695,3 +8695,16 @@ ul li a.customer_info:hover{
     font-weight: bold;
     color: #FF8B13;
 }
+
+.size-chart-btn{
+    padding: 6px 18px;
+    border: 1px solid #18a0fb;
+    border-radius: 28px;
+    margin-left: 30px;
+    color: #18a0fb;
+}
+.size-chart-btn:hover{
+    background-color: #18a0fb;
+    border: 1px solid #18a0fb;
+    color: #ffffff;
+}

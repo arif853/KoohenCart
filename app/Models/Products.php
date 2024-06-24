@@ -25,7 +25,8 @@ class Products extends Model
         'sku',
         'stock',
         'slug',
-        'status'
+        'status',
+        'is_sizechart',
     ];
 
     protected static function boot()
@@ -126,7 +127,7 @@ class Products extends Model
     {
         return $this->hasMany(Camp_product::class);
     }
-    
+
         public function product_stocks()
     {
         return $this->hasMany(Product_stock::class, 'product_id');
