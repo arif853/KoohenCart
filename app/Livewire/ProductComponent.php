@@ -58,7 +58,7 @@ class ProductComponent extends Component
 
         Session::flash('success','Product added To cart.');
         $this->dispatch('cartRefresh')->to('cart-icon-component');
-        
+
         return redirect()->route('cart');
 
     }
@@ -122,7 +122,7 @@ class ProductComponent extends Component
         session()->forget('quantity');
         session()->forget('product_size');
         session()->forget('product_color');
-        
+
         Session::flash('success', 'Product added to cart.');
             // return response()->json( $item_data);
         return redirect()->route('checkout');
@@ -146,7 +146,7 @@ class ProductComponent extends Component
             'product_price',
             'product_thumbnail',
             'product_stocks',
-        ])->where('slug', $this->slug)->first();
+        ])->where('slug', $this->slug)->where('status','active')->first();
 
         return view('livewire.product-component',['product'=>$product]);
     }

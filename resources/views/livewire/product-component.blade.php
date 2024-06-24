@@ -49,7 +49,7 @@
                             @endforeach
                         @endif
                 </div>
-                
+
                 <!-- THUMBNAILS -->
                 <div class="slider-nav-thumbnails-sm pl-15 pr-15 d-lg-none">
                     {{-- <img src="" alt="product image"> --}}
@@ -72,7 +72,7 @@
                     @endif
 
                 </div>
-                
+
             </div>
             <!-- End Gallery -->
         </div>
@@ -159,10 +159,11 @@
                 </div>
                 <div class="attr-detail attr-size">
                     <strong class="color-size mr-10">Size</strong>
-
                     @livewire('select-size-component', ['sizes' => $product->sizes, 'productId' => $product->id])
 
+                    <a href="#" class="size-chart-btn">Size Chart</a>
                 </div>
+
                 @endif
                 <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                 @if($balance > 0)
@@ -187,7 +188,7 @@
                     <div class="col-lg-6">
                         <div class="product_sort_info font-xs">
                             <ul class="product-meta font-xs color-grey">
-                                
+
                                <li><strong>Availability:</strong>
                                     <span class="in-stock ml-5">
                                         @if($balance > 0)
@@ -207,8 +208,8 @@
                             <ul class="product-meta font-xs color-grey">
                                 <li class=""><strong>SKU:</strong> <a
                                         href="#">{{$product->sku}}</a></li>
-                              
-                               
+
+
                                <li class="">
                                 <strong>Tags:</strong>
                                 @foreach ($product->tags as $tag)

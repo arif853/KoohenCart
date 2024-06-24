@@ -22,46 +22,49 @@
 
     <div class="col-lg-12">
         <div class="card">
-            <h3>Size Charts</h3>
-            @foreach($categories as $category)
-            <div class="card-body">
-                <h5>{{ $category->category_name }}</h5>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Size</th>
-                            @foreach($categoryHeaders[$category->id] as $header)
-                            <th>{{ $header }}</th>
-                            @endforeach
-                            <td>Action</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(isset($sizeChartData[$category->id]))
-                        @foreach($sizes as $size)
-                            @if(isset($sizeChartData[$category->id][$size->size_name]))
-                                <tr>
-                                    <td>{{ $size->size_name }}</td>
-                                    @foreach($categoryHeaders[$category->id] as $header)
-                                    <td>{{ $sizeChartData[$category->id][$size->size_name][$header] ?? '' }}</td>
-                                    @endforeach
-                                    <td>
-                                        <a href="{{ route('size_chart.edit', $category->id) }}" class="btn btn-info btn-sm">Edit</a>
-                                        <form action="{{ route('size_chart.destroy', $category->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    @endif
-                    </tbody>
-                </table>
+            <div class="card-header">
+                <h3>Size Charts</h3>
             </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach($categories as $category)
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header-size-chart d-flex justify-content-between mb-4">
+                            <h5>{{ $category->category_name }}</h5>
+                            <div>
+                                {{-- <a href="{{ route('size_chart.edit', $category->id) }}" class="btn btn-info btn-sm">Edit</a> --}}
+                                <a href="{{ route('size_chart.destroy', $category->id) }}" class="btn btn-danger btn-sm" onclick="confirmDelete(event)">Delete</a>
+                            </div>
+                        </div>
 
-            @endforeach
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Size</th>
+                                    @foreach($categoryHeaders[$category->id] as $header)
+                                    <th>{{ $header }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($sizeChartData[$category->id]))
+                                @foreach($sizes as $size)
+                                    @if(isset($sizeChartData[$category->id][$size->size_name]))
+                                        <tr>
+                                            <td>{{ $size->size_name }}</td>
+                                            @foreach($categoryHeaders[$category->id] as $header)
+                                            <td>{{ $sizeChartData[$category->id][$size->size_name][$header] ?? '' }}</td>
+                                            @endforeach
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div>
 
@@ -69,6 +72,7 @@
         $categories = DB::table('categories')->get();
         $sizes = DB::table('sizes')->get();
     @endphp
+
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">

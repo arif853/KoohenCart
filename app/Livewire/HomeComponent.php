@@ -19,7 +19,7 @@ class HomeComponent extends Component
 
     use WithPagination;
     // public $products;
-    
+
     public function store($id)
     {
         $product = Products::find($id);
@@ -103,9 +103,9 @@ class HomeComponent extends Component
 
         $this->dispatch('cartRefresh')->to('wishlist-icon-component');
     }
-    
+
     public $paginate = 8;
-    
+
     public function render()
     {
         // $products = Products::all();
@@ -122,8 +122,8 @@ class HomeComponent extends Component
             'subcategory',
             'product_price',
             'product_stocks'
-        ])->paginate($this->paginate);
-        
+        ])->where('status','active')->paginate($this->paginate);
+
          if(Auth::guard('customer')->check()){
             Cart::instance('wishlist')->store(Auth::guard('customer')->user()->email);
         }
@@ -132,10 +132,10 @@ class HomeComponent extends Component
         // print_r($products);
         return view('livewire.home-component',['products'=> $products,'campaign' => $campaign]);
     }
-    
+
     public function loadMore()
     {
         $this->paginate += 4;
     }
-    
+
 }

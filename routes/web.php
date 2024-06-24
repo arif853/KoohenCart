@@ -253,15 +253,19 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/products/{slug}', 'show')->name('products.show');
         Route::post('/dashboard/products/filter', 'ProductFilter')->name('products.filter');
 
+        Route::get('/dashboard/products/size-chart-update/{id}', 'sizeChartUpdate')->name('product.sizechart.update');
+        Route::get('/dashboard/products/product-status-update/{id}', 'productStatusUpdate')->name('product.status.update');
+
     });
 
-    //Order
     Route::controller(SteadfastController::class)->middleware('auth')->group(function () {
         Route::post('/dashboard/orders_bulk', 'send_bulk_to_courier')->name('order.bulk_order.curier');
         Route::post('/dashboard/place_order/curier', 'place_order')->name('order.place_order.curier');
         Route::get('/dashboard/delivery/status/{consignmentId}', 'checkingDeliveryStatus')->name('order.delivery.status');
         Route::get('/dashboard/get/balance','getCurrentBalance');
     });
+
+    //Order
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
         Route::get('/dashboard/orders/bulk/{id}', 'bulk_order')->name('order.bulk_order');
@@ -539,8 +543,9 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::post('/dashboard/terms_conditioin/update', 'update')->name('terms_conditioin.update');
     });
 
+    //sizechart
     Route::controller(SizeChartController::class)->middleware('auth')->group(function(){
-        Route::get('/dashboard/varient/size_chart','index')->name('sizechart.index');
+        Route::get('/dashboard/varient/size_chart','index')->name('size_chart.index');
         Route::post('/dashboard/size_chart', 'store')->name('size_chart.store');
         Route::get('/dashboard/size_chart/{id}/edit', 'edit')->name('size_chart.edit');
         Route::put('/dashboard/size_chart/{id}', 'update')->name('size_chart.update');

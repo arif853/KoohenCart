@@ -13,7 +13,7 @@
         </nav>
     </div>
     <div>
-        <a href="{{route('sizechart.index')}}" class="btn btn-primary btn-sm rounded">Size Chart</a>
+        <a href="{{route('size_chart.index')}}" class="btn btn-primary btn-sm rounded">Size Chart</a>
         <!-- Button trigger modal -->
 
     </div>
