@@ -113,6 +113,50 @@
             appendArrows:  (appendArrowsClassName),
         });
     });
+    /*Carausel 5 columns*/
+    $(".carausel-5-columns").each(function(key, item) {
+        var id=$(this).attr("id");
+        var sliderID='#'+id;
+        var appendArrowsClassName = '#'+id+'-arrows'
+
+        $(sliderID).slick({
+            dots: false,
+            infinite: true,
+            speed: 1000,
+            arrows: true,
+            autoplay: true,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            loop: true,
+            adaptiveHeight: true,
+            // rtl: true,
+            responsive: [
+                {
+                    breakpoint: 1025,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3,
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                }
+            ],
+            prevArrow: '<span class="slider-btn slider-prev"><i class="fi-rs-angle-left"></i></span>',
+            nextArrow: '<span class="slider-btn slider-next"><i class="fi-rs-angle-right"></i></span>',
+            appendArrows:  (appendArrowsClassName),
+        });
+    });
+
+    /*Fix Bootstrap 5 tab & slick slider*/
+
+    $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+		$('.carausel-5-columns').slick('setPosition');
+	});
 
     /*Carausel 4 columns*/
     $(".carausel-4-columns").each(function(key, item) {

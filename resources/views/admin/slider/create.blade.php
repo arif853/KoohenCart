@@ -25,8 +25,13 @@
                     </div>
 
                     <div class="col-md-12 mb-2">
-                        <label for="slider_url" class="form-label">Shop URL</label>
-                        <input type="text" class="form-control" id="slider_url" name="slider_url" placeholder="Shop Link URL">
+                        <label for="btn-text" class="form-label">Button Text</label>
+                        <input type="text" class="form-control" id="btnText" name="btnText" placeholder="Button Text">
+                    </div>
+
+                    <div class="col-md-12 mb-2">
+                        <label for="slider_url" class="form-label">Button URL</label>
+                        <input type="text" class="form-control" id="slider_url" name="slider_url" placeholder="Button URL">
                     </div>
 
                     <div class="col-md-12 mb-2">

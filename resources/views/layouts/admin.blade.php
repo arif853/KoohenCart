@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="{{asset('admin/assets/css/vendors/jquery.toggleinput.css')}}">
     <!-- Template CSS -->
     <link href="{{asset('admin/assets/css/main.css')}}" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="{{asset('admin/assets/vendors/daterangepicker/daterangepicker.css')}}">
     {{-- Notification --}}
     <link href="{{asset('admin/assets/vendors/notifications/notification.css')}}" rel="stylesheet" />
 
@@ -105,6 +107,9 @@
     <script src="{{asset('admin/assets/vendors/form-wizard/jquery.bootstrap.wizard.js')}}"></script>
     <script src="{{asset('admin/assets/vendors/form-wizard/gsdk-bootstrap-wizard.js')}}"></script>
     {{-- <script src="{{asset('admin/assets/vendors/form-wizard/step-init.js')}}"></script> --}}
+
+    <script src="{{asset('admin/assets/vendors/daterangepicker/moment.min.js')}}"></script>
+    <script src="{{asset('admin/assets/vendors/daterangepicker/daterangepicker.min.js')}}"></script>
     <!-- Main Script -->
     <script src="{{asset('admin/assets/js/main.js')}}" type="text/javascript"></script>
     <script src="{{asset('admin/assets/js/custom-chart.js')}}" type="text/javascript"></script>
@@ -295,7 +300,7 @@
 
 
             $('#summernote').summernote({
-                placeholder: 'Your About us Description Here...',
+                placeholder: 'Write Description Here...',
                 tabsize: 2,
                 height: 250,
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'],

@@ -13,7 +13,7 @@
         </nav>
     </div>
     <div>
-        {{-- <a href="#" class="btn btn-primary btn-sm rounded">Add New Brand</a> --}}
+        <a href="{{route('sizechart.index')}}" class="btn btn-primary btn-sm rounded">Size Chart</a>
         <!-- Button trigger modal -->
 
     </div>
@@ -132,6 +132,7 @@
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div>
+
 </div>
 @include('admin.products.varient.colors_edit')
 @include('admin.products.varient.size_edit')
@@ -144,7 +145,7 @@
 
 <script>
     $(document).ready(function () {
-        
+
         $('#colorTable').DataTable( {
             pageLength : 5,
             lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'All']]

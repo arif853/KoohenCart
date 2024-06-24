@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('is_featured')->nullable();
             $table->string('is_feature_no')->default('0');
             $table->string('image');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

@@ -6,9 +6,10 @@
     @php
         $tags = DB::table('product_tags')->distinct()->pluck('tag')->implode(', ');
         // $description = DB::table('user-profile')->pluck('company_short_details')->first();
-        $userData = DB::table('user_profiles')->first();
+        $userData = DB::table('web_infos')->first();
         $seoData = DB::table('seo_settings')->first();
-        $socialinfo = DB::table('socialinfos')->first();
+        $socialinfos = DB::table('socialinfos')->get();
+        $contactinfo = DB::table('contactinfos')->first();
         // echo $description;
     @endphp
 
@@ -44,6 +45,8 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('storage/favicons/'.$userData->webfavicon)}}">
+    <link rel="manifest" href="{{asset('sitemap.xml')}}">
+
     <!--Font-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
 
@@ -75,8 +78,6 @@
 </head>
 
 <body>
-
-
     <header class="header-area header-style-4 header-height-2">
         <!--Top Header-->
         <div class="header-top header-top-ptb-1 d-none d-lg-block">
@@ -84,10 +85,12 @@
                 <div class="row align-items-center">
                     <div class="col-xl-3 col-lg-4">
                        <div class="header-info">
-                            <ul>
-                                <li><i class="far fa-phone-alt"></i> <a href="tel:{{$socialinfo->appPhone}}">{{$socialinfo->appPhone}}</a></li>
-                                <li><i class="fal fa-envelope"></i><a  href="mailto:{{$socialinfo->appEmail}}">{{$socialinfo->appEmail}}</a></li>
-                            </ul>
+                        <ul>
+                             @if($contactinfo)
+                                <li><i class="far fa-phone-alt"></i> <a href="tel:{{$contactinfo->phone}}">{{$contactinfo->phone}}</a></li>
+                                <li><i class="fal fa-envelope"></i> <a href="mailto:{{$contactinfo->email}}">{{$contactinfo->email}}</a></li>
+                            @endif
+                        </ul>
                         </div>
                     </div>
                     <!--Top Offer Notice-->
@@ -147,8 +150,6 @@
                                                 </li>
                                             </ul>
                                           </div> --}}
-
-
                                     @else
                                         {{-- Show login/register links --}}
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#login">Log In / </a>
@@ -166,10 +167,14 @@
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="{{route('home')}}"><img src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo"></a>
+                        <a href="{{route('home')}}">
+                        <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                        </a>
                     </div>
                      <div class="logo logo-width-1 d-block d-sm-none">
-                        <a href="{{route('home')}}"><img src="{{asset('')}}frontend/assets/imgs/Kohen_Logo_Main.png" alt="logo"></a>
+                        <a href="{{route('home')}}">
+                            <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                        </a>
                     </div>
 
                     <div class="header-nav d-none d-lg-flex" id="header-nav">
@@ -194,13 +199,8 @@
                         </div>
                         <!--Main Menu Bar-->
                     </div>
-
-
-
                     <div class="hotline d-none d-lg-block">
                         <div class="header-action-2 header">
-
-
                             <div class="searchbar">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                                  <div class="togglesearch">
@@ -233,44 +233,6 @@
                             @livewire('wishlist-icon-component')
 
                             @livewire('cart-icon-component')
-
-                                {{-- <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="#">
-                                        <img alt="Evara" src="{{asset('')}}frontend/assets/imgs/theme/icons/icon-cart.svg">
-                                        <span class="pro-count blue">{{Cart::count()}}</span>
-                                    </a> --}}
-
-                                    {{-- @if(Cart::count() > 0)
-                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                        <ul>
-                                            @foreach (Cart::content() as $item)
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="{{route('shop.cart')}}"><img alt="{{$item->options->slug}}" src="{{asset('storage/product_images/').$item->options->image->product_image}}"></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="{{route('shop.cart')}}">{{substr($item->name,0,20)}}</a></h4>
-                                                    <h3><span>{{$item->qty}} × </span>${{$item->price}}</h3>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="{{route('remove.cart',$item->rowId)}}"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                        <div class="shopping-cart-footer">
-                                            <div class="shopping-cart-total">
-                                                <h4>Total <span>${{Cart::subtotal()}}</span></h4>
-                                            </div>
-                                            <div class="shopping-cart-button">
-                                                <a href="{{route('shop.cart')}}" class="outline">View cart</a>
-                                                <a href="checkout.php">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endif --}}
-                                {{-- </div> --}}
-                                {{-- @livewire('cart-icon-component') --}}
 
                         </div>
                     </div>
@@ -326,7 +288,9 @@
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="{{route('home')}}"><img src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo"></a>
+                    <a href="{{route('home')}}">
+                         <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                    </a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                     <button class="close-style search-close">
@@ -397,10 +361,19 @@
                             @endauth
                     </div>
                    <div class="single-mobile-header-info">
-                        <a href="tel:{{$socialinfo->appPhone}}">{{$socialinfo->appPhone}}</a>
+                    {{-- @foreach($socialinfos as $socialinfo)
+                        @if($socialinfo->social_title === 'Phone')
+                        <a href="tel:{{$socialinfo->title_value}}">{{$socialinfo->title_value}}</a>
+                        @endif
+                    @endforeach --}}
+                    @if($contactinfo)
+                        <a href="tel:{{$contactinfo->phone}}">{{$contactinfo->phone}}</a>
+                        <a href="mailto:{{$contactinfo->email}}">{{$contactinfo->email}}</a>
+                    @endif
+
                     </div>
-                    <div class="single-mobile-header-info mt-30">
-                        <a  href="{{route('contactus')}}"> Our location: <p>{{$userData->address}}</p></a>
+                    <div class="single-mobile-header-info mt-10">
+                        <a  href="{{route('contactus')}}"> Our location: <p>{{$contactinfo->address}}</p></a>
                     </div>
                 </div>
 
@@ -430,7 +403,9 @@
                     </div>
                     <div class="col-lg-4">
                         <!-- Subscribe Form -->
-                        <form class="form-subcriber d-flex wow fadeIn animated">
+                        <form class="form-subcriber d-flex wow fadeIn animated" action="#" method="post">
+                            @csrf
+                            @method('post')
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn text-white" type="submit">Subscribe</button>
                         </form>
@@ -460,11 +435,30 @@
 
                             <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
                             <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                                <a href="{{$socialinfo->facebook}}"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-facebook.svg')}}" alt="{{$socialinfo->facebook}}"></a>
-                                {{-- <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-twitter.svg')}}" alt=""></a> --}}
-                                <a href="{{$socialinfo->instragram}}"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-instagram.svg')}}" alt="{{$socialinfo->instragram}}"></a>
-                                {{-- <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-pinterest.svg')}}" alt=""></a> --}}
-                                {{-- <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube.svg')}}" alt=""></a> --}}
+                                @foreach($socialinfos as $socialinfo)
+                                    @if($socialinfo->social_title === 'Facebook')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-facebook.svg')}}" alt="{{$socialinfo->title_value}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'Instagram')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-instagram.svg')}}" alt="{{$socialinfo->title_value}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'Twitter')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-twitter.svg')}}" alt="{{$socialinfo->title_value}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'YouTube')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube.svg')}}" alt="{{$socialinfo->social_title}}">
+                                    </a>
+                                    @elseif($socialinfo->social_title === 'LinkedIn')
+                                    <a href="{{$socialinfo->title_value}}">
+                                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-linkedin.svg')}}" alt="{{$socialinfo->social_title}}">
+                                    </a>
+                                    @endif
+
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -472,13 +466,22 @@
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <h5 class="widget-title wow fadeIn animated">Contact</h5>
                             <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
-                            <li>
-                                <a href="https://wa.me/{{$socialinfo->whatsapp}}"><span><i class="fab fa-whatsapp"></i></span> {{$socialinfo->whatsapp}}</a>
-
-                            </li>
-                            <li><a href="tel:{{$socialinfo->appPhone}}" target="__blank"><span><i class="fal fa-phone-alt"></i></span> {{$socialinfo->appPhone}}</a></li>
-                            <li><a href="mailto:{{$socialinfo->appEmail}}" target="__blank"><span><i class="fal fa-envelope"></i></span> {{$socialinfo->appEmail}}</a></li>
-                            <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{$userData->address}}</a></li>
+                                <li>
+                                    <a href="https://wa.me/{{ $contactinfo->whatsapp }}"><span><i class="fab fa-whatsapp"></i>
+                                    </span> {{ $contactinfo->whatsapp }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tel:{{ $contactinfo->phone }}" target="__blank"><span><i class="fal fa-phone-alt"></i>
+                                    </span> {{ $contactinfo->phone }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="mailto:{{$socialinfo->title_value}}" target="__blank"><span><i class="fal fa-envelope"></i>
+                                    </span> {{ $contactinfo->email }}
+                                    </a>
+                                </li>
+                            <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{ $contactinfo->address }}</a></li>
 
                         </ul>
 
@@ -517,12 +520,13 @@
                 </div>
                 <div class="col-lg-6">
                     <p class="float-md-left font-sm text-muted mb-0 d-flex">
-                    <script>document.write(new Date().getFullYear())</script> &copy; All rights reserved,
-                    <strong class="text-brand mr-10 ml-10">
-                        <!--<img width="40" src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo">-->
-                        <img width="40" src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="logo">
 
-                    </strong><span style="text-transform:uppercase"> - Your ultimate Lifestyle.</span> </p>
+                    <script>document.write(new Date().getFullYear())</script> &copy; <strong class="mr-5 ml-5">{{$userData->appName}}</strong>
+                    All rights reserved,
+
+                    <strong class="text-brand mr-10 ml-10">
+                        <img width="40" src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="logo">
+                    </strong><span style="text-transform:uppercase"> - {{$userData->entitle}}</span> </p>
                 </div>
                 <div class="col-lg-6">
                     <p class="text-lg-end text-start font-sm text-muted mb-0">
@@ -533,8 +537,6 @@
         </div>
     </footer>
 
-
-     <livewire:quick-view-component />
 
     @include('auth.registermodal')
 
@@ -568,11 +570,14 @@
 
     <script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.plugin.min.js')}}"></script>
     <script src="{{asset('frontend/assets/vendor/jquery.countdown/js/jquery.countdown.js')}}"></script>
-        {{-- sweet alert --}}
+ {{-- sweet alert --}}
     <script src="{{asset('admin/assets/js/vendors/sweetalert2.all.min.js')}}"></script>
     <!-- Template  JS -->
     <script src="{{asset('')}}frontend/assets/js/main.js?v=3.4"></script>
     <script src="{{asset('')}}frontend/assets/js/shop.js?v=3.4"></script>
+
+
+
 
     @stack('dashboard')
     @stack('checkout')
@@ -671,28 +676,6 @@
 
                 Livewire.dispatch('buyNow', response.product_id);
 
-                // $(".slider-nav-thumbnails").empty();
-
-                // $.each(response.product_images, function(index, image){
-                //     var baseUrl = "{{ asset('storage/product_images/') }}";
-                //     var imageUrl = baseUrl + '/' + image.product_image;
-                //     var image_Div = '<div><img src="' + imageUrl + '" alt="'+response.slug+'"></div>';
-                //     $(".slider-nav-thumbnails").append(image_Div);
-
-
-                // });
-                //     $(".product-image-slider").slick();
-
-                //     // $('.slider-nav-thumbnails').slick();
-                //     $(".slider-nav-thumbnails").slick({
-                //         slidesToShow: 4,
-                //         slidesToScroll: 1,
-                //         asNavFor: '.product-image-slider',
-                //         dots: false,
-                //         centerMode: false,
-                //         focusOnSelect: true
-                //     });
-
                 $(".product-image-slider").empty();
                 if (response.product_thumbnail && response.product_thumbnail.length > 0) {
                     var baseUrl = "{{ asset('storage/product_images/thumbnail/') }}";
@@ -704,10 +687,6 @@
 
                     $(".product-image-slider").append(imageDiv);
                 }
-
-
-                // const outputImage = document.getElementById('output-image2');
-                // outputImage.src = "{{asset('storage')}}"+'/'+response.image
             }
         });
     });

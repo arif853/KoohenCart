@@ -105,7 +105,6 @@
                 $total += $item->subtotal;
                 @endphp
                 @endforeach
-                {{-- cart loop end --}}
 
                 <!-- Subtotal row -->
                 <tr>

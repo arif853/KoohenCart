@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Socialinfo extends Model
 {
     use HasFactory;
-    
-    protected $fillable = ['appPhone','appEmail','whatsapp','facebook','instragram','youtube','copyright'];
+
+    protected $fillable = ['social_title','title_value','status'];
 }

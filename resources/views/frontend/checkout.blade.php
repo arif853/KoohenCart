@@ -354,7 +354,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="agreeTerms" required>
                                         <label class="form-check-label" for="agreeTerms">
-                                            I agree to the <a href="{{ url('/terms-and-condition') }}" target="_blank">Terms & Conditions</a>
+                                            I agree to the <a href="{{ url('/terms-and-condition') }}" target="_blank">Terms & Conditions</a>, <a href="{{ url('/privacy_and_policy') }}" target="_blank">, Privacy Policy</a> and <a href="{{ url('/cancellation_and_return') }}" target="_blank">Return and Refund Policy</a>
                                         </label>
                                     </div>
                                     {{-- <div class="custome-radio">

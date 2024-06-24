@@ -120,7 +120,6 @@
                 </a>
                 <div class="submenu">
                     <a href="{{route('sale.report')}}">Sales Report</a>
-
                 </div>
             </li>
             <li class="menu-item">
@@ -128,24 +127,66 @@
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
             </li>
-           
-           <li class="menu-item has-submenu">
+            <li class="menu-item has-submenu {{ request()->is('dashboard/setting') ? 'active' : '' }}">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
                     <span class="text">Web Settings</span>
                 </a>
                 <div class="submenu">
-                    <a href="{{ route('settings.index') }}">WebInfo</a>
-
+                    <a href="{{route('aboutus.index')}}">
+                        <span class="text">About us</span>
+                    </a>
                     <a href="{{route('slider')}}">
-                        <span class="text">Manage Slider</span>
+                        <span class="text">Slider</span>
+                    </a>
+                    <a href="{{route('ads')}}">
+                        <span class="text">Advertisement</span>
+                    </a>
+                    <a href="{{ route('webinfo.index') }}">
+                        <span class="text">WebInfo</span>
+                    </a>
+                    <a href="{{ url('/dashboard/delivery_info') }}">
+                        <span class="text">Manage Delivery Information</span>
+                    </a>
+                    <a href="{{ route('privacy_policy.index') }}">
+                        <span class="text">Manage Privacy Policy</span>
+                    </a>
+                    <a href="{{ route('terms_conditioin.index') }}">
+                        <span class="text">Manage Terms & Conditions</span>
+                    </a>
+                    <a href="{{route('contactinfo.index')}}">
+                        <span class="text">Contact Info</span>
                     </a>
 
-                    <a href="{{route('ads')}}">
-                        <span class="text">Manage Ads</span>
+                    <a href="{{route('socialinfo.index')}}">
+                        <span class="text">Social Info</span>
                     </a>
-                    <a href="{{url('/dashboard/aboutus')}}">
-                        <span class="text">Manage About us</span>
+
+                    <a href="#">
+                        <span class="text">Shipping Method</span>
                     </a>
+
+                    <a href="#">
+                        <span class="text">Subscriber</span>
+                    </a>
+                    <a href="{{route('webmessage.index')}}">
+                        <span class="text">Web Message</span>
+                    </a>
+
+                    <div class="sub-submenu"> <!-- New sub-submenu level -->
+                        <a href="#" class="menu-link">
+                            <span class="text">SEO Setting</span>
+                        </a>
+                        <div class="sub-submenu-content"> <!-- Sub-submenu content -->
+                            <a href="#">
+                                <i class="icon material-icons md-arrow_forward"></i>
+                                 <span class="text">Google Analytics</span>
+                            </a>
+                            <a href="#">
+                                <i class="icon material-icons md-arrow_forward"></i>
+                                <span class="text">Meta Setting</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </li>
 

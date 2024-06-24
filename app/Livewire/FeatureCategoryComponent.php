@@ -12,7 +12,9 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 class FeatureCategoryComponent extends Component
 {
-     public function store($id)
+    public $product;
+
+    public function store($id)
     {
         $product = Products::find($id);
         $item_name = $product->product_name;
@@ -52,36 +54,36 @@ class FeatureCategoryComponent extends Component
 
     public function render()
     {
-        $cat_features = Feature_category::where('status', 'Active')->first();
+        // $cat_features = Feature_category::where('status', 'Active')->first();
 
-        $items = Products::with([
-            'overviews',
-            'product_infos',
-            'product_images',
-            'product_extras',
-            'tags',
-            'sizes',
-            'colors',
-            'brand',
-            'category',
-            'subcategory',
-            'product_price'
+        // $items = Products::with([
+        //     'overviews',
+        //     'product_infos',
+        //     'product_images',
+        //     'product_extras',
+        //     'tags',
+        //     'sizes',
+        //     'colors',
+        //     'brand',
+        //     'category',
+        //     'subcategory',
+        //     'product_price'
 
-        ])->where('category_id', $cat_features->category_id)->get();
-        
-        $products = $items->filter(function ($product) {
+        // ])->where('category_id', $cat_features->category_id)->get();
 
-            // Calculate total stock balance for the product
-            $totalStock = $product->product_stocks->sum(function ($stock) {
-                return $stock->inStock - $stock->outStock;
-            });
-            // Add a property to the product object with the total stock balance
-            $product->totalStock = $totalStock;
+        // $products = $items->filter(function ($product) {
 
-            // Return true if total stock balance is greater than zero
-            return $totalStock > 0;
-        });
+        //     // Calculate total stock balance for the product
+        //     $totalStock = $product->product_stocks->sum(function ($stock) {
+        //         return $stock->inStock - $stock->outStock;
+        //     });
+        //     // Add a property to the product object with the total stock balance
+        //     $product->totalStock = $totalStock;
 
-        return view('livewire.feature-category-component',['products' =>$products]);
+        //     // Return true if total stock balance is greater than zero
+        //     return $totalStock > 0;
+        // });
+
+        return view('livewire.feature-category-component');
     }
 }

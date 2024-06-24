@@ -53,7 +53,7 @@
                             <h4>Refund Policy</h4>
                             <ol>
                                 <li><p>
-                                    The refund will be processed after we have completed evaluating your return.
+                                    The refund will be processed  within <strong>(7-10 working days)</strong> after claiming for refund.
 
                                 </p></li>
 

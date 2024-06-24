@@ -415,7 +415,7 @@
 
         $(document).on('input', '.deliveryCharge, .discount', function() {
             var d_charge = parseInt($('.deliveryCharge').val(), 10);
-            console.log(d_charge);
+            // console.log(d_charge);
             var discount = parseInt($('.discount').val(), 10);
             // console.log(discount);
             var subtotal = parseInt($('#subtotal').text().trim().replace('৳', ''), 10);
@@ -511,6 +511,7 @@
 
         // Get delivery charge, discount, and total paid
         formData.deliveryCharge = $('.deliveryCharge').val();
+        // console.log(formData.deliveryCharge);
         formData.discount = $('.discount').val();
         formData.totalPaid = $('.totalPaid').val();
 

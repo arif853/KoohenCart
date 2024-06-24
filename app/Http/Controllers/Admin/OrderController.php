@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DB;
 use PDF;
+use Carbon\Carbon;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Order;
@@ -16,11 +16,11 @@ use App\Models\order_items;
 use App\Models\Orderstatus;
 use App\Models\transactions;
 use Illuminate\Http\Request;
+use App\Models\Product_stock;
 use Illuminate\Validation\Rule;
 use App\Models\Register_customer;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Product_stock;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -41,6 +41,27 @@ class OrderController extends Controller
             ->latest('created_at')->get();
 
         return view('admin.order.index',compact('orders'));
+    }
+    public function bulk_order($id)
+    {
+        $order = Order::with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->where('id',$id)->first();
+        return view('admin.order.create_bulk_order',compact('order'));
+    }
+    public function place_order($id)
+    {
+        $order = Order::with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->where('id',$id)->first();
+
+        return view('admin.order.place_order',compact('order'));
     }
 
     public function order_track(Request $request)
@@ -190,7 +211,7 @@ class OrderController extends Controller
                             ],
                             [
                                 // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                                'outStock' => \DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
+                                'outStock' => DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
                             ]
                         );
                     Session::flash('success','Order items returned to inventory.');
@@ -250,7 +271,7 @@ class OrderController extends Controller
                         ],
                         [
                             // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                            'outStock' => \DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
+                            'outStock' => DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
                         ]
                     );
                     Session::flash('warning','Items deducted from inventory.');
@@ -270,7 +291,7 @@ class OrderController extends Controller
                         ],
                         [
                             // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                            'outStock' => \DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
+                            'outStock' => DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
                         ]
                     );
                 Session::flash('success','Order items returned to inventory.');
@@ -364,6 +385,17 @@ class OrderController extends Controller
                           ->orWhere('lastName', 'LIKE', '%' . $customerName . '%');
                 });
             }
+
+            if ($status) {
+                $query->where('status', 'LIKE', '%' . $status . '%');
+            }
+
+            if ($customerPhone) {
+                $query->whereHas('customer', function ($query) use ($customerPhone) {
+                    $query->where('phone', 'LIKE', '%' . $customerPhone . '%');
+                });
+            }
+
             if ($productSize) {
                 $query->whereHas('order_item.product_sizes', function ($query) use ($productSize) {
                     $query->where('size', 'LIKE', '%' . $productSize . '%');
@@ -373,16 +405,6 @@ class OrderController extends Controller
             if ($sku) {
                 $query->whereHas('order_item.product', function ($query) use ($sku) {
                     $query->where('sku', 'LIKE', '%' . $sku . '%');
-                });
-            }
-
-            if ($status) {
-                $query->where('status', 'LIKE', '%' . $status . '%');
-            }
-
-            if ($customerPhone) {
-                $query->whereHas('customer', function ($query) use ($customerPhone) {
-                    $query->where('phone', 'LIKE', '%' . $customerPhone . '%');
                 });
             }
 
@@ -640,6 +662,22 @@ class OrderController extends Controller
                 'total_due' => $request->totalDue,
                 'delivery_charge' => $request->deliveryCharge,
             ]);
+
+            $transaction = transactions::where('order_id',$order->id)->first();
+
+            if($order->total_due == 0)
+            {
+                $transaction->update([
+                    'status' => 'paid',
+                ]);
+            }
+            else{
+                 $transaction->update([
+                    'status' => 'unpaid',
+                ]);
+            }
+
+
             Session::flash('success','Order updated successfully');
 
             return response()->json(['message' => 'Order item updated successfully'], 200);

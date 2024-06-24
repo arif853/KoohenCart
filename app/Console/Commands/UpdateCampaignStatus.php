@@ -14,14 +14,14 @@ class UpdateCampaignStatus extends Command
      *
      * @var string
      */
-    protected $signature = 'app:update-campaign-status';
+    protected $signature = 'update:campaign-status';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Campaign status update on expired.';
 
     /**
      * Execute the console command.
@@ -29,16 +29,19 @@ class UpdateCampaignStatus extends Command
     public function handle()
     {
         $currentDateTime = Carbon::now('Asia/Dhaka');
-        Log::info('Running UpdateCampaignStatus command at ' . $currentDateTime);
+        // Log::info('Running UpdateCampaignStatus command at ' . $currentDateTime);
         $expiredCampaigns = Campaign::where('status', 'Published')
                                     ->where('end_date', '<', $currentDateTime)
                                     ->get();
 
         foreach ($expiredCampaigns as $campaign) {
-            $campaign->status = 'Draft';
-            $campaign->save();
+            if($campaign)
+            {
+                $campaign->status = 'Draft';
+                $campaign->save();
+                Log::info('Campaign statuses updated successfully.');
+            }
         }
-
-        Log::info('Campaign statuses updated successfully.');
+        // Log::info('Campaign status update command run successfully!');
     }
 }

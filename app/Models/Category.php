@@ -29,8 +29,9 @@ class Category extends Model
     }
     public function product()
     {
-        return $this->hasOne(Products::class, 'product_id');
+        return $this->hasMany(Products::class, 'product_id');
     }
+
     public function subcategories()
     {
         return $this->hasMany(Subcategory::class, 'category_id');
@@ -44,5 +45,10 @@ class Category extends Model
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_category', 'category_name');
+    }
+
+    public function categorySizeHeaders()
+    {
+        return $this->hasMany(CategorySizeHeader::class, 'category_id');
     }
 }

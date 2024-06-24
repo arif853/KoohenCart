@@ -14,7 +14,7 @@
 <div class="row">
    
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-1">
+        <div class="card card-body counter bg-row-1">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-1">
+        <div class="card card-body counter bg-row-1">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-1">
+        <div class="card card-body counter bg-row-1">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -47,7 +47,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-1">
+        <div class="card card-body counter bg-row-1">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4  bg-row-2">
+        <div class="card card-body counter  bg-row-2">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -69,7 +69,7 @@
         </div>
     </div>
      <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-2">
+        <div class="card card-body counter bg-row-2">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -80,7 +80,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-2">
+        <div class="card card-body counter bg-row-2">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -91,7 +91,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-2">
+        <div class="card card-body counter bg-row-2">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
                 <div class="text">
@@ -103,7 +103,7 @@
     </div>
    
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-3">
+        <div class="card card-body counter bg-row-3">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_bag"></i></span>
                 <div class="text">
@@ -113,7 +113,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-3">
+        <div class="card card-body counter bg-row-3">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_bag"></i></span>
                 <div class="text">
@@ -122,8 +122,18 @@
             </article>
         </div>
     </div>
+     <div class="col-lg-3">
+        <div class="card card-body counter bg-row-3">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_bag"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">In stock Balance</h6> <span>৳ {{ number_format($totalInStockBalance, 2 ) }}</span>
+                </div>
+            </article>
+        </div>
+    </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-3">
+        <div class="card card-body counter bg-row-3">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-local_shipping"></i></span>
                 <div class="text">
@@ -134,9 +144,9 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-3">
+        <div class="card card-body counter bg-row-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-category"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-category"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Total Category</h6> <span>{{ $category }}</span>
 
@@ -146,7 +156,7 @@
     </div>
      
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-4">
+        <div class="card card-body counter bg-row-4">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-supervisor_account"></i></span>
                 <div class="text">
@@ -157,7 +167,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-4">
+        <div class="card card-body counter bg-row-4">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
@@ -168,7 +178,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-4">
+        <div class="card card-body counter bg-row-4">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
@@ -178,7 +188,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-4">
+        <div class="card card-body counter bg-row-5">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
@@ -188,7 +198,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-5">
+        <div class="card card-body counter bg-row-5">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
@@ -199,7 +209,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-5">
+        <div class="card card-body counter bg-row-5">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
@@ -210,7 +220,7 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="card card-body mb-4 bg-row-5">
+        <div class="card card-body counter bg-row-5">
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">

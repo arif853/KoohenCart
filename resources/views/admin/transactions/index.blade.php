@@ -17,23 +17,23 @@
         </div> --}}
     </div>
     <div class="card mb-4">
-       <header class="card-header">
-            <h4 class="mb-2">Search Transactions:-</h4>
+        {{-- <header class="card-header">
             <div class="row gx-3 customer_live_search">
-                <div class="col-lg-4 col-md-6 ">
-                    <input type="text" placeholder="Type Order Number" class="form-control" name="orderId"
-                        id="orderId">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Customer name..." class="form-control" name="customer_name"
+                        id="customer_name">
                 </div>
-                <div class="col-lg-4 col-md-6 ">
-                    <input type="text" placeholder="Type a Customer name..." class="form-control" name="customer"
-                        id="customer">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Customer mobile number..." class="form-control" name="customer_phone"
+                        id="customer_phone">
                 </div>
-                {{-- <div class="col-lg-4 col-md-6 me-auto">
+                <div class="col-lg-4 col-md-6 me-auto">
                     <input type="email" placeholder="Customer email..." class="form-control" name="customer_email"
                         id="customer_email">
-                </div> --}}
+                </div>
+
             </div>
-        </header>
+        </header> <!-- card-header end// --> --}}
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" id="datatable">
@@ -72,25 +72,19 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td>{{$list->order->created_at->format('d-m-Y') }}</td>
+                                <td>{{ date('j F y',strtotime($list->order->created_at)) }}</td>
                                 <td>{{ $list->order->total }}</td>
                                 <td>{{ $list->order->total_paid }}</td>
                                 <td>{{ $list->order->total_due }}</td>
                                 <td>
                                     @if ($list->mode =='online')
-                                        <span class="badge rounded-pill alert-info">Online</span>
+                                        <span class="badge rounded-pill alert-success">Online</span>
                                     @elseif($list->mode =='card')
                                         <span class="badge rounded-pill alert-info">Bank Card</span>
                                     @elseif($list->mode =='cod')
-                                        <span class="badge rounded-pill alert-info">Cash On Delivery</span>
-                                    @elseif($list->mode =='cash')
-                                        <span class="badge rounded-pill alert-info">Cash </span>
-                                    @elseif($list->mode =='bkash')
-                                       <span class="badge rounded-pill alert-bkash">Bkash</span>
-                                    @elseif($list->mode =='nagad')
-                                    <span class="badge rounded-pill alert-nagad">Nagad</span>
-                                    @elseif($list->mode =='rocket')
-                                    <span class="badge rounded-pill alert-success">Rocket</span>
+                                        <span class="badge rounded-pill alert-warning">Cash On Delivery</span>
+                                    @else
+                                       <span class="badge rounded-pill alert-danger">Not Found</span>
                                     @endif
                                 </td>
                                 <td>
@@ -111,7 +105,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td>{{ $list->updated_at->format('d-m-Y') }}</td>
+                                <td>{{ $list->created_at->format('d-m-Y') }}</td>
 
                             </tr>
                         @endforeach
@@ -125,7 +119,7 @@
     </div> <!-- card end// -->
 
 
-    <!-- Modal -->
+ <!-- Modal -->
     <div class="modal fade" id="makepament" tabindex="-1" aria-labelledby="makepamentLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -185,7 +179,6 @@
                             Payment:
                             </label>
                             <input type="number" class="form-control" min="0" id="payment" name="payment" value="0">
-
                         </div>
 
                     </div>

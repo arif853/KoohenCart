@@ -33,10 +33,11 @@
             <div class="card-header">
                 <div class="left pull-left">
                     {{-- <a href="#" class="btn btn-warning rounded">Permission</a> --}}
-                    <a href="{{url('/dashboard/users/index')}}" class="btn btn-info rounded">Manage Users</a>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#roleModal" class="btn btn-info rounded mr-5 btn-sm">Add Role</button>
+                    <a href="{{url('/dashboard/users/index')}}" class="btn btn-success rounded mr-5 btn-sm">Users</a>
+                    <a href="{{url('/dashboard/permissions')}}" class="btn btn-success rounded btn-sm">Permissions</a>
                 </div>
                 <div class="right pull-right">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#roleModal" class="btn btn-success rounded">Add Role</button>
                 </div>
 
             </div>
@@ -60,6 +61,9 @@
                                 <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
+                                    <a href="#" class="btn btn-sm font-sm btn-warning rounded mr-5">
+                                        Add / Edit Permissions
+                                    </a>
                                     <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
                                     data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
                                         <i class="material-icons md-edit"></i> Edit
@@ -72,7 +76,10 @@
                                 <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit"
+                                    <a href="#" class="btn btn-sm font-sm btn-warning rounded mr-5">
+                                        Add / Edit Permissions
+                                    </a>
+                                    <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit mr-5"
                                     data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>

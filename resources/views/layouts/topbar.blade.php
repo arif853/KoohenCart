@@ -14,17 +14,6 @@
         <!--</form>-->
     </div>
     <style>
-        .nav-item .pos{
-            width: 150px;
-            height: 40px;
-            line-height: 36px;
-            border: 2px solid #E52E16;
-            border-radius: 28px;
-            margin-left: 15px;
-            margin-right: 15px;
-            background-color: #E52E16;
-            color:#fff !important;
-        }
         .nav-item .cache{
             width: 150px;
             height: 40px;
@@ -35,9 +24,6 @@
             margin-right: 15px;
             background-color: #3cbff0;
             color:#fff !important;
-        }
-        .nav-item .pos:hover{
-            color: #E52E16 !important;
         }
 
         .nav-item .cache:hover{
@@ -105,20 +91,22 @@
                 </div>
             </li>
             @endif
-            <li class="nav-item">
-                <a class="nav-link btn-icon cache" href="{{url('/cache_clear')}}">
-                   <span class="icon"><i class=" material-icons md-cached mr-5"></i></span>Cache
-                </a>
-            </li>
-            <!--<li class="nav-item">-->
-            <!--    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>-->
-            <!--</li>-->
+
             <li class="nav-item">
                 <a class="nav-link btn-icon pos" href="{{route('pos')}}">
                     <span class="icon"><i class=" material-icons md-point_of_sale mr-5"></i></span>
-                    POS
+                    <span class="text">POS & Sales</span>
                 </a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link btn-icon pos" href="{{url('/cache_clear')}}">
+                   <span class="icon"><i class=" material-icons md-cached "></i></span>
+                   <span class="text">Cache Clear</span>
+                </a>
+            </li>
+             <!--<li class="nav-item">-->
+            <!--    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>-->
+            <!--</li>-->
 
             <li class="dropdown nav-item">
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{{asset('frontend/assets/imgs/favicon_128x128.ico')}}" alt="User"></a>

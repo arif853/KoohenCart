@@ -5,16 +5,18 @@ use Illuminate\Routing\Router;
 use App\Livewire\CartComponent;
 use App\Livewire\HomeComponent;
 use App\Livewire\ShopComponent;
+use App\Livewire\OfferComponent;
 use App\Models\Feature_category;
 use App\Livewire\ProductComponent;
 use App\Livewire\CheckoutComponent;
 use App\Livewire\PostOfficeSelector;
-use App\Livewire\OfferComponent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\POSController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\MediaController;
@@ -23,6 +25,8 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\AboutusController;
+use App\Http\Controllers\Admin\PrivacyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
 use App\Http\Controllers\Frontend\CartController;
@@ -35,19 +39,23 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Admin\SizeChartController;
+use App\Http\Controllers\Auth\SocialAuthController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\WebmessageController;
+use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Admin\DeliveryInfoController;
 use App\Http\Controllers\Frontend\TrackorderController;
+use App\Http\Controllers\Admin\TermsConditionController;
 use App\Http\Controllers\Admin\FeatureCategoryController;
 use App\Http\Controllers\Admin\FeatureProductsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
+use App\Http\Controllers\Admin\Steadfast\SteadfastController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AboutusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,12 +69,14 @@ use App\Http\Controllers\Admin\AboutusController;
 */
 Route::get('/cache_clear',function(){
     Artisan::call('route:clear');
-    Artisan::call('config:clear');
     Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    // Artisan::call('config:cache');
+    Artisan::call('optimize:clear');
     return redirect()->back()->with('success','Cache cleard!!');
 });
 
-Route::get('/storage',function(){
+Route::get('/storage_link',function(){
     Artisan::call('storage:link');
     return redirect()->back()->with('success','Storage link complete!!');
     // return "Storage Linked";
@@ -118,6 +128,9 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/cart', 'cart')->name('cart');
     Route::get('/home/quickview', 'quickview')->name('quickview');
     Route::get('/home/product_search', 'searchBar')->name('search');
+    Route::get('/delivery_information', 'deliveryInfo')->name('delivery_info');
+    Route::get('/privacy_and_policy', 'PrivacyPolicy')->name('privacy_policy');
+    Route::get('/terms-and-condition', 'termsCondition')->name('terms.condition');
 });
 
 // Route::get('/shop', [ShopController::class, 'index'])->name('shop');
@@ -126,6 +139,7 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('
 
 //store checkout orders.
 Route::post('/customer/shop/checkout/store', [CheckoutController::class, 'store'])->name('order.store');
+//oute::post('/customer/shop/checkout/courier', [CheckoutController::class, 'send_bulk_to_courier'])->name('order.courier');
 Route::post('/customer/shop/checkout/login', [CheckoutController::class, 'login'])->name('checkout.login');
 Route::post('/customer/shop/checkout/coupone', [CheckoutController::class, 'appliedCoupone'])->name('applied.coupone');
 
@@ -171,7 +185,6 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
 // Backend Route Start
 
-
     //dashboard
     Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::post('/dashboard/mark-notification-as-read', [DashboardController::class,'markNotificationAsRead'])->middleware(['auth', 'verified'])->name('markNotificationAsRead');
@@ -206,9 +219,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/subcategory/edit', 'edit')->name('subcategory.edit');
         Route::post('/dashboard/subcategory/update', 'update')->name('subcategory.update');
         Route::delete('/dashboard/subcategory/destroy/{id}', 'destroy')->name('subcategory.destroy');
-
         Route::get('/dashboard/subcategory/get_subcategory/{id}', 'get_subcategory')->name('category.subcategory');
-
     });
 
 
@@ -245,8 +256,16 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     //Order
+    Route::controller(SteadfastController::class)->middleware('auth')->group(function () {
+        Route::post('/dashboard/orders_bulk', 'send_bulk_to_courier')->name('order.bulk_order.curier');
+        Route::post('/dashboard/place_order/curier', 'place_order')->name('order.place_order.curier');
+        Route::get('/dashboard/delivery/status/{consignmentId}', 'checkingDeliveryStatus')->name('order.delivery.status');
+        Route::get('/dashboard/get/balance','getCurrentBalance');
+    });
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
+        Route::get('/dashboard/orders/bulk/{id}', 'bulk_order')->name('order.bulk_order');
+        Route::get('/dashboard/orders/place_order/{id}', 'place_order')->name('order.place_order');
         Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');
@@ -381,20 +400,21 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Slider
     Route::controller(SliderController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/slider', 'index')->name('slider');
-        Route::post('/dashboard/slider/store', 'store')->name('slider.store');
-        Route::get('/dashboard/slider/edit', 'edit')->name('slider.edit');
-        Route::post('/dashboard/slider/update', 'update')->name('slider.update');
-        Route::delete('/dashboard/slider/destroy/{id}', 'destroy')->name('slider.destroy');
+        Route::get('/dashboard/setting/slider', 'index')->name('slider');
+        Route::post('/dashboard/setting/slider/store', 'store')->name('slider.store');
+        Route::get('/dashboard/setting/slider/edit', 'edit')->name('slider.edit');
+        Route::post('/dashboard/setting/slider/update', 'update')->name('slider.update');
+        Route::delete('/dashboard/setting/slider/destroy/{id}', 'destroy')->name('slider.destroy');
     });
 
     //ads route
     Route::controller(AdsController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/ads', 'index')->name('ads');
-        Route::post('/dashboard/ads/store', 'store')->name('ads.store');
-        Route::get('/dashboard/ads/edit', 'edit')->name('ads.edit');
-        Route::post('/dashboard/ads/update', 'update')->name('ads.update');
-        Route::delete('/dashboard/ads/destroy/{id}', 'destroy')->name('ads.destroy');
+        Route::get('/dashboard/setting/ads', 'index')->name('ads');
+        Route::post('/dashboard/setting/ads/store', 'store')->name('ads.store');
+        Route::get('/dashboard/setting/ads/edit', 'edit')->name('ads.edit');
+        Route::post('/dashboard/setting/ads/update', 'update')->name('ads.update');
+        Route::delete('/dashboard/setting/ads/destroy/{id}', 'destroy')->name('ads.destroy');
+        Route::get('/dashboard/setting/ads/update-status','UpdateStatus')->name('update.status');
     });
 
 
@@ -419,6 +439,10 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         //add new stock
         Route::get('/dashboard/inventory/newstock', 'newstock')->name('new.stock');
         Route::post('/dashboard/inventory/addstock', 'addstock')->name('add.stock');
+
+        //inventory Report
+        Route::get('/dashboard/inventory/sizewise-report','SizeWiseReport')->name('sizewise.report');
+        Route::post('/dashboard/inventory/sizewise/categorywisefilter','CategoryWiseFilter')->name('categorywise.filter');
 
     });
 
@@ -446,7 +470,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     // User Managment
-    Route::controller(UserController::class)->group(function(){
+    Route::controller(UserController::class)->middleware('auth')->group(function(){
         Route::get('/dashboard/users/index', 'index')->name('users.index');
         Route::post('/dashboard/users/store', 'store')->name('users.store');
         Route::get('/dashboard/users/edit', 'edit')->name('users.edit');
@@ -457,26 +481,79 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     // user role permission
     Route::resource('/dashboard/roles', RoleController::class);
     Route::post('/dashboard/roles/{role}', [RoleController::class, 'update']);
-    Route::delete('/dashboard/roles/{userId}/delete', [RoleController::class, 'destroy']);
-   // Route::get('/dashboard/roles/{roleId}/give-permissions', [RoleController::class, 'addPermissionToRole']);
-   // Route::put('/dashboard/roles/{roleId}/give-permissions', [RoleController::class, 'givePermissionToRole']);
+    Route::delete('/dashboard/roles/{id}/delete', [RoleController::class, 'destroy']);
 
-    // About us
-    Route::controller(AboutusController::class)->group(function(){
-        Route::get('/dashboard/aboutus/', 'index')->name('aboutus.index');
-        Route::get('/dashboard/aboutus/edit', 'edit')->name('aboutus.edit');
-        Route::post('/dashboard/aboutus/update', 'update')->name('aboutus.update');
+    Route::resource('/dashboard/permissions', PermissionController::class);
+    Route::post('/dashboard/permissions/{permission}',[PermissionController::class, 'update']);
+    Route::delete('/dashboard/permissions/{id}/delete',[PermissionController::class, 'destroy']);
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-// <========================= Backend Route End ========================>
+    Route::controller(WebSettingController::class)->middleware('auth')->group(function(){
+
+        Route::get('/dashboard/setting/profile/web-info','webInfo')->name('webinfo.index');
+        Route::post('/dashboard/setting/profile/web-info','webInfoUpdate')->name('webinfo.update');
+
+        Route::get('/dashboard/setting/profile/social-info','socialInfo')->name('socialinfo.index');
+        Route::post('/dashboard/setting/profile/social-info-update', 'SocialInfoUpdate')->name('socialinfo.update');
+        Route::post('/dashboard/setting/profile/social-info-status-update','socialInfoStatusUpdate')->name('socialstatus.update');
+
+        Route::post('dashboard/profile/seoupdate', 'SEOUpdate')->name('user.SEOUpdate');
+
+        Route::get('/dashboard/setting/contact-info','contactindex')->name('contactinfo.index');
+        Route::get('/dashboard/setting/contact-info/edit','contactInfoEdit')->name('contactinfo.edit');
+        Route::post('/dashboard/setting/contact-info/update','contactInfoUpdate')->name('contactinfo.update');
+    });
+
+    // About us
+    Route::controller(AboutusController::class)->middleware('auth')->group(function(){
+        Route::get('/dashboard/setting/aboutus/', 'index')->name('aboutus.index');
+        Route::get('/dashboard/setting/aboutus/edit', 'edit')->name('aboutus.edit');
+        Route::post('/dashboard/setting/aboutus/update', 'update')->name('aboutus.update');
+    });
+
+    Route::controller(WebmessageController::class)->middleware('auth')->group(function(){
+        Route::get('/dashboard/setting/webmessage','index')->name('webmessage.index');
+        Route::delete('/dashboard/setting/webmessage/destroy/{id}', 'destroy')->name('webmessage.destroy');
+    });
+
+    Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
+
+     // Delivery Info
+    Route::controller(DeliveryInfoController::class)->group(function(){
+        Route::get('/dashboard/delivery_info', 'index')->name('delivery_info.index');
+        Route::post('/dashboard/delivery_info/update', 'update')->name('delivery_info.update');
+    });
+
+     // Privacy Policy
+     Route::controller(PrivacyController::class)->group(function(){
+        Route::get('/dashboard/privacy_policy', 'index')->name('privacy_policy.index');
+        Route::post('/dashboard/privacy_policy/update', 'update')->name('privacy_policy.update');
+    });
+
+     // terms and Condition
+    Route::controller(TermsConditionController::class)->group(function(){
+        Route::get('/dashboard/terms_conditioin','index')->name('terms_conditioin.index');
+        Route::post('/dashboard/terms_conditioin/update', 'update')->name('terms_conditioin.update');
+    });
+
+    Route::controller(SizeChartController::class)->middleware('auth')->group(function(){
+        Route::get('/dashboard/varient/size_chart','index')->name('sizechart.index');
+        Route::post('/dashboard/size_chart', 'store')->name('size_chart.store');
+        Route::get('/dashboard/size_chart/{id}/edit', 'edit')->name('size_chart.edit');
+        Route::put('/dashboard/size_chart/{id}', 'update')->name('size_chart.update');
+        Route::delete('/dashboard/size_chart/{id}', 'destroy')->name('size_chart.destroy');
+    });
 
 
-Route::controller(WebmessageController::class)->middleware('auth')->group(function(){
+    // <========================= Backend Route End ========================>
 
-});
-
-Route::post('/contact/webmessage/store' , [WebmessageController::class,'store'])->name('webmessage.store');
-Route::get('/contact/webmessage/destroy' ,  [WebmessageController::class,'destroy'])->name('webmessage.destroy');
+    Route::get('/{provider}/redirect', [SocialAuthController::class, 'redirect']);
+    Route::get('/{provider}/callback', [SocialAuthController::class, 'callback']);
 
 Route::get('/thankyou',function(){
     return view('frontend.thankyou');
@@ -487,17 +564,7 @@ Route::get('/dashboard/reviews', function () {
     return view('admin.reviews.index');
 })->name('reviews');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::post('dashboard/profile/userupdate',[ProfileController::class, 'userProfileUpdate'])->name('user.profileupdate');
-    Route::post('dashboard/profile/usersocialupdate',[ProfileController::class, 'userSocialUpdate'])->name('user.socialupdate');
-    Route::post('dashboard/profile/seoupdate',[ProfileController::class, 'SEOUpdate'])->name('user.SEOUpdate');
-});
 
-// Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);
-// Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
 
 require __DIR__.'/auth.php';

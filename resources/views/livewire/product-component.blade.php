@@ -243,54 +243,54 @@
                 </div>
                 @if (strpos($product->product_name, 'Pajama') === false)
                <!--size Chart-->
-                <div>
-                    <h4>Size Chart</h4>
-                    <br>
-                    <div class="table-responsive">
-                        <table class="table bordered">
-                            <thead>
-                                <tr>
-                                    <th class="fw-bold">SIZE</th>
-                                    <th class="fw-bold">CHEST</th>
-                                    <th class="fw-bold">LENGTH</th>
-                                    <th class="fw-bold">SHOULDER</th>
-                                    <th class="fw-bold">SLEEVE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>38</td>
-                                    <td>40</td>
-                                    <td>38</td>
-                                    <td>17</td>
-                                    <td>22</td>
-                                </tr>
-                                <tr>
-                                    <td>40</td>
-                                    <td>41</td>
-                                    <td>40</td>
-                                    <td>17</td>
-                                    <td>23.5</td>
-                                </tr>
-                                <tr>
-                                    <td>42</td>
-                                    <td>43</td>
-                                    <td>42</td>
-                                    <td>18</td>
-                                    <td>23.5</td>
-                                </tr>
-                                <tr>
-                                    <td>44</td>
-                                    <td>44</td>
-                                    <td>44</td>
-                                    <td>18.5</td>
-                                    <td>24</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <!--<div>-->
+                <!--    <h4>Size Chart</h4>-->
+                <!--    <br>-->
+                <!--    <div class="table-responsive">-->
+                <!--        <table class="table bordered">-->
+                <!--            <thead>-->
+                <!--                <tr>-->
+                <!--                    <th class="fw-bold">SIZE</th>-->
+                <!--                    <th class="fw-bold">CHEST</th>-->
+                <!--                    <th class="fw-bold">LENGTH</th>-->
+                <!--                    <th class="fw-bold">SHOULDER</th>-->
+                <!--                    <th class="fw-bold">SLEEVE</th>-->
+                <!--                </tr>-->
+                <!--            </thead>-->
+                <!--            <tbody>-->
+                <!--                <tr>-->
+                <!--                    <td>38</td>-->
+                <!--                    <td>40</td>-->
+                <!--                    <td>38</td>-->
+                <!--                    <td>17</td>-->
+                <!--                    <td>22</td>-->
+                <!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td>40</td>-->
+                <!--                    <td>41</td>-->
+                <!--                    <td>40</td>-->
+                <!--                    <td>17</td>-->
+                <!--                    <td>23.5</td>-->
+                <!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td>42</td>-->
+                <!--                    <td>43</td>-->
+                <!--                    <td>42</td>-->
+                <!--                    <td>18</td>-->
+                <!--                    <td>23.5</td>-->
+                <!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td>44</td>-->
+                <!--                    <td>44</td>-->
+                <!--                    <td>44</td>-->
+                <!--                    <td>18.5</td>-->
+                <!--                    <td>24</td>-->
+                <!--                </tr>-->
+                <!--            </tbody>-->
+                <!--        </table>-->
+                <!--    </div>-->
 
-                </div>
+                <!--</div>-->
                 <!--end size chart-->
                 @endif
             </div>

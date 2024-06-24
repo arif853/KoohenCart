@@ -23,12 +23,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('admin.profile.index',[
-            'user' => $request->user(),
-        ]);
         // return view('profile.edit', [
         //     'user' => $request->user(),
         // ]);
+        return view('admin.profile.index',[
+            'user' => $request->user(),
+        ]);
     }
 
     /**
@@ -67,7 +67,7 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-
+    
     public function userProfileUpdate(Request $request)
     {
         $validatedData = $request->validate([
@@ -79,7 +79,7 @@ class ProfileController extends Controller
             'description' => 'nullable|string',
             'startDate' => 'nullable|date',
             'weblogo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
-            'webfavicon' => 'nullable|mimes:jpeg,png,jpg,ico|max:2048', // Max 2MB
+            'webfavicon' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
         ]);
 
         // Handle file uploads

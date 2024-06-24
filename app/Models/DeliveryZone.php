@@ -10,7 +10,7 @@ class DeliveryZone extends Model
     use HasFactory;
 
     protected $fillable = ['district_id','upazila_id','charge','status'];
-
+   
     public function district()
     {
         return $this->belongsTo(District::class);

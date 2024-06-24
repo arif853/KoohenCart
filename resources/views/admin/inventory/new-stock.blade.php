@@ -22,6 +22,26 @@
                       <label for="supplier" class="form-label">Supplier</label>
                       <input type="text" class="form-control" id="supplier" name="supplier" readonly>
                     </div>
+                    
+                    <div class="col-md-6 mb-2">
+                      <label for="supplierPrice" class="form-label">Supplier Price</label>
+                      <input type="text" class="form-control" id="supplierPrice" name="supplierPrice" >
+                    </div>
+                    
+                    <div class="col-md-6 mb-2">
+                      <label for="regularPrice" class="form-label">Regular Price</label>
+                      <input type="text" class="form-control" id="regularPrice" name="regularPrice" >
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                      <label for="supplierPrice" class="form-label">Supplier Price</label>
+                      <input type="text" class="form-control" id="supplierPrice" name="supplierPrice" >
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                      <label for="regularPrice" class="form-label">Regular Price</label>
+                      <input type="text" class="form-control" id="regularPrice" name="regularPrice" >
+                    </div>
 
                     <div class="col-md-12 mb-2">
                         <label for="purchase_date" class="form-label">Purchase Date</label>
@@ -35,7 +55,7 @@
                             padding: 8px; /* Adjust padding as needed */
                             border-radius: 5px; /* Add border radius for rounded corners */
                             margin-bottom: 5px; /* Add margin to separate the header from input fields */
-                            width: 300px;
+                            width: 100%;
                         }
 
                         .input-label {
@@ -44,7 +64,7 @@
                             font-weight: bold; /* Add bold font weight */
                         }
                         </style>
-                    <div class="col-md-8 mb-2">
+                    <div class="col-md-12 mb-2">
                         <!--<label for="size" style="width: 350px;" class="form-label">Size -------- In -------- Out -------- Balance -------- New<span class="text-danger">*</span></label>-->
                          <div class="input-header">
                             <span class="input-label">Color</span>
@@ -53,7 +73,7 @@
                             <span class="input-label">Balance</span>
                             <span class="input-label">New</span>
                         </div>
-                     <div id="input_container" style="width: 300px;">
+                     <div id="input_container" style="width: 100%;">
 
                      </div>
                     </div>

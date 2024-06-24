@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Products;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Campaign;
-use App\Models\Slider;
 use App\Models\Ads;
+use App\Models\Slider;
+use App\Models\Aboutus;
+use App\Models\Campaign;
+use App\Models\Category;
 use App\Models\Division;
+use App\Models\Products;
+use App\Models\DeliveryInfo;
+use Illuminate\Http\Request;
+use App\Models\PrivacyPolicy;
+use App\Models\TermsCondition;
 use App\Models\Feature_category;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Models\Aboutus;
 
 class HomeController extends Controller
 {
@@ -22,23 +25,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $Newproducts = Products::with([
-        //     'overviews',
-        //     'product_infos',
-        //     'product_images',
-        //     'product_extras',
-        //     'tags',
-        //     'sizes',
-        //     'colors',
-        //     'brand',
-        //     'category',
-        //     'subcategory',
-        //     'product_price'
-        // ])->latest('created_at')->take(8)->get();
-
-        // echo '<pre>';
-        // print_r($products);
-
         function getChildren($categoryName) {
             $children = Category::where('parent_category', $categoryName)->get();
             foreach ($children as $child) {
@@ -54,13 +40,44 @@ class HomeController extends Controller
         }
 
         $categories = Category::with('children')->whereNull('parent_category')->get();
-        $cat_feature = Feature_category::where('status', 'Active')->first();
 
+        $cat_features = Feature_category::where('status', 'Active')->get();
+
+        foreach($cat_features as $cat_feature){
+
+            $items = Products::with([
+                'overviews',
+                'product_infos',
+                'product_images',
+                'product_extras',
+                'tags',
+                'sizes',
+                'colors',
+                'brand',
+                'category',
+                'subcategory',
+                'product_price'
+
+            ])->where('category_id', $cat_feature->category_id)->get();
+
+            $cat_feature->products = $items->filter(function ($product) {
+
+                // Calculate total stock balance for the product
+                $totalStock = $product->product_stocks->sum(function ($stock) {
+                    return $stock->inStock - $stock->outStock;
+                });
+                // Add a property to the product object with the total stock balance
+                $product->totalStock = $totalStock;
+
+                // Return true if total stock balance is greater than zero
+                return $totalStock > 0;
+            });
+        }
         $sliders = Slider::all();
         $adsbanner = Ads::all();
         $campaign = Campaign::where('status','Published')->first();
-
-        return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign'));
+        return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign','cat_features'));
+        // dd($cat_features);
     }
 
     /**
@@ -72,9 +89,18 @@ class HomeController extends Controller
         return view('frontend.about-us', ['aboutus' => $aboutus]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function deliveryInfo(){
+        $delivery_info = DeliveryInfo::first();
+        return view('frontend.delivery_information',compact('delivery_info'));
+    }
+    public function PrivacyPolicy(){
+        $privacy_policy = PrivacyPolicy::first();
+        return view('frontend.privacy-policy',compact('privacy_policy'));
+    }
+    public function termsCondition(){
+        $terms = TermsCondition::first();
+        return view('frontend.terms-and-condition',compact('terms'));
+    }
     public function contactus()
     {
         return view('frontend.contact-us');
@@ -86,7 +112,7 @@ class HomeController extends Controller
         $divisions = Division::all();
         if (Auth::guard('customer')->check()) {
             $user = Auth::guard('customer')->user();
-            
+
             if ($user->customer->billing_address != null && $user->customer->shipping()->exists()) {
                 return view('frontend.checkout');
             } else {
@@ -142,9 +168,9 @@ class HomeController extends Controller
         // return response()->json($products, 200, [], JSON_PRETTY_PRINT);
 
     }
-    
+
      public function wishlist(){
-            
+
             return view('frontend.shop-wishlist');
         }
         /**
@@ -188,19 +214,16 @@ class HomeController extends Controller
     {
         //
     }
-    
+
      public function searchBar(Request $request)
     {
         $searchTerm = $request->input('search');
-
         // Query the products table to find matching products along with their images
         $products = Products::where('product_name', 'like', '%' . $searchTerm . '%')
                             ->orWhere('sku', 'like', '%' . $searchTerm . '%')
                             ->with(['product_thumbnail','product_price']) // Eager load product images
                             // ->limit(5) // Limit the number of results
                             ->get();
-
-
         // Return the response as JSON
         return response()->json(['products' => $products]);
     }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('bn_name');
             $table->string('lat');
             $table->string('long');
+            $table->decimal('zone_charge',[10,0])->default(0);
             $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade');
             $table->timestamps();
         });

@@ -33,10 +33,12 @@
                     <thead>
                         <tr>
                             <th>#SN</th>
-                            <th>Header </th>
-                            <th>Title</th>
+                            <th>Header Title</th>
+                            <th>Main Title</th>
                             <th width=20% >Image</th>
-                            <th>Shop Link</th>
+                            <th>Button Link</th>
+                            <th>Position No.</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -49,12 +51,34 @@
                             <td>
                                 <img src="{{asset('storage/'.$ads->image)}}" alt="{{$ads->title}}" width="100%">
                             </td>
-
                             <td>
-                               <a href="{{$ads->shop_url}}" target="__blank">{{$ads->shop_url}}</a>
+                                <a href="{{$ads->shop_url}}" target="__blank">{{$ads->btntext}}</a>
                             </td>
                             <td>
-
+                                @if ($ads->is_featured == 1)
+                                    @if ($ads->is_feature_no == 1)
+                                     <span class="badge bg-success">1. After New Arrival</span>
+                                    @elseif ($ads->is_feature_no == 2)
+                                     <span class="badge bg-success">2. After Campaign</span>
+                                    @else
+                                     <span class="badge bg-success">3. After Popular Products</span>
+                                    @endif
+                                @else
+                                <span class="badge bg-danger">Not Featured</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ads->status == 1)
+                                <a href="{{route('update.status',['id' => $ads->id])}}">
+                                    <span class="badge bg-success">Active</span>
+                                </a>
+                                @else
+                                <a href="{{route('update.status',['id' => $ads->id])}}">
+                                    <span class="badge bg-danger">Inactive</span>
+                                </a>
+                                @endif
+                            </td>
+                            <td>
                                 <form class="deleteForm" action="{{ route('ads.destroy', $ads->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')

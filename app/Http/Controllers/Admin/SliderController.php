@@ -39,6 +39,8 @@ class SliderController extends Controller
         $rules = [
             'slider_title' => 'required|string',
             'slider_sub_title' => 'required|string',
+            'btnText' => 'nullable|string',
+            'slider_url' => 'nullable|url',
             'slider_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
@@ -68,6 +70,7 @@ class SliderController extends Controller
             $slider = new Slider;
             $slider->title = $request->slider_title;
             $slider->subtitle = $request->slider_sub_title;
+            $slider->btntext = $request->btnText;
             $slider->slider_url = $request->slider_url;
             $slider->image = $imagePath;
             $slider->save();
@@ -108,6 +111,8 @@ class SliderController extends Controller
         $rules = [
             'slider_title' => 'required|string',
             'slider_sub_title' => 'required|string',
+            'btnText' => 'nullable|string',
+            'slider_url' => 'nullable|url',
             'slider_image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
@@ -142,6 +147,7 @@ class SliderController extends Controller
 
             $slider->title = $request->slider_title;
             $slider->subtitle = $request->slider_sub_title;
+            $slider->btntext = $request->btnText;
             $slider->slider_url = $request->slider_url;
             $slider->image = $sliderImage;
             $slider->save();
