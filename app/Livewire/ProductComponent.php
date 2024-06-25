@@ -7,10 +7,11 @@ use App\Models\Color;
 use Livewire\Component;
 use App\Models\Campaign;
 use App\Models\Products;
+use Livewire\Attributes\On;
 use App\Models\Product_image;
+use App\Models\CategorySizeHeader;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Livewire\Attributes\On;
 
 class ProductComponent extends Component
 {
@@ -21,6 +22,7 @@ class ProductComponent extends Component
     {
         $this->slug= $slug;
     }
+
     public function store($id)
     {
         $product = Products::find($id);
@@ -128,6 +130,9 @@ class ProductComponent extends Component
         return redirect()->route('checkout');
     }
 
+    public $sizeChartData = [], $categoryHeaders = [], $headers = [], $sizes;
+
+
     #[On('qtyRefresh')]
 
     public function render()
@@ -148,6 +153,28 @@ class ProductComponent extends Component
             'product_stocks',
         ])->where('slug', $this->slug)->where('status','active')->first();
 
-        return view('livewire.product-component',['product'=>$product]);
+
+
+        $categorySizeHeaders = CategorySizeHeader::where('category_id', $product->category_id)
+        ->with(['size', 'sizeHeader'])
+        ->get();
+
+        foreach ($categorySizeHeaders as $entry) {
+            $this->sizeChartData[$product->category_id][$entry->size->size_name][$entry->sizeHeader->name] = $entry->value;
+            $this->headers[$entry->sizeHeader->id] = $entry->sizeHeader->name;
+        }
+        $this->sizes = Size::all();
+
+        $this->categoryHeaders[$product->category_id] = $this->headers;
+
+
+
+        return view('livewire.product-component',
+        [
+            'product'=>$product,
+            'categoryHeaders' => $this->categoryHeaders,
+            'sizeChartData' => $this->sizeChartData,
+            'sizes' => $this->sizes,
+        ]);
     }
 }

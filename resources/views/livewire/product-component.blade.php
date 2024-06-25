@@ -160,9 +160,47 @@
                 <div class="attr-detail attr-size">
                     <strong class="color-size mr-10">Size</strong>
                     @livewire('select-size-component', ['sizes' => $product->sizes, 'productId' => $product->id])
-
-                    <a href="#" class="size-chart-btn">Size Chart</a>
+                    {{-- {{$product->category_id}} --}}
+                    @if ($product->is_sizechart == 1)
+                    <a href="#" class="size-chart-btn" >Size Chart</a>
+                    @endif
                 </div>
+                @if ($product->is_sizechart == 1)
+                
+                <div class="floating-card" id="sizeChartCard" wire:ignore>
+                    <div class="card-content">
+                        <form id="sizeChartForm">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Size</th>
+                                        @foreach($categoryHeaders[$product->category_id] as $header)
+                                        <th>{{ $header }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(isset($sizeChartData[$product->category_id]))
+                                    @foreach($sizes as $size)
+                                        @if(isset($sizeChartData[$product->category_id][$size->size_name]))
+                                            <tr>
+                                                <td><input type="radio" name="size" value="{{ $size->size }}"></td>
+                                                <td>{{ $size->size_name }}</td>
+                                                @foreach($categoryHeaders[$product->category_id] as $header)
+                                                <td>{{ $sizeChartData[$product->category_id][$size->size_name][$header] ?? '' }}</td>
+                                                @endforeach
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                    @endif
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                @endif
 
                 @endif
                 <div class="bt-1 border-color-1 mt-30 mb-30"></div>
@@ -181,9 +219,9 @@
                     </div>
                 </div>
                 @endif
-                  @foreach ($product->product_extras as $extrainfo)
+                    @foreach ($product->product_extras as $extrainfo)
 
-                                @endforeach
+                    @endforeach
                 <div class="row product-tag-info">
                     <div class="col-lg-6">
                         <div class="product_sort_info font-xs">
@@ -243,56 +281,7 @@
                     </ul>
                 </div>
                 @if (strpos($product->product_name, 'Pajama') === false)
-               <!--size Chart-->
-                <!--<div>-->
-                <!--    <h4>Size Chart</h4>-->
-                <!--    <br>-->
-                <!--    <div class="table-responsive">-->
-                <!--        <table class="table bordered">-->
-                <!--            <thead>-->
-                <!--                <tr>-->
-                <!--                    <th class="fw-bold">SIZE</th>-->
-                <!--                    <th class="fw-bold">CHEST</th>-->
-                <!--                    <th class="fw-bold">LENGTH</th>-->
-                <!--                    <th class="fw-bold">SHOULDER</th>-->
-                <!--                    <th class="fw-bold">SLEEVE</th>-->
-                <!--                </tr>-->
-                <!--            </thead>-->
-                <!--            <tbody>-->
-                <!--                <tr>-->
-                <!--                    <td>38</td>-->
-                <!--                    <td>40</td>-->
-                <!--                    <td>38</td>-->
-                <!--                    <td>17</td>-->
-                <!--                    <td>22</td>-->
-                <!--                </tr>-->
-                <!--                <tr>-->
-                <!--                    <td>40</td>-->
-                <!--                    <td>41</td>-->
-                <!--                    <td>40</td>-->
-                <!--                    <td>17</td>-->
-                <!--                    <td>23.5</td>-->
-                <!--                </tr>-->
-                <!--                <tr>-->
-                <!--                    <td>42</td>-->
-                <!--                    <td>43</td>-->
-                <!--                    <td>42</td>-->
-                <!--                    <td>18</td>-->
-                <!--                    <td>23.5</td>-->
-                <!--                </tr>-->
-                <!--                <tr>-->
-                <!--                    <td>44</td>-->
-                <!--                    <td>44</td>-->
-                <!--                    <td>44</td>-->
-                <!--                    <td>18.5</td>-->
-                <!--                    <td>24</td>-->
-                <!--                </tr>-->
-                <!--            </tbody>-->
-                <!--        </table>-->
-                <!--    </div>-->
 
-                <!--</div>-->
-                <!--end size chart-->
                 @endif
             </div>
             <!-- Detail Info -->
@@ -624,5 +613,24 @@
         </div>
     </div>
     <!--Description-->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sizeChartBtn = document.querySelector('.size-chart-btn');
+        const sizeChartCard = document.getElementById('sizeChartCard');
 
+        sizeChartBtn.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default action of the anchor tag
+            sizeChartCard.style.display = (sizeChartCard.style.display === 'none' || sizeChartCard.style.display === '') ? 'block' : 'none';
+        });
+
+        const sizeChartForm = document.getElementById('sizeChartForm');
+
+        sizeChartForm.addEventListener('change', function() {
+            const selectedSize = document.querySelector('input[name="size"]:checked').value;
+            console.log('Selected size:', selectedSize);
+            // You can add further actions here, such as updating a hidden input field or submitting the form
+        });
+    });
+
+</script>
 </div>
