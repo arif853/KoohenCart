@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\Admin\DeliveryInfoController;
 use App\Http\Controllers\Frontend\TrackorderController;
 use App\Http\Controllers\Admin\TermsConditionController;
@@ -559,6 +560,28 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     Route::get('/{provider}/redirect', [SocialAuthController::class, 'redirect']);
     Route::get('/{provider}/callback', [SocialAuthController::class, 'callback']);
+
+
+    // SSLCOMMERZ Start
+
+    Route::post('/sslcommerz/success', [CheckoutController::class],'success')->name('sslcommerz.success');
+    Route::post('/sslcommerz/fail', [CheckoutController::class],'fail')->name('sslcommerz.fail');
+    Route::post('/sslcommerz/cancel', [CheckoutController::class],'cancel')->name('sslcommerz.cancel');
+    Route::post('/ipn-listener', [CheckoutController::class],'ipnListener')->name('ipn-listener');
+
+
+    // Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+    // Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+    // Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+    // Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+    // Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+    // Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+    // Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+    // Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+    //SSLCOMMERZ END
 
 Route::get('/thankyou',function(){
     return view('frontend.thankyou');

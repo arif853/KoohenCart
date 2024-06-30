@@ -477,7 +477,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="mailto:{{$socialinfo->title_value}}" target="__blank"><span><i class="fal fa-envelope"></i>
+                                    <a href="mailto:{{$contactinfo->email}}" target="__blank"><span><i class="fal fa-envelope"></i>
                                     </span> {{ $contactinfo->email }}
                                     </a>
                                 </li>
@@ -778,6 +778,7 @@
 
 
 </script>
+
     @if(Session::has('success'))
     <script>
         $.Notification.autoHideNotify('success', 'top right', 'Success', '{{ Session::get('success') }}');
@@ -791,9 +792,10 @@
     @if(Session::has('warning'))
     <script>
         $.Notification.autoHideNotify('warning', 'top right', 'Warning', '{{ Session::get('warning') }}');
-    </script>
-    @endif
 
+    </script>
+
+    @endif
 
 
 </body>

@@ -339,16 +339,12 @@
                                 </div>
                                 <div class="payment_option">
                                     <div class="custome-radio">
-                                        <input class="form-check-input" type="radio" name="payment_mode"
-                                            id="payment_cod" checked value="cod">
-                                        <label class="form-check-label" for="payment_cod" data-bs-toggle="collapse"
-                                            data-target="#bankTranfer" aria-controls="bankTranfer">Cash On
-                                            Delivery</label>
-                                        
-                                        {{-- <div class="form-group collapse in" id="bankTranfer">
-                                            <p class=" mt-5">There are many variations of passages of Lorem
-                                                Ipsum available, but the majority have suffered alteration. </p>
-                                        </div> --}}
+                                        <input class="form-check-input" type="radio" name="payment_mode" id="payment_cod" checked value="cod">
+                                        <label class="form-check-label" for="payment_cod" >Cash On Delivery</label>
+                                    </div>
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" type="radio" name="payment_mode" id="payment_online" value="online">
+                                        <label class="form-check-label" for="payment_online" >Online Payment</label>
                                     </div>
                                     <!-- Terms & Conditions Checkbox -->
                                     <div class="form-check">
@@ -357,24 +353,12 @@
                                             I agree to the <a href="{{ url('/terms-and-condition') }}" target="_blank">Terms & Conditions</a>, <a href="{{ url('/privacy_and_policy') }}" target="_blank">, Privacy Policy</a> and <a href="{{ url('/cancellation_and_return') }}" target="_blank">Return and Refund Policy</a>
                                         </label>
                                     </div>
-                                    {{-- <div class="custome-radio">
-                                        <input class="form-check-input" required type="radio" name="payment_option"
-                                            id="exampleRadios4" >
-                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
-                                            data-target="#checkPayment" aria-controls="checkPayment">Online
-                                            Payment</label>
-                                        <div class="form-group " id="checkPayment">
-                                            <p class="text-muted mt-5">Please send your cheque to Store Name, Store
-                                                Street, Store Town, Store State / County, Store Postcode. </p>
-                                        </div>
-                                    </div> --}}
+
                                 </div>
                             </div>
 
 
-
                             <button type="submit" class="btn btn-fill-out btn-block mt-30">Place Order</button>
-                            {{-- @endif --}}
 
                         </div>
                     </div>
@@ -406,6 +390,15 @@
             ]
         }
     });
+
+    // document.getElementById('payment_online').addEventListener('change', function() {
+    //     document.getElementById('payment_mode').value = 'online';
+    // });
+
+    // document.getElementById('payment_cod').addEventListener('change', function() {
+    //     document.getElementById('payment_mode').value = 'cod';
+    // });
+
 </script>
 @endsection
 @push('checkout')

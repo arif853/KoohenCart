@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use DB;
 use App\Models\Order;
 use App\Models\Coupon;
 use App\Mail\AdminMail;
@@ -17,6 +16,8 @@ use App\Models\Product_stock;
 use App\Models\AppliedCoupone;
 use Illuminate\Support\Carbon;
 use App\Models\Register_customer;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Library\SslCommerz\SslCommerzNotification;
 use App\Notifications\NewPendingOrderNotification;
 use SteadFast\SteadFastCourierLaravelPackage\Facades\SteadfastCourier;
 
@@ -78,191 +80,26 @@ class CheckoutController extends Controller
     {
         $track_id = $this->generateCode();
         $invoiceNo = $this->generateInvoiceNo();
+
+
         // Initialize an empty array to store purchase event data
         $purchaseEventData = [];
-        if (Auth::guard('customer')->check()) {
-            $user = Auth::guard('customer')->user();
-            $customer_id = $user->customer->id;
-            $couponCode = $request->input('coupon_code');
 
-            // order details store to order
-            $order = new Order();
-            $order->customer_id = $customer_id;
-            $order->invoice_no = $invoiceNo;
-            $order->order_track_id = $track_id;
-            $order->subtotal = $request->subtotal;
-            $order->discount = $request->discount;
-            $order->tax = $request->tax;
-            $order->total = $request->total_amount;
-            $order->delivery_charge = $request->shipping_cost;
-            $order->is_shipping_different = $request->is_shipping ? 1 : 0;
-            $order->comment = $request->comment;
-            $order->save();
+        DB::beginTransaction();
 
-            $order_status = Orderstatus::create([
-                'order_id' => $order->id,
-            ]);
-            //Transaction details
-            $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
-            $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
-            $purchaseEventData['tax'] = $request->tax; // Tax amount
-            $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
-            $purchaseEventData['currency'] = 'BDT'; // Currency
-            $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ''; // Coupon code
-            $purchaseEventData['items'] = [];
+        try {
+            if (Auth::guard('customer')->check()) {
+                $user = Auth::guard('customer')->user();
+                $customer_id = $user->customer->id;
+                $couponCode = $request->input('coupon_code');
 
-            $cartItems = Cart::instance('cart')->content();
-
-            // Loop through the cart items and save them to the order item table
-            foreach ($cartItems as $cartItem) {
-                // Save $cartItem to your order item table
-                //order item store in order item item table.
-                order_items::create([
-                    'product_id' => $cartItem->id,
-                    'order_id' => $order->id,
-                    'color_id' => $request->color_id,
-                    'size_id' => $request->size_id,
-                    'price' => $cartItem->price,
-                    'quantity' => $cartItem->qty,
-                ]);
-                //dataLayer Data
-                $item = [
-                    'item_id' => $cartItem->id,
-                    'item_name' => $cartItem->name, // Assuming you have a 'name' property for the item
-                    'price' => $cartItem->price,
-                    'quantity' => $cartItem->qty,
-                ];
-                $purchaseEventData['items'][] = $item;
-            }
-
-            $transaction = transactions::create([
-                'customer_id' => $customer_id,
-                'order_id' => $order->id,
-                'mode' => $request->payment_mode,
-            ]);
-
-            if ($couponCode) {
-                // Check if the customer has previously used the coupon
-                $appliedCoupon = AppliedCoupone::where('customer_id', $customer_id)->where('coupone_code', $couponCode)->first();
-                if ($appliedCoupon) {
-                    // Show error message if coupon has already been used by this customer
-                    $appliedCoupon->update([
-                        'order_id' => $order->id,
-                        'is_ordered' => 1,
-                    ]);
-                    // Session::flash('success', 'You have already used this coupon.');
-                }
-            }
-
-            $customer = Customer::find($customer_id);
-
-            // auth()->user()->notify(new NewPendingOrderNotification($order));
-
-            Session::flash('warning', 'Check your order in dashboard.');
-           
-          //  Mail::to($customer->email)->send(new customerMail($order));
-        } else {
-            $rules = [
-                'fname' => 'required|string',
-                'lname' => 'required|string',
-                'phone' => 'required|string',
-                'email' => 'required|email',
-                'billing_address' => 'required|string',
-                'division' => 'required',
-                'district' => 'required',
-                'area' => 'required',
-                // 'password' => 'min:6',
-            ];
-            $customMessages = [
-                'fname.required' => 'Please fill up first name field.',
-                'lname.required' => 'Please fill up last name field.',
-                'phone.required' => 'Please fill up phone field .',
-                'email.required' => 'Please fill up email field.',
-                'billing_address.required' => 'Please fill up billing address field.',
-                'division.required' => 'Please fill up division field.',
-                'district.required' => 'Please fill up district field.',
-                'area.required' => 'Please fill up area field.',
-            ];
-
-            $validator = Validator::make($request->all(), $rules, $customMessages);
-
-            // Validate the request
-            if ($validator->fails()) {
-                // Session::flash('danger', $validator->messages()->toArray());
-                return redirect()->back()->withErrors($validator)->withInput();
-            } else {
-                // save new customer.
-                // Check if customer with the given email or phone already exists
-                $existingCustomer = Customer::where('email', $request->email)
-                    ->orWhere('phone', $request->phone)
-                    ->first();
-
-                if ($existingCustomer) {
-                    // Customer with the same email or phone already exists
-                    // You can show a session message or take any other action
-                    return redirect()->back()->with('warning', 'The same email or phone already exists. Please login first.');
-                } else {
-                    // Customer does not exist, create a new one
-                    $customer = new Customer();
-                    $customer->firstName = $request->fname;
-                    $customer->lastName = $request->lname;
-                    $customer->phone = $request->phone;
-                    $customer->email = $request->email;
-                    $customer->billing_address = $request->billing_address;
-                    $customer->division = $request->division;
-                    $customer->district = $request->district;
-                    $customer->area = $request->area;
-                    $customer->loyalty_point = 10;
-                    $customer->save();
-                }
-
-                $customer_id = $customer->id;
-                $customerPhone = $customer->phone;
-                $customerEmail = $customer->email;
-
-                // if new customer registration store.
-                if ($request->is_createaccount) {
-                    $customer_reg = new Register_customer();
-                    $customer_reg->customer_id = $customer_id;
-                    $customer_reg->phone = $customerPhone;
-                    $customer_reg->email = $customerEmail;
-                    $customer_reg->password = Hash::make($request->password);
-                    $customer_reg->status = 'registerd';
-                    $customer_reg->save();
-
-                    $registration_status = $customer_reg->status;
-                    $register_customer = Customer::find($customer_reg->customer_id);
-                    $register_customer->update([
-                        'status' => $registration_status,
-                    ]);
-
-                    Session::flash('warning', 'Your registration complete successfully, Please login to user dashboard.');
-                } else {
-                    $customer_reg = new Register_customer();
-                    $customer_reg->customer_id = $customer_id;
-                    $customer_reg->phone = $customerPhone;
-                    $customer_reg->email = $customerEmail;
-                    $customer_reg->password = Hash::make($customerPhone);
-                    $customer_reg->status = 'registerd';
-                    $customer_reg->save();
-
-                    $registration_status = $customer_reg->status;
-                    $register_customer = Customer::find($customer_reg->customer_id);
-                    $register_customer->update([
-                        'status' => $registration_status,
-                    ]);
-
-                    Session::flash('warning', 'Use your Phone number as password to login.');
-                }
-
-                // $product = Cart::get();
                 // order details store to order
                 $order = new Order();
                 $order->customer_id = $customer_id;
                 $order->invoice_no = $invoiceNo;
                 $order->order_track_id = $track_id;
                 $order->subtotal = $request->subtotal;
-                $order->discount = 0;
+                $order->discount = $request->discount;
                 $order->tax = $request->tax;
                 $order->total = $request->total_amount;
                 $order->delivery_charge = $request->shipping_cost;
@@ -296,7 +133,7 @@ class CheckoutController extends Controller
                         'price' => $cartItem->price,
                         'quantity' => $cartItem->qty,
                     ]);
-
+                    //dataLayer Data
                     $item = [
                         'item_id' => $cartItem->id,
                         'item_name' => $cartItem->name, // Assuming you have a 'name' property for the item
@@ -306,38 +143,249 @@ class CheckoutController extends Controller
                     $purchaseEventData['items'][] = $item;
                 }
 
-                if ($request->is_shipping) {
-                    // shipping addres different from billing address. get shipping data.
-                    // $existingCustomer_shipping = shipping::where('customer_id', $customer_id);
 
-                    $shipping_info = new shipping();
-                    $shipping_info->customer_id = $customer_id;
-                    $shipping_info->order_id = $order->id;
-                    $shipping_info->first_name = $request->shipper_fname;
-                    $shipping_info->last_name = $request->shipper_lname;
-                    $shipping_info->s_phone = $request->shipper_phone;
-                    $shipping_info->s_email = $request->shipper_email;
-                    $shipping_info->shipping_add = $request->shipper_address;
-                    $shipping_info->division = $request->s_division;
-                    $shipping_info->district = $request->s_district;
-                    $shipping_info->area = $request->s_area;
-                    $shipping_info->save();
-                } else {
-                    // shipping address and billing address same. billing address save to shipping table.
-
-                    $shipping_info = new shipping();
-                    $shipping_info->customer_id = $customer_id;
-                    $shipping_info->order_id = $order->id;
-                    $shipping_info->first_name = $request->fname;
-                    $shipping_info->last_name = $request->lname;
-                    $shipping_info->s_phone = $request->phone;
-                    $shipping_info->s_email = $request->email;
-                    $shipping_info->shipping_add = $request->billing_address;
-                    $shipping_info->division = $request->division;
-                    $shipping_info->district = $request->district;
-                    $shipping_info->area = $request->area;
-                    $shipping_info->save();
+                if ($couponCode) {
+                    // Check if the customer has previously used the coupon
+                    $appliedCoupon = AppliedCoupone::where('customer_id', $customer_id)->where('coupone_code', $couponCode)->first();
+                    if ($appliedCoupon) {
+                        // Show error message if coupon has already been used by this customer
+                        $appliedCoupon->update([
+                            'order_id' => $order->id,
+                            'is_ordered' => 1,
+                        ]);
+                        // Session::flash('success', 'You have already used this coupon.');
+                    }
                 }
+
+                $customer = Customer::find($customer_id);
+
+                // auth()->user()->notify(new NewPendingOrderNotification($order));
+
+                Session::flash('warning', 'Check your order in dashboard.');
+
+              //  Mail::to($customer->email)->send(new customerMail($order));
+            } else {
+                $rules = [
+                    'fname' => 'required|string',
+                    'lname' => 'required|string',
+                    'phone' => 'required|string',
+                    'email' => 'required|email',
+                    'billing_address' => 'required|string',
+                    'division' => 'required',
+                    'district' => 'required',
+                    'area' => 'required',
+                    // 'password' => 'min:6',
+                ];
+                $customMessages = [
+                    'fname.required' => 'Please fill up first name field.',
+                    'lname.required' => 'Please fill up last name field.',
+                    'phone.required' => 'Please fill up phone field .',
+                    'email.required' => 'Please fill up email field.',
+                    'billing_address.required' => 'Please fill up billing address field.',
+                    'division.required' => 'Please fill up division field.',
+                    'district.required' => 'Please fill up district field.',
+                    'area.required' => 'Please fill up area field.',
+                ];
+
+                $validator = Validator::make($request->all(), $rules, $customMessages);
+
+                // Validate the request
+                if ($validator->fails()) {
+                    // Session::flash('danger', $validator->messages()->toArray());
+                    return redirect()->back()->withErrors($validator)->withInput();
+                } else {
+                    // save new customer.
+                    // Check if customer with the given email or phone already exists
+                    $existingCustomer = Customer::where('email', $request->email)
+                        ->orWhere('phone', $request->phone)
+                        ->first();
+
+                    if ($existingCustomer) {
+                        // Customer with the same email or phone already exists
+                        // You can show a session message or take any other action
+                        return redirect()->back()->with('warning', 'The same email or phone already exists. Please login first.');
+                    } else {
+                        // Customer does not exist, create a new one
+                        $customer = new Customer();
+                        $customer->firstName = $request->fname;
+                        $customer->lastName = $request->lname;
+                        $customer->phone = $request->phone;
+                        $customer->email = $request->email;
+                        $customer->billing_address = $request->billing_address;
+                        $customer->division = $request->division;
+                        $customer->district = $request->district;
+                        $customer->area = $request->area;
+                        $customer->loyalty_point = 10;
+                        $customer->save();
+                    }
+
+                    $customer_id = $customer->id;
+                    $customerPhone = $customer->phone;
+                    $customerEmail = $customer->email;
+
+                    // if new customer registration store.
+                    if ($request->is_createaccount) {
+                        $customer_reg = new Register_customer();
+                        $customer_reg->customer_id = $customer_id;
+                        $customer_reg->phone = $customerPhone;
+                        $customer_reg->email = $customerEmail;
+                        $customer_reg->password = Hash::make($request->password);
+                        $customer_reg->status = 'registerd';
+                        $customer_reg->save();
+
+                        $registration_status = $customer_reg->status;
+                        $register_customer = Customer::find($customer_reg->customer_id);
+                        $register_customer->update([
+                            'status' => $registration_status,
+                        ]);
+
+                        Session::flash('warning', 'Your registration complete successfully, Please login to user dashboard.');
+                    } else {
+                        $customer_reg = new Register_customer();
+                        $customer_reg->customer_id = $customer_id;
+                        $customer_reg->phone = $customerPhone;
+                        $customer_reg->email = $customerEmail;
+                        $customer_reg->password = Hash::make($customerPhone);
+                        $customer_reg->status = 'registerd';
+                        $customer_reg->save();
+
+                        $registration_status = $customer_reg->status;
+                        $register_customer = Customer::find($customer_reg->customer_id);
+                        $register_customer->update([
+                            'status' => $registration_status,
+                        ]);
+
+                        Session::flash('warning', 'Use your Phone number as password to login.');
+                    }
+
+                    // $product = Cart::get();
+                    // order details store to order
+                    $order = new Order();
+                    $order->customer_id = $customer_id;
+                    $order->invoice_no = $invoiceNo;
+                    $order->order_track_id = $track_id;
+                    $order->subtotal = $request->subtotal;
+                    $order->discount = 0;
+                    $order->tax = $request->tax;
+                    $order->total = $request->total_amount;
+                    $order->delivery_charge = $request->shipping_cost;
+                    $order->is_shipping_different = $request->is_shipping ? 1 : 0;
+                    $order->comment = $request->comment;
+                    $order->save();
+
+                    $order_status = Orderstatus::create([
+                        'order_id' => $order->id,
+                    ]);
+                    //Transaction details
+                    $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
+                    $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
+                    $purchaseEventData['tax'] = $request->tax; // Tax amount
+                    $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
+                    $purchaseEventData['currency'] = 'BDT'; // Currency
+                    $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ''; // Coupon code
+                    $purchaseEventData['items'] = [];
+
+                    $cartItems = Cart::instance('cart')->content();
+
+                    // Loop through the cart items and save them to the order item table
+                    foreach ($cartItems as $cartItem) {
+                        // Save $cartItem to your order item table
+                        //order item store in order item item table.
+                        order_items::create([
+                            'product_id' => $cartItem->id,
+                            'order_id' => $order->id,
+                            'color_id' => $request->color_id,
+                            'size_id' => $request->size_id,
+                            'price' => $cartItem->price,
+                            'quantity' => $cartItem->qty,
+                        ]);
+
+                        $item = [
+                            'item_id' => $cartItem->id,
+                            'item_name' => $cartItem->name, // Assuming you have a 'name' property for the item
+                            'price' => $cartItem->price,
+                            'quantity' => $cartItem->qty,
+                        ];
+                        $purchaseEventData['items'][] = $item;
+                    }
+
+                    if ($request->is_shipping) {
+                        // shipping addres different from billing address. get shipping data.
+                        // $existingCustomer_shipping = shipping::where('customer_id', $customer_id);
+
+                        $shipping_info = new shipping();
+                        $shipping_info->customer_id = $customer_id;
+                        $shipping_info->order_id = $order->id;
+                        $shipping_info->first_name = $request->shipper_fname;
+                        $shipping_info->last_name = $request->shipper_lname;
+                        $shipping_info->s_phone = $request->shipper_phone;
+                        $shipping_info->s_email = $request->shipper_email;
+                        $shipping_info->shipping_add = $request->shipper_address;
+                        $shipping_info->division = $request->s_division;
+                        $shipping_info->district = $request->s_district;
+                        $shipping_info->area = $request->s_area;
+                        $shipping_info->save();
+                    } else {
+                        // shipping address and billing address same. billing address save to shipping table.
+
+                        $shipping_info = new shipping();
+                        $shipping_info->customer_id = $customer_id;
+                        $shipping_info->order_id = $order->id;
+                        $shipping_info->first_name = $request->fname;
+                        $shipping_info->last_name = $request->lname;
+                        $shipping_info->s_phone = $request->phone;
+                        $shipping_info->s_email = $request->email;
+                        $shipping_info->shipping_add = $request->billing_address;
+                        $shipping_info->division = $request->division;
+                        $shipping_info->district = $request->district;
+                        $shipping_info->area = $request->area;
+                        $shipping_info->save();
+                    }
+
+                }
+
+                // auth()->user()->notify(new NewPendingOrderNotification($order));
+               // Mail::to($customer->email)->send(new customerMail($order));
+            }
+
+            // Clear the cart after saving to the order item table
+          //  Mail::to('masudszone.design@gmail.com')->send(new AdminMail($order));
+            // masudszone.design@gmail.com
+
+            if ($request->payment_mode == 'online') {
+
+                $post_data = array();
+                $post_data['total_amount'] = $order->total;
+                $post_data['currency'] = "BDT";
+                $post_data['tran_id'] = uniqid();
+
+                $post_data['cus_name'] = $order->customer->firstName . ' ' . $order->customer->lastName;
+                $post_data['cus_email'] = $order->customer->email;
+                $post_data['cus_add1'] = $order->customer->billing_address;
+                $post_data['cus_phone'] = $order->customer->phone;
+
+                // $post_data['ship_name'] = $order->shipping->first_name . ' ' . $order->shipping->last_name;
+                // $post_data['ship_add1'] = $order->shipping->shipping_add;
+                // $post_data['ship_phone'] = $order->shipping->s_phone;
+
+                $post_data['shipping_method'] = "NO";
+                $post_data['product_name'] = "Ecommerce";
+                $post_data['product_category'] = "Goods";
+                $post_data['product_profile'] = "physical-goods";
+
+                $post_data['value_a'] = $order->id;
+
+                $sslc = new SslCommerzNotification();
+                $payment_options = $sslc->makePayment($post_data, 'hosted');
+
+                if (!is_array($payment_options)) {
+                    print_r($payment_options);
+                    $payment_options = array();
+                }
+
+                return ;
+            }
+            else{
                 $transaction = transactions::create([
                     'customer_id' => $customer_id,
                     'order_id' => $order->id,
@@ -345,24 +393,67 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            // auth()->user()->notify(new NewPendingOrderNotification($order));
-           // Mail::to($customer->email)->send(new customerMail($order));
+            DB::commit();
+            Cart::instance('cart')->destroy();
+
+            return redirect()->route('thankyou')
+                ->with([
+                    'success' => 'Your order has been placed',
+                    'purchaseEventData' => $purchaseEventData,
+                ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error order: ' . $e->getMessage());
+            return redirect()->back()->with('danger','Checkout Error '.$e);
         }
-
-        // Clear the cart after saving to the order item table
-      //  Mail::to('masudszone.design@gmail.com')->send(new AdminMail($order));
-        // masudszone.design@gmail.com
-
-        Cart::instance('cart')->destroy();
-      
-        return redirect()
-            ->route('thankyou')
-            ->with([
-                'success' => 'Your order has been placed',
-                'purchaseEventData' => $purchaseEventData,
-            ]);
     }
-  
+
+
+    public function success(Request $request)
+    {
+        $order_id = $request->value_a;
+        $order = Order::find($order_id);
+        $order->update(['status' => 'paid']);
+        return redirect()->route('thankyou');
+    }
+
+    public function fail(Request $request)
+    {
+        $order_id = $request->value_a;
+        $order = Order::find($order_id);
+        return redirect()->route('order.fail');
+    }
+
+    public function cancel(Request $request)
+    {
+        $order_id = $request->value_a;
+        $order = Order::find($order_id);
+        return redirect()->route('order.cancel');
+    }
+
+    public function ipnListener(Request $request)
+    {
+        $sslc = new SslCommerzNotification();
+        $tran_id = $request->input('tran_id');
+
+        // Check the transaction status
+        $validation = $sslc->orderValidate($request->all(), $tran_id, $request->input('amount'), $request->input('currency'));
+
+        if ($validation == TRUE) {
+            // Transaction is valid, update order status
+            $order = Order::where('invoice_no', $tran_id)->first();
+            if ($order) {
+                $order->status = 'Paid';
+                $order->save();
+                return response()->json(['status' => 'success', 'message' => 'Transaction is successfully completed.']);
+            }
+        } else {
+            // Transaction is invalid, handle accordingly
+            return response()->json(['status' => 'fail', 'message' => 'Transaction validation failed.']);
+        }
+    }
+
     public function login(Request $request)
     {
         $request->validate([
