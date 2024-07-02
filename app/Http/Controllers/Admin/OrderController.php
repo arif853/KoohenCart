@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
+use SteadFast\SteadFastCourierLaravelPackage\Facades\SteadfastCourier;
 
 class OrderController extends Controller
 {
@@ -42,27 +43,7 @@ class OrderController extends Controller
 
         return view('admin.order.index',compact('orders'));
     }
-    public function bulk_order($id)
-    {
-        $order = Order::with(
-            'customer',
-            'order_item',
-            'shipping',
-            'transaction')
-            ->where('id',$id)->first();
-        return view('admin.order.create_bulk_order',compact('order'));
-    }
-    public function place_order($id)
-    {
-        $order = Order::with(
-            'customer',
-            'order_item',
-            'shipping',
-            'transaction')
-            ->where('id',$id)->first();
 
-        return view('admin.order.place_order',compact('order'));
-    }
 
     public function order_track(Request $request)
     {
@@ -144,7 +125,7 @@ class OrderController extends Controller
 
 
 // Multiple order status update
-  public function updateOrderStatus(Request $request)
+    public function updateOrderStatus(Request $request)
     {
         $selectedStatus = $request->input('status');
         $selectedOrders = $request->input('orders');
@@ -225,8 +206,6 @@ class OrderController extends Controller
 
         return response()->json(['success' => true, ]);
     }
-
-
 
     // Single Order status update
     public function updateOneOrderStatus(Request $request)
@@ -323,7 +302,6 @@ class OrderController extends Controller
         ->get();
          return view('admin.order.pending_list',compact('pendingOrders'));
     }
-
 
     /**
      * Display the specified resource.
@@ -735,6 +713,69 @@ class OrderController extends Controller
                 }
             }
         }
+    }
+
+    public function bulk_order(Request $request)
+    {
+
+        $selectedOrders = $request->input('orders');
+        $orders = Order::whereIn('id', $selectedOrders)->with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->get();
+
+        $response = [];
+
+        // Update the status for each selected order
+        foreach ($orders as $order)
+        {
+            $customerName = $order->customer->firstName .' ' .$order->customer->lastName;
+            $customerAddress = $order->customer->billing_address;
+            $orderData = [
+                'invoice' => $order->invoice_no,
+                'recipient_name' => $customerName,
+                'recipient_phone' => $order->customer->phone,
+                'recipient_address' => $customerAddress,
+                'cod_amount' => $order->total,
+                'note' => $order->comment,
+            ];
+            $response[] = $orderData;
+        }
+
+        // $orderResponse = SteadfastCourier::placeOrder($response);
+        return response()->json($response);
+        // return view('admin.order.create_bulk_order',compact('order'));
+        // dd($response);
+    }
+
+    public function place_order($id)
+    {
+        $order = Order::with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->where('id',$id)->first();
+
+        $customerName = $order->customer->firstName .' ' .$order->customer->lastName;
+        $customerAddress = $order->customer->billing_address;
+
+        $orderData =
+        [
+            'invoice' => $order->invoice_no,
+            'recipient_name' => $customerName,
+            'recipient_phone' => $order->customer->phone,
+            'recipient_address' => $customerAddress,
+            'cod_amount' => $order->total,
+            'note' => $order->comment,
+        ];
+
+        // $response = SteadfastCourier::placeOrder($orderData);
+        // dd($response);
+        // return view('admin.order.place_order',compact('order'));
+        return redirect()->back()->with('success','Order place in steadfast successfully.');
     }
 
 

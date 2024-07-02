@@ -143,6 +143,13 @@ class CheckoutController extends Controller
                     $purchaseEventData['items'][] = $item;
                 }
 
+                $transaction = transactions::create([
+                    'customer_id' => $customer_id,
+                    'order_id' => $order->id,
+                    'mode' => $request->payment_mode,
+                ]);
+
+
 
                 if ($couponCode) {
                     // Check if the customer has previously used the coupon
@@ -309,6 +316,13 @@ class CheckoutController extends Controller
                         $purchaseEventData['items'][] = $item;
                     }
 
+                    $transaction = transactions::create([
+                        'customer_id' => $customer_id,
+                        'order_id' => $order->id,
+                        'mode' => $request->payment_mode,
+                    ]);
+
+
                     if ($request->is_shipping) {
                         // shipping addres different from billing address. get shipping data.
                         // $existingCustomer_shipping = shipping::where('customer_id', $customer_id);
@@ -347,10 +361,12 @@ class CheckoutController extends Controller
                 // auth()->user()->notify(new NewPendingOrderNotification($order));
                // Mail::to($customer->email)->send(new customerMail($order));
             }
+            DB::commit();
 
             // Clear the cart after saving to the order item table
-          //  Mail::to('masudszone.design@gmail.com')->send(new AdminMail($order));
+            // Mail::to('qbittech.dev1@gmail.com')->send(new AdminMail($order));
             // masudszone.design@gmail.com
+            Cart::instance('cart')->destroy();
 
             if ($request->payment_mode == 'online') {
 
@@ -383,18 +399,9 @@ class CheckoutController extends Controller
                     $payment_options = array();
                 }
 
-                return ;
-            }
-            else{
-                $transaction = transactions::create([
-                    'customer_id' => $customer_id,
-                    'order_id' => $order->id,
-                    'mode' => $request->payment_mode,
-                ]);
+                return;
             }
 
-            DB::commit();
-            Cart::instance('cart')->destroy();
 
             return redirect()->route('thankyou')
                 ->with([
@@ -412,11 +419,26 @@ class CheckoutController extends Controller
 
     public function success(Request $request)
     {
-        $order_id = $request->value_a;
+        $order_id = $request->input('value_a');
+        if (!$order_id) {
+            return redirect()->route('order.fail')->withErrors(['error' => 'Invalid Order ID']);
+        }
+
         $order = Order::find($order_id);
-        $order->update(['status' => 'paid']);
-        return redirect()->route('thankyou');
+        if (!$order) {
+            return redirect()->route('order.fail')->withErrors(['error' => 'Order not found']);
+        }
+
+        $transaction = transactions::where('order_id', $order->id)->first();
+        if ($transaction) {
+            $transaction->update(['status' => 'paid']);
+        } else {
+            return redirect()->route('order.fail')->withErrors(['error' => 'Transaction not found']);
+        }
+
+        return redirect()->route('thankyou')->with(['success' => 'Your order has been placed, Payment successful.']);
     }
+
 
     public function fail(Request $request)
     {

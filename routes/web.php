@@ -260,17 +260,17 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     Route::controller(SteadfastController::class)->middleware('auth')->group(function () {
+
         Route::post('/dashboard/orders_bulk', 'send_bulk_to_courier')->name('order.bulk_order.curier');
         Route::post('/dashboard/place_order/curier', 'place_order')->name('order.place_order.curier');
         Route::get('/dashboard/delivery/status/{consignmentId}', 'checkingDeliveryStatus')->name('order.delivery.status');
         Route::get('/dashboard/get/balance','getCurrentBalance');
+
     });
 
     //Order
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
         Route::get('/dashboard/orders', 'index')->name('order.index');
-        Route::get('/dashboard/orders/bulk/{id}', 'bulk_order')->name('order.bulk_order');
-        Route::get('/dashboard/orders/place_order/{id}', 'place_order')->name('order.place_order');
         Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');
@@ -296,6 +296,9 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::post('/dashboard/orders/orderitem_delete', 'deleteOrderItem')->name('orderItem.delete');
         Route::get('/dashboard/orders/newProductDetails', 'newProductDetails')->name('newproduct.details');
         Route::post('/dashboard/orders/newProductStore', 'newProductStore')->name('newProduct.store');
+
+        Route::post('/dashboard/orders/steadfast-bulk-order', 'bulk_order')->name('order.steadfast.bulk_order');
+        Route::get('/dashboard/orders/steadfast-order/{id}', 'place_order')->name('order.steadfast.place_order');
 
     });
 
@@ -564,11 +567,14 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     // SSLCOMMERZ Start
 
-    Route::post('/sslcommerz/success', [CheckoutController::class],'success')->name('sslcommerz.success');
-    Route::post('/sslcommerz/fail', [CheckoutController::class],'fail')->name('sslcommerz.fail');
-    Route::post('/sslcommerz/cancel', [CheckoutController::class],'cancel')->name('sslcommerz.cancel');
+    Route::post('/success', [CheckoutController::class],'success')->name('sslcommerz.success');
+    Route::post('/fail', [CheckoutController::class],'fail')->name('sslcommerz.fail');
+    Route::post('/cancel', [CheckoutController::class],'cancel')->name('sslcommerz.cancel');
     Route::post('/ipn-listener', [CheckoutController::class],'ipnListener')->name('ipn-listener');
 
+    Route::match(['get', 'post'],'/thankyou',function(){
+        return view('frontend.thankyou');
+    })->name('thankyou');
 
     // Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
     // Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
@@ -583,9 +589,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     // Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
     //SSLCOMMERZ END
 
-Route::get('/thankyou',function(){
-    return view('frontend.thankyou');
-})->name('thankyou');
+
 
 // reviews
 Route::get('/dashboard/reviews', function () {
