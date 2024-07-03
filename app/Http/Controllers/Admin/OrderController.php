@@ -21,9 +21,11 @@ use Illuminate\Validation\Rule;
 use App\Models\Register_customer;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\SteadfastOrder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use SteadFast\SteadFastCourierLaravelPackage\Facades\SteadfastCourier;
 
@@ -719,6 +721,7 @@ class OrderController extends Controller
     {
 
         $selectedOrders = $request->input('orders');
+
         $orders = Order::whereIn('id', $selectedOrders)->with(
             'customer',
             'order_item',
@@ -726,14 +729,14 @@ class OrderController extends Controller
             'transaction')
             ->get();
 
-        $response = [];
+            $orderDataList = [];
 
-        // Update the status for each selected order
-        foreach ($orders as $order)
-        {
-            $customerName = $order->customer->firstName .' ' .$order->customer->lastName;
+        // Prepare the order data for each selected order
+        foreach ($orders as $order) {
+            $customerName = $order->customer->firstName . ' ' . $order->customer->lastName;
             $customerAddress = $order->customer->billing_address;
-            $orderData = [
+            $orderDataList[] = [
+                'order_id' => $order->id,
                 'invoice' => $order->invoice_no,
                 'recipient_name' => $customerName,
                 'recipient_phone' => $order->customer->phone,
@@ -741,11 +744,29 @@ class OrderController extends Controller
                 'cod_amount' => $order->total,
                 'note' => $order->comment,
             ];
-            $response[] = $orderData;
         }
 
-        // $orderResponse = SteadfastCourier::placeOrder($response);
-        return response()->json($response);
+        // Send the bulk order data to the API
+        $responses = SteadfastCourier::bulkCreateOrders($orderDataList);
+
+        // Process each response
+        foreach ($responses['data'] as $res) {
+            if ($res['status'] == 'success') {
+                try {
+                    SteadfastOrder::create([
+                        'order_id' => $res['order_id'],
+                        'consignment_id' => $res['consignment_id'],
+                        'invoice' => $res['invoice'],
+                        'tracking_code' => $res['tracking_code'],
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('SteadFast Error: ' . $e->getMessage());
+                }
+            }
+        }
+
+        Session::flash('success','SteadFast Bulk order Place successfully.');
+        return response()->json($responses);
         // return view('admin.order.create_bulk_order',compact('order'));
         // dd($response);
     }
@@ -772,12 +793,33 @@ class OrderController extends Controller
             'note' => $order->comment,
         ];
 
-        // $response = SteadfastCourier::placeOrder($orderData);
-        // dd($response);
+        $response = SteadfastCourier::placeOrder($orderData);
+
+        if ($response) {
+            try {
+                $SteadfastOrder = SteadfastOrder::create([
+                    'order_id' => $order->id,
+                    'consignment_id' => $response['consignment']['consignment_id'],
+                    'invoice' => $response['consignment']['invoice'],
+                    'tracking_code' => $response['consignment']['tracking_code'],
+                ]);
+            } catch (\Exception $e) {
+                Log::error('SteadFast Error' . $e->getMessage());
+            }
+        }
+
         // return view('admin.order.place_order',compact('order'));
-        return redirect()->back()->with('success','Order place in steadfast successfully.');
+        return redirect()->back()->with('success','Steadfast order created successfully.');
     }
 
+    public function steadfastOrderStatus($id)
+    {
+        $SteadfastOrder = SteadfastOrder::where('order_id',$id)->first();
 
+        $orderStatus = SteadfastCourier::checkDeliveryStatusByConsignmentId($SteadfastOrder->consignment_id);
+        // $balance = SteadfastCourier::getCurrentBalance();
+
+        return view('admin.order.steadfastorder',compact('orderStatus','SteadfastOrder'));
+    }
 
 }

@@ -259,14 +259,6 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     });
 
-    Route::controller(SteadfastController::class)->middleware('auth')->group(function () {
-
-        Route::post('/dashboard/orders_bulk', 'send_bulk_to_courier')->name('order.bulk_order.curier');
-        Route::post('/dashboard/place_order/curier', 'place_order')->name('order.place_order.curier');
-        Route::get('/dashboard/delivery/status/{consignmentId}', 'checkingDeliveryStatus')->name('order.delivery.status');
-        Route::get('/dashboard/get/balance','getCurrentBalance');
-
-    });
 
     //Order
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
@@ -278,9 +270,11 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/orders/orders_return', 'order_return')->name('order.return');
         Route::post('/update-order-status', 'updateOrderStatus');
         Route::post('/update-one-order-status', 'updateOneOrderStatus');
+
         // Invoice
         Route::get('/orders/invoice/{id}', 'orderInvoice')->name('order.invoice');
         Route::get('/orders/invoice-page/{id}', 'invoicePage')->name('invoice');
+
         //filter
         Route::get('/dashboard/orders/filter', 'OrderFilter')->name('order.filters');
         Route::get('/dashboard/orders/pendingfilters', 'pendingfilters')->name('order.pendingfilters');
@@ -299,6 +293,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
         Route::post('/dashboard/orders/steadfast-bulk-order', 'bulk_order')->name('order.steadfast.bulk_order');
         Route::get('/dashboard/orders/steadfast-order/{id}', 'place_order')->name('order.steadfast.place_order');
+        Route::get('/dashboard/orders/steadfast-order/status/{id}', 'steadfastOrderStatus')->name('order.steadfast.statusCheck');
 
     });
 

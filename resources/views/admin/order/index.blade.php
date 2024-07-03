@@ -16,7 +16,10 @@
     border: none;
     font-size: 16px;
 }
-
+.dropdown-menu .dropdown-item img {
+	max-width: 100% !important;
+	margin-right: 10px;
+}
 </style>
     <div class="content-header">
         <div>
@@ -101,9 +104,9 @@
                         <table class="table table-hover" id="datatable">
                             <thead>
                                 <tr>
-                                    <td><input type="checkbox" id="select-all-checkbox"></td>
-                                    <th>ID</th>
-                                   <th>Order No</th>
+                                    <td class="text-center"><input type="checkbox" id="select-all-checkbox"></td>
+                                    <th class="text-center">ID</th>
+                                    <th>Order No</th>
                                     <th>Customer </th>
                                     <th>Product Info</th>
                                     <th>Price</th>
@@ -115,8 +118,15 @@
                             <tbody id="orderTableBody">
                                 @foreach ($orders as $key => $order)
                                 <tr>
-                                    <td><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td>
-                                    <td>{{$key+1}}</td>
+                                    <td class="text-center"><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td>
+                                    <td class="text-center">
+                                        {{$key+1}}
+                                        @if ($order->steadfastorder)
+                                        <br>
+                                        <img src="{{asset('admin/assets/imgs/logo.svg')}}" alt="steadfast" width="60px"
+                                        style="margin-top: 5px;">
+                                        @endif
+                                    </td>
                                      <td>
                                         <small >Order No.: #{{$order->id}}</small><br>
                                         Date: <small >{{ $order->created_at->format('d-m-Y') }}</small>
@@ -131,7 +141,6 @@
                                             </div>
                                         </a>
                                     </td>
-
                                     <td>
                                         <div class="order-items-container">
                                             @foreach ($order->order_item as $key => $item)
@@ -188,14 +197,28 @@
                                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                             <div class="dropdown-menu">
 
-                                                <a class="dropdown-item" href="{{route('order.steadfast.place_order', ['id' => $order->id])}}">Send SteadFast</a>
+                                                {{-- steadfast button --}}
+                                                @if ($order->steadfastorder)
+                                                <a class="dropdown-item" href="{{route('order.steadfast.statusCheck', ['id' => $order->id])}}" >
+                                                    <img src="{{asset('admin/assets/imgs/steadfast.png')}}" alt="steadfast" width="20px"
+                                                    style="margin-top: 5px;">SteadFast Order</a>
+                                                @else
+                                                <a class="dropdown-item" href="{{route('order.steadfast.place_order', ['id' => $order->id])}}">
+                                                    <img src="{{asset('admin/assets/imgs/steadfast.png')}}" alt="steadfast" width="20px"
+                                                    style="margin-top: 5px;">Send to Courier</a>
+                                                @endif
+
+                                                {{-- Action Button --}}
                                                 @if($order->is_pos == 0 )
                                                 <a class="dropdown-item" href="{{route('order.track', ['id' => $order->id])}}">Track me</a>
                                                 @endif
+                                                {{-- invoice --}}
                                                 @if($order->is_pos == 1 )
-                                                <a class="dropdown-item" href="{{ url('/dashboard/pos/invoice/'.$order->id) }}" target="__blank">Invoice</a>
+                                                <a class="dropdown-item" href="{{ url('/dashboard/pos/invoice/'.$order->id) }}" target="__blank">
+                                                    <i class="fas fa-file-invoice"></i>Invoice</a>
                                                 @else
-                                                <a class="dropdown-item" href="{{ url('/orders/invoice/'.$order->id) }}" target="__blank">Invoice</a>
+                                                <a class="dropdown-item" href="{{ url('/orders/invoice/'.$order->id) }}" target="__blank">
+                                                    <i class="fas fa-file-invoice"></i>Invoice</a>
                                                 @endif
 
                                             </div>
@@ -213,6 +236,7 @@
         </div>
 
     </div>
+
 
 @endsection
 
@@ -291,8 +315,8 @@
                 },
                 success: function(response) {
                     // Handle success, if needed
+                    location.reload();
                     console.log(response);
-                    // location.reload();
                 },
                 error: function(error) {
                     // Handle error, if needed
