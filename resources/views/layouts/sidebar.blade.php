@@ -214,9 +214,13 @@
             </li>
 
             <li class="menu-item {{ request()->is('dashboard/inventory') ? 'active' : '' }}">
-                <a class="menu-link" href="{{route('inventory')}}">
-                    <i class="icon material-icons md-store"></i>
-                    <span class="text">Inventory</span> </a>
+                <div class="submenu">
+                    <a href="{{ route('inventory.item') }}">Item Wise</a>
+
+                    <a href="{{route('inventory.size')}}">
+                        <span class="text">Size Wise</span>
+                    </a>
+                </div>
             </li>
         </ul>
         <hr>

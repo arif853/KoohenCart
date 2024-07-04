@@ -61,14 +61,14 @@
                                 <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="#" class="btn btn-sm font-sm btn-warning rounded mr-5">
+                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-warning rounded mr-5">
                                         Add / Edit Permissions
                                     </a>
-                                    <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
+                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
                                     data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
-                                    <a href="#" class="btn btn-sm font-sm btn-light rounded delete d-none">
+                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-light rounded delete d-none">
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>
                                 </form>
@@ -76,7 +76,7 @@
                                 <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="#" class="btn btn-sm font-sm btn-warning rounded mr-5">
+                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-warning rounded mr-5">
                                         Add / Edit Permissions
                                     </a>
                                     <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit mr-5"

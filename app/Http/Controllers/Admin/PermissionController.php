@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
@@ -30,7 +31,16 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|unique:permissions,name'
+        ]);
+
+        Permission::create([
+            'name' => strtolower($request->name),
+        ]);
+
+        Session::flash('success','Permission Created Successfully.');
+        return response()->json(['status'=> 200]);
     }
 
     /**
@@ -44,17 +54,26 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Permission $permission)
     {
-        //
+        return response()->json(['status' => 200, 'permission' => $permission]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Permission $permission)
     {
-        //
+        $request->validate([
+            'permission_name' => 'required|string|unique:permissions,name'
+        ]);
+
+        $permission->update([
+            'name' => strtolower($request->name),
+        ]);
+
+        Session::flash('success', 'Permission Updated Successfully.');
+        return response()->json(['status' => 200]);
     }
 
     /**
@@ -62,6 +81,25 @@ class PermissionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $role = Permission::find($id);
+        $role->delete();
+        Session::flash('success','Permission deleted Successfully.');
+
+        return redirect()->back();
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $selectedPermissions = $request->input('selected_permissions');
+
+        if ($selectedPermissions) {
+            Permission::whereIn('id', $selectedPermissions)->delete();
+            Session::flash('success', 'Selected permissions deleted successfully.');
+        } else {
+            Session::flash('error', 'No permissions selected for deletion.');
+        }
+
+        return redirect()->back();
+    }
+
 }

@@ -5,7 +5,7 @@
     <div class="modal-dialog modal-dialog-centered ">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel">Update Permission</h4>
+          <h4 class="modal-title" id="permissionUpdateModalLabel">Update Permission</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         {{-- <div class="category_form" id="category_form"></div> --}}
@@ -13,6 +13,9 @@
             @csrf
             <input type="hidden" name="permission_id" id="permission_id">
             <div class="modal-body">
+                <p class="mb-4"><span class="text-warning">* Warning: </span> Make a permission name like <span class="text-warning">Type + ( Permission For )</span>.
+                    You can add 4 types of permission ( Create, Update, Delete, View ). If you need other type contact technical team. <br>
+                    <span class="text-success">Example: ( Create Order or Update Order )</span>
                 <div class="row g-3">
                     <div class="col-md-12 mb-2">
                         <label for="permission_name" class="form-label">Permission Name<span class="text-danger">*</span></label>

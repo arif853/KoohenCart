@@ -42,9 +42,22 @@
 
             </div>
             <div class="card-body">
+                <p class="mb-4"><span class="text-warning">* Warning: </span> Make a permission name like <span class="text-warning">Type + ( Permission For )</span>.
+                    You can add 4 types of permission ( Create, Update, Delete, View ). If you need other type contact technical team. <br>
+                    <span class="text-success">Example: ( Create Order or Update Order )</span>
+
+                    {{-- Bulk Delete btn --}}
+                    <form id="bulkDeleteForm" method="POST" action="{{ route('permissions.bulkDelete') }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-danger mb-4 delete" id="bulkDeleteButton" style="display: none;">Delete Selected</button>
+                    </form>
                 <table id="" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th>
+                                <input type="checkbox" id="selectAll">
+                            </th>
                             <th>#</th>
                             <th>Permission Name</th>
                             <th>Action</th>
@@ -53,6 +66,9 @@
                     <tbody>
                         @foreach ($permissions as $key => $permission)
                         <tr>
+                            <td>
+                                <input type="checkbox" name="selected_permissions[]" value="{{$permission->id }}" class="selectCheckbox">
+                            </td>
                             <td>{{$key + 1}}</td>
                             <td>{{$permission->name}}</td>
 
@@ -70,14 +86,12 @@
                                     </a>
                                 </form>
                                 @else
-                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$permission->id.'/delete') }}" method="post">
+                                <form class="deleteForm" action="{{ url('/dashboard/permissions/'.$permission->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="#" class="btn btn-sm font-sm btn-warning rounded mr-5">
-                                        Add / Edit Permissions
-                                    </a>
+
                                     <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit mr-5"
-                                    data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-permission-id="{{ $permission->id}}">
+                                    data-bs-toggle="modal" data-bs-target="#permissionUpdateModal" data-permission-id="{{ $permission->id}}">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
                                     <a href="#" class="btn btn-sm font-sm btn-light rounded delete">
@@ -96,6 +110,41 @@
     </div>
 </div>
 
+<script>
+    document.getElementById('selectAll').addEventListener('change', function(e) {
+        let checkboxes = document.querySelectorAll('.selectCheckbox');
+        checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+        toggleBulkDeleteButton();
+    });
+
+    document.querySelectorAll('.selectCheckbox').forEach(checkbox => {
+        checkbox.addEventListener('change', toggleBulkDeleteButton);
+    });
+
+    function toggleBulkDeleteButton() {
+        let selected = document.querySelectorAll('.selectCheckbox:checked').length;
+        document.getElementById('bulkDeleteButton').style.display = selected > 0 ? 'block' : 'none';
+    }
+
+    document.getElementById('bulkDeleteButton').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('bulkDeleteForm').submit();
+            }
+        });
+    });
+</script>
+
 @include('admin.user-role.permission.edit')
 @include('admin.user-role.permission.create')
 
@@ -103,49 +152,41 @@
 @push('product')
 <script>
 
-    // Edit ROle
+// $(document).ready(function{
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+        // Edit permission
     $(document).on('click', '.edit', function (e) {
         e.preventDefault();
-        var roleId = $(this).data('role-id');
-        // console.log(categoryId);
+        var permissionId = $(this).data('permission-id');
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var editURL = "{{url('')}}"+ '/dashboard/roles/'+roleId+'/edit';
+        var editURL = "{{url('')}}"+ '/dashboard/permissions/'+permissionId+'/edit';
         // console.log(editURL);
 
         $.ajax({
             url: editURL,
             method: 'GET',
             data: {
-                id: roleId,
+                id: permissionId,
             },
             success: function (response) {
-                console.log(response);
-                $('#role_id').val(response.role.id);
-                $('#role_name').val(response.role.name);
+                $('#permission_id').val(response.permission.id);
+                $('#permission_name').val(response.permission.name);
             }
         });
     });
 
-    //Store Roles
+    //Store permissions
     $("#permissionStoreForm").submit(function (e) {
         e.preventDefault();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         const data = new FormData(this);
         // console.log(data);
         $.ajax({
-            url: '{{url('/dashboard/roles')}}',
+            url: '{{url('/dashboard/permissions')}}',
             method: 'post',
             data: data,
             cache: false,
@@ -156,10 +197,6 @@
                     // $("#sliderEditModal").modal('hide');
                     location.reload();
                 }
-                // else{
-                //     $.Notification.autoHideNotify('danger', 'top right', 'Danger', res.responseJSON.errors.name[0]);
-                //     $("#sliderEditModal").modal('hide');
-                // }
             },
             error: function (xhr, textStatus, errorThrown) {
                 $.Notification.autoHideNotify('danger', 'top right', 'Danger', xhr.responseJSON.errors.name[0]);
@@ -169,14 +206,15 @@
     });
 
     //Update Role
-    $("#roleUpdateForm").submit(function (e) {
+    $("#permissionUpdateForm").submit(function (e) {
         e.preventDefault();
         const data = new FormData(this);
-        var roleId = $('#role_id').val();
-        // console.log(roleId);
+        var permissionId = $('#permission_id').val();
+        console.log(permissionId);
+        console.log(data);
 
         $.ajax({
-            url: '{{url('dashboard/roles/')}}'+'/'+roleId,
+            url: '{{url('dashboard/permissions/')}}'+'/'+permissionId,
             method: 'post',
             data: data,
             cache: false,
@@ -221,5 +259,7 @@
             });
         });
     });
+// });
+
 </script>
 @endpush

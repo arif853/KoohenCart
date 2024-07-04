@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -83,6 +84,57 @@ class RoleController extends Controller
         $role->delete();
         Session::flash('success','Role deleted Successfully.');
 
+        return redirect()->back();
+    }
+
+    public function addPermission($roleId)
+    {
+        function parsePermissionName($permissionName)
+        {
+            $actions = ['CREATE', 'UPDATE', 'DELETE', 'VIEW'];
+            foreach ($actions as $action) {
+                if (strpos($permissionName, $action) !== false) {
+                    $category = trim(str_replace($action, '', $permissionName));
+                    return [
+                        'action' => $action,
+                        'category' => $category,
+                    ];
+                }
+            }
+            return [
+                'action' => 'Other',
+                'category' => $permissionName,
+            ];
+        }
+
+        $role = Role::findOrFail($roleId);
+        $permissions = Permission::get();
+
+        $groupedPermissions = $permissions->groupBy(function ($permission) {
+            $parsed = parsePermissionName($permission->name);
+            return $parsed['category']; // Group by category
+        })->map(function ($group) {
+            return $group->groupBy(function ($permission) {
+                $parsed = parsePermissionName($permission->name);
+                return $parsed['action']; // Group by action within category
+            });
+        });
+        // $rolePermission = $role->permissions->pluck('name');
+        $rolePermission = $role->permissions;
+
+        return view('admin.user-role.give-role-permission',compact('role','permissions','groupedPermissions','rolePermission'));
+    }
+
+    public function addPermissionToRole(Request $request, $roleId)
+    {
+        $request->validate([
+            'permission' => 'required',
+        ]);
+
+        $role = Role::findById($roleId);
+        $role->syncPermissions($request->permission);
+
+        Session::flash('success','Permission Assigned successfully');
         return redirect()->back();
     }
 }

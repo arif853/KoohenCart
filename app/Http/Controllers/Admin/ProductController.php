@@ -30,6 +30,15 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+        // examples:
+        $this->middleware(['role:Admin','permission:CREATE PRODUCT']);
+        // $this->middleware(['role_or_permission:Admin|CREATE PRODUCT']);
+        // or with specific guard
+        // $this->middleware(['role_or_permission:manager|edit articles,api']);
+    }
     /**
      * Display a listing of the resource.
      */

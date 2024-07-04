@@ -9,9 +9,13 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         {{-- <div class="category_form" id="category_form"></div> --}}
-        <form id="permissionStoreForm">
+        <form id="permissionStoreForm" >
             @csrf
             <div class="modal-body">
+                <p class="mb-4"><span class="text-warning">* Warning: </span> Make a permission name like <span class="text-warning">Type + ( Permission For )</span>.
+                    You can add 4 types of permission ( Create, Update, Delete, View ). If you need other type contact technical team. <br>
+                    <span class="text-success">Example: ( Create Order or Update Order )</span>
+                   </p>
                 <div class="row g-3">
                     <div class="col-md-12 mb-2">
                         <label for="name" class="form-label">Permission Name<span class="text-danger">*</span></label>

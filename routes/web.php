@@ -242,6 +242,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     // Products
     Route::controller(ProductController::class)->middleware('auth')->group(function () {
+        // ->middleware(['permission:VIEW PRODUCT'])
         Route::get('/dashboard/products', 'index')->name('products.index');
         Route::get('/dashboard/products/create', 'create')->name('products.create');
         Route::post('/dashboard/products/store', 'store')->name('products.store');
@@ -481,14 +482,20 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::delete('/dashboard/users/{userId}/delete', 'destroy');
 
     });
-    // user role permission
-    Route::resource('/dashboard/roles', RoleController::class);
-    Route::post('/dashboard/roles/{role}', [RoleController::class, 'update']);
-    Route::delete('/dashboard/roles/{id}/delete', [RoleController::class, 'destroy']);
 
-    Route::resource('/dashboard/permissions', PermissionController::class);
-    Route::post('/dashboard/permissions/{permission}',[PermissionController::class, 'update']);
-    Route::delete('/dashboard/permissions/{id}/delete',[PermissionController::class, 'destroy']);
+    // user role permission
+    Route::resource('/dashboard/roles', RoleController::class)->middleware('auth');
+    Route::post('/dashboard/roles/{role}', [RoleController::class, 'update'])->middleware('auth');
+    Route::delete('/dashboard/roles/{id}/delete', [RoleController::class, 'destroy'])->middleware('auth');
+
+    Route::get('/dashboard/roles/{roleId}/give-permissions',[RoleController::class, 'addPermission'])->middleware('auth');
+    Route::put('/dashboard/roles/{roleId}/give-permissions',[RoleController::class, 'addPermissionToRole'])->middleware('auth');
+
+    Route::resource('/dashboard/permissions', PermissionController::class)->middleware('auth');
+    Route::post('/dashboard/permissions/{permission}',[PermissionController::class, 'update'])->middleware('auth');
+    Route::delete('/dashboard/permissions/{id}/delete',[PermissionController::class, 'destroy'])->middleware('auth');
+    Route::delete('/dashboard/permissions/bulk-delete', [PermissionController::class, 'bulkDelete'])->name('permissions.bulkDelete');
+
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
