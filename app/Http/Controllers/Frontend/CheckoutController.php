@@ -419,6 +419,14 @@ class CheckoutController extends Controller
 
     public function success(Request $request)
     {
+        echo "Transaction is Successful";
+
+        $tran_id = $request->input('tran_id');
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+
+        $sslc = new SslCommerzNotification();
+
         $order_id = $request->input('value_a');
         if (!$order_id) {
             return redirect()->route('order.fail')->withErrors(['error' => 'Invalid Order ID']);
@@ -435,8 +443,9 @@ class CheckoutController extends Controller
         } else {
             return redirect()->route('order.fail')->withErrors(['error' => 'Transaction not found']);
         }
-
-        return redirect()->route('thankyou')->with(['success' => 'Your order has been placed, Payment successful.']);
+        Log::alert('Payment success');
+        dd($order_id, $transaction, $sslc);
+        // return redirect()->route('thankyou')->with(['success' => 'Your order has been placed, Payment successful.']);
     }
 
 

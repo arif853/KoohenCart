@@ -47,7 +47,7 @@
 
                     <div class="card">
                         <div class="card-header alert alert-primary">
-                            <h4 class="">{{ $category }}</h4>
+                            <h4 class=" uppercase">{{ $category }}</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">

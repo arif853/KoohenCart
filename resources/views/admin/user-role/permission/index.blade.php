@@ -52,7 +52,7 @@
                         @method('DELETE')
                         <button type="button" class="btn btn-danger mb-4 delete" id="bulkDeleteButton" style="display: none;">Delete Selected</button>
                     </form>
-                <table id="" class="table table-striped table-bordered" style="width:100%">
+                <table id="datatable" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>

@@ -133,6 +133,17 @@
     @stack('offers')
     @stack('transaction')
 
+    @if(session('error'))
+        <script>
+        $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '{{ session('error') }}',
+                });
+            });
+        </script>
+    @endif
 
     <script>
         $(document).ready(function() {
@@ -353,6 +364,7 @@
             </script>
         @endforeach
     @endif
+
 </body>
 
 </html>

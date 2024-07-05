@@ -91,7 +91,7 @@ class RoleController extends Controller
     {
         function parsePermissionName($permissionName)
         {
-            $actions = ['CREATE', 'UPDATE', 'DELETE', 'VIEW'];
+            $actions = ['create', 'update', 'delete', 'view'];
             foreach ($actions as $action) {
                 if (strpos($permissionName, $action) !== false) {
                     $category = trim(str_replace($action, '', $permissionName));

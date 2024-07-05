@@ -191,24 +191,24 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     Route::post('/dashboard/mark-notification-as-read', [DashboardController::class,'markNotificationAsRead'])->middleware(['auth', 'verified'])->name('markNotificationAsRead');
 
     //Brands
-    Route::controller(BrandController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/brands', 'index')->name('brands.index');
-        Route::get('/dashboard/brands/create', 'create')->name('brands.create');
-        Route::post('/dashboard/brands/store', 'store')->name('brands.store');
-        Route::get('/dashboard/brands/edit', 'edit')->name('brands.edit');
-        Route::post('/dashboard/brands/update', 'update')->name('brands.update');
-        Route::delete('/dashboard/brands/destroy/{id}', 'destroy')->name('brands.destroy');
+    Route::controller(BrandController::class)->middleware(['auth','handle.auth.exception'])->group(function () {
+        Route::get('/dashboard/brands', 'index')->middleware(['permission:view brand'])->name('brands.index');
+        Route::get('/dashboard/brands/create', 'create')->middleware(['permission:create brand'])->name('brands.create');
+        Route::post('/dashboard/brands/store', 'store')->middleware(['permission:create brand'])->name('brands.store');
+        Route::get('/dashboard/brands/edit', 'edit')->middleware(['permission:update brand'])->name('brands.edit');
+        Route::post('/dashboard/brands/update', 'update')->middleware(['permission:update brand'])->name('brands.update');
+        Route::delete('/dashboard/brands/destroy/{id}', 'destroy')->middleware(['permission:delete brand'])->name('brands.destroy');
 
     });
 
     //Category
     Route::controller(CategoryController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/category', 'index')->name('category.index');
-        Route::get('/dashboard/category/create', 'create')->name('category.create');
-        Route::post('/dashboard/category/store', 'store')->name('category.store');
-        Route::get('/dashboard/category/edit', 'edit')->name('category.edit');
-        Route::post('/dashboard/category/update', 'update')->name('category.update');
-        Route::delete('/dashboard/category/destroy/{id}', 'destroy')->name('category.destroy');
+        Route::get('/dashboard/category', 'index')->middleware(['permission:view category'])->name('category.index');
+        Route::get('/dashboard/category/create', 'create')->middleware(['permission:create category'])->name('category.create');
+        Route::post('/dashboard/category/store', 'store')->middleware(['permission:create category'])->name('category.store');
+        Route::get('/dashboard/category/edit', 'edit')->middleware(['permission:update category'])->name('category.edit');
+        Route::post('/dashboard/category/update', 'update')->middleware(['permission:update category'])->name('category.update');
+        Route::delete('/dashboard/category/destroy/{id}', 'destroy')->middleware(['permission:delete category'])->name('category.destroy');
 
     });
 
@@ -226,31 +226,31 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Varient
     Route::controller(VarientController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/varient', 'index')->name('varient.index');
+        Route::get('/dashboard/varient', 'index')->middleware(['permission:view varient'])->name('varient.index');
         //color
-        Route::post('/dashboard/varient/color_store', 'color_store')->name('color.store');
-        Route::get('/dashboard/varient/color_edit', 'color_edit')->name('color.edit');
-        Route::post('/dashboard/varient/color_update', 'color_update')->name('color.update');
-        Route::delete('/dashboard/varient/color_destroy/{id}', 'color_destroy')->name('color.destroy');
-        //size
-        Route::post('/dashboard/varient/size_store', 'size_store')->name('size.store');
-        Route::get('/dashboard/varient/size_edit', 'size_edit')->name('size.edit');
-        Route::post('/dashboard/varient/size_update', 'size_update')->name('size.update');
-        Route::delete('/dashboard/varient/size_destroy/{id}', 'size_destroy')->name('size.destroy');
+        Route::post('/dashboard/varient/color_store', 'color_store')->middleware(['permission:create varient'])->name('color.store');
+        Route::get('/dashboard/varient/color_edit', 'color_edit')->middleware(['permission:update varient'])->name('color.edit');
+        Route::post('/dashboard/varient/color_update', 'color_update')->middleware(['permission:update varient'])->name('color.update');
+        Route::delete('/dashboard/varient/color_destroy/{id}', 'color_destroy')->middleware(['permission:delete varient'])->name('color.destroy');
+        //size->middleware(['permission:delete category'])
+        Route::post('/dashboard/varient/size_store', 'size_store')->middleware(['permission:create varient'])->name('size.store');
+        Route::get('/dashboard/varient/size_edit', 'size_edit')->middleware(['permission:update varient'])->name('size.edit');
+        Route::post('/dashboard/varient/size_update', 'size_update')->middleware(['permission:update varient'])->name('size.update');
+        Route::delete('/dashboard/varient/size_destroy/{id}', 'size_destroy')->middleware(['permission:delete varient'])->name('size.destroy');
 
     });
 
     // Products
     Route::controller(ProductController::class)->middleware('auth')->group(function () {
         // ->middleware(['permission:VIEW PRODUCT'])
-        Route::get('/dashboard/products', 'index')->name('products.index');
-        Route::get('/dashboard/products/create', 'create')->name('products.create');
-        Route::post('/dashboard/products/store', 'store')->name('products.store');
-        Route::get('/dashboard/products/edit/{id}', 'edit')->name('products.edit');
-        Route::patch('/dashboard/products/update/{id}', 'update')->name('products.update');
-        Route::delete('/dashboard/products/destroy/{id}', 'destroy')->name('products.destroy');
-        Route::delete('/dashboard/products/image_destroy/{id}', 'image_destroy')->name('productsimage.destroy');
-        Route::delete('/dashboard/products/thumb_destroy/{id}', 'thumb_destroy')->name('productsthumb.destroy');
+        Route::get('/dashboard/products', 'index')->middleware(['permission:view product'])->name('products.index');
+        Route::get('/dashboard/products/create', 'create')->middleware(['permission:create product'])->name('products.create');
+        Route::post('/dashboard/products/store', 'store')->middleware(['permission:create product'])->name('products.store');
+        Route::get('/dashboard/products/edit/{id}', 'edit')->middleware(['permission:update product'])->name('products.edit');
+        Route::patch('/dashboard/products/update/{id}', 'update')->middleware(['permission:update product'])->name('products.update');
+        Route::delete('/dashboard/products/destroy/{id}', 'destroy')->middleware(['permission:delete product'])->name('products.destroy');
+        Route::delete('/dashboard/products/image_destroy/{id}', 'image_destroy')->middleware(['permission:delete product'])->name('productsimage.destroy');
+        Route::delete('/dashboard/products/thumb_destroy/{id}', 'thumb_destroy')->middleware(['permission:delete product'])->name('productsthumb.destroy');
 
         Route::get('/dashboard/products/{slug}', 'show')->name('products.show');
         Route::post('/dashboard/products/filter', 'ProductFilter')->name('products.filter');
@@ -263,17 +263,17 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Order
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/orders', 'index')->name('order.index');
-        Route::get('/dashboard/orders/pending_order', 'pending_order')->name('order.pending');
-        Route::get('/dashboard/orders/completed_order', 'completed_order')->name('order.completed');
+        Route::get('/dashboard/orders', 'index')->middleware(['permission:view order'])->name('order.index');
+        Route::get('/dashboard/orders/pending_order', 'pending_order')->middleware(['permission:view order'])->name('order.pending');
+        Route::get('/dashboard/orders/completed_order', 'completed_order')->middleware(['permission:view order'])->name('order.completed');
         Route::get('/dashboard/orders/orders_track', 'order_track')->name('order.track');
-        Route::get('/dashboard/orders/orders_details', 'order_details')->name('order.details');
-        Route::get('/dashboard/orders/orders_return', 'order_return')->name('order.return');
+        Route::get('/dashboard/orders/orders_details', 'order_details')->middleware(['permission:view order'])->name('order.details');
+        Route::get('/dashboard/orders/orders_return', 'order_return')->middleware(['permission:view order'])->name('order.return');
         Route::post('/update-order-status', 'updateOrderStatus');
         Route::post('/update-one-order-status', 'updateOneOrderStatus');
 
         // Invoice
-        Route::get('/orders/invoice/{id}', 'orderInvoice')->name('order.invoice');
+        Route::get('/orders/invoice/{id}', 'orderInvoice')->middleware(['permission:view invoice'])->name('order.invoice');
         Route::get('/orders/invoice-page/{id}', 'invoicePage')->name('invoice');
 
         //filter
@@ -287,14 +287,14 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/get-size-options', 'getSizeOptions');
 
         //Update order
-        Route::post('/dashboard/orders/order_update', 'orderUpdate')->name('order.update');
-        Route::post('/dashboard/orders/orderitem_delete', 'deleteOrderItem')->name('orderItem.delete');
-        Route::get('/dashboard/orders/newProductDetails', 'newProductDetails')->name('newproduct.details');
-        Route::post('/dashboard/orders/newProductStore', 'newProductStore')->name('newProduct.store');
+        Route::post('/dashboard/orders/order_update', 'orderUpdate')->middleware(['permission:update order'])->name('order.update');
+        Route::post('/dashboard/orders/orderitem_delete', 'deleteOrderItem')->middleware(['permission:update order'])->name('orderItem.delete');
+        Route::get('/dashboard/orders/newProductDetails', 'newProductDetails')->middleware(['permission:update order'])->name('newproduct.details');
+        Route::post('/dashboard/orders/newProductStore', 'newProductStore')->middleware(['permission:update order'])->name('newProduct.store');
 
-        Route::post('/dashboard/orders/steadfast-bulk-order', 'bulk_order')->name('order.steadfast.bulk_order');
-        Route::get('/dashboard/orders/steadfast-order/{id}', 'place_order')->name('order.steadfast.place_order');
-        Route::get('/dashboard/orders/steadfast-order/status/{id}', 'steadfastOrderStatus')->name('order.steadfast.statusCheck');
+        Route::post('/dashboard/orders/steadfast-bulk-order', 'bulk_order')->middleware(['permission:create courier'])->name('order.steadfast.bulk_order');
+        Route::get('/dashboard/orders/steadfast-order/{id}', 'place_order')->middleware(['permission:create courier'])->name('order.steadfast.place_order');
+        Route::get('/dashboard/orders/steadfast-order/status/{id}', 'steadfastOrderStatus')->middleware(['permission:view courier'])->name('order.steadfast.statusCheck');
 
     });
 
@@ -569,9 +569,9 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     // SSLCOMMERZ Start
 
-    Route::post('/success', [CheckoutController::class],'success')->name('sslcommerz.success');
-    Route::post('/fail', [CheckoutController::class],'fail')->name('sslcommerz.fail');
-    Route::post('/cancel', [CheckoutController::class],'cancel')->name('sslcommerz.cancel');
+    // Route::post('/success', [CheckoutController::class],'success')->name('sslcommerz.success');
+    // Route::post('/fail', [CheckoutController::class],'fail')->name('sslcommerz.fail');
+    // Route::post('/cancel', [CheckoutController::class],'cancel')->name('sslcommerz.cancel');
     Route::post('/ipn-listener', [CheckoutController::class],'ipnListener')->name('ipn-listener');
 
     Route::match(['get', 'post'],'/thankyou',function(){
@@ -584,11 +584,11 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     // Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     // Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
-    // Route::post('/success', [SslCommerzPaymentController::class, 'success']);
-    // Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
-    // Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+    Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+    Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+    Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
 
-    // Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+    Route::post('/ipn-listener', [SslCommerzPaymentController::class, 'ipn']);
     //SSLCOMMERZ END
 
 

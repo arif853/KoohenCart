@@ -69,7 +69,7 @@ class PermissionController extends Controller
         ]);
 
         $permission->update([
-            'name' => strtolower($request->name),
+            'name' => strtolower($request->permission_name),
         ]);
 
         Session::flash('success', 'Permission Updated Successfully.');
