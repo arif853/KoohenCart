@@ -37,7 +37,7 @@ class RoleController extends Controller
         ]);
 
         Role::create([
-            'name' => $request->name,
+            'name' => strtolower($request->name),
         ]);
         Session::flash('success','Role Added Successfully.');
         return response()->json(['status'=> 200]);
@@ -65,11 +65,11 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $request->validate([
-            'role_name' => 'required|string|unique:roles,name'
+            'role_name' => 'required|string'
         ]);
 
         $role->update([
-            'name' => $request->role_name,
+            'name' => strtolower($request->role_name),
         ]);
 
         Session::flash('success', 'Role Updated Successfully.');

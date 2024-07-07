@@ -47,7 +47,7 @@
                     <span class="text-success">Example: ( Create Order or Update Order )</span>
 
                     {{-- Bulk Delete btn --}}
-                    <form id="bulkDeleteForm" method="POST" action="{{ route('permissions.bulkDelete') }}">
+                    <form id="bulkDeleteForm" method="POST" action="{{ route('permissions.bulk_delete') }}">
                         @csrf
                         @method('DELETE')
                         <button type="button" class="btn btn-danger mb-4 delete" id="bulkDeleteButton" style="display: none;">Delete Selected</button>
@@ -74,7 +74,7 @@
 
                             <td>
                                 @if($permission->name =='Super Admin')
-                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$permission->id.'/delete') }}" method="post">
+                                <form class="deleteForm" action="{{ url('/dashboard/permissions/'.$permission->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
@@ -111,38 +111,40 @@
 </div>
 
 <script>
-    document.getElementById('selectAll').addEventListener('change', function(e) {
-        let checkboxes = document.querySelectorAll('.selectCheckbox');
-        checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-        toggleBulkDeleteButton();
-    });
+    // document.getElementById('selectAll').addEventListener('change', function(e) {
+    //     let checkboxes = document.querySelectorAll('.selectCheckbox');
+    //     checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+    //     toggleBulkDeleteButton();
+    // });
 
-    document.querySelectorAll('.selectCheckbox').forEach(checkbox => {
-        checkbox.addEventListener('change', toggleBulkDeleteButton);
-    });
+    // document.querySelectorAll('.selectCheckbox').forEach(checkbox => {
+    //     checkbox.addEventListener('change', toggleBulkDeleteButton);
+    // });
 
-    function toggleBulkDeleteButton() {
-        let selected = document.querySelectorAll('.selectCheckbox:checked').length;
-        document.getElementById('bulkDeleteButton').style.display = selected > 0 ? 'block' : 'none';
-    }
+    // function toggleBulkDeleteButton() {
+    //     let selected = document.querySelectorAll('.selectCheckbox:checked').length;
+    //     document.getElementById('bulkDeleteButton').style.display = selected > 0 ? 'block' : 'none';
+    // }
 
-    document.getElementById('bulkDeleteButton').addEventListener('click', function(event) {
-        event.preventDefault();
+    // document.getElementById('bulkDeleteButton').addEventListener('click', function(event) {
+    //     event.preventDefault();
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('bulkDeleteForm').submit();
-            }
-        });
-    });
+    //     form = this.closest('form');
+
+    //     Swal.fire({
+    //         title: 'Are you sure?',
+    //         text: 'You won\'t be able to revert this!',
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Yes, delete it!'
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             form.submit();
+    //         }
+    //     });
+    // });
 </script>
 
 @include('admin.user-role.permission.edit')
@@ -151,8 +153,30 @@
 @endsection
 @push('product')
 <script>
+$(document).ready(function() {
 
-// $(document).ready(function{
+    $('#selectAll').on('change', function() {
+        $('.selectCheckbox').prop('checked', this.checked);
+        // toggleBulkDeleteButton();
+    });
+
+    $('.selectCheckbox').on('change', function() {
+        if ($('.selectCheckbox:checked').length === $('.selectCheckbox').length) {
+            $('#selectAll').prop('checked', true);
+        } else {
+            $('#selectAll').prop('checked', false);
+        }
+        // toggleBulkDeleteButton();
+    });
+
+    function toggleBulkDeleteButton() {
+        if ($('.selectCheckbox:checked').length > 0) {
+            $('#bulkDeleteButton').show();
+        } else {
+            $('#bulkDeleteButton').hide();
+        }
+    }
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -237,28 +261,124 @@
         })
     });
 
-    document.querySelectorAll('.delete').forEach(function (element) {
-        element.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent the default link behavior
+    $('.delete').on('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
 
-            var form = this.closest('form');
+        var form = $(this).closest('form');
+        var url = form.attr('action');
+        var row = $(this).closest('tr');
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                // If confirmed, submit the corresponding form
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    data: form.serialize(),
+                    success: function(response) {
+                        Swal.fire(
+                            'Deleted!',
+                            response.success,
+                            'success'
+                        );
+                        row.remove(); // Remove the row from the table
+                    },
+                    error: function(response) {
+                        Swal.fire(
+                            'Error!',
+                            'There was an error deleting the permission.',
+                            'error'
+                        );
+                    }
+                });
+            }
         });
     });
+
+    $('#bulkDeleteButton').on('click', function(event) {
+        event.preventDefault(); // Prevent the default button behavior
+
+        var form = $('#bulkDeleteForm');
+        var url1 = form.attr('action');
+        console.log(url1);
+
+        var selectedPermissions = [];
+        $('.selectCheckbox:checked').each(function() {
+            selectedPermissions.push($(this).val());
+            console.log(selectedPermissions);
+        });
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete them!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url1,
+                    type: 'DELETE',
+                    data: {
+                        '_token': $('input[name="_token"]').val(),
+                        'selected_permissions': selectedPermissions
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            'Deleted!',
+                            response.success,
+                            'success'
+                        );
+                        $('.selectCheckbox:checked').closest('tr').remove(); // Remove selected rows from the table
+                        $('#selectAll').prop('checked', false); // Uncheck the select all checkbox
+                        toggleBulkDeleteButton(); // Hide the bulk delete button
+                    },
+                    error: function(response) {
+                        Swal.fire(
+                            'Error!',
+                            'There was an error deleting the permissions.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+});
+// $(document).ready(function{
+
+
+    // document.querySelectorAll('.delete').forEach(function (element) {
+    //     element.addEventListener('click', function (event) {
+    //         event.preventDefault(); // Prevent the default link behavior
+
+    //         var form = this.closest('form');
+
+    //         Swal.fire({
+    //             title: 'Are you sure?',
+    //             text: 'You won\'t be able to revert this!',
+    //             icon: 'warning',
+    //             showCancelButton: true,
+    //             confirmButtonColor: '#3085d6',
+    //             cancelButtonColor: '#d33',
+    //             confirmButtonText: 'Yes, delete it!'
+    //         }).then((result) => {
+    //             // If confirmed, submit the corresponding form
+    //             if (result.isConfirmed) {
+    //                 form.submit();
+    //             }
+    //         });
+    //     });
+    // });
 // });
 
 </script>

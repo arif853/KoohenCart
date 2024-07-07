@@ -65,7 +65,7 @@ class PermissionController extends Controller
     public function update(Request $request, Permission $permission)
     {
         $request->validate([
-            'permission_name' => 'required|string|unique:permissions,name'
+            'permission_name' => 'required|string'
         ]);
 
         $permission->update([
@@ -76,30 +76,36 @@ class PermissionController extends Controller
         return response()->json(['status' => 200]);
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $permissionIds = $request->input('selected_permissions');
+        dd($permissionIds);
+        // Permission::whereIn('id', $permissionIds)->delete();
+
+        // if ($request->ajax()) {
+        //     return response()->json(['success' => 'Permissions deleted successfully.']);
+        // }
+
+        // Session::flash('success', 'Permissions deleted successfully.');
+        // return redirect()->back();
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        $role = Permission::find($id);
-        $role->delete();
-        Session::flash('success','Permission deleted Successfully.');
+        $permission = Permission::find($id);
+        $permission->delete();
 
-        return redirect()->back();
-    }
-
-    public function bulkDelete(Request $request)
-    {
-        $selectedPermissions = $request->input('selected_permissions');
-
-        if ($selectedPermissions) {
-            Permission::whereIn('id', $selectedPermissions)->delete();
-            Session::flash('success', 'Selected permissions deleted successfully.');
-        } else {
-            Session::flash('error', 'No permissions selected for deletion.');
+        if (request()->ajax()) {
+            return response()->json(['success' => 'Permission deleted successfully.']);
         }
 
+        Session::flash('success','Permission deleted Successfully.');
         return redirect()->back();
     }
+
+
 
 }

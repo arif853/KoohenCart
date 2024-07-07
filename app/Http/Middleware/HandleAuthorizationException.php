@@ -18,8 +18,8 @@ class HandleAuthorizationException
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            return $next($request);
             Log::info('all good.');
+            return $next($request);
         } catch (AuthorizationException $e) {
             // Redirect back with a flash message
             Log::error('Error',$e->getMessage());

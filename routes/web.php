@@ -191,13 +191,13 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     Route::post('/dashboard/mark-notification-as-read', [DashboardController::class,'markNotificationAsRead'])->middleware(['auth', 'verified'])->name('markNotificationAsRead');
 
     //Brands
-    Route::controller(BrandController::class)->middleware(['auth','handle.auth.exception'])->group(function () {
-        Route::get('/dashboard/brands', 'index')->middleware(['permission:view brand'])->name('brands.index');
-        Route::get('/dashboard/brands/create', 'create')->middleware(['permission:create brand'])->name('brands.create');
-        Route::post('/dashboard/brands/store', 'store')->middleware(['permission:create brand'])->name('brands.store');
-        Route::get('/dashboard/brands/edit', 'edit')->middleware(['permission:update brand'])->name('brands.edit');
-        Route::post('/dashboard/brands/update', 'update')->middleware(['permission:update brand'])->name('brands.update');
-        Route::delete('/dashboard/brands/destroy/{id}', 'destroy')->middleware(['permission:delete brand'])->name('brands.destroy');
+    Route::controller(BrandController::class)->middleware('auth')->group(function () {
+        Route::get('/dashboard/brands', 'index')->middleware(['permission:view brand','handle.auth.exception'])->name('brands.index');
+        Route::get('/dashboard/brands/create', 'create')->middleware(['permission:create brand','handle.auth.exception'])->name('brands.create');
+        Route::post('/dashboard/brands/store', 'store')->middleware(['permission:create brand','handle.auth.exception'])->name('brands.store');
+        Route::get('/dashboard/brands/edit', 'edit')->middleware(['permission:update brand','handle.auth.exception'])->name('brands.edit');
+        Route::post('/dashboard/brands/update', 'update')->middleware(['permission:update brand','handle.auth.exception'])->name('brands.update');
+        Route::delete('/dashboard/brands/destroy/{id}', 'destroy')->middleware(['permission:delete brand','handle.auth.exception'])->name('brands.destroy');
 
     });
 
@@ -474,13 +474,12 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     // User Managment
-    Route::controller(UserController::class)->middleware('auth')->group(function(){
-        Route::get('/dashboard/users/index', 'index')->name('users.index');
-        Route::post('/dashboard/users/store', 'store')->name('users.store');
-        Route::get('/dashboard/users/edit', 'edit')->name('users.edit');
-        Route::post('/dashboard/users/update', 'update')->name('users.update');
-        Route::delete('/dashboard/users/{userId}/delete', 'destroy');
-
+    Route::controller(UserController::class)->middleware(['auth', 'role:Super Admin|admin'])->group(function(){
+        Route::get('/dashboard/users/index', 'index')->middleware(['permission:view user'])->name('users.index');
+        Route::post('/dashboard/users/store', 'store')->middleware(['permission:create user'])->name('users.store');
+        Route::get('/dashboard/users/edit', 'edit')->middleware(['permission:update user'])->name('users.edit');
+        Route::post('/dashboard/users/update', 'update')->middleware(['permission:update user'])->name('users.update');
+        Route::delete('/dashboard/users/{userId}/delete', 'destroy')->middleware(['permission:delete user']);
     });
 
     // user role permission
@@ -494,7 +493,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     Route::resource('/dashboard/permissions', PermissionController::class)->middleware('auth');
     Route::post('/dashboard/permissions/{permission}',[PermissionController::class, 'update'])->middleware('auth');
     Route::delete('/dashboard/permissions/{id}/delete',[PermissionController::class, 'destroy'])->middleware('auth');
-    Route::delete('/dashboard/permissions/bulk-delete', [PermissionController::class, 'bulkDelete'])->name('permissions.bulkDelete');
+    Route::delete('/dashboard/permissions/bulkdelete', [PermissionController::class, 'bulkDelete'])->name('permissions.bulk_delete');
 
 
     Route::middleware('auth')->group(function () {
