@@ -46,8 +46,12 @@
                     @foreach($groupedPermissions as $category => $types)
 
                     <div class="card">
-                        <div class="card-header alert alert-primary">
+                        <div class="card-header alert alert-primary d-flex justify-content-between">
                             <h4 class=" uppercase">{{ $category }}</h4>
+                            <label class=" uppercase" for="selectall_{{$category}}">
+                                <input type="checkbox" name="" id="selectall_{{$category}}" class="select_All me-1" data-category="{{$category}}">
+                                Select ALL
+                            </label>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -59,9 +63,12 @@
                                             <input type="checkbox" name="permission[]"
                                             id="permission_{{$permission->id}}"
                                             value="{{$permission->name}}"
+                                            data-category="{{$category}}"
                                             @if(in_array($permission->id, $rolePermission->pluck('pivot.permission_id')->toArray())) checked @endif
                                             >
-                                            {{ $permission->name }}
+                                            <span class=" uppercase">
+                                                {{ $permission->name }}
+                                            </span>
                                             <br>
                                         </label>
                                     </div>
@@ -86,5 +93,29 @@
 @endsection
 
 @push('product')
+<script>
+    $(document).ready(function() {
+        function updateSelectAll(category) {
+            var allChecked = $(`input[type='checkbox'][data-category='${category}']:not(.select_All)`).length === $(`input[type='checkbox'][data-category='${category}']:not(.select_All):checked`).length;
+            $(`#selectall_${category}`).prop('checked', allChecked);
+        }
 
+        $('.select_All').change(function() {
+            var category = $(this).data('category');
+            var checkboxes = $(`input[type='checkbox'][data-category='${category}']:not(.select_All)`);
+            checkboxes.prop('checked', $(this).prop('checked'));
+        });
+
+        $('input[type="checkbox"]:not(.select_All)').change(function() {
+            var category = $(this).data('category');
+            updateSelectAll(category);
+        });
+
+        // Initialize the state of the select all checkboxes on page load
+        $('.select_All').each(function() {
+            var category = $(this).data('category');
+            updateSelectAll(category);
+        });
+    });
+</script>
 @endpush

@@ -300,37 +300,35 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Customer
     Route::controller(CustomerController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/customers', 'index')->name('customer.index');
+        Route::get('/dashboard/customers', 'index')->middleware(['permission:view customer'])->name('customer.index');
         Route::get('/dashboard/customers/create_customer', 'create')->name('customer.create');
-        Route::get('/dashboard/customers/Customer_profile', 'customer_details')->name('customer.profile');
+        Route::get('/dashboard/customers/Customer_profile', 'customer_details')->middleware(['permission:view customer'])->name('customer.profile');
         // Route::get('/dashboard/category/create', 'create')->name('category.create');
         Route::get('/dashboard/customers/customer_filter', 'CustomerFilter')->name('customer.filter');
 
-        Route::get('/dashboard/customer/edit','edit')->name('admincustomer.edit');
-        Route::post('/dashboard/customer/update','update')->name('admincustomer.update');
-        Route::delete('/dashboard/customer/destroy', 'destroy')->name('customer.destroy');
+        Route::get('/dashboard/customer/edit','edit')->middleware(['permission:update customer'])->name('admincustomer.edit');
+        Route::post('/dashboard/customer/update','update')->middleware(['permission:delete customer'])->name('admincustomer.update');
+        Route::delete('/dashboard/customer/destroy', 'destroy')->middleware(['permission:delete customer'])->name('customer.destroy');
     });
 
     //offers
     Route::controller(OfferController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/promotion/offers', 'index')->name('offers.index');
+        Route::get('/dashboard/promotion/offers', 'index')->middleware(['permission:view offer'])->name('offers.index');
         Route::post('/dashboard/promotion/create_offers', 'create_offer_type')->name('offerstype.create');
-        Route::post('/dashboard/promotion/offers_data', 'SaveOfferData')->name('offer.saved');
-        Route::get('/dashboard/promotion/edit_offers_data', 'EditOfferData')->name('offer.edit');
-        Route::post('/dashboard/promotion/update_offers_data', 'UpdateOfferData')->name('offer.update');
-        Route::delete('/dashboard/promotion/offers_data', 'delteOfferData')->name('offer.destroy');
+        Route::post('/dashboard/promotion/offers_data', 'SaveOfferData')->middleware(['permission:create offer'])->name('offer.saved');
+        Route::get('/dashboard/promotion/edit_offers_data', 'EditOfferData')->middleware(['permission:update offer'])->name('offer.edit');
+        Route::post('/dashboard/promotion/update_offers_data', 'UpdateOfferData')->middleware(['permission:update offer'])->name('offer.update');
+        Route::delete('/dashboard/promotion/offers_data', 'delteOfferData')->middleware(['permission:delete offer'])->name('offer.destroy');
     });
 
     //Coupons
     Route::controller(CouponController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/promotion/coupons', 'index')->name('coupon.index');
-        Route::get('/dashboard/promotion/coupons/create', 'create')->name('coupon.create');
-        Route::post('/dashboard/promotion/coupons/save', 'store')->name('coupon.store');
-        Route::get('/dashboard/promotion/coupons-edit/{id}', 'edit')->name('coupon.edit');
-        Route::put('/dashboard/promotion/coupons-update/{id}', 'update')->name('coupon.update');
-        Route::delete('/dashboard/promotion/coupons-destroy', 'destroy')->name('coupon.destroy');
-        // Route::get('/dashboard/customers/Customer_profile', 'customer_details')->name('customer.profile');
-        // Route::get('/dashboard/category/create', 'create')->name('category.create');
+        Route::get('/dashboard/promotion/coupons', 'index')->middleware(['permission:view coupon'])->name('coupon.index');
+        Route::get('/dashboard/promotion/coupons/create', 'create')->middleware(['permission:create coupon'])->name('coupon.create');
+        Route::post('/dashboard/promotion/coupons/save', 'store')->middleware(['permission:create coupon'])->name('coupon.store');
+        Route::get('/dashboard/promotion/coupons-edit/{id}', 'edit')->middleware(['permission:update coupon'])->name('coupon.edit');
+        Route::put('/dashboard/promotion/coupons-update/{id}', 'update')->middleware(['permission:update coupon'])->name('coupon.update');
+        Route::delete('/dashboard/promotion/coupons-destroy', 'destroy')->middleware(['permission:delete coupon'])->name('coupon.destroy');
     });
 
     //Media
@@ -344,12 +342,12 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //supplier
     Route::controller(SupplierController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/supplier', 'index')->name('supplier.index');
-        Route::post('/dashboard/supplier/store', 'store')->name('supplier.store');
-        Route::get('/dashboard/supplier/edit', 'edit')->name('supplier.edit');
-        Route::post('/dashboard/supplier/update', 'update')->name('supplier.update');
-        Route::delete('/dashboard/supplier/destroy', 'destroy')->name('supplier.destroy');
-        Route::get('/dashboard/supplier/filter', 'SupplierFilter')->name('supplier.filter');
+        Route::get('/dashboard/supplier', 'index')->middleware(['permission:view supplier'])->name('supplier.index');
+        Route::post('/dashboard/supplier/store', 'store')->middleware(['permission:create supplier'])->name('supplier.store');
+        Route::get('/dashboard/supplier/edit', 'edit')->middleware(['permission:create supplier'])->name('supplier.edit');
+        Route::post('/dashboard/supplier/update', 'update')->middleware(['permission:update supplier'])->name('supplier.update');
+        Route::delete('/dashboard/supplier/destroy', 'destroy')->middleware(['permission:update supplier'])->name('supplier.destroy');
+        Route::get('/dashboard/supplier/filter', 'SupplierFilter')->middleware(['permission:delete supplier'])->name('supplier.filter');
     });
 
     //setting
@@ -373,30 +371,30 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Feature category
     Route::controller(FeatureCategoryController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/category_feature', 'index')->name('category_feature');
-        Route::post('/dashboard/category_feature/store', 'store')->name('category_feature.store');
-        Route::get('/dashboard/category_feature/edit', 'edit')->name('category_feature.edit');
-        Route::post('/dashboard/category_feature/update', 'update')->name('category_feature.update');
+        Route::get('/dashboard/category_feature', 'index')->middleware(['permission:view featurecategory'])->name('category_feature');
+        Route::post('/dashboard/category_feature/store', 'store')->middleware(['permission:create featurecategory'])->name('category_feature.store');
+        Route::get('/dashboard/category_feature/edit', 'edit')->middleware(['permission:update featurecategory'])->name('category_feature.edit');
+        Route::post('/dashboard/category_feature/update', 'update')->middleware(['permission:update featurecategory'])->name('category_feature.update');
         // Route::match(['get', 'post'], '/dashboard/zone/status_update/{id}', 'status_update')->name('zonestatus.update');
-        Route::delete('/dashboard/category_feature/destroy', 'destroy')->name('category_feature.destroy');
+        Route::delete('/dashboard/category_feature/destroy', 'destroy')->middleware(['permission:delete featurecategory'])->name('category_feature.destroy');
     });
 
 
     // Feature product
     Route::controller(FeatureProductsController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/product_feature', 'index')->name('product_feature');
-        Route::post('/dashboard/product_feature/store', 'store')->name('product_feature.store');
-        Route::get('/dashboard/product_feature/edit', 'edit')->name('product_feature.edit');
-        Route::post('/dashboard/product_feature/update', 'update')->name('product_feature.update');
+        Route::get('/dashboard/product_feature', 'index')->middleware(['permission:view featureproduct'])->name('product_feature');
+        Route::post('/dashboard/product_feature/store', 'store')->middleware(['permission:create featureproduct'])->name('product_feature.store');
+        Route::get('/dashboard/product_feature/edit', 'edit')->middleware(['permission:update featureproduct'])->name('product_feature.edit');
+        Route::post('/dashboard/product_feature/update', 'update')->middleware(['permission:update featureproduct'])->name('product_feature.update');
         // Route::match(['get', 'post'], '/dashboard/zone/status_update/{id}', 'status_update')->name('zonestatus.update');
-        Route::delete('/dashboard/product_feature/destroy', 'destroy')->name('product_feature.destroy');
+        Route::delete('/dashboard/product_feature/destroy', 'destroy')->middleware(['permission:delete featureproduct'])->name('product_feature.destroy');
     });
 
     // Transaction
     Route::controller(TransactionController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/transaction', 'index')->name('transaction.index');
+        Route::get('/dashboard/transaction', 'index')->middleware(['permission:view transaction'])->name('transaction.index');
         Route::get('/dashboard/transaction/payment-info', 'paymentInfo')->name('payment.info');
-        Route::post('/dashboard/transaction/payment-update', 'paymentUpdate')->name('payment.update');
+        Route::post('/dashboard/transaction/payment-update', 'paymentUpdate')->middleware(['permission:update transaction'])->name('payment.update');
         Route::get('/dashboard/transaction/search', 'transactionSearch')->name('transaction.search');
         Route::get('/dashboard/transaction-filter', 'transactionFilter')->name('transaction.filter');
 
@@ -404,45 +402,45 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Slider
     Route::controller(SliderController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/setting/slider', 'index')->name('slider');
-        Route::post('/dashboard/setting/slider/store', 'store')->name('slider.store');
-        Route::get('/dashboard/setting/slider/edit', 'edit')->name('slider.edit');
-        Route::post('/dashboard/setting/slider/update', 'update')->name('slider.update');
-        Route::delete('/dashboard/setting/slider/destroy/{id}', 'destroy')->name('slider.destroy');
+        Route::get('/dashboard/setting/slider', 'index')->middleware(['permission:view slider'])->name('slider');
+        Route::post('/dashboard/setting/slider/store', 'store')->middleware(['permission:create slider'])->name('slider.store');
+        Route::get('/dashboard/setting/slider/edit', 'edit')->middleware(['permission:update slider'])->name('slider.edit');
+        Route::post('/dashboard/setting/slider/update', 'update')->middleware(['permission:update slider'])->name('slider.update');
+        Route::delete('/dashboard/setting/slider/destroy/{id}', 'destroy')->middleware(['permission:delete slider'])->name('slider.destroy');
     });
 
     //ads route
     Route::controller(AdsController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/setting/ads', 'index')->name('ads');
-        Route::post('/dashboard/setting/ads/store', 'store')->name('ads.store');
-        Route::get('/dashboard/setting/ads/edit', 'edit')->name('ads.edit');
-        Route::post('/dashboard/setting/ads/update', 'update')->name('ads.update');
-        Route::delete('/dashboard/setting/ads/destroy/{id}', 'destroy')->name('ads.destroy');
-        Route::get('/dashboard/setting/ads/update-status','UpdateStatus')->name('update.status');
+        Route::get('/dashboard/setting/ads', 'index')->middleware(['permission:view advertisement'])->name('ads');
+        Route::post('/dashboard/setting/ads/store', 'store')->middleware(['permission:create advertisement'])->name('ads.store');
+        Route::get('/dashboard/setting/ads/edit', 'edit')->middleware(['permission:update advertisement'])->name('ads.edit');
+        Route::post('/dashboard/setting/ads/update', 'update')->middleware(['permission:update advertisement'])->name('ads.update');
+        Route::delete('/dashboard/setting/ads/destroy/{id}', 'destroy')->middleware(['permission:delete advertisement'])->name('ads.destroy');
+        Route::get('/dashboard/setting/ads/update-status','UpdateStatus')->middleware(['permission:update advertisement'])->name('update.status');
     });
 
 
     //campaign route
     Route::controller(CampaignController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/campaign', 'index')->name('campaign');
-        Route::get('/dashboard/campaign/create', 'create')->name('campaign.create');
-        Route::post('/dashboard/campaign/store', 'store')->name('campaign.store');
-        Route::get('/dashboard/campaign/edit', 'edit')->name('campaign.edit');
-        Route::post('/dashboard/campaign/update/{id}', 'update')->name('campaign.update');
-        Route::delete('/dashboard/campaign/destroy/{id}', 'destroy')->name('campaign.destroy');
-        Route::delete('/dashboard/campaign/camp_item/delete', 'campItemRemove')->name('camp_item.delete');
+        Route::get('/dashboard/campaign', 'index')->middleware(['permission:view campaign'])->name('campaign');
+        Route::get('/dashboard/campaign/create', 'create')->middleware(['permission:create campaign'])->name('campaign.create');
+        Route::post('/dashboard/campaign/store', 'store')->middleware(['permission:create campaign'])->name('campaign.store');
+        Route::get('/dashboard/campaign/edit', 'edit')->middleware(['permission:update campaign'])->name('campaign.edit');
+        Route::post('/dashboard/campaign/update/{id}', 'update')->middleware(['permission:update campaign'])->name('campaign.update');
+        Route::delete('/dashboard/campaign/destroy/{id}', 'destroy')->middleware(['permission:delete campaign'])->name('campaign.destroy');
+        Route::delete('/dashboard/campaign/camp_item/delete', 'campItemRemove')->middleware(['permission:update campaign'])->name('camp_item.delete');
 
     });
 
     //Inventory route
     Route::controller(InventoryController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/inventory/itemwise', 'itemWise')->name('inventory.item');
-        Route::get('/dashboard/inventory/sizewise', 'SizeWise')->name('inventory.size');
-        Route::get('/dashboard/inventory/create', 'create')->name('inventory.create');
+        Route::get('/dashboard/inventory/itemwise', 'itemWise')->middleware(['permission:view inventory'])->name('inventory.item');
+        Route::get('/dashboard/inventory/sizewise', 'SizeWise')->middleware(['permission:view inventory'])->name('inventory.size');
+        Route::get('/dashboard/inventory/create', 'create')->middleware(['permission:create inventory'])->name('inventory.create');
 
         //add new stock
         Route::get('/dashboard/inventory/newstock', 'newstock')->name('new.stock');
-        Route::post('/dashboard/inventory/addstock', 'addstock')->name('add.stock');
+        Route::post('/dashboard/inventory/addstock', 'addstock')->middleware(['permission:create inventory | update inventory'])->name('add.stock');
 
         //inventory Report
         Route::get('/dashboard/inventory/sizewise-report','SizeWiseReport')->name('sizewise.report');
@@ -452,13 +450,13 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //Pos route
     Route::controller(POSController::class)->middleware('auth')->group(function () {
-        Route::get('/dashboard/pos', 'index')->name('pos');
+        Route::get('/dashboard/pos', 'index')->middleware(['permission:view pos'])->name('pos');
         Route::get('/dashboard/search-products', 'searchProducts')->name('search.products');
         Route::get('/dashboard/pos_cart/{id}', 'posCart');
         Route::get('/dashboard/pos_cart/cart_remove/{id}', 'cart_remove');
         Route::get('/dashboard/pos/customer', 'searchcustomer')->name('search.customer');
         Route::get('/dashboard/pos/order_cancel', 'posOrderCancel')->name('pos.cancel');
-        Route::post('/dashboard/pos/store','posOrder')->name('pos.order');
+        Route::post('/dashboard/pos/store','posOrder')->middleware(['permission:create pos'])->name('pos.order');
 
         Route::get('/dashboard/pos_cart/add/{rowId}','increaseQuantity');
         Route::get('/dashboard/pos_cart/remove/{rowId}','decreaseQuantity');
@@ -469,7 +467,7 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     //reports
     Route::controller(ReportController::class)->middleware('auth')->group(function(){
-        Route::get('/dashboard/reports/sale', 'saleReport')->name('sale.report');
+        Route::get('/dashboard/reports/sale', 'saleReport')->middleware(['permission:view report'])->name('sale.report');
         Route::get('/dashboard/report/sale_search', 'searchSale')->name('search.sale');
     });
 
@@ -504,25 +502,25 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     Route::controller(WebSettingController::class)->middleware('auth')->group(function(){
 
-        Route::get('/dashboard/setting/profile/web-info','webInfo')->name('webinfo.index');
-        Route::post('/dashboard/setting/profile/web-info','webInfoUpdate')->name('webinfo.update');
+        Route::get('/dashboard/setting/profile/web-info','webInfo')->middleware(['permission:view websetting'])->name('webinfo.index');
+        Route::post('/dashboard/setting/profile/web-info','webInfoUpdate')->middleware(['permission:update websetting'])->name('webinfo.update');
 
-        Route::get('/dashboard/setting/profile/social-info','socialInfo')->name('socialinfo.index');
-        Route::post('/dashboard/setting/profile/social-info-update', 'SocialInfoUpdate')->name('socialinfo.update');
-        Route::post('/dashboard/setting/profile/social-info-status-update','socialInfoStatusUpdate')->name('socialstatus.update');
+        Route::get('/dashboard/setting/profile/social-info','socialInfo')->middleware(['permission:view websetting'])->name('socialinfo.index');
+        Route::post('/dashboard/setting/profile/social-info-update', 'SocialInfoUpdate')->middleware(['permission:update websetting'])->name('socialinfo.update');
+        Route::post('/dashboard/setting/profile/social-info-status-update','socialInfoStatusUpdate')->middleware(['permission:update websetting'])->name('socialstatus.update');
 
         Route::post('dashboard/profile/seoupdate', 'SEOUpdate')->name('user.SEOUpdate');
 
-        Route::get('/dashboard/setting/contact-info','contactindex')->name('contactinfo.index');
-        Route::get('/dashboard/setting/contact-info/edit','contactInfoEdit')->name('contactinfo.edit');
-        Route::post('/dashboard/setting/contact-info/update','contactInfoUpdate')->name('contactinfo.update');
+        Route::get('/dashboard/setting/contact-info','contactindex')->middleware(['permission:view websetting'])->name('contactinfo.index');
+        Route::get('/dashboard/setting/contact-info/edit','contactInfoEdit')->middleware(['permission:update websetting'])->name('contactinfo.edit');
+        Route::post('/dashboard/setting/contact-info/update','contactInfoUpdate')->middleware(['permission:update websetting'])->name('contactinfo.update');
     });
 
     // About us
     Route::controller(AboutusController::class)->middleware('auth')->group(function(){
-        Route::get('/dashboard/setting/aboutus/', 'index')->name('aboutus.index');
-        Route::get('/dashboard/setting/aboutus/edit', 'edit')->name('aboutus.edit');
-        Route::post('/dashboard/setting/aboutus/update', 'update')->name('aboutus.update');
+        Route::get('/dashboard/setting/aboutus/', 'index')->middleware(['permission:view about'])->name('aboutus.index');
+        Route::get('/dashboard/setting/aboutus/edit', 'edit')->middleware(['permission:update about'])->name('aboutus.edit');
+        Route::post('/dashboard/setting/aboutus/update', 'update')->middleware(['permission:update about'])->name('aboutus.update');
     });
 
     Route::controller(WebmessageController::class)->middleware('auth')->group(function(){

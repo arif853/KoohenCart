@@ -67,7 +67,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($user->hasRole(['Super Admin']))
+                                @if($user->hasRole(['Super Admin']) )
                                 <form class="deleteForm" action="{{ url('/dashboard/users/'.$user->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
@@ -79,7 +79,7 @@
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>
                                 </form>
-                                @else
+                                @elseif ($user->id != auth()->user()->id)
                                 <form class="deleteForm" action="{{ url('/dashboard/users/'.$user->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
