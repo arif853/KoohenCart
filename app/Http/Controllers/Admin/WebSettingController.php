@@ -27,11 +27,13 @@ class WebSettingController extends Controller
     {
         $validatedData = $request->validate([
             'appName' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'Required|string',
             'weblogo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'footerlogo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
             'webfavicon' => 'nullable|mimes:jpeg,png,jpg,ico|max:2048', // Max 2MB
             'marquee' => 'nullable|string|max:255',
-            'copyright' => 'required'
+            'copyright' => 'required',
+            'entitle' => 'nullable|string|max:255'
         ]);
 
         // Handle file uploads
@@ -49,6 +51,22 @@ class WebSettingController extends Controller
             Storage::disk('public')->put($logoPath , (string)$img->encode());
 
             $validatedData['weblogo'] = $logoName;
+        }
+
+        if ($request->hasFile('footerlogo')) {
+
+            $Flogo = $request->file('footerlogo');
+
+            $manager = new ImageManager(new Driver());
+            $FlogoName =  'footer_' . time() .  '.' . $Flogo->getClientOriginalExtension();
+
+            $img = $manager->read($Flogo);
+
+            $logoPath = 'logos/' . $FlogoName;
+
+            Storage::disk('public')->put($logoPath , (string)$img->encode());
+
+            $validatedData['footerlogo'] = $FlogoName;
         }
 
         if ($request->hasFile('webfavicon')) {
@@ -71,6 +89,7 @@ class WebSettingController extends Controller
         // For example:
         WebInfo::updateOrCreate(['id' => $request->user_id], $validatedData);
         Session::flash('success','Your App info updated.');
+
         return redirect()->back();
     }
 

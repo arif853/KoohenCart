@@ -48,7 +48,6 @@ class CampaignController extends Controller
             return $totalStock > 0;
         });
 
-
         return view('admin.campaign.create',compact('products'));
     }
 

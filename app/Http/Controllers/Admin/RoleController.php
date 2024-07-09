@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -39,7 +37,7 @@ class RoleController extends Controller
         ]);
 
         Role::create([
-            'name' => $request->name,
+            'name' => strtolower($request->name),
         ]);
         Session::flash('success','Role Added Successfully.');
         return response()->json(['status'=> 200]);
@@ -67,11 +65,11 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $request->validate([
-            'role_name' => 'required|string|unique:roles,name'
+            'role_name' => 'required|string'
         ]);
 
         $role->update([
-            'name' => $request->role_name,
+            'name' => strtolower($request->role_name),
         ]);
 
         Session::flash('success', 'Role Updated Successfully.');
@@ -88,37 +86,55 @@ class RoleController extends Controller
 
         return redirect()->back();
     }
-    // public function addPermissionToRole($roleId){
-    //     $permissions = Permission::get();
-    //     $role = Role::findOrFail($roleId);
-    //     $rolePermissions = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $role->id)
-    //     ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-    //     ->all();
-    //     return response()->json([
-    //         'role' => $role,
-    //         'permissions' => $permissions,
-    //         'rolePermissions' => $rolePermissions
-    //     ]);
-      
-    // }
-    // public function givePermissionToRole(Request $request, $roleId){
-    //     $rules = [
-    //         'permission' => 'required',
-    //     ];
 
-    //     $customMessages = [
-    //         'permission.required' => 'The permission name field is required.',
-    //     ];
+    public function addPermission($roleId)
+    {
+        function parsePermissionName($permissionName)
+        {
+            $actions = ['create', 'update', 'delete', 'view'];
+            foreach ($actions as $action) {
+                if (strpos($permissionName, $action) !== false) {
+                    $category = trim(str_replace($action, '', $permissionName));
+                    return [
+                        'action' => $action,
+                        'category' => $category,
+                    ];
+                }
+            }
+            return [
+                'action' => 'Other',
+                'category' => $permissionName,
+            ];
+        }
 
-    //     $validator = Validator::make($request->all(), $rules, $customMessages);
+        $role = Role::findOrFail($roleId);
+        $permissions = Permission::get();
 
-    //     // Validate the request
-    //     if ($validator->fails()) {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-    //     $role = Role::findOrFail($roleId);
-    //     $role->syncPermissions($request->permission);
-    //     Session::flash('success', 'Permissions added to role.');
-    //     return redirect()->back();
-    // }
+        $groupedPermissions = $permissions->groupBy(function ($permission) {
+            $parsed = parsePermissionName($permission->name);
+            return $parsed['category']; // Group by category
+        })->map(function ($group) {
+            return $group->groupBy(function ($permission) {
+                $parsed = parsePermissionName($permission->name);
+                return $parsed['action']; // Group by action within category
+            });
+        });
+        // $rolePermission = $role->permissions->pluck('name');
+        $rolePermission = $role->permissions;
+
+        return view('admin.user-role.give-role-permission',compact('role','permissions','groupedPermissions','rolePermission'));
+    }
+
+    public function addPermissionToRole(Request $request, $roleId)
+    {
+        $request->validate([
+            'permission' => 'required',
+        ]);
+
+        $role = Role::findById($roleId);
+        $role->syncPermissions($request->permission);
+
+        Session::flash('success','Permission Assigned successfully');
+        return redirect()->back();
+    }
 }

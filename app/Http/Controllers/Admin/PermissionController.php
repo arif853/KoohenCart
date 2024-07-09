@@ -6,24 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Validator;
 
 class PermissionController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('permission:view permission', ['only' => ['index']]);
-        $this->middleware('permission:create permission', ['only' => ['create', 'store']]);
-        $this->middleware('permission:update permission', ['only' => ['update', 'edit']]);
-        $this->middleware('permission:delete permission', ['only' => ['destroy']]);
-    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $permissions = Permission::get();
-        return view('admin.users.permission.index', ['permissions' => $permissions]);
+        $permissions = Permission::all();
+        return view('admin.user-role.permission.index',compact('permissions'));
     }
 
     /**
@@ -31,7 +23,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('admin.users.permission.create');
+        //
     }
 
     /**
@@ -39,23 +31,16 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name' => 'required|string|unique:permissions,name',
-        ];
-        $customMessages = [
-            'name.required' => 'Need a permission name.',
-        ];
-        $validator = Validator::make($request->all(), $rules, $customMessages);
-        // Validate the request
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            Permission::create([
-                'name' => $request->name,
-            ]);
-        }
-        Session::flash('success', 'Permission created successfully.');
-        return redirect('permissions');
+        $request->validate([
+            'name' => 'required|string|unique:permissions,name'
+        ]);
+
+        Permission::create([
+            'name' => strtolower($request->name),
+        ]);
+
+        Session::flash('success','Permission Created Successfully.');
+        return response()->json(['status'=> 200]);
     }
 
     /**
@@ -71,7 +56,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        return view('admin.users.permission.edit', ['permission' => $permission]);
+        return response()->json(['status' => 200, 'permission' => $permission]);
     }
 
     /**
@@ -79,34 +64,48 @@ class PermissionController extends Controller
      */
     public function update(Request $request, Permission $permission)
     {
-        $rules = [
-            'name' => 'required|string|unique:permissions,name,' . $permission->id,
-        ];
+        $request->validate([
+            'permission_name' => 'required|string'
+        ]);
 
-        $customMessages = [
-            'name.required' => 'Need a permission name.',
-        ];
-        $validator = Validator::make($request->all(), $rules, $customMessages);
-        // Validate the request
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $permission->update([
-                'name' => $request->name,
-            ]);
-        }
-        Session::flash('success', 'Permission updated successfully.');
-        return redirect('permissions');
+        $permission->update([
+            'name' => strtolower($request->permission_name),
+        ]);
+
+        Session::flash('success', 'Permission Updated Successfully.');
+        return response()->json(['status' => 200]);
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $permissionIds = $request->input('selected_permissions');
+        dd($permissionIds);
+        // Permission::whereIn('id', $permissionIds)->delete();
+
+        // if ($request->ajax()) {
+        //     return response()->json(['success' => 'Permissions deleted successfully.']);
+        // }
+
+        // Session::flash('success', 'Permissions deleted successfully.');
+        // return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($permissionId)
+    public function destroy(string $id)
     {
-        $permission = Permission::find($permissionId);
+        $permission = Permission::find($id);
         $permission->delete();
-        Session::flash('success', 'Permission deleted successfully.');
-        return redirect('permissions');
+
+        if (request()->ajax()) {
+            return response()->json(['success' => 'Permission deleted successfully.']);
+        }
+
+        Session::flash('success','Permission deleted Successfully.');
+        return redirect()->back();
     }
+
+
+
 }

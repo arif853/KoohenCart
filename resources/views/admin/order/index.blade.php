@@ -1,7 +1,26 @@
 @extends('layouts.admin')
 @section('title','Orders list')
 @section('content')
+<style>
+    .hidden-item {
+    display: none;
+}
 
+.show-more-container {
+    margin-top: 10px;
+}
+
+.show-more-btn {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+.dropdown-menu .dropdown-item img {
+	max-width: 100% !important;
+	margin-right: 10px;
+}
+</style>
     <div class="content-header">
         <div>
             <h2 class="content-title card-title">Order List </h2>
@@ -58,14 +77,15 @@
                     </form>
 
                 </header>
+
+                <!-- card-header end// -->
+                <div class="card-body">
                     <div class="row gx-3 mt-4">
-                        <div class="col-lg-4 col-md-6 me-auto">
-                            {{-- <input type="text" placeholder="Search..." class="form-control"> --}}
-                        </div>
-                        <div class="col-lg-2 col-md-3 col-6">
-                            <select class="form-select mb-lg-0 mb-15 mw-200 all_order_status"
-                            id="all_order_status" name="all_order_status"
-                            style="display: none; border-color: #088178">
+                        <div class="col-lg-6 col-md-6 me-auto">
+                            <a href="#" id="bulkOrderSend" class="btn btn-brand mb-15" style="display: none; ">Send SteadFast</a>
+                            <select class="form-select mb-lg-0 mb-15 mw-200 all_order_status ml-5 btn"
+                                    id="all_order_status" name="all_order_status"
+                                    style="display: none; border-color: #088178">
 
                                 <option value="0" >Change Status</option>
                                 <option value="pending" style="color: orange;" >Pending</option>
@@ -76,18 +96,17 @@
                                 <option value="returned" style="color: gray;" >Returned</option>
                                 <!--<option value="cancelled" style="color: red;" >Cancelled</option>-->
                             </select>
+                            {{-- <input type="text" placeholder="Search..." class="form-control"> --}}
                         </div>
 
                     </div>
-                <!-- card-header end// -->
-                <div class="card-body">
                     <div class="">
                         <table class="table table-hover" id="datatable">
                             <thead>
                                 <tr>
-                                    <td><input type="checkbox" id="select-all-checkbox"></td>
-                                    <th>ID</th>
-                                   <th>Order No</th>
+                                    <td class="text-center"><input type="checkbox" id="select-all-checkbox"></td>
+                                    <th class="text-center">ID</th>
+                                    <th>Order No</th>
                                     <th>Customer </th>
                                     <th>Product Info</th>
                                     <th>Price</th>
@@ -99,12 +118,19 @@
                             <tbody id="orderTableBody">
                                 @foreach ($orders as $key => $order)
                                 <tr>
-                                    <td><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td>
-                                    <td>{{$key+1}}</td>
+                                    <td class="text-center"><input type="checkbox" class="form-group order-checkbox" value="{{$order->id}}" id="order_checkbox"></td>
+                                    <td class="text-center">
+                                        {{$key+1}}
+                                        @if ($order->steadfastorder)
+                                        <br>
+                                        <img src="{{asset('admin/assets/imgs/logo.svg')}}" alt="steadfast" width="60px"
+                                        style="margin-top: 5px;">
+                                        @endif
+                                    </td>
                                      <td>
                                         <small >Order No.: #{{$order->id}}</small><br>
                                         Date: <small >{{ $order->created_at->format('d-m-Y') }}</small>
-                                        
+
                                     </td>
                                     <td>
                                         <a href="{{route('customer.profile', ['id' => $order->customer->id])}}" class="">
@@ -115,17 +141,27 @@
                                             </div>
                                         </a>
                                     </td>
-
                                     <td>
-                                        @foreach ($order->order_item as $key => $item   )
-                                            {{$key+1}} .
-                                            <span class="text-brand">{{$item->product->product_name}}</span>,
-                                            <span > Size: {{$item->product_sizes->size_name}}</span>,
-                                            @if($item->product_colors)
-                                            <span> Color: {{$item->product_colors->color_name}}</span>,
-                                            @endif
-                                            <span>Quantiy: {{$item->quantity}}</span><br>
-                                        @endforeach
+                                        <div class="order-items-container">
+                                            @foreach ($order->order_item as $key => $item)
+                                                <div class="order-item {{ $key >= 3 ? 'hidden-item' : '' }}">
+                                                    {{ $key+1 }}.
+                                                    <span class="text-brand">{{ $item->product->product_name }}</span>,
+                                                    @if($item->product_sizes)
+                                                    <span>Size: {{ $item->product_sizes->size_name }}</span>,
+                                                    @endif
+                                                    @if($item->product_colors)
+                                                        <span>Color: {{ $item->product_colors->color_name }}</span>,
+                                                    @endif
+                                                    <span>Quantity: {{ $item->quantity }}</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @if(count($order->order_item) > 3)
+                                            <div class="show-more-container text-center">
+                                                <button class="show-more-btn">▼</button>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td>৳{{$order->total}}</td>
                                     <td>৳<span>{{ $order->total_due}}</span></td>
@@ -145,25 +181,48 @@
                                         @else
                                         <div class="status-container">
                                             <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200 order_status" id="order_status" data-order-id="{{ $order->id }}" name="order_status">
-                                            
+
                                                 <option value="completed" style="color: purple;" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
                                                 <option value="returned" style="color: gray;" {{ $order->status == 'returned' ? 'selected' : '' }}>Returned</option>
                                             </select>
                                         </div>
                                         @endif
                                     </td>
-                                    
-                                    <td class="text-end">
-                                        <a href="{{route('order.details', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Detail</a>
-                                         @if($order->is_pos == 0 )
-                                        <a class="btn btn-md rounded font-sm" href="{{route('order.track', ['id' => $order->id])}}">Track me</a>
-                                        @endif
-                                         @if($order->is_pos == 1 )
-                                        <a href="{{ url('/dashboard/pos/invoice/'.$order->id) }}" target="__blank" class="btn btn-facebook rounded font-sm">Invoice</a>
-                                        @else
-                                        <a href="{{ url('/orders/invoice/'.$order->id) }}" target="__blank" class="btn btn-facebook rounded font-sm">Invoice</a>
-                                        @endif
 
+                                    <td class="text-end">
+
+                                        <a href="{{route('order.details', ['id' => $order->id])}}" class="btn btn-md rounded font-sm">Detail</a>
+
+                                        <div class="dropdown">
+                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                            <div class="dropdown-menu">
+
+                                                {{-- steadfast button --}}
+                                                @if ($order->steadfastorder)
+                                                <a class="dropdown-item" href="{{route('order.steadfast.statusCheck', ['id' => $order->id])}}" >
+                                                    <img src="{{asset('admin/assets/imgs/steadfast.png')}}" alt="steadfast" width="20px"
+                                                    style="margin-top: 5px;">SteadFast Order</a>
+                                                @else
+                                                <a class="dropdown-item" href="{{route('order.steadfast.place_order', ['id' => $order->id])}}">
+                                                    <img src="{{asset('admin/assets/imgs/steadfast.png')}}" alt="steadfast" width="20px"
+                                                    style="margin-top: 5px;">Send to Courier</a>
+                                                @endif
+
+                                                {{-- Action Button --}}
+                                                @if($order->is_pos == 0 )
+                                                <a class="dropdown-item" href="{{route('order.track', ['id' => $order->id])}}">Track me</a>
+                                                @endif
+                                                {{-- invoice --}}
+                                                @if($order->is_pos == 1 )
+                                                <a class="dropdown-item" href="{{ url('/dashboard/pos/invoice/'.$order->id) }}" target="__blank">
+                                                    <i class="fas fa-file-invoice"></i>Invoice</a>
+                                                @else
+                                                <a class="dropdown-item" href="{{ url('/orders/invoice/'.$order->id) }}" target="__blank">
+                                                    <i class="fas fa-file-invoice"></i>Invoice</a>
+                                                @endif
+
+                                            </div>
+                                        </div> <!-- dropdown //end -->
                                         <!-- dropdown //end -->
                                     </td>
                                 </tr>
@@ -178,15 +237,23 @@
 
     </div>
 
+
 @endsection
 
 @push('order_status')
 <script>
     $(document).ready(function() {
+
+        $('.show-more-btn').on('click', function() {
+            $(this).closest('td').find('.hidden-item').toggle();
+            $(this).text($(this).text() === '▼' ? '▲' : '▼');
+        });
+
         // Get references to the global and individual checkboxes
         const selectAllCheckbox = document.getElementById('select-all-checkbox');
         const individualCheckboxes = document.querySelectorAll('.order-checkbox');
         const statusSelect = $('#all_order_status');
+        const bulkOrderBtn = $('#bulkOrderSend');
 
         // Add an event listener to the global checkbox
         selectAllCheckbox.addEventListener('change', function () {
@@ -197,6 +264,7 @@
 
             // Show/hide the statusSelect based on the state of the global checkbox
             statusSelect.toggle(selectAllCheckbox.checked);
+            bulkOrderBtn.toggle(selectAllCheckbox.checked);
         });
 
         // Add an event listener to each individual checkbox
@@ -207,17 +275,21 @@
 
                 // Show/hide the statusSelect based on the state of the individual checkboxes
                 statusSelect.toggle([...individualCheckboxes].some(checkbox => checkbox.checked));
+                bulkOrderBtn.toggle([...individualCheckboxes].some(checkbox => checkbox.checked));
             });
         });
 
         $('.order-checkbox').change(function() {
             var orderId = $(this).val();
             var statusSelect = $('#all_order_status');
+            var bulkOrderBtn = $('#bulkOrderSend');
 
             if ($(this).prop('checked')) {
                 statusSelect.show();
+                bulkOrderBtn.show();
             } else {
                 statusSelect.hide();
+                bulkOrderBtn.hide();
             }
         });
 
@@ -225,6 +297,33 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+
+        $('#bulkOrderSend').on('click',function() {
+
+            var selectedOrders = $('.order-checkbox:checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            console.log(selectedOrders);
+            // Perform an AJAX request to update the status of selected orders
+            $.ajax({
+                url: '{{route('order.steadfast.bulk_order')}}',
+                type: 'POST',
+                data: {
+                    orders: selectedOrders
+                },
+                success: function(response) {
+                    // Handle success, if needed
+                    location.reload();
+                    console.log(response);
+                },
+                error: function(error) {
+                    // Handle error, if needed
+                    // location.reload();
+                    console.log(error);
+                }
+            });
         });
 
         $('.all_order_status').change(function() {
@@ -319,7 +418,7 @@
                     },
                     success: function(response) {
                         // Handle success, if needed
-                         console.log(response);
+                        // console.log(response);
 
                         var tableBody = $('#orderTableBody');
                         tableBody.empty(); // Clear existing table rows
@@ -418,11 +517,11 @@
                             // Append more columns as needed
                             tableBody.append(row);
                         });
-                        
+
                         $('.order_status').change(function() {
                             var orderId = $(this).data('order-id');
                             var newStatus = $(this).val();
-                
+
                             console.log(newStatus);
                             console.log(orderId);
                             // Perform an AJAX request to update the status of selected orders

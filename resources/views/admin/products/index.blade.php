@@ -62,9 +62,12 @@
                     <th>Brand</th>
                     <th>Category</th>
                     <th>Stock</th>
+                    <th>Purchase Price</th>
+                    <th>Selling Price</th>
+                    <th>Is_SizeChart</th>
                     <th>overviews</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th width=8%>Action</th>
                 </tr>
             </thead>
             <tbody id="productBody">
@@ -90,6 +93,15 @@
                         {{$product->category->category_name}}
                     </td>
                     <td>{{$product->balance}}</td>
+                    <td>{{$product->raw_price}}</td>
+                    <td>{{$product->regular_price}}</td>
+                    <td>
+                        @if ($product->is_sizechart)
+                            <a href="{{ route('product.sizechart.update', ['id' => $product->id]) }}" class="badge rounded-pill alert-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Click To Remove">Added</a>
+                        @else
+                            <a href="{{ route('product.sizechart.update', ['id' => $product->id]) }}" class="badge rounded-pill alert-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Click To Add">Not Added</a>
+                        @endif
+
                     <td>
                         @foreach ($product->overviews as $overview)
                         <span>{{$overview->overview_name}} {{$overview->overview_value}}</span><br>
@@ -97,11 +109,9 @@
                     </td>
                     <td>
                         @if ($product->status == "active")
-
-                        <span class="badge rounded-pill alert-success">Active</span>
+                        <a href="{{ route('product.status.update', ['id' => $product->id]) }}" class="badge rounded-pill alert-success">Active</a>
                         @else
-                        <span class="badge rounded-pill alert-danger">Inactive</span>
-
+                        <a href="{{ route('product.status.update', ['id' => $product->id]) }}" class="badge rounded-pill alert-danger">Inactive</a>
                         @endif
                     </td>
                     <td class="text-end">

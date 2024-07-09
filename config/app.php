@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://www.koohen.com'),
+    'url' => env('APP_URL', 'http://127.0.0.1:8000'),
 
     'asset_url' => env('ASSET_URL'),
 
@@ -172,7 +172,8 @@ return [
         misterspelik\LaravelPdf\PdfServiceProvider::class,
         Igoshev\Captcha\Providers\CaptchaServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-        Milon\Barcode\BarcodeServiceProvider::class
+        Milon\Barcode\BarcodeServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -192,6 +193,8 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF' => misterspelik\LaravelPdf\Facades\Pdf::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ])->toArray(),
 
 ];

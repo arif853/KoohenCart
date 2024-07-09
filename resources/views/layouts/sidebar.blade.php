@@ -8,7 +8,7 @@
         </div>
     </div>
     <nav>
-        @if(auth()->user()->hasRole(['Super Admin','Admin']))
+        @if(auth()->user()->hasRole(['Super Admin','admin']))
         <ul class="menu-aside">
             <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                 <a class="menu-link" href="{{('/dashboard')}}"> <i class="icon material-icons md-home"></i>
@@ -191,7 +191,7 @@
             </li>
 
         </ul>
-        @elseif(auth()->user()->hasRole(['Manager']))
+        @elseif(auth()->user()->hasRole(['manager']))
         <ul class="menu-aside">
             <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                 <a class="menu-link" href="{{('/dashboard')}}"> <i class="icon material-icons md-home"></i>
@@ -214,9 +214,13 @@
             </li>
 
             <li class="menu-item {{ request()->is('dashboard/inventory') ? 'active' : '' }}">
-                <a class="menu-link" href="{{route('inventory')}}">
-                    <i class="icon material-icons md-store"></i>
-                    <span class="text">Inventory</span> </a>
+                <div class="submenu">
+                    <a href="{{ route('inventory.item') }}">Item Wise</a>
+
+                    <a href="{{route('inventory.size')}}">
+                        <span class="text">Size Wise</span>
+                    </a>
+                </div>
             </li>
         </ul>
         <hr>
@@ -242,7 +246,7 @@
             </li>
 
         </ul>
-        @elseif(auth()->user()->hasRole(['User']))
+        @elseif(auth()->user()->hasRole(['user']))
         <ul class="menu-aside">
             <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                 <a class="menu-link" href="{{('/dashboard')}}"> <i class="icon material-icons md-home"></i>

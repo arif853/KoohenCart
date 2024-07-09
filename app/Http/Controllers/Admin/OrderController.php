@@ -21,10 +21,13 @@ use Illuminate\Validation\Rule;
 use App\Models\Register_customer;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\SteadfastOrder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use SteadFast\SteadFastCourierLaravelPackage\Facades\SteadfastCourier;
 
 class OrderController extends Controller
 {
@@ -39,9 +42,10 @@ class OrderController extends Controller
             'shipping',
             'transaction')
             ->latest('created_at')->get();
-        
+
         return view('admin.order.index',compact('orders'));
     }
+
 
     public function order_track(Request $request)
     {
@@ -115,15 +119,15 @@ class OrderController extends Controller
 
             $orderProducts->push($product);
         }
-        
+
         $items = Products::with(['sizes','colors'])->get();
         // $customer = $order->customer;
         return view('admin.order.order_details',compact('order','orderProducts','district','postOffice','items'));
     }
 
 
-// Multiple order status update 
-  public function updateOrderStatus(Request $request)
+// Multiple order status update
+    public function updateOrderStatus(Request $request)
     {
         $selectedStatus = $request->input('status');
         $selectedOrders = $request->input('orders');
@@ -177,11 +181,11 @@ class OrderController extends Controller
                     }
                 }
             }
-            
+
             if($newStatus == 'returned' && $order->is_pos == 1){
 
                 foreach($order->order_item as $item){
-    
+
                     if($item && $item->size_id){
                         Product_stock::updateOrCreate(
                             [
@@ -205,8 +209,6 @@ class OrderController extends Controller
         return response()->json(['success' => true, ]);
     }
 
-
-    
     // Single Order status update
     public function updateOneOrderStatus(Request $request)
     {
@@ -226,7 +228,7 @@ class OrderController extends Controller
 
         // Update the OrderStatus table
         $statusColumn = $newStatus . '_date_time';
-        
+
         Orderstatus::updateOrCreate(['order_id' => $orderId], ['status' => $newStatus, $statusColumn => Carbon::now()]);
 
 
@@ -303,7 +305,6 @@ class OrderController extends Controller
          return view('admin.order.pending_list',compact('pendingOrders'));
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -374,7 +375,7 @@ class OrderController extends Controller
                     $query->where('phone', 'LIKE', '%' . $customerPhone . '%');
                 });
             }
-            
+
             if ($productSize) {
                 $query->whereHas('order_item.product_sizes', function ($query) use ($productSize) {
                     $query->where('size', 'LIKE', '%' . $productSize . '%');
@@ -423,7 +424,7 @@ class OrderController extends Controller
             return response()->json($orders);
         }
     }
-    
+
     public function completedfilters( Request $request)
     {
         if($request->ajax()) {
@@ -461,7 +462,7 @@ class OrderController extends Controller
         $order_return = Order::with('customer')->where('status','returned')->get();
         return view('admin.order.order_return.index',compact('order_return'));
     }
-    
+
     // Order return confirmation
     public function return_confirm(string $id)
     {
@@ -478,8 +479,8 @@ class OrderController extends Controller
         Session::flash('success', ' Order return confirmation done.');
         return redirect()->back();
     }
-    
-    
+
+
     public function getColorOptions()
     {
         $colors = Color::all();
@@ -491,7 +492,7 @@ class OrderController extends Controller
         $sizes = Size::all();
         return response()->json($sizes);
     }
-    
+
      public function newProductDetails(Request $request){
 
         $productId = $request->input('id');
@@ -641,9 +642,9 @@ class OrderController extends Controller
                 'total_due' => $request->totalDue,
                 'delivery_charge' => $request->deliveryCharge,
             ]);
-            
+
             $transaction = transactions::where('order_id',$order->id)->first();
-            
+
             if($order->total_due == 0)
             {
                 $transaction->update([
@@ -655,14 +656,15 @@ class OrderController extends Controller
                     'status' => 'unpaid',
                 ]);
             }
-            
-            
+
+
             Session::flash('success','Order updated successfully');
 
             return response()->json(['message' => 'Order item updated successfully'], 200);
         }
+
     }
-    
+
     public function deleteOrderItem(Request $request)
     {
         // Retrieve the order item ID from the request
@@ -715,6 +717,109 @@ class OrderController extends Controller
         }
     }
 
-    
+    public function bulk_order(Request $request)
+    {
+
+        $selectedOrders = $request->input('orders');
+
+        $orders = Order::whereIn('id', $selectedOrders)->with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->get();
+
+            $orderDataList = [];
+
+        // Prepare the order data for each selected order
+        foreach ($orders as $order) {
+            $customerName = $order->customer->firstName . ' ' . $order->customer->lastName;
+            $customerAddress = $order->customer->billing_address;
+            $orderDataList[] = [
+                'order_id' => $order->id,
+                'invoice' => $order->invoice_no,
+                'recipient_name' => $customerName,
+                'recipient_phone' => $order->customer->phone,
+                'recipient_address' => $customerAddress,
+                'cod_amount' => $order->total,
+                'note' => $order->comment,
+            ];
+        }
+
+        // Send the bulk order data to the API
+        $responses = SteadfastCourier::bulkCreateOrders($orderDataList);
+
+        // Process each response
+        foreach ($responses['data'] as $res) {
+            if ($res['status'] == 'success') {
+                try {
+                    SteadfastOrder::create([
+                        'order_id' => $res['order_id'],
+                        'consignment_id' => $res['consignment_id'],
+                        'invoice' => $res['invoice'],
+                        'tracking_code' => $res['tracking_code'],
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('SteadFast Error: ' . $e->getMessage());
+                }
+            }
+        }
+
+        Session::flash('success','SteadFast Bulk order Place successfully.');
+        return response()->json($responses);
+        // return view('admin.order.create_bulk_order',compact('order'));
+        // dd($response);
+    }
+
+    public function place_order($id)
+    {
+        $order = Order::with(
+            'customer',
+            'order_item',
+            'shipping',
+            'transaction')
+            ->where('id',$id)->first();
+
+        $customerName = $order->customer->firstName .' ' .$order->customer->lastName;
+        $customerAddress = $order->customer->billing_address;
+
+        $orderData =
+        [
+            'invoice' => $order->invoice_no,
+            'recipient_name' => $customerName,
+            'recipient_phone' => $order->customer->phone,
+            'recipient_address' => $customerAddress,
+            'cod_amount' => $order->total,
+            'note' => $order->comment,
+        ];
+
+        $response = SteadfastCourier::placeOrder($orderData);
+
+        if ($response) {
+            try {
+                $SteadfastOrder = SteadfastOrder::create([
+                    'order_id' => $order->id,
+                    'consignment_id' => $response['consignment']['consignment_id'],
+                    'invoice' => $response['consignment']['invoice'],
+                    'tracking_code' => $response['consignment']['tracking_code'],
+                ]);
+            } catch (\Exception $e) {
+                Log::error('SteadFast Error' . $e->getMessage());
+            }
+        }
+
+        // return view('admin.order.place_order',compact('order'));
+        return redirect()->back()->with('success','Steadfast order created successfully.');
+    }
+
+    public function steadfastOrderStatus($id)
+    {
+        $SteadfastOrder = SteadfastOrder::where('order_id',$id)->first();
+
+        $orderStatus = SteadfastCourier::checkDeliveryStatusByConsignmentId($SteadfastOrder->consignment_id);
+        // $balance = SteadfastCourier::getCurrentBalance();
+
+        return view('admin.order.steadfastorder',compact('orderStatus','SteadfastOrder'));
+    }
 
 }

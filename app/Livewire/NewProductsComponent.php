@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class NewProductsComponent extends Component
 {
     public $Newproducts = [];
-    
+
     public function store($id)
     {
         $product = Products::find($id);
@@ -52,7 +52,7 @@ class NewProductsComponent extends Component
         $this->dispatch('cartRefresh')->to('cart-icon-component');
 
     }
-    
+
     public function AddToWishlist($id){
 
         $product = Products::find($id);
@@ -109,8 +109,8 @@ class NewProductsComponent extends Component
             'subcategory',
             'product_price',
             'product_stocks'
-        ])->latest('created_at')->take(8)->get();
-        
+        ])->where('status','active')->latest('created_at')->take(8)->get();
+
          if(Auth::guard('customer')->check()){
             Cart::instance('wishlist')->store(Auth::guard('customer')->user()->email);
         }

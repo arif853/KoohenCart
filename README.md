@@ -1,66 +1,39 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+#A Complete Ecommerce Website
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
+Koohen is a comprehensive ecommerce platform developed using Laravel, HTML, CSS, and JavaScript. It offers a range of features to facilitate seamless online shopping experiences for both customers and administrators.
 
-## About Laravel
+## Features
+- **Product Management**: Manage products with color and size variants, Brand, Category, ensuring a dynamic catalog presentation.
+- **Point of Sale (POS) System**: Streamline transactions with an intuitive POS interface for in-store operations.
+- **Order and Customer Management**: Easily track and manage orders while maintaining a detailed customer database.
+- **Supplier Management**: Efficiently manage supplier relationships and inventory replenishments.
+- **Product Showcase**: Highlight featured products by category and individual highlights for enhanced visibility.
+- **Basic Sales Reports**: Access insightful sales reports for informed decision-making.
+- **Inventory Management**: Maintain basic inventory control with size-wise stock updates.
+- **Offers and Coupons**: Implement promotional offers and coupons to drive sales and customer engagement.
+- **Campaign and Zone Wise Delivery Charges**: Apply specific delivery charges based on delivery zones and make Campaign for specific products with limited time and price.
+- **Add to Cart and Wishlist**: Allow customers to add items to their cart for later purchase and create wishlists for future reference.
+- **Interactive Customer Login and Registration**: Seamlessly onboard customers with interactive registration and login features.
+- **Cash on Delivery Checkout**: Offer cash on delivery as a payment option during checkout for customer convenience.
+- **Interactive Invoice with Bangla Language**: Generate interactive invoices in Bangla language for a personalized customer experience.
+- **Email Notifications**: Automatically send order confirmation emails to customers and administrators upon order placement.
+- **Order Tracking System**: Provide customers with a unique order tracking ID to monitor their order status.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Installation
+1. Clone the repository: `git clone [repository_url]`
+2. Install dependencies: `composer install && npm install`
+3. Set up your environment variables by renaming `.env.example` to `.env` and configuring accordingly.
+4. Run migrations and seeders: `php artisan migrate --seed`
+5. Generate application key: `php artisan key:generate`
+6. Serve the application: `php artisan serve`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Usage
+- Access the admin panel by visiting `/login` and login with provided credentials.
+- Explore various modules such as product management, order management, etc., from the admin dashboard.
+- Utilize the POS system for in-store transactions.
+- Monitor sales reports for business insights.
 
 ## Contributing
+Contributions are welcome! Please fork the repository and submit pull requests for any enhancements, bug fixes, or new features.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

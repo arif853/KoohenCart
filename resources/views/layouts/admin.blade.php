@@ -53,7 +53,7 @@
         </section> <!-- content-main end// -->
 
         <footer class="main-footer font-xs">
-            <div class="row pb-30 mt-55">
+            <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
                     <script>
                     document.write(new Date().getFullYear())
@@ -131,9 +131,28 @@
     @stack('report')
     @stack('coupons_type')
     @stack('offers')
+    @stack('transaction')
+
+    @if(session('error'))
+        <script>
+        $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '{{ session('error') }}',
+                });
+            });
+        </script>
+    @endif
 
     <script>
         $(document).ready(function() {
+            var tooltipTriggerList = [].slice.call(
+                document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            );
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
 
             $('#notify-counter').click(function(e) {
                 e.preventDefault();
@@ -345,6 +364,7 @@
             </script>
         @endforeach
     @endif
+
 </body>
 
 </html>

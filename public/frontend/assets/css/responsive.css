@@ -1,5 +1,9 @@
 
 @media only screen and (max-width: 768px) {
+    .floating-card {
+        top: 50%;
+        left: 50%;
+    }
     .logo.logo-width-1 {
       margin-right: 0;
     }
@@ -502,6 +506,10 @@
 
   /*small phone*/
   @media only screen and (max-width: 480px) {
+    .floating-card {
+        top: 50%;
+        left: 50%;
+    }
     .post-list .post-thumb {
       max-width: unset;
       margin-right: 0 !important;
@@ -817,10 +825,18 @@
         top: 5px;
         left: 45px;
     }
+    .floating-card {
+        top: 50%;
+        left: 50%;
+    }
   }
 
   /*small phone*/
   @media only screen and (max-width: 375px) {
+    .floating-card {
+        top: 50%;
+        left: 50%;
+    }
     .entry-meta .hit-count, .entry-meta.meta-2 .font-xs {
       display: none;
     }

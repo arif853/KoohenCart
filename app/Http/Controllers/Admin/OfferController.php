@@ -19,11 +19,10 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::latest('id')->with('products', 'OfferType')->get();
+        $offers = Offer::latest('id')->with('products','OfferType')->get();
         $offerType = OfferType::latest('id')->get();
-
         $products = Products::latest('id')->get();
-        return view('admin.offers.index', ['offerType' => $offerType, 'products' => $products, 'offers' => $offers]);
+        return view('admin.offers.index', ['offerType' => $offerType, 'products' => $products,'offers' => $offers]);
     }
 
     /**
@@ -31,6 +30,7 @@ class OfferController extends Controller
      */
     public function create_offer_type(Request $request)
     {
+       
         $rules = [
             'offer_type_name' => 'required|string|max:255',
         ];
@@ -122,20 +122,23 @@ class OfferController extends Controller
     /**
      * Display the specified resource.
      */
-
-    public function editOfferData(Request $request)
+    public function EditOfferData(Request $request)
     {
+        // Get the offer ID from the request
         $offerId = $request->id;
 
-        $offer = Offer::findOrFail($offerId);
+        // Fetch offer data from the database
+        $offer = Offer::find($offerId);
 
-        $relatedProducts = DB::table('product_offer_types')->where('offer_id', $offerId)->join('products', 'products.id', '=', 'product_offer_types.offer_product_id')->select('product_offer_types.offer_product_id AS product_id', 'products.product_name AS ProductName')->get();
+        // Check if offer exists
+        if (!$offer) {
+            return response()->json(['error' => 'Offer not found'], 404);
+        }
 
-        return response()->json([
-            'offer' => $offer,
-            'relatedProducts' => $relatedProducts,
-        ]);
+      
+        return response()->json($offer);
     }
+    
     /**
      * Show the form for editing the specified resource.
      */
@@ -149,53 +152,36 @@ class OfferController extends Controller
      */
     public function UpdateOfferData(Request $request)
     {
-        $rules = [
-            'offer_name' => 'string|max:255',
-            'offer_type_id' => 'integer',
-            'offer_percent' => 'integer',
-        ];
-        $customMessages = [
-            'offer_name.string' => ' Offer Name is a string.',
-            'offer_type_id.integer' => 'Offer Type is a integer.',
-        ];
-        $validator = Validator::make($request->all(), $rules, $customMessages);
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
 
-        // Validate the request
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors()->first(),
-            ]);
-        } else {
-            $from_date = $request->from_date;
-            $to_date = $request->to_date;
-
-            // Calculate days
-            $from_date_dt = new DateTime($from_date);
-            $to_date_dt = new DateTime($to_date);
-            $days_diff = $from_date_dt->diff($to_date_dt)->days;
-            $id = $request->offer_id;
-            $offerItem = Offer::find($id);
-            $offerItem->offer_name = $request->offer_name;
-            $offerItem->offer_percent = $request->offer_percent;
-            $offerItem->offer_type_id = $request->offer_type_id;
-            $offerItem->from_date = $request->from_date;
-            $offerItem->to_date = $request->to_date;
-            $offerItem->day = $days_diff;
-            $offerItem->save();
-            $offerItem->products()->sync($request->input('offer_product_id'));
-            if ($offerItem == true) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Offer Updated Successfully.',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Offer Not Updated.',
-                ]);
-            }
-        }
+        // Calculate days
+        $from_date_dt = new DateTime($from_date);
+        $to_date_dt = new DateTime($to_date);
+        $days_diff = $from_date_dt->diff($to_date_dt)->days;
+        $id = $request->offer_id;
+        $offerItem = Offer::find($id);
+        $offerItem->offer_name = $request->offer_name;
+        $offerItem->offer_percent = $request->offer_percent;
+        $offerItem->offer_type_id = $request->offer_type_id;
+        $offerItem->from_date = $request->from_date;
+        $offerItem->to_date = $request->to_date;
+        $offerItem->day = $days_diff;
+        $offerItem->save();
+        $offerItem->products()->sync($request->input('offer_product_id'));
+       if($offerItem ==true){
+        return response()->json([
+          'status' =>'success',
+          'message' => 'Offer Updated Successfully.',
+        ]);
+       }else{
+        return response()->json([
+         'status' => 'error',
+         'message' => 'Offer Not Updated.',
+        ]);
+       }
+        
+       
     }
 
     /**
@@ -203,11 +189,11 @@ class OfferController extends Controller
      */
     public function delteOfferData(Request $request)
     {
-        try {
-            $offers = Offer::find($request->id);
-            $offers->delete();
-            return redirect()->back()->with('success', 'Item deleted successfully.');
-        } catch (\Exception $e) {
+        try{
+          $offers = Offer::find($request->id);
+          $offers->delete();
+          return redirect()->back()->with('success', 'Item deleted successfully.');
+        }catch(\Exception $e){
             return redirect()->back()->with('danger', 'This item can be deleted.');
         }
     }

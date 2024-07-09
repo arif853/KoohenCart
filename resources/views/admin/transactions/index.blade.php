@@ -52,15 +52,15 @@
 
                         </tr>
                     </thead>
-                    <tbody id="CustomerTable">
+                    <tbody id="transactionTable">
                         @foreach ($data as $key => $list)
                             <tr>
                                 <td>{{$key+1}}</td>
-                                <td> 
+                                <td>
                                 <span>Order ID: {{ $list->order->id }}</span> <br>
                                 Invoice no: <a href="{{route('order.details', ['id' => $list->order->id])}}" class="font-sm">{{$list->order->invoice_no}}</a>
                                 <!--<span style="color: #088178;"> </span>-->
-                                
+
                                 </td>
                                 <td>
                                     <a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}"
@@ -106,7 +106,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $list->created_at->format('d-m-Y') }}</td>
-                               
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -160,7 +160,7 @@
                         <div class="col-md-4">
                             <label for="total" class="form-label">Payment Method</label>
                             <select name="paymentMode" id="paymentMode" class="form-control">
-    
+
                                 <option value="cash">Cash</option>
                                 <option value="cod">Cash On Delivery</option>
                                 <option value="bkash">Bkash</option>
@@ -192,3 +192,182 @@
         </div>
     </div>
 @endsection
+@push('transaction')
+    <script>
+        // Edit customer
+        $(document).on('click', '.pay', function(e) {
+            e.preventDefault();
+            var transId = $(this).data('trans_id');
+            console.log(transId);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '{{url('/dashboard/transaction/payment-info')}}',
+                method: 'GET',
+                data: {
+                    id: transId,
+                },
+                success: function(response) {
+
+                    // console.log(response);
+                    var fullname = response.customer.firstName +' ' +response.customer.lastName;
+                    $('#orderNo').val(response.order_id);
+                    $('#trans_id').val(response.id);
+                    $('#customerName').val(fullname);
+                    $('#total').val(response.order.total);
+                    $('#paid').val(response.order.total_paid);
+                    $('#due').val(response.order.total_due);
+
+
+                    // Enable input field for payment
+                    $('#payment').prop('disabled', false);
+                    $('#payButton').prop('disabled', true);
+
+                    // Add change event listener to payment input field
+                    $('#payment').on('keyup', function() {
+                        var payment = parseFloat($(this).val());
+                        var due = parseFloat($('#due').val());
+                        $('#payButton').prop('disabled', false);
+
+                        if (isNaN(payment) || payment < 0) {
+                            $(this).val('');
+                            $('#payButton').prop('disabled', true); // Disable pay button
+                            return;
+                        }
+
+                        if (payment > due) {
+                            $('#payButton').prop('disabled', true); // Disable pay button
+                            alert('Payment amount cannot exceed due amount.');
+                            $(this).val('');
+                        } else {
+                            $('#payButton').prop('disabled', false); // Enable pay button
+                        }
+                    });
+                }
+            });
+        });
+
+        //Update customer
+        $("#paymentForm").submit(function(e) {
+            e.preventDefault();
+            const data = new FormData(this);
+                console.log(data);
+            $.ajax({
+                url: '{{url('/dashboard/transaction/payment-update')}}',
+                method: 'post',
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    console.log(res);
+                    if (res.status == 200) {
+                        // $("#brandEditForm").modal('hide');
+                        location.reload();
+                        // $.Notification.autoHideNotify('success', 'top right', 'Success', res.message);
+                    } else {
+                        $.Notification.autoHideNotify('danger', 'top right', 'Danger', res.message);
+
+                    }
+                }
+            })
+        });
+
+         $(document).ready(function() {
+
+            function searchHandler() {
+                var loadingIndicator = $('#loading-indicator');
+                var orderId = $('#orderId').val().trim();
+                var customerName = $('#customer').val().trim();
+
+                // Show loading indicator
+                loadingIndicator.show();
+
+                $.ajax({
+                    url: "{{ route('transaction.search') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        orderNo: orderId,
+                        customerName: customerName
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        var tbody = $('#transactionTable');
+                        tbody.empty();
+
+                        if (data.transactions.length === 0) {
+                            tbody.append('<tr><td colspan="9">No products found</td></tr>');
+                        } else {
+                            $.each(data.transactions, function(index, transaction) {
+
+                                var createdDate = new Date(transaction.order.created_at);
+                                var transactionDate = new Date(transaction.updated_at);
+
+                                // Define formatting options
+                                var options = {
+                                    day: '2-digit',   // numeric day with leading zeros
+                                    month: '2-digit', // numeric month with leading zeros
+                                    year: 'numeric'   // full numeric year
+                                };
+
+                                // Format the date
+                                var orderDate = createdDate.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+                                var transDate = transactionDate.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+                                // console.log(formattedDate);
+
+                                if(transaction.status == 'unpaid')
+                                {
+                                    var status = '<span class="badge rounded-pill alert-danger">' + transaction.status + '</span>'+
+                                    '<a class="badge rounded-pill bg-success ml-2 pay" data-bs-toggle="modal" data-bs-target="#makepament" data-trans_id="'+transaction.id+'"> Pay Now</a>';
+                                }else {
+                                    status = '<span class="badge rounded-pill alert-success">' + transaction.status + '</span>';
+                                }
+
+                                var tr = $('<tr>' +
+                                    '<td> Order ID: ' + transaction.order.id + '</td>' +
+                                    '<td>' +
+                                    '<a href="{{ route('customer.profile', ['id' => $list->customer->id]) }}" class="itemside">' +
+                                    '<div class="info pl-3">' +
+                                    '<h6 class="mb-0 title">' + transaction.customer.firstName + ' ' + transaction.customer.lastName + '</h6>' +
+                                    '<small class="text-muted">Customer ID: #' + transaction.customer.id + '</small>' +
+                                    '</div>' +
+                                    '</a>' +
+                                    '</td>' +
+                                    '<td>' + orderDate + '</td>' +
+                                    '<td>' + transaction.order.total + '</td>' +
+                                    '<td>' + transaction.order.total_paid + '</td>' +
+                                    '<td>' + transaction.order.total_due + '</td>' +
+                                    '<td><span class="badge rounded-pill alert-success">' + transaction.mode + '</span></td>' +
+                                    '<td>'+ status +
+                                    '</td>' +
+                                    '<td>' + transDate + '</td>' +
+                                    '</tr>');
+
+                                tbody.append(tr);
+                            });
+                        }
+
+                        // Hide loading indicator after displaying results
+                        loadingIndicator.hide();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching product suggestions:', error);
+                        // Hide loading indicator on error
+                        loadingIndicator.hide();
+                    }
+                });
+            }
+
+            // Call the function for each search input
+            $('#orderId, #customer').on('keyup', function(event) {
+                searchHandler();
+            });
+        });
+
+    </script>
+@endpush

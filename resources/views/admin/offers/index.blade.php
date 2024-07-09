@@ -26,7 +26,29 @@
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card mb-4">
-               
+                <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 mb-lg-0 mb-15 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                        {{-- <div class="col-lg-2 col-6">
+                        <div class="custom_select">
+                            <select class="form-select select-nice">
+                                <option selected>Categories</option>
+                                <option>Technology</option>
+                                <option>Fashion</option>
+                                <option>Home Decor</option>
+                                <option>Healthy</option>
+                                <option>Travel</option>
+                                <option>Auto-car</option>
+                            </select>
+                        </div>
+                    </div> --}}
+                        <div class="col-lg-2 col-6">
+                            <input type="date" class="form-control" name="">
+                        </div>
+                    </div>
+                </header> <!-- card-header end// -->
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -132,6 +154,7 @@
             $('.edit-offer').on('click', function(e) {
                 e.preventDefault();
                 var offerId = $(this).data('offer-id');
+
                 $.ajax({
                     url: '{{url('/dashboard/promotion/edit_offers_data')}}',
                     method: 'GET',
@@ -139,34 +162,26 @@
                         id: offerId,
                     },
                     success: function(response) {
-                       // console.log(response);
-                        $('#offer_name').val(response.offer.offer_name);
-                        $('#offer_id').val(response.offer.id);
-                        $('#OffersName').val(response.offer.offer_name);
-                        $('#offer_percent').val(response.offer.offer_percent);
-                        $('#editOffertype').val(response.offer.offer_type_id);
-                        $('.fDate').val(response.offer.from_date);
-                        $('.toDate').val(response.offer.to_date);
-                        // Reset selected options in the multi-select menu
-                        $('#editOffertype option').prop('selected', false);
-                        // Select the correct offer type
-                        $('#editOffertype option[value="' + response.offer.offer_type_id + '"]')
-                            .prop('selected', true);
-                        // Add the selected products to the multi-select menu
-                        // Reset selected options in the multi-select menu
-                          
-                        $('#offer_product_id_s option').prop('selected', false);
-                            response.relatedProducts.forEach(function(product) {
-                                //console.log(product);
-                                $("#offer_product_id_s option[value='" + product
-                                        .product_id + "'")
-                                    .prop("selected", true);
-                            });
-                            $('#offer_product_id_s').trigger('change');
+                        console.log(response);
+                        $('#offer_name').val
+                        $('#offer_id').val(response.id);
+                        $('#OffersName').val(response.offer_name);
+                        $('#offer_percent').val(response.offer_percent);
+                        $('.fDate').val(response.from_date);
+                        $('.toDate').val(response.to_date);
+                        // Iterate through each option in the select element
+                        $('#editOffertype').find('option').each(function() {
+                            // Check if the value of the option matches the offer_type_id from the response
+                            if ($(this).val() == response.offer_type_id) {
+                                // Set the selected attribute for the matching option
+                                $(this).prop('selected', true);
+                            } else {
+                                // Remove the selected attribute for other options
+                                $(this).prop('selected', false);
+                            }
+                        });
                     }
                 });
-
-
             });
 
             //Update Brand

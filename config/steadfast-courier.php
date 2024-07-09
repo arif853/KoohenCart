@@ -12,8 +12,10 @@ return [
     |
     */
 
-    'base_url' => env('STEADFAST_BASE_URL', ' https://portal.steadfast.com.bd/api/v1'),
+    'base_url' => env('STEADFAST_BASE_URL', 'https://portal.steadfast.com.bd/api/v1'),
+
     'api_key' => env('STEADFAST_API_KEY', 'wp6wnz0lm5f3romt0zo7w5wlwzx0oz0q'),
+
     'secret_key' => env('STEADFAST_SECRET_KEY', 'cbwqozzzghsial4lffpvmwnb'),
 
     /*

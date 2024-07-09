@@ -31,7 +31,7 @@
 
                     <div class="col-md-12 mb-2">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Set user password">
+                        <input type="text" class="form-control" id="password" name="password" placeholder="Set user password">
                         @error('password')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
