@@ -12,6 +12,11 @@ class PreventRequestsDuringMaintenance extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        '/login',
+        '/dashboard',
+        '/logout',
+        '/enable-maintenance-mode',
+        '/disable-maintenance-mode',
+        '/dashboard/*'
     ];
 }

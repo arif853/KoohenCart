@@ -35,7 +35,7 @@
                     {{-- <a href="#" class="btn btn-warning rounded">Permission</a> --}}
                     <button type="button" data-bs-toggle="modal" data-bs-target="#roleModal" class="btn btn-info rounded mr-5 btn-sm">Add Role</button>
                     <a href="{{url('/dashboard/users/index')}}" class="btn btn-success rounded mr-5 btn-sm">Users</a>
-                    <a href="{{url('/dashboard/permissions')}}" class="btn btn-success rounded btn-sm">Permissions</a>
+                    <a href="{{url('/dashboard/users/permissions')}}" class="btn btn-success rounded btn-sm">Permissions</a>
                 </div>
                 <div class="right pull-right">
                 </div>
@@ -58,25 +58,25 @@
 
                             <td>
                                 @if($role->name =='Super Admin')
-                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
+                                <form class="deleteForm" action="{{ url('/dashboard/users/roles/'.$role->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-warning rounded mr-5">
+                                    <a href="{{url('dashboard/users/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-warning rounded mr-5">
                                         Add / Edit Permissions
                                     </a>
-                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
+                                    <a href="{{url('dashboard/users/roles/'.$role->id.'/give-permissions')}}"  class="btn btn-sm font-sm rounded btn-brand edit d-none"
                                     data-bs-toggle="modal" data-bs-target="#roleUpdateModal" data-role-id="{{ $role->id}}">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
-                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-light rounded delete d-none">
+                                    <a href="{{url('dashboard/users/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-light rounded delete d-none">
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>
                                 </form>
                                 @else
-                                <form class="deleteForm" action="{{ url('/dashboard/roles/'.$role->id.'/delete') }}" method="post">
+                                <form class="deleteForm" action="{{ url('/dashboard/users/roles/'.$role->id.'/delete') }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="{{url('dashboard/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-warning rounded mr-5">
+                                    <a href="{{url('dashboard/users/roles/'.$role->id.'/give-permissions')}}" class="btn btn-sm font-sm btn-warning rounded mr-5">
                                         Add / Edit Permissions
                                     </a>
                                     <a href="#"  class="btn btn-sm font-sm rounded btn-brand edit mr-5"
@@ -119,7 +119,7 @@
             }
         });
 
-        var editURL = "{{url('')}}"+ '/dashboard/roles/'+roleId+'/edit';
+        var editURL = "{{url('')}}"+ '/dashboard/users/roles/'+roleId+'/edit';
         // console.log(editURL);
 
         $.ajax({
@@ -149,7 +149,7 @@
         const data = new FormData(this);
         // console.log(data);
         $.ajax({
-            url: '{{url('/dashboard/roles')}}',
+            url: '{{url('/dashboard/users/roles')}}',
             method: 'post',
             data: data,
             cache: false,
@@ -180,7 +180,7 @@
         // console.log(roleId);
 
         $.ajax({
-            url: '{{url('dashboard/roles/')}}'+'/'+roleId,
+            url: '{{url('dashboard/users/roles/')}}'+'/'+roleId,
             method: 'post',
             data: data,
             cache: false,

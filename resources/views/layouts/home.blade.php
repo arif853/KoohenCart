@@ -12,6 +12,7 @@
         $contactinfo = DB::table('contactinfos')->first();
         // echo $description;
     @endphp
+    <title>@yield('title') - {{ config('app.name') }} | YOUR ULTIMATE LIFESTYLE</title>
 
     <meta name="description" content="{{$userData->description}}">
     <meta name="keywords" content="{{$tags}}">
@@ -40,7 +41,6 @@
 
     <meta name="google-site-verification" content="JQkHKHzfb1bWvZnjgXV4fjWaaHeX8G6uY4SsOfP3WTg" />
     <!--কহেন-->
-    <title>@yield('title') - {{ config('app.name') }} | YOUR ULTIMATE LIFESTYLE</title>
 
 
     <!-- Favicon -->
@@ -575,9 +575,6 @@
     <!-- Template  JS -->
     <script src="{{asset('')}}frontend/assets/js/main.js?v=3.4"></script>
     <script src="{{asset('')}}frontend/assets/js/shop.js?v=3.4"></script>
-
-
-
 
     @stack('dashboard')
     @stack('checkout')

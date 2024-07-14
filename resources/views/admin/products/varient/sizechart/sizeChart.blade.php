@@ -2,6 +2,19 @@
 @section('title','Size Chart')
 @section('content')
 
+<style>
+    .header-input-container{
+        position: relative;
+        margin-right: 5px;
+    }
+    .header-delete {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translate(-40%,-50%);
+        color: red
+    }
+</style>
 <div class="content-header">
     <div>
         <h2 class="content-title card-title">Varient List</h2>
@@ -122,7 +135,7 @@
         </div>
 
 
-        <script>
+        {{-- <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const headerContainer = document.getElementById('header-container');
                 const headerRow = document.getElementById('header-row');
@@ -170,12 +183,81 @@
                     }
                 });
             });
-        </script>
+        </script> --}}
     </div>
 </div>
 
 @endsection
 @push('varient')
+<script>
+    $(document).ready(function () {
+        const headerContainer = $('#header-container');
+        const headerRow = $('#header-row');
+        const sizeChartBody = $('#size-chart-body');
+        let headerCount = 0;
 
+        $('#add-header').click(function () {
+            const headerDiv = $('<div>', {
+                class: 'header-input-container d-inline-block mb-2 mr-2'
+            });
+
+            const headerInput = $('<input>', {
+                type: 'text',
+                name: `headers[${headerCount}]`,
+                class: 'form-control d-inline-block header-input',
+                placeholder: 'Header'
+            }).appendTo(headerDiv);
+
+            const deleteButton = $('<button>', {
+                type: 'button',
+                text: 'X',
+                class: 'btn btn-sm ml-2 header-delete'
+            }).appendTo(headerDiv);
+
+            headerDiv.appendTo(headerContainer);
+
+            const th = $('<th>', {
+                text: headerInput.attr('placeholder'),
+                id: `header-th-${headerCount}`
+            }).appendTo(headerRow);
+
+            headerInput.on('input', function () {
+                th.text($(this).val());
+            });
+
+            deleteButton.click(function () {
+                const index = headerInput.attr('name').match(/\d+/)[0];
+                th.remove();
+                $(`input[name^='values'][name$='[${index}]']`).each(function () {
+                    $(this).parent().remove();
+                });
+                headerDiv.remove();
+            });
+
+            const sizes = @json($sizes);
+            $.each(sizes, function (index, size) {
+                const td = $('<td>');
+                const input = $('<input>', {
+                    type: 'text',
+                    name: `values[${size.id}][${headerCount}]`,
+                    class: 'form-control'
+                }).appendTo(td);
+
+                const row = sizeChartBody.find(`tr[data-size-id="${size.id}"]`);
+                if (row.length) {
+                    row.append(td);
+                }
+            });
+
+            headerCount++;
+        });
+
+        $(document).on('click', '.remove-size', function () {
+            $(this).closest('tr').remove();
+        });
+    });
+
+
+</script>
 
 @endpush

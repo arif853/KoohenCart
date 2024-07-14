@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Products;
+use Illuminate\Support\Str;
 use Illuminate\Routing\Router;
 use App\Livewire\CartComponent;
 use App\Livewire\HomeComponent;
@@ -9,9 +10,11 @@ use App\Livewire\OfferComponent;
 use App\Models\Feature_category;
 use App\Livewire\ProductComponent;
 use App\Livewire\CheckoutComponent;
+use Illuminate\Support\Facades\App;
 use App\Livewire\PostOfficeSelector;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\POSController;
@@ -82,6 +85,35 @@ Route::get('/storage_link',function(){
     return redirect()->back()->with('success','Storage link complete!!');
     // return "Storage Linked";
 });
+
+Route::get('/disable-maintenance-mode',
+    function () {
+        Artisan::call( 'up' );
+        // dd(Artisan::output());
+        Session::flash('success','The application maintenance mode turn off.');
+        return response()->json(['status' => 200]);
+    }
+);
+
+Route::get('/enable-maintenance-mode',
+    function () {
+
+        if (App::isDownForMaintenance()) {
+            Session::flash('danger', 'The application is in maintenance mode.');
+            return response()->json(['status' => 200]);
+        } else {
+            $secret = Str::uuid();
+            Artisan::call( 'down', [
+                '--secret' => $secret,
+                '--render' => 'maintenance',
+            ] );
+            Session::flash('warning','The application is set to maintenance mode.');
+            return response()->json(['status' => 200]);
+        }
+    }
+);
+
+
 
 // Frontend Route Start
 
@@ -481,17 +513,17 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     });
 
     // user role permission
-    Route::resource('/dashboard/roles', RoleController::class)->middleware('auth');
-    Route::post('/dashboard/roles/{role}', [RoleController::class, 'update'])->middleware('auth');
-    Route::delete('/dashboard/roles/{id}/delete', [RoleController::class, 'destroy'])->middleware('auth');
+    Route::resource('/dashboard/users/roles', RoleController::class)->middleware('auth');
+    Route::post('/dashboard/users/roles/{role}', [RoleController::class, 'update'])->middleware('auth');
+    Route::delete('/dashboard/users/roles/{id}/delete', [RoleController::class, 'destroy'])->middleware('auth');
 
-    Route::get('/dashboard/roles/{roleId}/give-permissions',[RoleController::class, 'addPermission'])->middleware('auth');
-    Route::put('/dashboard/roles/{roleId}/give-permissions',[RoleController::class, 'addPermissionToRole'])->middleware('auth');
+    Route::get('/dashboard/users/roles/{roleId}/give-permissions',[RoleController::class, 'addPermission'])->middleware('auth');
+    Route::put('/dashboard/users/roles/{roleId}/give-permissions',[RoleController::class, 'addPermissionToRole'])->middleware('auth');
 
-    Route::resource('/dashboard/permissions', PermissionController::class)->middleware('auth');
-    Route::post('/dashboard/permissions/{permission}',[PermissionController::class, 'update'])->middleware('auth');
-    Route::delete('/dashboard/permissions/{id}/delete',[PermissionController::class, 'destroy'])->middleware('auth');
-    Route::delete('/dashboard/permissions/bulkdelete', [PermissionController::class, 'bulkDelete'])->name('permissions.bulk_delete');
+    Route::resource('/dashboard/users/permissions', PermissionController::class)->middleware('auth');
+    Route::post('/dashboard/users/permissions/{permission}',[PermissionController::class, 'update'])->middleware('auth');
+    Route::delete('/dashboard/users/permissions/{id}/delete',[PermissionController::class, 'destroy'])->middleware('auth');
+    Route::delete('/dashboard/users/permissions/bulkdelete', [PermissionController::class, 'bulkDelete'])->name('permissions.bulk_delete');
 
 
     Route::middleware('auth')->group(function () {

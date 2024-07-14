@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{url('/dashboard/roles/'.$role->id.'/give-permissions')}}" method="post">
+                <form action="{{url('/dashboard/users/roles/'.$role->id.'/give-permissions')}}" method="post">
                     @csrf
                     @method('put')
                     @foreach($groupedPermissions as $category => $types)

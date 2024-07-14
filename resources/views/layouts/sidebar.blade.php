@@ -122,10 +122,15 @@
                     <a href="{{route('sale.report')}}">Sales Report</a>
                 </div>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{url('/dashboard/users/index')}}">
+            <li class="menu-item has-submenu {{ request()->is('dashboard/users/*') ? 'active' : '' }}" >
+                <a class="menu-link" href="#">
                     <i class="icon material-icons md-people"></i><span class="text">Manage Users</span>
                 </a>
+                <div class="submenu">
+                    <a href="{{url('/dashboard/users/index')}}">Users</a>
+                    <a href="{{url('/dashboard/users/roles')}}">Roles</a>
+                    <a href="{{url('/dashboard/users/permissions')}}">Permissions</a>
+                </div>
             </li>
             <li class="menu-item has-submenu {{ request()->is('dashboard/setting') ? 'active' : '' }}">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>

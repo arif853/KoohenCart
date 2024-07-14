@@ -8,11 +8,18 @@
         <p>Whole data about your business here</p>
     </div>
     <div>
-        <!--<a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>-->
+        <span>Maintenance Mode:
+            @if (App::isDownForMaintenance())
+            <a href="{{url('/disable-maintenance-mode')}}" class="btn btn-warning confirm-change" >Turn OFF</a>
+            <marquee class="text-danger">**Website is in maintenance mode.</marquee>
+            @else
+            <a href="{{url('/enable-maintenance-mode')}}" class="btn btn-warning confirm-change">Turn ON</a>
+            @endif
+        </span>
     </div>
 </div>
 <div class="row">
-   
+
     <div class="col-lg-3">
         <div class="card card-body counter bg-row-1">
             <article class="icontext">
@@ -84,7 +91,7 @@
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-monetization_on"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Profit</h6> 
+                    <h6 class="mb-1 card-title">Total Profit</h6>
                     <span>৳ {{ number_format($totalProfit, 2 ) }}</span>
                 </div>
             </article>
@@ -101,7 +108,7 @@
             </article>
         </div>
     </div>
-   
+
     <div class="col-lg-3">
         <div class="card card-body counter bg-row-3">
             <article class="icontext">
@@ -154,7 +161,7 @@
             </article>
         </div>
     </div>
-     
+
     <div class="col-lg-3">
         <div class="card card-body counter bg-row-4">
             <article class="icontext">
@@ -202,7 +209,7 @@
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Total Product Ordered</h6> 
+                    <h6 class="mb-1 card-title">Total Product Ordered</h6>
                     <span>{{ $ordered_products->sum('total_ordered') }}</span>
                 </div>
             </article>
@@ -213,7 +220,7 @@
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Paid Invoice</h6> 
+                    <h6 class="mb-1 card-title">Paid Invoice</h6>
                     <span>{{$paidOrdersCount}}</span>
                 </div>
             </article>
@@ -224,7 +231,7 @@
             <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-shopping_basket"></i></span>
                 <div class="text">
-                    <h6 class="mb-1 card-title">Unpaid Invoice</h6> 
+                    <h6 class="mb-1 card-title">Unpaid Invoice</h6>
                     <span>{{$unpaidOrdersCount}}</span>
                 </div>
             </article>
@@ -345,3 +352,54 @@
 
 
 @endsection
+@push('brand')
+<script>
+    $(document).ready(function() {
+            $(document).on('click', '.confirm-change', function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+
+                // Find the closest form element related to the clicked link
+                var URL = $(this).attr('href');
+                console.log(URL);
+
+                // Display SweetAlert confirmation
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to change maintenace mode!',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, change it!'
+                }).then((result) => {
+                    // If confirmed, submit the corresponding form
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                        type: 'GET',
+                        url: URL, // Update with your route
+                        success: function (response) {
+                            // Handle success, if needed
+                            
+                            if(response.status == 200){
+                                Swal.fire({
+                                    title: "Changed!",
+                                    text: "Thank You.",
+                                    icon: "success"
+                                });
+                                location.reload();
+                            }
+
+                        },
+                        error: function (error) {
+                            // Handle error, if needed
+                            console.error(error);
+                        }
+                    });
+
+                    }
+                });
+            });
+        });
+</script>
+@endpush

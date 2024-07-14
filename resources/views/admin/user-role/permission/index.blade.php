@@ -34,7 +34,7 @@
                 <div class="left pull-left">
                     {{-- <a href="#" class="btn btn-warning rounded">Permission</a> --}}
                     <button type="button" data-bs-toggle="modal" data-bs-target="#permissionModal" class="btn btn-info rounded mr-5 btn-sm">Add Permission</button>
-                    <a href="{{url('/dashboard/roles')}}" class="btn btn-success rounded mr-5 btn-sm">Roles</a>
+                    <a href="{{url('/dashboard/users/roles')}}" class="btn btn-success rounded mr-5 btn-sm">Roles</a>
                     <a href="{{url('/dashboard/users/index')}}" class="btn btn-success rounded btn-sm">Users</a>
                 </div>
                 <div class="right pull-right">
@@ -187,7 +187,7 @@ $(document).ready(function() {
         e.preventDefault();
         var permissionId = $(this).data('permission-id');
 
-        var editURL = "{{url('')}}"+ '/dashboard/permissions/'+permissionId+'/edit';
+        var editURL = "{{url('')}}"+ '/dashboard/users/permissions/'+permissionId+'/edit';
         // console.log(editURL);
 
         $.ajax({
@@ -210,7 +210,7 @@ $(document).ready(function() {
         const data = new FormData(this);
         // console.log(data);
         $.ajax({
-            url: '{{url('/dashboard/permissions')}}',
+            url: '{{url('/dashboard/users/permissions')}}',
             method: 'post',
             data: data,
             cache: false,
@@ -218,8 +218,14 @@ $(document).ready(function() {
             contentType: false,
             success: function (res) {
                 if (res.status == 200) {
-                    // $("#sliderEditModal").modal('hide');
-                    location.reload();
+                    // location.reload();
+                $.Notification.autoHideNotify('success', 'top right', 'Success', 'Permission added successfully.');
+
+                // Clear the form for the next input
+                $("#permissionStoreForm")[0].reset();
+
+                // Show the modal again for the next permission
+                $("#permissionModal").modal('show');
                 }
             },
             error: function (xhr, textStatus, errorThrown) {
@@ -238,7 +244,7 @@ $(document).ready(function() {
         console.log(data);
 
         $.ajax({
-            url: '{{url('dashboard/permissions/')}}'+'/'+permissionId,
+            url: '{{url('dashboard/users/permissions/')}}'+'/'+permissionId,
             method: 'post',
             data: data,
             cache: false,

@@ -88,7 +88,7 @@
                                             <p>
                                                 <span class="text-danger" style="font-size: 18px; font-weight: 600;">{{ $notificationData->message }}</span>
                                                 <span class="pull-right" style="font-size: 12px;">
-                                                    {{$notifydate = \Illuminate\Support\Carbon::parse($data['date'])->setTimezone('Asia/Dhaka')->format('d F, H:i A');}}
+                                                    {{$notifydate }}
                                                 </span>
                                             </p>
                                             <span style="margin: 0px 0;">
