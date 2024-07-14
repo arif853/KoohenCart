@@ -5390,18 +5390,18 @@ footer.main-footer {
 }
 
 .notify-nav {
-    position: absolute;
-    top: 55px;
-    left: -120px;
-    width: 320px;
-    max-height: 280px; /* Adjusted max-height for better scrolling */
-    border: 1px solid #E3E3E3;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #F4F4F4;
-    z-index: 9999;
-    overflow-y: auto; /* Changed to auto for scrollbar only when needed */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+	position: absolute;
+	top: 55px;
+	left: -65px;
+	width: 360px;
+	max-height: 280px;
+	border: 1px solid #E3E3E3;
+	border-radius: 8px;
+	padding: 20px;
+	background-color: #F4F4F4;
+	z-index: 9999;
+	overflow-y: auto;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .notify-nav h5 {
@@ -5417,7 +5417,7 @@ footer.main-footer {
 }
 
 .notify-nav ul li {
-    padding: 10px 0; /* Increased padding */
+    padding: 15px; /* Increased padding */
 }
 
 .notify-nav ul li:hover {

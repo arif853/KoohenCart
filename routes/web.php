@@ -260,9 +260,9 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
 
     });
 
-
     //Order
     Route::controller(OrderController::class)->middleware('auth')->group(function () {
+
         Route::get('/dashboard/orders', 'index')->middleware(['permission:view order'])->name('order.index');
         Route::get('/dashboard/orders/pending_order', 'pending_order')->middleware(['permission:view order'])->name('order.pending');
         Route::get('/dashboard/orders/completed_order', 'completed_order')->middleware(['permission:view order'])->name('order.completed');

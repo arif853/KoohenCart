@@ -52,7 +52,7 @@ class NewPendingOrderNotification extends Notification
     {
         $customerName = $this->order->customer->firstName . ' '. $this->order->customer->lastName;
         return [
-            'message' => 'You have a new pending order!',
+            'message' => 'New Order!',
             'date' => now(),
             'order_id' => $this->order->id,
             'order_details' => [ // Include additional details for better visualization

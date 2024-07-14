@@ -35,7 +35,7 @@
         <ul class="nav">
             @php
                 $user = Auth::user();
-                $orderNotify = $user->unreadNotifications;
+                $orderNotify = DB::table('notifications')->where('type', 'App\Notifications\NewPendingOrderNotification')->whereNull('read_at')->get();
                 $notifyCount = $orderNotify->count();
 
                 $stockNotify = DB::table('notifications')->where('type', 'App\Notifications\LowStockNotification')->whereNull('read_at')->get();
@@ -54,17 +54,24 @@
                     <h5>You have {{$notifyCount + $stockNotifyCount}} new notifications.</h5>
                     <ul>
                         @if ($notifyCount > 0)
+                        {{-- {{$orderNotify}} --}}
                             @foreach($orderNotify as $notification)
-                                <li class="notification-item" data-notification-id="{{ $notification->id }}">
-                                    <a href="{{route('order.details', ['id' => $notification->data['order_id'] ])}}">
+                            @php
+                                $data = json_decode($notification->data, true);
+                            @endphp
 
+                                <li class="notification-item" data-notification-id="{{ $notification->id }}">
+                                    <a href="{{route('order.details', ['id' => $data['order_id'] ])}}">
                                         <p>
-                                            <span class="text-success">{{ $notification->data['message'] }}</span>
-                                            <span class="pull-right">{{$notifydate = \Illuminate\Support\Carbon::parse($notification->data['date'])->setTimezone('Asia/Dhaka')->format('d F, H:i A');}}</span>
+                                            <span class="text-success" style="font-size: 18px; font-weight: 600;">{{ $data['message'] }}</span>
+                                            <span class="pull-right" style="font-size: 12px;">
+                                                {{$notifydate = \Illuminate\Support\Carbon::parse($data['date'])->setTimezone('Asia/Dhaka')->format('d F, H:i A');}}
+                                            </span>
                                         </p>
-                                        <span>Order No: #{{ $notification->data['order_id'] }} </span><br>
-                                        <span>{{ $notification->data['order_details']['customer_name'] }} </span>
-                                        <span class="pull-right"> {{ $notification->data['order_details']['total_amount'] }}</span><br>
+                                        <span style="font-size: 16px; font-weight: 600;">{{ $data['order_details']['customer_name'] }} </span>
+                                        <span class="pull-right"> {{ $data['order_details']['total_amount'] }} ৳</span>
+                                        <br>
+                                        <span style="font-size: 12px;">Order No: #{{ $data['order_id'] }} </span>
                                     </a>
                                 </li>
                             @endforeach
@@ -78,10 +85,17 @@
                                 @endphp
                                     <li class="notification-item" data-notification-id="{{ $notification->id }}">
                                         <a href="{{route('inventory.item')}}">
-                                            <p><span class="text-danger">{{ $notificationData->message }}</span> <span class="pull-right">{{ $notifydate}}</span></p>
+                                            <p>
+                                                <span class="text-danger" style="font-size: 18px; font-weight: 600;">{{ $notificationData->message }}</span>
+                                                <span class="pull-right" style="font-size: 12px;">
+                                                    {{$notifydate = \Illuminate\Support\Carbon::parse($data['date'])->setTimezone('Asia/Dhaka')->format('d F, H:i A');}}
+                                                </span>
+                                            </p>
                                             <span style="margin: 0px 0;">
-                                                <span>{{ $notificationData->product_id }}</span>.
-                                                {{ $notificationData->product_name }} - {{$notificationData->current_stock}} Pcs
+                                                <span style="font-size: 16px; font-weight: 600; width: 175px;  display: inline-block;">
+                                                    {{ $notificationData->product_id }}. {{ $notificationData->product_name }}
+                                                </span>
+                                                <span class="pull-right"> {{$notificationData->current_stock}} Pcs</span>
                                             </span><br>
                                         </a>
                                     </li>

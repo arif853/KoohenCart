@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Models\Products;
-use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+
 class GenerateSitemap extends Command
 {
     /**
@@ -26,7 +28,7 @@ class GenerateSitemap extends Command
      * Execute the console command.
      */
     public function handle()
-    
+
     {
         $sitemap = Sitemap::create();
          // Static pages
@@ -45,5 +47,6 @@ class GenerateSitemap extends Command
         }
         $sitemap->writeToFile(public_path('sitemap.xml'));
 
+        Log::info("Sitemap Created ");
     }
 }

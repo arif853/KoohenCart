@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('update:campaign-status')->everyMinute();
-        $schedule->command('sitemap:generate')->daily();
+        $schedule->command('sitemap:generate')->everyMinute();
 
     }
 

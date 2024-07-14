@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use App\Library\SslCommerz\SslCommerzNotification;
 use App\Notifications\NewPendingOrderNotification;
@@ -166,7 +167,7 @@ class CheckoutController extends Controller
 
                 $customer = Customer::find($customer_id);
 
-                // auth()->user()->notify(new NewPendingOrderNotification($order));
+                $order->notify(new NewPendingOrderNotification($order));
 
                 Session::flash('warning', 'Check your order in dashboard.');
 
@@ -358,7 +359,11 @@ class CheckoutController extends Controller
 
                 }
 
-                // auth()->user()->notify(new NewPendingOrderNotification($order));
+                // $admins = User::where('is_admin', true)->get();
+
+                // Notification::send(new NewPendingOrderNotification($order));
+
+                $order->notify(new NewPendingOrderNotification($order));
                // Mail::to($customer->email)->send(new customerMail($order));
             }
             DB::commit();
@@ -366,6 +371,7 @@ class CheckoutController extends Controller
             // Clear the cart after saving to the order item table
             // Mail::to('qbittech.dev1@gmail.com')->send(new AdminMail($order));
             // masudszone.design@gmail.com
+
             Cart::instance('cart')->destroy();
 
             if ($request->payment_mode == 'online') {

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
+
     protected $fillable = ['customer_id','subtotal','discount','tax','total','is_shipping_different','delivery_charge','comment','total_paid','total_due','is_pos'];
 
     public function customer()

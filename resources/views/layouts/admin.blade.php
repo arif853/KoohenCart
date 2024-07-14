@@ -147,6 +147,7 @@
 
     <script>
         $(document).ready(function() {
+
             var tooltipTriggerList = [].slice.call(
                 document.querySelectorAll('[data-bs-toggle="tooltip"]')
             );
@@ -178,7 +179,7 @@
 
                     // Get the notification ID
                     var notificationId = item.getAttribute('data-notification-id');
-
+                    console.log(notificationId);
                     // Send AJAX request to mark notification as read
                     markNotificationAsRead(notificationId);
                 });
