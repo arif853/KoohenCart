@@ -16,7 +16,6 @@ use App\Models\TermsCondition;
 use App\Models\Feature_category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -76,7 +75,7 @@ class HomeController extends Controller
         $sliders = Slider::all();
         $adsbanner = Ads::all();
         $campaign = Campaign::where('status','Published')->first();
-        return view('frontend.home.index',compact('categories','groupedCategories','cat_feature','sliders','adsbanner','campaign','cat_features'));
+        return view('frontend.home.index',compact('categories','groupedCategories','sliders','adsbanner','campaign','cat_features'));
         // dd($cat_features);
     }
 

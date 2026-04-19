@@ -10,6 +10,26 @@
         $seoData = DB::table('seo_settings')->first();
         $socialinfos = DB::table('socialinfos')->get();
         $contactinfo = DB::table('contactinfos')->first();
+
+        // Provide safe defaults when setup tables are empty.
+        $userData = (object) array_merge([
+            'description' => '',
+            'webfavicon' => '',
+            'weblogo' => '',
+            'appName' => config('app.name'),
+            'entitle' => '',
+        ], (array) ($userData ?? []));
+
+        $seoData = (object) array_merge([
+            'seoLogo' => '',
+        ], (array) ($seoData ?? []));
+
+        $contactinfo = (object) array_merge([
+            'phone' => '',
+            'email' => '',
+            'address' => '',
+            'whatsapp' => '',
+        ], (array) ($contactinfo ?? []));
         // echo $description;
     @endphp
     <title>@yield('title') - {{ config('app.name') }} | YOUR ULTIMATE LIFESTYLE</title>
