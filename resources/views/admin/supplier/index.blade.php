@@ -184,6 +184,9 @@
     });
 
     $(document).ready(function() {
+            let supplierDeleteUrl = "{{ route('supplier.destroy') }}";
+            let csrfToken = "{{ csrf_token() }}";
+
             $('.supplier_live_search input').on('keyup', function() {
                 let supplierName = $('#supplierName').val();
                 let supplierPhone = $('#supplier_phone').val();
@@ -225,7 +228,11 @@
                             row.append($('<td>').html(statusBadge));
                             // some correction this line class delete_supplier not working
                             row.append($('<td>').html(
-                                '<form class="deleteForm mr-2" action="{{ route('supplier.destroy', ['id' => $supplier->id]) }}" method="post">@csrf @method('DELETE')<a href="#" data-bs-toggle="modal" data-bs-target="#supplierModalEdit" data-supplier-id="' +
+                                '<form class="deleteForm mr-2" action="' + supplierDeleteUrl + '" method="post">' +
+                                '<input type="hidden" name="_token" value="' + csrfToken + '">' +
+                                '<input type="hidden" name="_method" value="DELETE">' +
+                                '<input type="hidden" name="id" value="' + supplier.id + '">' +
+                                '<a href="#" data-bs-toggle="modal" data-bs-target="#supplierModalEdit" data-supplier-id="' +
                                 supplier.id +
                                 '" class="btn btn-sm btn-brand rounded font-sm mt-15 edit-supplier">Edit</a>&nbsp;&nbsp;<a href="#" class="btn btn-sm btn-danger me-2 rounded font-sm mt-15 delete_supplier">Delete</a></form>'
                                 ));

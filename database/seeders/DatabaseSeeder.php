@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
         $this->call(DistrictSeeder::class);
         $this->call(UpazillaSeeder::class);
         $this->call(PostcodeSeeder::class);
+        $this->call(RolePermissionSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(ProductSeeder::class);
         $this->call(AboutusSeeder::class);
 
     }

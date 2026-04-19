@@ -1,4 +1,7 @@
 <div>
+    @php
+        $fallbackProductImage = asset('frontend/assets/imgs/shop/product-1-1.jpg');
+    @endphp
     <div class="row mb-50">
         <!--Product View-->
         <div class="col-md-2 col-sm-4 col-xs-4">
@@ -21,6 +24,12 @@
                                 alt="product image" style="height: 180px;margin: 5px auto;">
                             </div>
                         @endforeach
+                    @endif
+
+                    @if ($product->product_thumbnail->isEmpty() && $product->product_images->isEmpty())
+                        <div>
+                            <img src="{{$fallbackProductImage}}" alt="product image" style="height: 180px;margin: 5px auto;">
+                        </div>
                     @endif
 
                 </div>
@@ -48,6 +57,12 @@
                             </figure>
                             @endforeach
                         @endif
+
+                        @if ($product->product_thumbnail->isEmpty() && $product->product_images->isEmpty())
+                            <figure class="border-radius-10">
+                                <img src="{{$fallbackProductImage}}" alt="product image">
+                            </figure>
+                        @endif
                 </div>
 
                 <!-- THUMBNAILS -->
@@ -69,6 +84,12 @@
                                 alt="product image">
                             </div>
                         @endforeach
+                    @endif
+
+                    @if ($product->product_thumbnail->isEmpty() && $product->product_images->isEmpty())
+                        <div>
+                            <img src="{{$fallbackProductImage}}" alt="product image">
+                        </div>
                     @endif
 
                 </div>
@@ -219,9 +240,9 @@
                     </div>
                 </div>
                 @endif
-                    @foreach ($product->product_extras as $extrainfo)
-
-                    @endforeach
+                @php
+                    $extraInfo = $product->product_extras->first();
+                @endphp
                 <div class="row product-tag-info">
                     <div class="col-lg-6">
                         <div class="product_sort_info font-xs">
@@ -237,7 +258,7 @@
                                     </span>
                                 </li>
                                 <li class=""><strong>EMI:</strong> <span
-                                        class="in-stock ml-5">{{$extrainfo->emi}}</span></li>
+                                        class="in-stock ml-5">{{$extraInfo?->emi ?? 'N/A'}}</span></li>
                             </ul>
                         </div>
                     </div>

@@ -35,18 +35,18 @@
                 <div class="product-cart-wrap mb-25">
                     <div class="product-img-action-wrap">
                         <div class="product-img product-img-zoom">
+                            @php
+                                $fallbackProductImage = asset('frontend/assets/imgs/shop/product-1-1.jpg');
+                                $defaultThumb = $item->product->product_thumbnail->get(0)->product_thumbnail ?? null;
+                                $hoverThumb = $item->product->product_thumbnail->get(1)->product_thumbnail ?? $defaultThumb;
+                                $defaultImageUrl = $defaultThumb ? asset('storage/product_images/thumbnail/'.$defaultThumb) : $fallbackProductImage;
+                                $hoverImageUrl = $hoverThumb ? asset('storage/product_images/thumbnail/'.$hoverThumb) : $defaultImageUrl;
+                            @endphp
                             <a href="{{route('product.detail',['slug'=>$item->product->slug])}}">
-                                @foreach ($item->product->product_thumbnail as $index => $image)
-                                @if($index == 0)
                                 <img class="default-img"
-                                src="{{asset('storage/product_images/thumbnail/'.$item->product->product_thumbnail[0]->product_thumbnail)}}" alt="{{$item->slug}}">
-                                @endif
-
-                                @if($index == 1)
+                                src="{{$defaultImageUrl}}" alt="{{$item->slug}}">
                                 <img class="hover-img"
-                                src="{{asset('storage/product_images/thumbnail/'.$item->product->product_thumbnail[1]->product_thumbnail)}}" alt="{{$item->slug}}">
-                                @endif
-                                @endforeach
+                                src="{{$hoverImageUrl}}" alt="{{$item->slug}}">
                                 {{-- <img class="default-img" src="{{asset('frontend/assets/imgs/shop/panjabi-2.jpg')}}" alt=""> --}}
                             </a>
                         </div>

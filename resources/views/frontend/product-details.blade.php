@@ -40,18 +40,18 @@
                         <div class="product-cart-wrap mb-25 small hover-up">
                             <div class="product-img-action-wrap">
                                 <div class="product-img product-img-zoom">
+                                    @php
+                                        $fallbackProductImage = asset('frontend/assets/imgs/shop/product-1-1.jpg');
+                                        $defaultThumb = $r_product->product_thumbnail->get(0)->product_thumbnail ?? null;
+                                        $hoverThumb = $r_product->product_thumbnail->get(1)->product_thumbnail ?? $defaultThumb;
+                                        $defaultImageUrl = $defaultThumb ? asset('storage/product_images/thumbnail/'.$defaultThumb) : $fallbackProductImage;
+                                        $hoverImageUrl = $hoverThumb ? asset('storage/product_images/thumbnail/'.$hoverThumb) : $defaultImageUrl;
+                                    @endphp
                                     <a href="{{route('product.detail',['slug'=>$r_product->slug])}}">
-                                        @foreach ($r_product->product_images as $index => $image)
-                                            @if($index == 0)
                                             <img class="default-img"
-                                            src="{{asset('storage/product_images/thumbnail/'.$r_product->product_thumbnail[0]->product_thumbnail)}}" alt="{{$r_product->slug}}">
-                                            @endif
-
-                                            @if($index == 1)
+                                            src="{{$defaultImageUrl}}" alt="{{$r_product->slug}}">
                                             <img class="hover-img"
-                                            src="{{asset('storage/product_images/thumbnail/'.$r_product->product_thumbnail[1]->product_thumbnail)}}" alt="{{$r_product->slug}}">
-                                            @endif
-                                            @endforeach
+                                            src="{{$hoverImageUrl}}" alt="{{$r_product->slug}}">
 
                                     </a>
                                 </div>
@@ -121,18 +121,18 @@
                    </div>
                    <!--Related Product-->
                    <!--Advertise-->
-                   @foreach ($adsbanner as $ads)
-
-                   @endforeach
-                   @if($ads->is_featured == 1 )
+                   @php
+                       $featuredAd = collect($adsbanner)->firstWhere('is_featured', 1);
+                   @endphp
+                   @if($featuredAd)
                     <div class="banner-img banner-big wow fadeIn animated f-none">
-                        <img src="{{asset('storage/'.$ads->image)}}" alt="$ads->title">
+                        <img src="{{asset('storage/'.$featuredAd->image)}}" alt="{{$featuredAd->title}}">
                         <div class="banner-text d-md-block d-none">
-                            <h4 class="mb-15 text-brand">{{$ads->header}}</h4>
-                            <h1 class="fw-600 mb-20" style="width: 450px; color:#fff">{{$ads->title}}</h1>
+                            <h4 class="mb-15 text-brand">{{$featuredAd->header}}</h4>
+                            <h1 class="fw-600 mb-20" style="width: 450px; color:#fff">{{$featuredAd->title}}</h1>
 
-                            @if($ads->shop_url != null)
-                            <a href="{{$ads->shop_url}}" class="btn">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                            @if($featuredAd->shop_url != null)
+                            <a href="{{$featuredAd->shop_url}}" class="btn">Shop Now <i class="fi-rs-arrow-right"></i></a>
                             @endif
                         </div>
                     </div>

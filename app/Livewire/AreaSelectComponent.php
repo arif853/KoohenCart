@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\Postcode;
+use App\Livewire\CheckoutComponent;
 
 class AreaSelectComponent extends Component
 {
@@ -44,6 +45,11 @@ class AreaSelectComponent extends Component
 
     public function updateDeliveryCharge()
     {
-        $this->dispatch('postOfficeChanged', $this->selectedPostOffice);
+        if ($this->selectedPostOffice) {
+            $postOffice = Postcode::find($this->selectedPostOffice);
+            if ($postOffice) {
+                $this->dispatch('postOfficeChanged', $postOffice->zone_charge)->to(CheckoutComponent::class);
+            }
+        }
     }
 }

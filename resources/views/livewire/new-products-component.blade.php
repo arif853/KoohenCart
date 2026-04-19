@@ -5,18 +5,18 @@
         <div class="product-cart-wrap mb-25">
             <div class="product-img-action-wrap">
                 <div class="product-img product-img-zoom">
+                    @php
+                        $fallbackProductImage = asset('frontend/assets/imgs/shop/product-1-1.jpg');
+                        $defaultThumb = $newproduct->product_thumbnail->get(0)->product_thumbnail ?? null;
+                        $hoverThumb = $newproduct->product_thumbnail->get(1)->product_thumbnail ?? $defaultThumb;
+                        $defaultImageUrl = $defaultThumb ? asset('storage/product_images/thumbnail/'.$defaultThumb) : $fallbackProductImage;
+                        $hoverImageUrl = $hoverThumb ? asset('storage/product_images/thumbnail/'.$hoverThumb) : $defaultImageUrl;
+                    @endphp
                     <a href="{{route('product.detail',['slug'=>$newproduct->slug])}}">
-                        @foreach ($newproduct->product_thumbnail as $index => $image)
-                            @if($index == 0)
                             <img class="default-img"
-                            src="{{asset('storage/product_images/thumbnail/'.$newproduct->product_thumbnail[0]->product_thumbnail)}}" alt="{{$newproduct->slug}}">
-                            @endif
-
-                            @if($index == 1)
+                            src="{{$defaultImageUrl}}" alt="{{$newproduct->slug}}">
                             <img class="hover-img"
-                            src="{{asset('storage/product_images/thumbnail/'.$newproduct->product_thumbnail[1]->product_thumbnail)}}" alt="{{$newproduct->slug}}">
-                            @endif
-                            @endforeach
+                            src="{{$hoverImageUrl}}" alt="{{$newproduct->slug}}">
 
                     </a>
                 </div>

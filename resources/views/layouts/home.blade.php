@@ -625,6 +625,7 @@
             },
             success: function (response) {
                 console.log(response);
+                var defaultProductImage = "{{ asset('frontend/assets/imgs/shop/product-1-1.jpg') }}";
                 $('#p_name').text(response.product_name);
                 $('#brand_name').text(response.brand.brand_name);
 
@@ -694,16 +695,17 @@
                 Livewire.dispatch('buyNow', response.product_id);
 
                 $(".product-image-slider").empty();
-                if (response.product_thumbnail && response.product_thumbnail.length > 0) {
+                var imageUrl = defaultProductImage;
+                if (response.product_thumbnail && response.product_thumbnail.length > 0 && response.product_thumbnail[0].product_thumbnail) {
                     var baseUrl = "{{ asset('storage/product_images/thumbnail/') }}";
-                    var imageUrl = baseUrl + '/' + response.product_thumbnail[0].product_thumbnail;
-
-                    var imageDiv = '<figure class="border-radius-10" >' +
-                                        '<img src="' + imageUrl + '" alt="' + response.slug + '">' +
-                                    '</figure>';
-
-                    $(".product-image-slider").append(imageDiv);
+                    imageUrl = baseUrl + '/' + response.product_thumbnail[0].product_thumbnail;
                 }
+
+                var imageDiv = '<figure class="border-radius-10" >' +
+                                    '<img src="' + imageUrl + '" alt="' + response.slug + '">' +
+                                '</figure>';
+
+                $(".product-image-slider").append(imageDiv);
             }
         });
     });
@@ -743,7 +745,10 @@
                             ul.append('<li>No products found</li>');
                         } else {
                             data.products.forEach(function(product) {
-                                var imageUrl = '{{asset('storage/product_images/thumbnail/')}}'+'/'+product.product_thumbnail[0].product_thumbnail;
+                                var imageUrl = "{{ asset('frontend/assets/imgs/shop/product-1-1.jpg') }}";
+                                if (product.product_thumbnail && product.product_thumbnail.length > 0 && product.product_thumbnail[0].product_thumbnail) {
+                                    imageUrl = '{{asset('storage/product_images/thumbnail/')}}'+'/'+product.product_thumbnail[0].product_thumbnail;
+                                }
                                 var slug = product.slug;
                                 var productUrl = '{{ url('products') }}'+ '/'+ slug;
                                 // console.log(slug);
@@ -791,6 +796,56 @@
         $('#search-input2').keyup(function(event) {
             searchHandel($('#search-input2'), $('#show-product2'));
         });
+
+        (function setupProductImageFallback() {
+            var fallbackImage = "{{ asset('frontend/assets/imgs/shop/product-1-1.jpg') }}";
+
+            function isProductStoragePath(src) {
+                return src.includes('/storage/product_images/');
+            }
+
+            function isEmptyProductPath(src) {
+                return /\/storage\/product_images\/?(thumbnail\/?)?$/.test(src) || src.includes('null') || src.includes('undefined');
+            }
+
+            function bindFallback(img) {
+                var src = (img.getAttribute('src') || '').trim();
+                if (!src || !isProductStoragePath(src)) {
+                    return;
+                }
+
+                if (isEmptyProductPath(src)) {
+                    img.src = fallbackImage;
+                }
+
+                img.onerror = function() {
+                    if (this.src !== fallbackImage) {
+                        this.onerror = null;
+                        this.src = fallbackImage;
+                    }
+                };
+            }
+
+            document.querySelectorAll('img').forEach(bindFallback);
+
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType !== 1) {
+                            return;
+                        }
+
+                        if (node.tagName === 'IMG') {
+                            bindFallback(node);
+                        }
+
+                        node.querySelectorAll && node.querySelectorAll('img').forEach(bindFallback);
+                    });
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+        })();
     });
 
 

@@ -93,18 +93,18 @@
                             <div class="product-cart-wrap mb-25">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
+                                        @php
+                                            $fallbackProductImage = asset('frontend/assets/imgs/shop/product-1-1.jpg');
+                                            $defaultImage = $product->product_images->get(0)->product_image ?? null;
+                                            $hoverImage = $product->product_images->get(1)->product_image ?? $defaultImage;
+                                            $defaultImageUrl = $defaultImage ? asset('storage/product_images/'.$defaultImage) : $fallbackProductImage;
+                                            $hoverImageUrl = $hoverImage ? asset('storage/product_images/'.$hoverImage) : $defaultImageUrl;
+                                        @endphp
                                         <a href="{{route('product.detail',['slug'=>$product->slug])}}">
-                                            @foreach ($product->product_images as $index => $image)
-                                                @if($index == 0)
                                                 <img class="default-img"
-                                                src="{{asset('storage/product_images/'.$product->product_images[0]->product_image)}}" alt="{{$product->slug}}">
-                                                @endif
-
-                                                @if($index == 1)
+                                                src="{{$defaultImageUrl}}" alt="{{$product->slug}}">
                                                 <img class="hover-img"
-                                                src="{{asset('storage/product_images/'.$product->product_images[1]->product_image)}}" alt="{{$product->slug}}">
-                                                @endif
-                                                @endforeach
+                                                src="{{$hoverImageUrl}}" alt="{{$product->slug}}">
 
                                         </a>
                                     </div>
