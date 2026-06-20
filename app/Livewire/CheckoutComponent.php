@@ -38,6 +38,10 @@ class CheckoutComponent extends Component
     public function decreaseQuantity($rowId)
     {
         $item = Cart::instance('cart')->get($rowId);
+        // Never let the quantity drop below 1; use removecart to delete an item.
+        if ($item->qty <= 1) {
+            return;
+        }
         $qty = $item->qty - 1;
         Cart::instance('cart')->update($rowId,$qty);
         $this->dispatch('cartRefresh')->to('cart-icon-component');

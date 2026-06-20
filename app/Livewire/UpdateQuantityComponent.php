@@ -9,17 +9,27 @@ class UpdateQuantityComponent extends Component
 {
 
     public $quantity = 1;
+
+    public function mount()
+    {
+        // Keep the session in sync with the displayed quantity from the start.
+        Session::put('quantity', $this->quantity);
+    }
+
     public function increaseQuantites()
     {
-        $qty = $this->quantity++;
-        Session::put('quantity', $qty );
+        $this->quantity++;
+        Session::put('quantity', $this->quantity);
         $this->dispatch('qtyRefresh')->to('update-quantity-component');
     }
 
     public function decreaseQuantities()
     {
-        $qty = $this->quantity-- ;
-        Session::put('quantity', $qty );
+        // Never go below 1.
+        if ($this->quantity > 1) {
+            $this->quantity--;
+        }
+        Session::put('quantity', $this->quantity);
         $this->dispatch('qtyRefresh')->to('update-quantity-component');
     }
     public function render()

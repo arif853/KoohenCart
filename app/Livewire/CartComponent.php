@@ -21,6 +21,10 @@ class CartComponent extends Component
     public function decreaseQuantity($id)
     {
         $item = Cart::instance('cart')->get($id);
+        // Never let the quantity drop below 1; use removecart to delete an item.
+        if ($item->qty <= 1) {
+            return;
+        }
         $qty = $item->qty - 1;
         Cart::instance('cart')->update($id,$qty);
         $this->dispatch('cartRefresh')->to('cart-icon-component');

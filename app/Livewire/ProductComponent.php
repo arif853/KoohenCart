@@ -71,7 +71,7 @@ class ProductComponent extends Component
         $product = Products::find($id);
         $item_id = $product->id;
         $item_name = $product->product_name;
-        $item_qty = session()->get('quantity') + 1;
+        $item_qty = max(1, (int) session()->get('quantity', 1));
         $item_size = session()->get('product_size');
         $item_color = session()->get('product_color');
 
