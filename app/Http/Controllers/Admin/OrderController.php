@@ -673,11 +673,12 @@ class OrderController extends Controller
                 $totalDue =  $total - $order->total_paid;
 
                 $stock = Product_stock::where('product_id',$orderItem->product_id)->where('size_id', $orderItem->size_id)->first();
-                $itemQty = $stock->outStock - $orderItem->quantity;
-
-                $stock->update([
-                    'outStock' => $itemQty,
-                ]);
+                if ($stock) {
+                    // Return the removed quantity to stock (never below 0).
+                    $stock->update([
+                        'outStock' => max(0, (int) $stock->outStock - (int) $orderItem->quantity),
+                    ]);
+                }
 
                 $order->update([
                     'subtotal' => $subtotal,

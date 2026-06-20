@@ -63,8 +63,10 @@ class CheckoutComponent extends Component
         {
             $user = auth()->guard('customer')->user();
             $customer = Customer::find($user->customer_id);
-            $postOffice = Postcode::find($customer->area);
-            $this->deliveryCharge = $postOffice->zone_charge;
+            // Guard against a missing/invalid saved area so the checkout page
+            // doesn't 500 on a null Postcode.
+            $postOffice = $customer ? Postcode::find($customer->area) : null;
+            $this->deliveryCharge = $postOffice->zone_charge ?? 0;
         }
 
         return view('livewire.checkout-component', [
