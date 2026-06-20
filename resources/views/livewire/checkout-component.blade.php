@@ -141,7 +141,7 @@
                         @php
                             $total =  $total - $discount + $deliveryCharge ;
                         @endphp
-                        <span class="font-xl text-brand fw-900">৳{{$total }}</span>
+                        <span id="totalAmount" class="font-xl text-brand fw-900">৳{{$total }}</span>
                         <input type="hidden" name="total_amount" id="t_amount" value="{{$total }}">
                     </td>
                     @else
