@@ -79,15 +79,19 @@ class PermissionController extends Controller
     public function bulkDelete(Request $request)
     {
         $permissionIds = $request->input('selected_permissions');
-        dd($permissionIds);
-        // Permission::whereIn('id', $permissionIds)->delete();
 
-        // if ($request->ajax()) {
-        //     return response()->json(['success' => 'Permissions deleted successfully.']);
-        // }
+        if (empty($permissionIds)) {
+            return response()->json(['error' => 'No permissions selected.'], 422);
+        }
 
-        // Session::flash('success', 'Permissions deleted successfully.');
-        // return redirect()->back();
+        Permission::whereIn('id', $permissionIds)->delete();
+
+        if ($request->ajax()) {
+            return response()->json(['success' => 'Permissions deleted successfully.']);
+        }
+
+        Session::flash('success', 'Permissions deleted successfully.');
+        return redirect()->back();
     }
 
     /**
