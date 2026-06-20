@@ -90,6 +90,10 @@ class TrackorderController extends Controller
 
         foreach ($orderItems as $orderItem) {
             $product = $orderItem->product;
+            // Product may have been deleted; skip the line rather than crash.
+            if (!$product) {
+                continue;
+            }
             $product->load('product_images');
 
             // Add price and quantity properties to the product

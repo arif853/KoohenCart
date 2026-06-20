@@ -198,10 +198,15 @@ class CustomerDashboardController extends Controller
     public function orderReturn(Request $request)
     {
         $orderId = $request->orderId;
-        $newStatus = $request->newStatus;
 
-        // Retrieve the order
-        $order = Order::find($orderId);
+        // Customers may only request a return; they cannot set arbitrary statuses.
+        $newStatus = 'returned';
+
+        // Retrieve the order and verify it belongs to the authenticated customer.
+        $customerId = auth()->guard('customer')->user()?->customer_id;
+        $order = Order::where('id', $orderId)
+            ->where('customer_id', $customerId)
+            ->first();
 
         if (!$order) {
             return response()->json(['success' => false, 'message' => 'Order not found']);

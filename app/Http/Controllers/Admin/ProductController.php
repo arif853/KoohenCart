@@ -248,34 +248,26 @@ class ProductController extends Controller
             ]);
 
             // Offer price store
-            $price = $product->regular_price;
-
+            $price = (float) ($product->regular_price ?? 0);
             $percentage = $request->input('percentage');
             $amount = $request->input('amount');
             $offer_price = 0;
+            $percentage_offer = null;
+            $amount_offer = null;
 
-            // If offer is in percentage, convert percentage to amount
-            if (!empty($percentage)) {
+            if (!empty($percentage) && $price > 0) {
                 $amount_offer = ($percentage / 100) * $price;
                 $offer_price = $price - $amount_offer;
-            }else{
-                $amount_offer = $amount;
-            }
-
-            // If offer is in amount, convert amount to percentage
-            if (!empty($amount)) {
-                $percentage_offer = ($amount / $price) * 100;
-                $percentage_offer = number_format($percentage_offer,1);
-                //$amount_discount = ($percentage_offer / 100) * $price; // Calculate the discount amount based on the percentage
-                $offer_price = $price - $amount;
-            }
-            else{
                 $percentage_offer = $percentage;
+            } elseif (!empty($amount) && $price > 0) {
+                $offer_price = $price - $amount;
+                $amount_offer = $amount;
+                $percentage_offer = number_format(($amount / $price) * 100, 1);
             }
 
             Product_price::create([
                 'product_id' => $product->id,
-                'offer_price' => $offer_price,
+                'offer_price' => max(0, $offer_price),
                 'percentage' => $percentage_offer,
                 'amount' => $amount_offer,
             ]);
@@ -531,7 +523,7 @@ class ProductController extends Controller
 
                 if ($additionalInfo) {
                     $additionalInfo->update([
-                        'additional_name', $infoNames[$index],
+                        'additional_name' => $infoNames[$index],
                         'additional_value' => $infoValues[$index],
                     ]);
                 } else {
@@ -543,49 +535,37 @@ class ProductController extends Controller
                 }
             }
 
-            $product_extra = Product_extra::where('product_id', $product->id)->first();
+            $product_extra = Product_extra::firstOrNew(['product_id' => $product->id]);
             // Extra info store
-            $product_extra->update([
-                // 'product_id' => $product->id,
-                'warranty_type' => $request->input('warranty'),
-                'return_policy' => $request->input('return_policy'),
-                'delivery_type' => $request->input('delivery_type'),
-                'emi' => $request->input('emi'),
-            ]);
+            $product_extra->warranty_type = $request->input('warranty');
+            $product_extra->return_policy = $request->input('return_policy');
+            $product_extra->delivery_type = $request->input('delivery_type');
+            $product_extra->emi = $request->input('emi');
+            $product_extra->save();
 
             // Offer price store
-            $price = $product->regular_price;
-
+            $price = (float) ($product->regular_price ?? 0);
             $percentage = $request->input('percentage');
             $amount = $request->input('amount');
             $offer_price = 0;
+            $percentage_offer = null;
+            $amount_offer = null;
 
-            // If offer is in percentage, convert percentage to amount
-            if (!empty($percentage)) {
+            if (!empty($percentage) && $price > 0) {
                 $amount_offer = ($percentage / 100) * $price;
                 $offer_price = $price - $amount_offer;
-            }else{
+                $percentage_offer = $percentage;
+            } elseif (!empty($amount) && $price > 0) {
+                $offer_price = $price - $amount;
                 $amount_offer = $amount;
+                $percentage_offer = number_format(($amount / $price) * 100, 1);
             }
 
-            // If offer is in amount, convert amount to percentage
-            if (!empty($amount)) {
-                $percentage_offer = ($amount / $price) * 100;
-                //$amount_discount = ($percentage_offer / 100) * $price; // Calculate the discount amount based on the percentage
-                $offer_price = $price - $amount;
-                // $percentage_offer = intval($percentage_offer);
-                $percentage_offer = number_format($percentage_offer, 0);
-            }
-            else{
-                $percentage_offer = $percentage;
-            }
-            $product_price = Product_price::where('product_id',$product->id)->first();
-            $product_price->update([
-                // 'product_id' => $product->id,
-                'offer_price' => $offer_price,
-                'percentage' => $percentage_offer,
-                'amount' => $amount_offer,
-            ]);
+            $product_price = Product_price::firstOrNew(['product_id' => $product->id]);
+            $product_price->offer_price = max(0, $offer_price);
+            $product_price->percentage = $percentage_offer;
+            $product_price->amount = $amount_offer;
+            $product_price->save();
 
 
             // Update tags
@@ -630,7 +610,7 @@ class ProductController extends Controller
     {
         $product_image = Product_image::findOrFail($id);
         if ($product_image) {
-            Storage::delete('public/product_images/' . $product_image->product_image);
+            Storage::disk('public')->delete('product_images/' . $product_image->product_image);
             $product_image->delete();
 
             Session::flash('success', 'Product image has been deleted successfully!!');
@@ -647,7 +627,7 @@ class ProductController extends Controller
 
         $product_thumbnail = Product_thumbnail::findOrFail($id);
         if ($product_thumbnail) {
-            Storage::delete('public/product_images/thumbnail' . $product_thumbnail->product_thumbnail);
+            Storage::disk('public')->delete('product_images/thumbnail/' . $product_thumbnail->product_thumbnail);
             $product_thumbnail->delete();
 
             Session::flash('success', 'Product thumbnail image has been deleted !!');
