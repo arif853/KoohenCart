@@ -601,7 +601,8 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
     // Route::post('/success', [CheckoutController::class],'success')->name('sslcommerz.success');
     // Route::post('/fail', [CheckoutController::class],'fail')->name('sslcommerz.fail');
     // Route::post('/cancel', [CheckoutController::class],'cancel')->name('sslcommerz.cancel');
-    Route::post('/ipn-listener', [CheckoutController::class],'ipnListener')->name('ipn-listener');
+    // Handled below by SslCommerzPaymentController@ipn (this malformed duplicate was removed).
+    // Route::post('/ipn-listener', [CheckoutController::class],'ipnListener')->name('ipn-listener');
 
     Route::match(['get', 'post'],'/thankyou',function(){
         return view('frontend.thankyou');
