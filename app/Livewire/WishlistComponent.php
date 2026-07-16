@@ -39,20 +39,16 @@ class WishlistComponent extends Component
 
     public function removewish($id){
        
+        // Remove only the selected item from the wishlist.
+        Cart::instance('wishlist')->remove($id);
+
+        // Persist the updated wishlist back for logged-in customers so the
+        // single-item removal sticks instead of wiping the whole list.
         if(Auth::guard('customer')->check()){
-
-            $userEmail = Auth::guard('customer')->user()->email;
-
-            // Use parameter binding to avoid SQL injection
-            DB::delete('DELETE FROM shoppingcart WHERE identifier = ?', [$userEmail]);
-
-            // Destroy the entire wishlist for the authenticated customer
-            Cart::instance('wishlist')->destroy($userEmail);
-
-        }else{
-            Cart::instance('wishlist')->remove($id);
-            Session::flash('success','Product removed from wishlist.');
+            Cart::instance('wishlist')->store(Auth::guard('customer')->user()->email);
         }
+
+        Session::flash('success','Product removed from wishlist.');
 
         $this->dispatch('cartRefresh')->to('wishlist-icon-component');
     }

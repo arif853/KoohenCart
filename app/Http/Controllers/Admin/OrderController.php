@@ -126,6 +126,23 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * Adjust a product/size outStock by $delta (positive to deduct on sale,
+     * negative to return). Uses firstOrNew so it works even when the stock row
+     * doesn't exist yet — a raw "outStock + n" expression errors on INSERT.
+     * outStock is never allowed to go below 0.
+     */
+    private function adjustStock($productId, $sizeId, int $delta): void
+    {
+        $stock = Product_stock::firstOrNew([
+            'product_id' => $productId,
+            'size_id' => $sizeId,
+        ]);
+
+        $stock->outStock = max(0, (int) ($stock->outStock ?? 0) + $delta);
+        $stock->save();
+    }
+
 // Multiple order status update
     public function updateOrderStatus(Request $request)
     {
@@ -167,40 +184,23 @@ class OrderController extends Controller
                 foreach ($order->order_item as $item) {
 
                     if($item && $item->size_id){
-                        Product_stock::updateOrCreate(
-                            [
-                                'product_id' => $item->product_id,
-                                'size_id' => $item->size_id,
-                            ],
-                            [
-                                // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                                'outStock' => \DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
-                            ]
-                        );
+                        $this->adjustStock($item->product_id, $item->size_id, (int) $item->quantity);
                         Session::flash('success','stock counted..');
                     }
                 }
             }
 
-            if($newStatus == 'returned' && $order->is_pos == 1){
+            if($selectedStatus == 'returned' && $order->is_pos == 1){
 
                 foreach($order->order_item as $item){
 
                     if($item && $item->size_id){
-                        Product_stock::updateOrCreate(
-                            [
-                                'product_id' => $item->product_id,
-                                'size_id' => $item->size_id,
-                            ],
-                            [
-                                // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                                'outStock' => DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
-                            ]
-                        );
+                        $this->adjustStock($item->product_id, $item->size_id, -(int) $item->quantity);
                     Session::flash('success','Order items returned to inventory.');
                     }
                 }
                 $order->return_confirm = 1;
+                $order->save();
                 Session::flash('warning','Order has been returned successfully.');
             }
         }
@@ -245,16 +245,7 @@ class OrderController extends Controller
             foreach ($order->order_item as $item) {
 
                 if($item && $item->size_id){
-                    Product_stock::updateOrCreate(
-                        [
-                            'product_id' => $item->product_id,
-                            'size_id' => $item->size_id,
-                        ],
-                        [
-                            // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                            'outStock' => DB::raw("outStock + $item->quantity"), // Assuming outStock starts at 0
-                        ]
-                    );
+                    $this->adjustStock($item->product_id, $item->size_id, (int) $item->quantity);
                     Session::flash('warning','Items deducted from inventory.');
                 }
             }
@@ -265,16 +256,7 @@ class OrderController extends Controller
             foreach($order->order_item as $item){
 
                 if($item && $item->size_id){
-                    Product_stock::updateOrCreate(
-                        [
-                            'product_id' => $item->product_id,
-                            'size_id' => $item->size_id,
-                        ],
-                        [
-                            // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                            'outStock' => DB::raw("outStock - $item->quantity"), // Assuming outStock starts at 0
-                        ]
-                    );
+                    $this->adjustStock($item->product_id, $item->size_id, -(int) $item->quantity);
                 Session::flash('success','Order items returned to inventory.');
                 }
             }
@@ -691,11 +673,12 @@ class OrderController extends Controller
                 $totalDue =  $total - $order->total_paid;
 
                 $stock = Product_stock::where('product_id',$orderItem->product_id)->where('size_id', $orderItem->size_id)->first();
-                $itemQty = $stock->outStock - $orderItem->quantity;
-
-                $stock->update([
-                    'outStock' => $itemQty,
-                ]);
+                if ($stock) {
+                    // Return the removed quantity to stock (never below 0).
+                    $stock->update([
+                        'outStock' => max(0, (int) $stock->outStock - (int) $orderItem->quantity),
+                    ]);
+                }
 
                 $order->update([
                     'subtotal' => $subtotal,

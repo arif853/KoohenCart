@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Order;
 use App\Models\Coupon;
 use App\Mail\AdminMail;
+use App\Models\Postcode;
 use App\Models\Customer;
 use App\Models\shipping;
 use App\Mail\customerMail;
@@ -77,11 +78,109 @@ class CheckoutController extends Controller
         return $invoiceNo;
     }
 
+    /**
+     * Authoritative cart subtotal computed from the server-side cart contents,
+     * so it can never be tampered with via the submitted form.
+     */
+    private function cartSubtotal(): float
+    {
+        return (float) Cart::instance('cart')->content()->sum(function ($item) {
+            return $item->price * $item->qty;
+        });
+    }
+
+    /**
+     * Resolve a coupon that is genuinely usable by this customer right now,
+     * or null when no valid coupon applies.
+     */
+    private function resolveValidCoupon(?string $code, $customerId): ?Coupon
+    {
+        if (!$code) {
+            return null;
+        }
+
+        $alreadyUsed = AppliedCoupone::where('customer_id', $customerId)
+            ->where('coupone_code', $code)
+            ->where('is_ordered', 1)
+            ->exists();
+
+        if ($alreadyUsed) {
+            return null;
+        }
+
+        return Coupon::where('coupons_code', $code)
+            ->where('status', 1)
+            ->where('quantity', '>', 0)
+            ->whereDate('end_date', '>=', now())
+            ->first();
+    }
+
+    /**
+     * Discount amount for a coupon against a subtotal, clamped to [0, subtotal].
+     */
+    private function couponDiscount(?Coupon $coupon, float $subtotal): float
+    {
+        if (!$coupon) {
+            return 0.0;
+        }
+
+        $discount = $coupon->discounts_type === 'percent'
+            ? $subtotal * ((float) $coupon->percent_value / 100)
+            : (float) $coupon->fixed;
+
+        return (float) min(max($discount, 0), $subtotal);
+    }
+
+    /**
+     * Delivery charge for a given postcode/area id (0 when it can't be resolved).
+     */
+    private function deliveryChargeForArea($areaId): float
+    {
+        $postOffice = $areaId ? Postcode::find($areaId) : null;
+
+        return (float) ($postOffice->zone_charge ?? 0);
+    }
+
+    /**
+     * Return human-readable messages for any cart line that exceeds available stock.
+     * Only size-tracked lines with an existing stock row are checked, so products
+     * that don't use per-size inventory are never wrongly blocked.
+     */
+    private function outOfStockItems(): array
+    {
+        $problems = [];
+
+        foreach (Cart::instance('cart')->content() as $item) {
+            $sizeId = $item->options->size ?? null;
+            if (!$sizeId) {
+                continue;
+            }
+
+            $stock = Product_stock::where('product_id', $item->id)
+                ->where('size_id', $sizeId)
+                ->first();
+
+            if ($stock) {
+                $balance = $stock->inStock - $stock->outStock;
+                if ($balance < $item->qty) {
+                    $problems[] = $item->name . ' has only ' . max(0, $balance) . ' left in stock.';
+                }
+            }
+        }
+
+        return $problems;
+    }
+
     public function store(Request $request)
     {
         $track_id = $this->generateCode();
         $invoiceNo = $this->generateInvoiceNo();
 
+        // Prevent overselling: reject the order if any size-tracked item exceeds stock.
+        $stockProblems = $this->outOfStockItems();
+        if (!empty($stockProblems)) {
+            return redirect()->back()->with('danger', implode(' ', $stockProblems));
+        }
 
         // Initialize an empty array to store purchase event data
         $purchaseEventData = [];
@@ -94,16 +193,23 @@ class CheckoutController extends Controller
                 $customer_id = $user->customer->id;
                 $couponCode = $request->input('coupon_code');
 
+                // --- Authoritative server-side amounts (never trust client totals) ---
+                $subtotal = $this->cartSubtotal();
+                $coupon = $this->resolveValidCoupon($couponCode, $customer_id);
+                $discount = $this->couponDiscount($coupon, $subtotal);
+                $deliveryCharge = $this->deliveryChargeForArea(optional($user->customer)->area);
+                $grandTotal = max(0, $subtotal - $discount + $deliveryCharge);
+
                 // order details store to order
                 $order = new Order();
                 $order->customer_id = $customer_id;
                 $order->invoice_no = $invoiceNo;
                 $order->order_track_id = $track_id;
-                $order->subtotal = $request->subtotal;
-                $order->discount = $request->discount;
-                $order->tax = $request->tax;
-                $order->total = $request->total_amount;
-                $order->delivery_charge = $request->shipping_cost;
+                $order->subtotal = $subtotal;
+                $order->discount = $discount;
+                $order->tax = 0;
+                $order->total = $grandTotal;
+                $order->delivery_charge = $deliveryCharge;
                 $order->is_shipping_different = $request->is_shipping ? 1 : 0;
                 $order->comment = $request->comment;
                 $order->save();
@@ -113,9 +219,9 @@ class CheckoutController extends Controller
                 ]);
                 //Transaction details
                 $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
-                $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
-                $purchaseEventData['tax'] = $request->tax; // Tax amount
-                $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
+                $purchaseEventData['value'] = $grandTotal; // Total amount of the transaction
+                $purchaseEventData['tax'] = 0; // Tax amount
+                $purchaseEventData['shipping'] = $deliveryCharge; // Shipping cost
                 $purchaseEventData['currency'] = 'BDT'; // Currency
                 $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ''; // Coupon code
                 $purchaseEventData['items'] = [];
@@ -129,8 +235,10 @@ class CheckoutController extends Controller
                     order_items::create([
                         'product_id' => $cartItem->id,
                         'order_id' => $order->id,
-                        'color_id' => $request->color_id,
-                        'size_id' => $request->size_id,
+                        // Use each cart item's own selected color/size so multi-item
+                        // orders aren't all saved with the last <select>'s value.
+                        'color_id' => $cartItem->options->color ?? $request->color_id,
+                        'size_id' => $cartItem->options->size ?? $request->size_id,
                         'price' => $cartItem->price,
                         'quantity' => $cartItem->qty,
                     ]);
@@ -152,17 +260,18 @@ class CheckoutController extends Controller
 
 
 
-                if ($couponCode) {
-                    // Check if the customer has previously used the coupon
-                    $appliedCoupon = AppliedCoupone::where('customer_id', $customer_id)->where('coupone_code', $couponCode)->first();
-                    if ($appliedCoupon) {
-                        // Show error message if coupon has already been used by this customer
-                        $appliedCoupon->update([
-                            'order_id' => $order->id,
-                            'is_ordered' => 1,
-                        ]);
-                        // Session::flash('success', 'You have already used this coupon.');
-                    }
+                // Finalize coupon usage at order time. The coupon is only consumed
+                // (quantity decremented + usage recorded) when an order is actually
+                // placed, and only when it produced a real discount above.
+                if ($coupon && $discount > 0) {
+                    $coupon->decrement('quantity');
+                    AppliedCoupone::create([
+                        'customer_id' => $customer_id,
+                        'order_id' => $order->id,
+                        'coupone_id' => $coupon->id,
+                        'coupone_code' => $coupon->coupons_code,
+                        'is_ordered' => 1,
+                    ]);
                 }
 
                 $customer = Customer::find($customer_id);
@@ -266,17 +375,22 @@ class CheckoutController extends Controller
                         Session::flash('warning', 'Use your Phone number as password to login.');
                     }
 
+                    // --- Authoritative server-side amounts (guests can't apply coupons) ---
+                    $subtotal = $this->cartSubtotal();
+                    $deliveryCharge = $this->deliveryChargeForArea($request->area);
+                    $grandTotal = max(0, $subtotal + $deliveryCharge);
+
                     // $product = Cart::get();
                     // order details store to order
                     $order = new Order();
                     $order->customer_id = $customer_id;
                     $order->invoice_no = $invoiceNo;
                     $order->order_track_id = $track_id;
-                    $order->subtotal = $request->subtotal;
+                    $order->subtotal = $subtotal;
                     $order->discount = 0;
-                    $order->tax = $request->tax;
-                    $order->total = $request->total_amount;
-                    $order->delivery_charge = $request->shipping_cost;
+                    $order->tax = 0;
+                    $order->total = $grandTotal;
+                    $order->delivery_charge = $deliveryCharge;
                     $order->is_shipping_different = $request->is_shipping ? 1 : 0;
                     $order->comment = $request->comment;
                     $order->save();
@@ -286,9 +400,9 @@ class CheckoutController extends Controller
                     ]);
                     //Transaction details
                     $purchaseEventData['transaction_id'] = $invoiceNo; // actual transaction ID
-                    $purchaseEventData['value'] = $request->total_amount; // Total amount of the transaction
-                    $purchaseEventData['tax'] = $request->tax; // Tax amount
-                    $purchaseEventData['shipping'] = $request->shipping_cost; // Shipping cost
+                    $purchaseEventData['value'] = $grandTotal; // Total amount of the transaction
+                    $purchaseEventData['tax'] = 0; // Tax amount
+                    $purchaseEventData['shipping'] = $deliveryCharge; // Shipping cost
                     $purchaseEventData['currency'] = 'BDT'; // Currency
                     $purchaseEventData['coupon'] = $request->input('coupon_code') ?? ''; // Coupon code
                     $purchaseEventData['items'] = [];
@@ -302,8 +416,10 @@ class CheckoutController extends Controller
                         order_items::create([
                             'product_id' => $cartItem->id,
                             'order_id' => $order->id,
-                            'color_id' => $request->color_id,
-                            'size_id' => $request->size_id,
+                            // Use each cart item's own selected color/size so multi-item
+                            // orders aren't all saved with the last <select>'s value.
+                            'color_id' => $cartItem->options->color ?? $request->color_id,
+                            'size_id' => $cartItem->options->size ?? $request->size_id,
                             'price' => $cartItem->price,
                             'quantity' => $cartItem->qty,
                         ]);
@@ -423,73 +539,10 @@ class CheckoutController extends Controller
     }
 
 
-    public function success(Request $request)
-    {
-        echo "Transaction is Successful";
-
-        $tran_id = $request->input('tran_id');
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
-
-        $sslc = new SslCommerzNotification();
-
-        $order_id = $request->input('value_a');
-        if (!$order_id) {
-            return redirect()->route('order.fail')->withErrors(['error' => 'Invalid Order ID']);
-        }
-
-        $order = Order::find($order_id);
-        if (!$order) {
-            return redirect()->route('order.fail')->withErrors(['error' => 'Order not found']);
-        }
-
-        $transaction = transactions::where('order_id', $order->id)->first();
-        if ($transaction) {
-            $transaction->update(['status' => 'paid']);
-        } else {
-            return redirect()->route('order.fail')->withErrors(['error' => 'Transaction not found']);
-        }
-        Log::alert('Payment success');
-        dd($order_id, $transaction, $sslc);
-        // return redirect()->route('thankyou')->with(['success' => 'Your order has been placed, Payment successful.']);
-    }
-
-
-    public function fail(Request $request)
-    {
-        $order_id = $request->value_a;
-        $order = Order::find($order_id);
-        return redirect()->route('order.fail');
-    }
-
-    public function cancel(Request $request)
-    {
-        $order_id = $request->value_a;
-        $order = Order::find($order_id);
-        return redirect()->route('order.cancel');
-    }
-
-    public function ipnListener(Request $request)
-    {
-        $sslc = new SslCommerzNotification();
-        $tran_id = $request->input('tran_id');
-
-        // Check the transaction status
-        $validation = $sslc->orderValidate($request->all(), $tran_id, $request->input('amount'), $request->input('currency'));
-
-        if ($validation == TRUE) {
-            // Transaction is valid, update order status
-            $order = Order::where('invoice_no', $tran_id)->first();
-            if ($order) {
-                $order->status = 'Paid';
-                $order->save();
-                return response()->json(['status' => 'success', 'message' => 'Transaction is successfully completed.']);
-            }
-        } else {
-            // Transaction is invalid, handle accordingly
-            return response()->json(['status' => 'fail', 'message' => 'Transaction validation failed.']);
-        }
-    }
+    // NOTE: The SSLCommerz success/fail/cancel/ipn callbacks are handled by
+    // App\Http\Controllers\SslCommerzPaymentController (see routes/web.php). The
+    // duplicate, dead implementations that used to live here (with a stray dd()
+    // and references to non-existent order.fail/order.cancel routes) were removed.
 
     public function login(Request $request)
     {
@@ -527,8 +580,12 @@ class CheckoutController extends Controller
             $user = Auth::guard('customer')->user();
             $customerId = $user->customer->id;
 
-            // Check if the customer has previously used the coupon
-            $appliedCoupon = AppliedCoupone::where('customer_id', $customerId)->where('coupone_code', $couponCode)->first();
+            // Only block re-use if the customer has actually COMPLETED an order with this coupon.
+            // (Merely applying it during a checkout that was later abandoned must not lock them out.)
+            $appliedCoupon = AppliedCoupone::where('customer_id', $customerId)
+                ->where('coupone_code', $couponCode)
+                ->where('is_ordered', 1)
+                ->first();
 
             if ($appliedCoupon) {
                 // Show error message if coupon has already been used by this customer
@@ -543,17 +600,9 @@ class CheckoutController extends Controller
                     ->whereDate('end_date', '>=', now()) // Check if the coupon is not expired
                     ->first();
                 if ($coupon) {
-                    // Reduce coupon quantity
-                    $coupon->decrement('quantity');
-                    // Store applied coupon in the database
-                    AppliedCoupone::create([
-                        'customer_id' => $customerId,
-                        'coupone_id' => $coupon->id,
-                        'coupone_code' => $coupon->coupons_code,
-                    ]);
-
-                    // Show success message
-                    // Session::flash('success', 'Coupon applied successfully!');
+                    // Just validate and return the coupon here. The quantity is only
+                    // decremented and the usage recorded once the order is actually placed
+                    // (see store()), so abandoned checkouts don't burn the coupon.
                     return response()->json(['status' => 200, 'coupon' => $coupon, 'message' => 'Coupon applied successfully!']);
                 } else {
                     // Show error message if coupon not found or invalid

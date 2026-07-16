@@ -34,7 +34,7 @@
     @endphp
     <title>@yield('title') - {{ config('app.name') }} | YOUR ULTIMATE LIFESTYLE</title>
 
-    <meta name="description" content="{{$userData->description}}">
+    <meta name="description" content="{{$userData?->description ?? ''}}">
     <meta name="keywords" content="{{$tags}}">
     <meta name="robots" content="index, follow">
     <meta name="author" content="{{ config('app.name') }}">
@@ -42,21 +42,21 @@
 
     <!-- Google / Search Engine Tags -->
     <meta itemprop="name" content="{{ config('app.name') }}">
-    <meta itemprop="description" content="{{$userData->description}}">
-    <meta itemprop="image" content="{{asset('storage/Seologos/'.$seoData->seoLogo)}}">
+    <meta itemprop="description" content="{{$userData?->description ?? ''}}">
+    <meta itemprop="image" content="{{asset('storage/Seologos/'.$seoData?->seoLogo)}}">
 
     <!-- Facebook Meta Tags -->
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ config('app.name') }}">
-    <meta property="og:description" content="{{$userData->description}}">
-    <meta property="og:image" content="{{asset('storage/Seologos/'.$seoData->seoLogo)}}">
+    <meta property="og:description" content="{{$userData?->description ?? ''}}">
+    <meta property="og:image" content="{{asset('storage/Seologos/'.$seoData?->seoLogo)}}">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="">
     <meta name="twitter:title" content="{{ config('app.name') }}">
-    <meta name="twitter:description" content="{{$userData->description}}">
-    <meta name="twitter:image" content="{{asset('storage/Seologos/'.$seoData->seoLogo)}}">
+    <meta name="twitter:description" content="{{$userData?->description ?? ''}}">
+    <meta name="twitter:image" content="{{asset('storage/Seologos/'.$seoData?->seoLogo)}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta name="google-site-verification" content="JQkHKHzfb1bWvZnjgXV4fjWaaHeX8G6uY4SsOfP3WTg" />
@@ -64,7 +64,7 @@
 
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('storage/favicons/'.$userData->webfavicon)}}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('storage/favicons/'.$userData?->webfavicon)}}">
     <link rel="manifest" href="{{asset('sitemap.xml')}}">
 
     <!--Font-->
@@ -87,13 +87,6 @@
     <!--Font-->
     @livewireStyles
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MTWGTJB6');</script>
-    <!-- End Google Tag Manager -->
     @stack('viewItem')
 </head>
 
@@ -107,8 +100,8 @@
                        <div class="header-info">
                         <ul>
                              @if($contactinfo)
-                                <li><i class="far fa-phone-alt"></i> <a href="tel:{{$contactinfo->phone}}">{{$contactinfo->phone}}</a></li>
-                                <li><i class="fal fa-envelope"></i> <a href="mailto:{{$contactinfo->email}}">{{$contactinfo->email}}</a></li>
+                                <li><i class="far fa-phone-alt"></i> <a href="tel:{{$contactinfo?->phone}}">{{$contactinfo?->phone}}</a></li>
+                                <li><i class="fal fa-envelope"></i> <a href="mailto:{{$contactinfo?->email}}">{{$contactinfo?->email}}</a></li>
                             @endif
                         </ul>
                         </div>
@@ -122,7 +115,7 @@
                                 @endphp
                                 <ul>
                                     @foreach ($offers as $offer)
-                                    <li>{{$offer->offer_name}}<a href="{{route('offer',['id'=>$offer->id])}}" class="ml-5">View details</a></li>
+                                    <li>{{$offer?->offer_name}}<a href="{{route('offer',['id'=>$offer?->id])}}" class="ml-5">View details</a></li>
                                     @endforeach
                                     {{-- <li>Supper Value Deals - Save more with coupons</li>
                                     <li>Trendy 25silver jewelry, save up 35% off today <a href="shop-grid-right.html">Shop now</a></li> --}}
@@ -188,12 +181,12 @@
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
                         <a href="{{route('home')}}">
-                        <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                        <img src="{{asset('storage/logos/'.$userData?->weblogo)}}" alt="{{$userData?->appName}}">
                         </a>
                     </div>
                      <div class="logo logo-width-1 d-block d-sm-none">
                         <a href="{{route('home')}}">
-                            <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                            <img src="{{asset('storage/logos/'.$userData?->weblogo)}}" alt="{{$userData?->appName}}">
                         </a>
                     </div>
 
@@ -309,7 +302,7 @@
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
                     <a href="{{route('home')}}">
-                         <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="{{$userData->appName}}">
+                         <img src="{{asset('storage/logos/'.$userData?->weblogo)}}" alt="{{$userData?->appName}}">
                     </a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
@@ -355,7 +348,7 @@
                          <i class="fi-rs-user"></i>
                                 @php
                                 $user = Auth::guard('customer')->user();
-                                $fullName = $user->customer->firstName . ' ' . $user->customer->lastName;
+                                $fullName = $user?->customer?->firstName . ' ' . $user?->customer?->lastName;
                                 @endphp
 
                                 <div class="dropdown">
@@ -393,7 +386,7 @@
 
                     </div>
                     <div class="single-mobile-header-info mt-10">
-                        <a  href="{{route('contactus')}}"> Our location: <p>{{$contactinfo->address}}</p></a>
+                        <a  href="{{route('contactus')}}"> Our location: <p>{{$contactinfo?->address}}</p></a>
                     </div>
                 </div>
 
@@ -448,10 +441,10 @@
                             <div class="logo logo-width-1 wow fadeIn animated">
                                 <a href="{{('/')}}">
                                     <!--<img src="{{asset('frontend/assets/imgs/Kohen_Logo_Main.png')}}" alt="logo">-->
-                                    <img src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="logo">
+                                    <img src="{{asset('storage/logos/'.$userData?->weblogo)}}" alt="logo">
                                     </a>
                             </div>
-                            <p class="footer-desc">{{$userData->description}}</p>
+                            <p class="footer-desc">{{$userData?->description ?? ''}}</p>
 
                             <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
                             <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
@@ -487,21 +480,21 @@
                         <h5 class="widget-title wow fadeIn animated">Contact</h5>
                             <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
                                 <li>
-                                    <a href="https://wa.me/{{ $contactinfo->whatsapp }}"><span><i class="fab fa-whatsapp"></i>
-                                    </span> {{ $contactinfo->whatsapp }}
+                                    <a href="https://wa.me/{{ $contactinfo?->whatsapp }}"><span><i class="fab fa-whatsapp"></i>
+                                    </span> {{ $contactinfo?->whatsapp }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="tel:{{ $contactinfo->phone }}" target="__blank"><span><i class="fal fa-phone-alt"></i>
-                                    </span> {{ $contactinfo->phone }}
+                                    <a href="tel:{{ $contactinfo?->phone }}" target="__blank"><span><i class="fal fa-phone-alt"></i>
+                                    </span> {{ $contactinfo?->phone }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="mailto:{{$contactinfo->email}}" target="__blank"><span><i class="fal fa-envelope"></i>
-                                    </span> {{ $contactinfo->email }}
+                                    <a href="mailto:{{$contactinfo?->email}}" target="__blank"><span><i class="fal fa-envelope"></i>
+                                    </span> {{ $contactinfo?->email }}
                                     </a>
                                 </li>
-                            <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{ $contactinfo->address }}</a></li>
+                            <li><a href="#" ><span><i class="fal fa-map-marker-alt"></i></span> {{ $contactinfo?->address }}</a></li>
 
                         </ul>
 
@@ -541,16 +534,16 @@
                 <div class="col-lg-6">
                     <p class="float-md-left font-sm text-muted mb-0 d-flex">
 
-                    <script>document.write(new Date().getFullYear())</script> &copy; <strong class="mr-5 ml-5">{{$userData->appName}}</strong>
+                    <script>document.write(new Date().getFullYear())</script> &copy; <strong class="mr-5 ml-5">{{$userData?->appName}}</strong>
                     All rights reserved,
 
                     <strong class="text-brand mr-10 ml-10">
-                        <img width="40" src="{{asset('storage/logos/'.$userData->weblogo)}}" alt="logo">
-                    </strong><span style="text-transform:uppercase"> - {{$userData->entitle}}</span> </p>
+                        <img width="40" src="{{asset('storage/logos/'.$userData?->weblogo)}}" alt="logo">
+                    </strong><span style="text-transform:uppercase"> - {{$userData?->entitle}}</span> </p>
                 </div>
                 <div class="col-lg-6">
                     <p class="text-lg-end text-start font-sm text-muted mb-0">
-                        Developed by <a href="https://qbit-tech.com/" target="_blank">QBitTech </a>.
+                        Developed by <a href="https://arifhossen.site/" target="_blank">Arif </a>.
                     </p>
                 </div>
             </div>

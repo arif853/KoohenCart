@@ -132,6 +132,10 @@ class POSController extends Controller
     public function decreaseQuantity($rowId)
     {
         $item = Cart::instance('pos_cart')->get($rowId);
+        // Never let the quantity drop below 1; use cart_remove to delete a line.
+        if ($item->qty <= 1) {
+            return redirect()->back()->with('success','Item quantity updated.');
+        }
         $qty = $item->qty - 1;
         Cart::instance('pos_cart')->update($rowId,$qty);
         return redirect()->back()->with('success','Item quantity updated.');
@@ -240,16 +244,14 @@ class POSController extends Controller
                 'quantity' => $cartItem->qty,
             ]);
 
-            Product_stock::updateOrCreate(
-                [
-                    'product_id' => $cartItem->id,
-                    'size_id' => $cartItem->options->size,
-                ],
-                [
-                    // 'inStock' => \DB::raw("inStock"), // Increment the inStock column
-                    'outStock' => \DB::raw("outStock + $cartItem->qty"), // Assuming outStock starts at 0
-                ]
-            );
+            // firstOrNew + numeric add works even when no stock row exists yet;
+            // a raw "outStock + n" expression errors on the initial INSERT.
+            $posStock = Product_stock::firstOrNew([
+                'product_id' => $cartItem->id,
+                'size_id' => $cartItem->options->size,
+            ]);
+            $posStock->outStock = max(0, (int) ($posStock->outStock ?? 0) + (int) $cartItem->qty);
+            $posStock->save();
             
             $product = Products::find($cartItem->id);
             $stock = $product->product_stocks->sum('inStock') - $product->product_stocks->sum('outStock');

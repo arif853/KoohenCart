@@ -27,20 +27,20 @@ class CartController extends Controller
     {
         $item = Cart::get($id);
         $qty = $item->qty + 1;
-        Cart::update($id,$qty);
-        $this->emitTo('refresh');
-        // return redirect()->back();
+        Cart::update($id, $qty);
+        return redirect()->back();
     }
 
     public function decreaseQuantity($id)
     {
         $item = Cart::get($id);
+        // Never let the quantity drop below 1; use removecart to delete an item.
+        if ($item->qty <= 1) {
+            return redirect()->back();
+        }
         $qty = $item->qty - 1;
-        Cart::update($id,$qty);
-        $this->emitTo('refresh');
-
-        // return redirect()->back();
-
+        Cart::update($id, $qty);
+        return redirect()->back();
     }
     public function addtocart(string $id)
     {

@@ -7,7 +7,6 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -28,6 +27,10 @@ class UserSeeder extends Seeder
 
         if ($admin->name !== 'Super Admin') {
             $admin->name = 'Super Admin';
+            $admin->email = 'superadmin@mail.com';
+            $admin->email_verified_at = now();
+            $admin->password = Hash::make(12345678);
+            $admin->remember_token = Str::random(10);
             $admin->save();
         }
 

@@ -64,9 +64,9 @@ class SocialAuthController extends Controller
             // Redirect to the customer dashboard
             return redirect()->route('customer.dashboard');
         } catch (Exception $e) {
-            // Handle errors (e.g., log the error, show an error message)
-            dd($e);
-            // return redirect()->route('home')->with('danger', 'Failed to login with Google.');
+            // Handle errors (log the error, show a friendly message instead of dumping a stack trace)
+            \Log::error('Google login failed: ' . $e->getMessage());
+            return redirect()->route('home')->with('danger', 'Failed to login with Google.');
         }
     }
 

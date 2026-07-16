@@ -21,6 +21,10 @@ class WishlistIconComponent extends Component
     public function decreaseQuantity($id)
     {
         $item = Cart::instance('wishlist')->get($id);
+        // Never let the quantity drop below 1; use removecart to delete an item.
+        if ($item->qty <= 1) {
+            return;
+        }
         $qty = $item->qty - 1;
         Cart::instance('wishlist')->update($id,$qty);
         $this->dispatch('cartRefresh')->to('cart-icon-component');

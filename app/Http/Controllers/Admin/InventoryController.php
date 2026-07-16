@@ -101,22 +101,20 @@ class InventoryController extends Controller
 
         // Loop through each size and quantity
         foreach ($sizes as $index => $sizeId) {
-            $quantity = $quantities[$index];
+            $quantity = (int) $quantities[$index];
 
-            // $old_stock =
-            // Find or create a product_stock record based on product_id and size_id
-            $stock = Product_stock::updateOrCreate(
-                [
-                    'product_id' => $productId,
-                    'size_id' => $sizeId,
-                ],
-                [
-                    'inStock' => \DB::raw("inStock + $quantity"), // Increment the inStock column
-                    // 'outStock' => 0, // Assuming outStock starts at 0
-                    'price' => null, // Set the price value as needed
-                    'purchase_date' => $request->purchase_date,
-                ]
-            );
+            // Find or create a product_stock record based on product_id and size_id.
+            // Using firstOrNew + a numeric add works whether the row exists or not;
+            // a raw "inStock + $quantity" expression would fail on the initial INSERT
+            // because MySQL can't reference the column in an INSERT VALUES list.
+            $stock = Product_stock::firstOrNew([
+                'product_id' => $productId,
+                'size_id' => $sizeId,
+            ]);
+
+            $stock->inStock = (int) ($stock->inStock ?? 0) + $quantity;
+            $stock->purchase_date = $request->purchase_date;
+            $stock->save();
         }
         
         $product->update([

@@ -113,18 +113,18 @@ class CampaignController extends Controller
                 $campaign->save();
 
                 // Save campaign products
-                $products = $request->input('product');
-                $regularPrices = $request->input('regular_price');
-                $stock = $request->input('stock');
-                $campaignPrices = $request->input('campaign_price');
+                $products = $request->input('product', []);
+                $regularPrices = $request->input('regular_price', []);
+                $stock = $request->input('stock', []);
+                $campaignPrices = $request->input('campaign_price', []);
 
-                foreach ($products as $key => $productId) {
+                foreach ((array) $products as $key => $productId) {
                     Camp_product::create([
                         'campaign_id' => $campaign->id,
                         'product_id' => $productId,
-                        'regular_price' => $regularPrices[$key],
-                        'camp_price' => $campaignPrices[$key],
-                        'camp_qty' => $stock[$key],
+                        'regular_price' => $regularPrices[$key] ?? 0,
+                        'camp_price' => $campaignPrices[$key] ?? 0,
+                        'camp_qty' => $stock[$key] ?? 0,
                     ]);
                 }
 
@@ -219,30 +219,31 @@ class CampaignController extends Controller
                 $campaign->save();
 
                 // Save campaign products
-                $products = $request->input('product');
-                $regularPrices = $request->input('regular_price');
-                $stock = $request->input('stock');
-                $campaignPrices = $request->input('campaign_price');
+                $products = $request->input('product', []);
+                $regularPrices = $request->input('regular_price', []);
+                $stock = $request->input('stock', []);
+                $campaignPrices = $request->input('campaign_price', []);
 
-                foreach ($products as $key => $productId) {
+                foreach ((array) $products as $key => $productId) {
+                    // Scope the lookup to this campaign so we don't accidentally
+                    // update the same product's entry in a different campaign.
+                    $existedProduct = Camp_product::where('campaign_id', $campaign->id)
+                        ->where('product_id', $productId)
+                        ->first();
 
-                    $existedProduct = Camp_product::where('product_id', $productId)->first();
-
-                    if(!$existedProduct){
+                    if (!$existedProduct) {
                         Camp_product::create([
                             'campaign_id' => $campaign->id,
                             'product_id' => $productId,
-                            'regular_price' => $regularPrices[$key],
-                            'camp_price' => $campaignPrices[$key],
-                            'camp_qty' => $stock[$key],
+                            'regular_price' => $regularPrices[$key] ?? 0,
+                            'camp_price' => $campaignPrices[$key] ?? 0,
+                            'camp_qty' => $stock[$key] ?? 0,
                         ]);
-                    }
-                    else{
+                    } else {
                         $existedProduct->update([
-                            // 'product_id' => $productId,
-                            'regular_price' => $regularPrices[$key],
-                            'camp_price' => $campaignPrices[$key],
-                            'camp_qty' => $stock[$key],
+                            'regular_price' => $regularPrices[$key] ?? 0,
+                            'camp_price' => $campaignPrices[$key] ?? 0,
+                            'camp_qty' => $stock[$key] ?? 0,
                         ]);
                     }
                 }
