@@ -60,6 +60,7 @@ use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
 use App\Http\Controllers\Admin\Steadfast\SteadfastController;
 use App\Http\Controllers\Frontend\CustomerDashboardController;
+use App\Http\Controllers\Frontend\CustomerPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -176,10 +177,25 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('
 //store checkout orders.
 Route::post('/customer/shop/checkout/store', [CheckoutController::class, 'store'])->name('order.store');
 //oute::post('/customer/shop/checkout/courier', [CheckoutController::class, 'send_bulk_to_courier'])->name('order.courier');
+// Logging in from the checkout page itself keeps the cart and returns to checkout.
+Route::post('/customer/shop/checkout/login', [CheckoutController::class, 'login'])
+    ->middleware('throttle:10,1')
+    ->name('checkout.login');
+
+// Set a password from an emailed link (guests: they are not signed in yet).
+Route::get('/customer/set-password/{token}', [CustomerPasswordController::class, 'showResetForm'])
+    ->name('customer.password.reset');
+Route::post('/customer/set-password', [CustomerPasswordController::class, 'reset'])
+    ->middleware('throttle:10,1')
+    ->name('customer.password.update');
 
 // Customer authentication routes
 Route::group(['prefix' => 'customer', 'middleware' => ['auth:customer']], function () {
     Route::get('/dashboard',[CustomerDashboardController::class, 'index'])->name('customer.dashboard');
+    Route::post('/password', [CustomerPasswordController::class, 'store'])->name('customer.password.store');
+    Route::post('/password/send-link', [CustomerPasswordController::class, 'sendLink'])
+        ->middleware('throttle:3,1')
+        ->name('customer.password.send_link');
     Route::post('/customer_update/{id}',[CustomerDashboardController::class, 'customer_update'])->name('customer.update');
     Route::post('/customer_billing_update/{id}', [CustomerDashboardController::class, 'customerBillingUpdate']);
     Route::post('shipping_update/{id}', [CustomerDashboardController::class, 'shipping_update'])->name('customer.shipping_update');

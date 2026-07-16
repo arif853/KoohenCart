@@ -21,8 +21,16 @@
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
-        <!-- <env name="DB_CONNECTION" value="sqlite"/> -->
-        <!-- <env name="DB_DATABASE" value=":memory:"/> -->
+        <!--
+            Tests MUST run against their own database. Some tests use RefreshDatabase,
+            which runs migrate:fresh and would otherwise wipe the development database.
+            Create it once with:  CREATE DATABASE koohen_testing;
+            SQLite is not an option: the checkout migration uses MySQL ALTER TABLE syntax
+            because doctrine/dbal (needed by ->change() on Laravel 10) is not installed.
+            Tests\TestCase enforces this at runtime as a second line of defence.
+        -->
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_DATABASE" value="koohen_testing"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>

@@ -21,7 +21,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
@@ -131,29 +134,62 @@ class CheckoutController extends Controller
     }
 
     /**
-     * The customer placing the order: the logged-in one, an earlier customer with
-     * the same phone (so repeat buyers aren't blocked), or a brand new record.
-     *
-     * A guest who types someone else's phone number must not be able to rewrite
-     * that person's saved profile, so the submitted details are only written to a
-     * customer this request owns: a brand new one, or the logged-in account. The
-     * details for THIS order are always kept on the order's own shipping row, which
-     * is what admin, the invoice and the courier read.
+     * The account matching the phone or email typed into the checkout form, if any.
+     * Its existence is what forces a shopper to log in instead of ordering as a
+     * guest, so it must never match on a blank email.
      */
-    private function resolveCustomer(array $data): Customer
+    public static function findExistingAccount(?string $phone, ?string $email): ?Register_customer
     {
-        if (Auth::guard('customer')->check()) {
-            $customer = Auth::guard('customer')->user()->customer;
-        } else {
-            $existing = Customer::where('phone', $data['phone'])->first();
+        return Register_customer::query()
+            ->when($phone, fn ($q) => $q->orWhere('phone', $phone))
+            ->when($email, fn ($q) => $q->orWhere('email', $email))
+            ->first();
+    }
 
-            if ($existing) {
-                return $existing;
-            }
+    /**
+     * Register a brand new customer at checkout and sign them straight in.
+     *
+     * The password is random and never shown: the customer proves ownership by
+     * already being in this session, and is prompted to choose a real one from the
+     * dashboard (and by email, when they gave one). A random password is what makes
+     * password_set_at null, which drives that prompt.
+     *
+     * This always creates a fresh Customer row. A phone may already belong to a
+     * customer created by admin/POS that has no login, and silently adopting that
+     * record would hand a stranger someone else's order history.
+     */
+    private function registerCustomer(array $data): Customer
+    {
+        $customer = new Customer();
+        $customer->firstName = $data['fname'];
+        $customer->lastName = $data['lname'];
+        $customer->phone = $data['phone'];
+        $customer->email = $data['email'] ?? null;
+        $customer->billing_address = $data['billing_address'];
+        $customer->loyalty_point = 10;
+        $customer->status = 'registerd';
+        $customer->save();
 
-            $customer = new Customer();
-            $customer->loyalty_point = 10;
-        }
+        $login = Register_customer::create([
+            'customer_id' => $customer->id,
+            'phone' => $customer->phone,
+            'email' => $customer->email,
+            'password' => Hash::make(Str::random(40)),
+            'password_set_at' => null,
+            'status' => 'registerd',
+        ]);
+
+        Auth::guard('customer')->login($login);
+
+        return $customer;
+    }
+
+    /**
+     * Update the signed-in customer's own profile from the checkout form.
+     */
+    private function updateOwnProfile(array $data): Customer
+    {
+        $customer = Auth::guard('customer')->user()->customer;
 
         $customer->firstName = $data['fname'];
         $customer->lastName = $data['lname'];
@@ -166,29 +202,20 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Guests get a dashboard login with their phone as the password, matching the
-     * shop's existing behaviour. An account is only created when none exists yet,
-     * so a repeat guest never overwrites a real password.
+     * Email the new customer a link to choose their password. Best effort: a failed
+     * send must never roll back an order that has already been paid for or placed.
      */
-    private function ensureLoginExists(Customer $customer): void
+    private function sendPasswordSetupLink(Customer $customer): void
     {
-        $exists = Register_customer::where('customer_id', $customer->id)->exists();
-
-        if ($exists) {
+        if (!$customer->email) {
             return;
         }
 
-        Register_customer::create([
-            'customer_id' => $customer->id,
-            'phone' => $customer->phone,
-            'email' => $customer->email,
-            'password' => Hash::make($customer->phone),
-            'status' => 'registerd',
-        ]);
-
-        $customer->update(['status' => 'registerd']);
-
-        Session::flash('warning', 'Use your phone number as the password to log in to your dashboard.');
+        try {
+            Password::broker('customers')->sendResetLink(['email' => $customer->email]);
+        } catch (\Throwable $e) {
+            Log::error('Could not send password setup link to ' . $customer->email . ': ' . $e->getMessage());
+        }
     }
 
     public function store(Request $request)
@@ -217,6 +244,23 @@ class CheckoutController extends Controller
             return redirect()->route('cart')->with('danger', 'Your cart is empty.');
         }
 
+        $isNewRegistration = false;
+
+        // A shopper whose phone or email already has an account must log in rather
+        // than quietly creating a second one (or ordering against someone else's).
+        if (!Auth::guard('customer')->check()) {
+            if (self::findExistingAccount($data['phone'], $data['email'] ?? null)) {
+                return redirect()->route('checkout')
+                    ->withInput()
+                    ->with('show_login', true)
+                    ->withErrors([
+                        'login_identifier' => 'You already have an account with this phone or email. Please log in to continue.',
+                    ]);
+            }
+
+            $isNewRegistration = true;
+        }
+
         // Prevent overselling: reject the order if any size-tracked item exceeds stock.
         $stockProblems = $this->outOfStockItems();
         if (!empty($stockProblems)) {
@@ -228,8 +272,9 @@ class CheckoutController extends Controller
         DB::beginTransaction();
 
         try {
-            $customer = $this->resolveCustomer($data);
-            $this->ensureLoginExists($customer);
+            $customer = $isNewRegistration
+                ? $this->registerCustomer($data)
+                : $this->updateOwnProfile($data);
 
             // --- Authoritative server-side amounts (never trust client totals) ---
             $subtotal = $this->cartSubtotal();
@@ -320,9 +365,22 @@ class CheckoutController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+
+            // The registration above signed them in; that session must not outlive
+            // the customer row the rollback just discarded.
+            if ($isNewRegistration) {
+                Auth::guard('customer')->logout();
+            }
+
             Log::error('Checkout error: ' . $e->getMessage());
 
             return redirect()->back()->with('danger', 'Sorry, we could not place your order. Please try again.')->withInput();
+        }
+
+        // After the commit: the order is placed, so a mail failure must not undo it.
+        if ($isNewRegistration) {
+            $this->sendPasswordSetupLink($customer);
+            Session::flash('warning', 'We created an account for you. Set a password from your dashboard to secure it.');
         }
 
         Cart::instance('cart')->destroy();
@@ -335,6 +393,37 @@ class CheckoutController extends Controller
             'success' => 'Your order has been placed',
             'purchaseEventData' => $purchaseEventData,
         ]);
+    }
+
+    /**
+     * Log in from the checkout page itself, so an existing customer keeps their
+     * cart and lands straight back on checkout rather than the dashboard.
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'login_identifier' => 'required|string',
+            'password' => 'required|string',
+        ], [
+            'login_identifier.required' => 'Enter your phone number or email.',
+            'password.required' => 'Enter your password.',
+        ]);
+
+        $identifier = $request->input('login_identifier');
+        $field = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+        if (!Auth::guard('customer')->attempt(
+            [$field => $identifier, 'password' => $request->input('password')],
+            $request->boolean('remember')
+        )) {
+            throw ValidationException::withMessages([
+                'login_identifier' => trans('auth.failed'),
+            ])->redirectTo(route('checkout'));
+        }
+
+        $request->session()->regenerate();
+
+        return redirect()->route('checkout')->with('success', 'Logged in. Please review your order.');
     }
 
     /**

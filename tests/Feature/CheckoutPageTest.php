@@ -5,13 +5,13 @@ namespace Tests\Feature;
 use App\Livewire\CheckoutComponent;
 use App\Models\Products;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
 class CheckoutPageTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     private Products $product;
 
@@ -53,6 +53,44 @@ class CheckoutPageTest extends TestCase
         $response->assertDontSee('name="district"', false);
         $response->assertDontSee('Ship to a different');
         $response->assertDontSee('Create an account?');
+    }
+
+    public function test_guests_are_offered_a_login_but_signed_in_customers_are_not(): void
+    {
+        // Anchor on the checkout login form itself: "Already have an account?" also
+        // appears in the register modal that the layout renders on every page.
+        $this->get(route('checkout'))
+            ->assertOk()
+            ->assertSee(route('checkout.login'), false);
+
+        $login = \App\Models\Register_customer::create([
+            'customer_id' => \App\Models\Customer::create([
+                'firstName' => 'Arif',
+                'lastName' => 'Hossen',
+                'phone' => '01711000444',
+                'email' => 'signedin@example.com',
+                'status' => 'registerd',
+            ])->id,
+            'phone' => '01711000444',
+            'email' => 'signedin@example.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('a-password-1'),
+            'password_set_at' => now(),
+            'status' => 'registerd',
+        ]);
+
+        $this->actingAs($login, 'customer')
+            ->get(route('checkout'))
+            ->assertOk()
+            ->assertDontSee(route('checkout.login'), false);
+    }
+
+    public function test_the_login_panel_opens_when_checkout_finds_an_existing_account(): void
+    {
+        $response = $this->withSession(['show_login' => true])->get(route('checkout'));
+
+        $response->assertOk();
+        // Bootstrap only shows a collapsed panel when it carries the "show" class.
+        $response->assertSee('login_form show', false);
     }
 
     public function test_switching_delivery_zone_updates_the_total(): void

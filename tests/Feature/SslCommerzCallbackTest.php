@@ -3,13 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\Order;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class SslCommerzCallbackTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * These branches used to redirect to route('order.fail'), which does not exist,

@@ -106,6 +106,17 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        // Shop customers are a separate provider and get their own token table:
+        // both tables are keyed by email, and the same address may belong to a
+        // staff user and a customer, so a shared table would let one reset
+        // consume the other's token.
+        'customers' => [
+            'provider' => 'customers',
+            'table' => 'customer_password_reset_tokens',
+            'expire' => 1440,
+            'throttle' => 60,
+        ],
     ],
 
     /*

@@ -7,12 +7,14 @@ use App\Models\Order;
 use App\Models\Products;
 use App\Models\Register_customer;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class CheckoutTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     private Products $product;
 
@@ -152,46 +154,117 @@ class CheckoutTest extends TestCase
             ->assertRedirect(route('cart'));
     }
 
-    public function test_a_repeat_guest_with_the_same_phone_can_order_again(): void
+    public function test_a_new_customer_is_registered_and_signed_in_by_checking_out(): void
     {
-        $before = Order::count();
-
         $this->addProductToCart();
         $this->post(route('order.store'), $this->validPayload())->assertRedirect(route('thankyou'));
 
-        $this->addProductToCart();
-        $this->post(route('order.store'), $this->validPayload())->assertRedirect(route('thankyou'));
+        $customer = Customer::where('phone', '01711000111')->firstOrFail();
+        $login = Register_customer::where('customer_id', $customer->id)->firstOrFail();
 
-        $this->assertSame($before + 2, Order::count());
+        $this->assertAuthenticatedAs($login, 'customer');
+        $this->assertSame('registerd', $customer->status);
+        // Still on the generated password, so the dashboard must prompt for one.
+        $this->assertTrue($login->needsPassword());
     }
 
-    public function test_a_guest_cannot_overwrite_an_existing_customers_saved_profile(): void
+    public function test_the_generated_password_is_not_the_phone_number(): void
     {
         $this->addProductToCart();
         $this->post(route('order.store'), $this->validPayload());
 
-        $customer = Customer::where('phone', '01711000111')->firstOrFail();
-        $this->assertSame('Arif', $customer->firstName);
+        $login = Register_customer::where('phone', '01711000111')->firstOrFail();
 
-        // Someone else places an order typing the same phone number.
+        $this->assertFalse(Hash::check('01711000111', $login->password));
+    }
+
+    public function test_a_returning_phone_must_log_in_instead_of_ordering_as_a_guest(): void
+    {
         $this->addProductToCart();
+        $this->post(route('order.store'), $this->validPayload())->assertRedirect(route('thankyou'));
+        Auth::guard('customer')->logout();
+
+        $before = Order::count();
+        $this->addProductToCart();
+
         $this->post(route('order.store'), $this->validPayload([
             'fname' => 'Impostor',
-            'lname' => 'Person',
-            'email' => 'impostor@example.com',
             'billing_address' => '99 Somewhere Else',
-        ]))->assertRedirect(route('thankyou'));
+        ]))
+            ->assertRedirect(route('checkout'))
+            ->assertSessionHasErrors('login_identifier');
 
-        // The saved profile is untouched...
-        $customer->refresh();
+        $this->assertSame($before, Order::count());
+        $this->assertGuest('customer');
+
+        // The impostor's details never reached the existing customer's profile.
+        $customer = Customer::where('phone', '01711000111')->firstOrFail();
         $this->assertSame('Arif', $customer->firstName);
-        $this->assertNull($customer->email);
         $this->assertSame('12 Green Road, Dhanmondi', $customer->billing_address);
+    }
 
-        // ...but the new order still ships to the address that was actually given.
-        $order = Order::latest('id')->first();
-        $this->assertSame('99 Somewhere Else', $order->deliveryDetails()->address);
-        $this->assertSame('Impostor Person', $order->deliveryDetails()->name);
+    public function test_a_returning_email_must_log_in_even_with_a_new_phone(): void
+    {
+        $this->addProductToCart();
+        $this->post(route('order.store'), $this->validPayload(['email' => 'repeat@example.com']));
+        Auth::guard('customer')->logout();
+
+        $before = Order::count();
+        $this->addProductToCart();
+
+        $this->post(route('order.store'), $this->validPayload([
+            'phone' => '01799999999',
+            'email' => 'repeat@example.com',
+        ]))->assertSessionHasErrors('login_identifier');
+
+        $this->assertSame($before, Order::count());
+    }
+
+    public function test_a_blank_email_never_matches_an_existing_account(): void
+    {
+        // Two different people who both leave email blank must not collide.
+        $this->addProductToCart();
+        $this->post(route('order.store'), $this->validPayload(['email' => '']))
+            ->assertRedirect(route('thankyou'));
+        Auth::guard('customer')->logout();
+
+        $this->addProductToCart();
+        $this->post(route('order.store'), $this->validPayload([
+            'phone' => '01788888888',
+            'email' => '',
+        ]))->assertRedirect(route('thankyou'));
+    }
+
+    public function test_an_existing_customer_can_log_in_from_checkout_and_keep_their_cart(): void
+    {
+        $this->addProductToCart();
+        $this->post(route('order.store'), $this->validPayload());
+        $login = Register_customer::where('phone', '01711000111')->firstOrFail();
+        $login->forceFill(['password' => Hash::make('secret-pass-1'), 'password_set_at' => now()])->save();
+        Auth::guard('customer')->logout();
+
+        $this->addProductToCart();
+        $this->post(route('checkout.login'), [
+            'login_identifier' => '01711000111',
+            'password' => 'secret-pass-1',
+        ])->assertRedirect(route('checkout'));
+
+        $this->assertAuthenticatedAs($login, 'customer');
+        $this->assertSame(1, Cart::instance('cart')->count());
+    }
+
+    public function test_checkout_login_rejects_a_wrong_password(): void
+    {
+        $this->addProductToCart();
+        $this->post(route('order.store'), $this->validPayload());
+        Auth::guard('customer')->logout();
+
+        $this->post(route('checkout.login'), [
+            'login_identifier' => '01711000111',
+            'password' => 'not-the-password',
+        ])->assertSessionHasErrors('login_identifier');
+
+        $this->assertGuest('customer');
     }
 
     public function test_a_logged_in_customer_updates_their_own_profile(): void
@@ -200,13 +273,11 @@ class CheckoutTest extends TestCase
         $this->post(route('order.store'), $this->validPayload());
         $customer = Customer::where('phone', '01711000111')->firstOrFail();
 
-        $login = Register_customer::where('customer_id', $customer->id)->firstOrFail();
-
+        // Checkout signed them in, so a second order goes through the authenticated path.
         $this->addProductToCart();
-        $this->actingAs($login, 'customer')
-            ->post(route('order.store'), $this->validPayload([
-                'billing_address' => '7 New Road, Banani',
-            ]))->assertRedirect(route('thankyou'));
+        $this->post(route('order.store'), $this->validPayload([
+            'billing_address' => '7 New Road, Banani',
+        ]))->assertRedirect(route('thankyou'));
 
         $customer->refresh();
         $this->assertSame('7 New Road, Banani', $customer->billing_address);

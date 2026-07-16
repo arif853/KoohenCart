@@ -84,6 +84,48 @@
         </style>
         <section class="mt-20">
             <div class="container">
+                {{-- Accounts created at checkout are on a random password their owner has
+                     never seen, so prompt until they choose one. --}}
+                @if (auth()->guard('customer')->user()?->needsPassword())
+                    <div class="alert alert-warning mt-4" id="set-password">
+                        <h5 class="mb-2">Finish setting up your account</h5>
+                        <p class="mb-3">
+                            We created this account for you when you placed your order. Choose a
+                            password so you can log in again and track your orders.
+                        </p>
+
+                        @if ($errors->any())
+                            <ul class="text-danger">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+
+                        <form method="post" action="{{ route('customer.password.store') }}" class="row g-2 align-items-center">
+                            @csrf
+                            <div class="col-md-4">
+                                <input type="password" name="password" class="form-control" required
+                                    placeholder="New password" autocomplete="new-password">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="password" name="password_confirmation" class="form-control" required
+                                    placeholder="Confirm password" autocomplete="new-password">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-sm">Save password</button>
+                            </div>
+                        </form>
+
+                        @if (auth()->guard('customer')->user()->email)
+                            <form method="post" action="{{ route('customer.password.send_link') }}" class="mt-2">
+                                @csrf
+                                <button type="submit" class="btn btn-link p-0">Email me a link instead</button>
+                            </form>
+                        @endif
+                    </div>
+                @endif
+
                 <div class="row p-5 d-flex align-items-start">
                     <div class="col-lg-2 col-md-3 col-sm-12">
                         <ul class="nav nav-pills flex-column nav-pills border-end border-3 me-3 align-items-end" id="pills-tab" role="tablist">

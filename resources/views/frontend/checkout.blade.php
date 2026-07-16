@@ -31,6 +31,50 @@
                 </div>
             @endif
 
+            @guest('customer')
+                @php($showLogin = session('show_login') || $errors->has('login_identifier'))
+                <div class="row mb-4">
+                    <div class="col-lg-6">
+                        <div class="toggle_info">
+                            <span>
+                                <i class="fi-rs-user mr-10"></i>
+                                <span>Already have an account?</span>
+                                <a href="#loginform" data-bs-toggle="collapse" aria-expanded="{{ $showLogin ? 'true' : 'false' }}">Click here to login</a>
+                            </span>
+                        </div>
+                        {{-- Opened automatically when checkout found an existing account for
+                             the phone/email that was typed in. --}}
+                        <div class="panel-collapse collapse login_form {{ $showLogin ? 'show' : '' }}" id="loginform">
+                            <div class="panel-body">
+                                <p class="mb-20 font-sm">Log in and your cart will be waiting for you.</p>
+                                <form method="post" action="{{ route('checkout.login') }}">
+                                    @csrf
+                                    <div class="form-group">
+                                        <input type="text" name="login_identifier" placeholder="Phone number or email"
+                                            value="{{ old('login_identifier', old('phone')) }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="password" placeholder="Password" required
+                                            autocomplete="current-password">
+                                    </div>
+                                    <div class="login_footer form-group">
+                                        <div class="chek-form">
+                                            <div class="custome-checkbox">
+                                                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                                                <label class="form-check-label" for="remember"><span>Remember me</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-md" type="submit">Log in</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endguest
+
             <form method="post" action="{{ route('order.store') }}">
                 @csrf
 
