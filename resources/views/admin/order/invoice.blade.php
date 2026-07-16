@@ -134,15 +134,17 @@ footer{
 
     <h3 class="tera" style="margin-bottom:0%;text-transform:uppercase;">Ship To:-</h3>
     <div class="customer" style="display: flex; justify-content: space-between; align-items: center;">
-        @if ($order->customer->shipping->isNotEmpty())
+        {{-- This order's own shipping row. Reading $order->customer->shipping[0] here
+             printed the customer's OLDEST address on every later invoice. --}}
+        @if ($order->shipping)
             <p style="margin-top:4px;"> <strong>Customer Name :</strong>
-                {{ $order->customer->shipping[0]->first_name.' '.$order->customer->shipping[0]->last_name }}
+                {{ $order->shipping->first_name.' '.$order->shipping->last_name }}
             </p>
             <p style="margin-top:4px;"> <strong>Phone :</strong>
-                {{ $order->customer->shipping[0]->s_phone }}
+                {{ $order->shipping->s_phone }}
             </p>
             <p style="margin-top:4px;"> <strong>Address :</strong>
-                {{ $order->customer->shipping[0]->shipping_add }}
+                {{ $order->shipping->shipping_add }}
             </p>
         @else
         <p style="margin-top:4px; font-family: 'nikosh';"> <strong>Customer Name :</strong>{{ $order->customer->firstName.' '.$order->customer->lastName }}</p>

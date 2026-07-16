@@ -52,10 +52,12 @@
             </table>
 
             <div class="card-body" style="display:inline-block; border:1px solid #c0c0c0; width:40%; margin:50px 15px; border-radius: 8px; background-color:#f8f8f8; box-shadow: 15px 10px 30px -5px rgba(0,0,0,0.1); padding: 15px;">
-                <h5 class="card-title">Billing Address</h5>
-                <p class="card-text">Address: {{$order->customer->billing_address}}</p>
-                <p>Phone: <a href="tel:{{$order->customer->phone}}">{{$order->customer->phone}}</a></p>
-                <p>Email: <a href="mailto:{{$order->customer->email}}">{{$order->customer->email}}</a></p>
+                {{-- This order's delivery details, not the customer's current profile. --}}
+                @php($shipTo = $order->deliveryDetails())
+                <h5 class="card-title">Delivery Address</h5>
+                <p class="card-text">Address: {{$shipTo->address}}</p>
+                <p>Phone: <a href="tel:{{$shipTo->phone}}">{{$shipTo->phone}}</a></p>
+                <p>Email: <a href="mailto:{{$shipTo->email}}">{{$shipTo->email}}</a></p>
             </div>
             <div class="card-body" style="display:inline-block; border:1px solid #c0c0c0; width:40%; margin:50px 0; border-radius: 8px; background-color:#f8f8f8; box-shadow: 15px 10px 30px -5px rgba(0,0,0,0.1); padding: 15px;">
                 <h5 class="card-title">Shipping Address</h5>

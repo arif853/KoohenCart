@@ -45,7 +45,7 @@ class FeatureCategoryComponent extends Component
         }
         $item_slug = $product->slug;
         $item_image = Product_image::where('product_id',$id)->select('product_image')->first();
-        $data = Cart::add($id,$item_name,1,$item_price, ['image' => $item_image,'slug' => $item_slug]);
+        $data = Cart::instance('cart')->add($id,$item_name,1,$item_price, ['image' => $item_image,'slug' => $item_slug]);
         Session::flash('success','Product added To cart.');
         // return redirect()->route('shop.cart');
         $this->dispatch('cartRefresh')->to('cart-icon-component');

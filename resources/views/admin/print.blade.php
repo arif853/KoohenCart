@@ -49,10 +49,12 @@
                     <div class="invoice-head-bottom">
                         <div class="invoice-head-bottom-left">
                             <ul class="text_soft">
+                                {{-- This order's delivery details, not the customer's current profile. --}}
+                                @php($shipTo = $order->deliveryDetails())
                                 <li class="text-bold font-style">SHIP To:</li>
-                                <li>Name : {{ $order->customer->firstName.' '.$order->customer->lastName }}</li>
-                                <li>Phone: {{ $order->customer->phone }}</li>
-                                <li>Address: {{ $order->customer->billing_address }}</li>
+                                <li>Name : {{ $shipTo->name }}</li>
+                                <li>Phone: {{ $shipTo->phone }}</li>
+                                <li>Address: {{ $shipTo->address }}</li>
 
                             </ul>
                         </div>

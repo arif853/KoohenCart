@@ -158,7 +158,10 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/products/{slug}', 'products')->name('product.detail');
     Route::get('/checkout', 'checkout')->name('checkout');
     Route::get('/wishlist', 'wishlist')->name('wishlist');
-    Route::get('/cart', 'cart')->name('cart');
+    // '/cart' is served by CartController@index below. A 'cart' action string here
+    // also collided with the global Cart facade alias: Router::prependGroupController()
+    // does class_exists('cart'), which matches the alias case-insensitively once it is
+    // loaded, so the action resolved to a class instead of HomeController@cart.
     Route::get('/home/quickview', 'quickview')->name('quickview');
     Route::get('/home/product_search', 'searchBar')->name('search');
     Route::get('/delivery_information', 'deliveryInfo')->name('delivery_info');
@@ -173,8 +176,6 @@ Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('
 //store checkout orders.
 Route::post('/customer/shop/checkout/store', [CheckoutController::class, 'store'])->name('order.store');
 //oute::post('/customer/shop/checkout/courier', [CheckoutController::class, 'send_bulk_to_courier'])->name('order.courier');
-Route::post('/customer/shop/checkout/login', [CheckoutController::class, 'login'])->name('checkout.login');
-Route::post('/customer/shop/checkout/coupone', [CheckoutController::class, 'appliedCoupone'])->name('applied.coupone');
 
 // Customer authentication routes
 Route::group(['prefix' => 'customer', 'middleware' => ['auth:customer']], function () {

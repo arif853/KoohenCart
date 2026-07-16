@@ -15,6 +15,7 @@ use App\Models\PrivacyPolicy;
 use App\Models\TermsCondition;
 use App\Models\Feature_category;
 use App\Http\Controllers\Controller;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -108,18 +109,13 @@ class HomeController extends Controller
 
     public function checkout()
     {
-        $divisions = Division::all();
-        if (Auth::guard('customer')->check()) {
-            $user = Auth::guard('customer')->user();
-
-            if ($user->customer->billing_address != null && $user->customer->shipping()->exists()) {
-                return view('frontend.checkout');
-            } else {
-                return redirect()->back()->with('warning', 'Update your profile with necessary information.')->with('success','Your product already saved in store.');
-            }
-        } else {
-            return view('frontend.checkout');
+        // The checkout form collects the delivery details itself, so a customer
+        // without a saved address is no longer bounced back to their profile.
+        if (Cart::instance('cart')->count() === 0) {
+            return redirect()->route('cart')->with('warning', 'Your cart is empty.');
         }
+
+        return view('frontend.checkout');
     }
 
 

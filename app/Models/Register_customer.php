@@ -11,7 +11,7 @@ class Register_customer extends Model implements AuthenticatableContract
 {
     use HasFactory;
     use Authenticatable;
-    protected $fillable = ['customer_id', 'phone', 'email', 'password'];
+    protected $fillable = ['customer_id', 'phone', 'email', 'password', 'status'];
 
     // public function getAuthPassword()
     // {

@@ -33,9 +33,13 @@
                                 <tbody>
                                         @foreach (Cart::instance('cart')->content() as $item)
                                         <tr>
-                                            <td class="image product-thumbnail"><img src="{{asset('storage/product_images/'.$item->options->image->product_image)}}" alt="{{$item->options->slug}}"></td>
+                                            <td class="image product-thumbnail">
+                                                @if($item->options->image)
+                                                    <img src="{{asset('storage/product_images/'.$item->options->image->product_image)}}" alt="{{$item->options->slug}}">
+                                                @endif
+                                            </td>
                                             <td class="product-des product-name">
-                                        {{-- <span>{{ Cart::content() }}</span> --}}
+                                        {{-- <span>{{ Cart::instance('cart')->content() }}</span> --}}
                                                 <h4 class="product-name"><a href="{{route('product.detail',['slug'=>$item->options->slug])}}">{{$item->name}}</a></h4>
                                             </td>
                                             <td class="price" data-title="Price"><span>৳{{$item->price}} </span></td>
@@ -61,7 +65,7 @@
                                         <td></td> --}}
                                         <td colspan="3" style="border: none"></td>
                                         <td class="cart_total_label ">Cart Subtotal:</td>
-                                        <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">৳{{Cart::subtotal()}}</span></td>
+                                        <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">৳{{Cart::instance('cart')->subtotal()}}</span></td>
                                     </tr>
                                     <tr>
                                         {{-- <td></td>
@@ -81,7 +85,7 @@
                                         <td colspan="3" style="border: none"></td>
 
                                         <td class="cart_total_label ">Total:</td>
-                                        <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">৳{{Cart::subtotal() }}</span></strong></td>
+                                        <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">৳{{Cart::instance('cart')->subtotal() }}</span></strong></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -195,7 +199,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="cart_total_label">Cart Subtotal</td>
-                                                    <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">৳{{Cart::subtotal()}}</span></td>
+                                                    <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">৳{{Cart::instance('cart')->subtotal()}}</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="cart_total_label">Shipping</td>
@@ -203,7 +207,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="cart_total_label">Total</td>
-                                                    <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">৳{{Cart::total()}}</span></strong></td>
+                                                    <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">৳{{Cart::instance('cart')->total()}}</span></strong></td>
                                                 </tr>
                                             </tbody>
                                         </table>

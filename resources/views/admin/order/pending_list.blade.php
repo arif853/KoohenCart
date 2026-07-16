@@ -84,8 +84,8 @@
                                         <a href="{{route('customer.profile', ['id' => $order->customer->id])}}" class="">
                                             <div class="info pl-3">
                                                 <h6 class="mb-0 title">{{$order->customer->firstName}} {{$order->customer->lastName}}</h6>
-                                                <a class="text-muted" href="tel:{{$order->customer->phone}}">{{$order->customer->phone}}</a><br>
-                                                <small class="text-muted" style="width:200px">{{$order->customer->billing_address}}</small>
+                                                <a class="text-muted" href="tel:{{$order->deliveryDetails()->phone}}">{{$order->deliveryDetails()->phone}}</a><br>
+                                                <small class="text-muted" style="width:200px">{{$order->deliveryDetails()->address}}</small>
                                             </div>
                                         </a>
                                     </td>

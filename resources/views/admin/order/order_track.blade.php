@@ -213,8 +213,12 @@
                         <div class="text">
                             <h6 class="mb-1">Deliver to</h6>
                             <p class="mb-1">
-                                City: {{$district->name}},<br> Area: {{$postOffice->postOffice}} <br>
-                                {{$order->customer->billing_address}}
+                                @if($district)
+                                    City: {{$district->name}},<br> Area: {{$postOffice?->postOffice}} <br>
+                                @endif
+                                Zone: {{$order->deliveryZoneLabel()}} <br>
+                                {{-- This order's address, not the customer's current profile. --}}
+                                {{$order->deliveryDetails()->address}}
                             </p>
                         </div>
                     </article>
@@ -225,7 +229,9 @@
                             <h6 class="mb-1">Shipping to</h6>
                             @if($order->shipping)
                             <p class="mb-1">
-                                City: {{$s_district->name}},<br> Area: {{$s_postOffice->postOffice}} <br>
+                                @if($s_district)
+                                    City: {{$s_district->name}},<br> Area: {{$s_postOffice?->postOffice}} <br>
+                                @endif
                                 {{$order->shipping->shipping_add}}
                             </p>
                             @else

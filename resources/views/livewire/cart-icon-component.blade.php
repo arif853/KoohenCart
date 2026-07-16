@@ -3,7 +3,7 @@
         <a class="mini-cart-icon" href="{{route('cart')}}">
             <i class="fal fa-shopping-bag"></i>
             @if(Cart::instance('cart')->count() > 0)
-            <span class="pro-count blue">{{Cart::count()}}</span>
+            <span class="pro-count blue">{{Cart::instance('cart')->count()}}</span>
             @endif
         </a>
         @if(Cart::instance('cart')->count() > 0)
@@ -12,7 +12,11 @@
                 @foreach (Cart::instance('cart')->content() as $item)
                 <li>
                     <div class="shopping-cart-img">
-                        <a href="{{route('cart')}}"><img alt="{{$item->options->slug}}" src="{{asset('storage/product_images/'.$item->options->image->product_image)}}"></a>
+                        <a href="{{route('cart')}}">
+                            @if($item->options->image)
+                                <img alt="{{$item->options->slug}}" src="{{asset('storage/product_images/'.$item->options->image->product_image)}}">
+                            @endif
+                        </a>
                     </div>
                     <div class="shopping-cart-title">
                         <h4><a href="{{route('cart')}}">{{substr($item->name,0,20)}}</a></h4>

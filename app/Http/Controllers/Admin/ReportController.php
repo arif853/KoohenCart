@@ -10,7 +10,7 @@ class ReportController extends Controller
 {
     public function saleReport()
     {
-        $orders = Order::where('status','completed')->get();
+        $orders = Order::with('customer', 'shipping')->where('status','completed')->get();
         return view('admin.reports.sale',compact('orders'));
     }
 

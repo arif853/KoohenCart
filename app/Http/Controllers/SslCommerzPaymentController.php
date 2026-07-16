@@ -15,33 +15,43 @@ class SslCommerzPaymentController extends Controller
     public function success(Request $request)
     {
         $tran_id = $request->input('tran_id');
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
-
-        $sslc = new SslCommerzNotification();
 
         $order_id = $request->input('value_a');
         if (!$order_id) {
-            return redirect()->route('order.fail')->withErrors(['error' => 'Invalid Order ID']);
+            return $this->unresolvedPayment('Missing order id on success callback', $request);
         }
 
         $order = Order::find($order_id);
         if (!$order) {
-            return redirect()->route('order.fail')->withErrors(['error' => 'Order not found']);
+            return $this->unresolvedPayment('Order ' . $order_id . ' not found on success callback', $request);
         }
 
         $transaction = transactions::where('order_id', $order->id)->first();
-        if ($transaction) {
-            $transaction->update(['status' => 'paid','transaction_no' => $tran_id]);
-        } else {
-            return redirect()->route('order.fail')->withErrors(['error' => 'Transaction not found']);
+        if (!$transaction) {
+            return $this->unresolvedPayment('No transaction for order ' . $order_id . ' on success callback', $request);
         }
 
-        Log::alert('Payment success '.$transaction);
-        // dd($order_id, $transaction, $sslc);
+        $transaction->update(['status' => 'paid', 'transaction_no' => $tran_id]);
+
+        Log::alert('Payment success ' . $transaction);
 
         return redirect()->route('thankyou')->with(['success' => 'Your order has been placed, Payment successful.']);
+    }
 
+    /**
+     * The gateway reported success but we cannot tie it back to an order, so the
+     * customer may well have been charged. Never tell them the payment failed and
+     * never route to the non-existent 'order.fail' - log loudly and ask them to
+     * contact us so a human can reconcile it.
+     */
+    private function unresolvedPayment(string $reason, Request $request)
+    {
+        Log::error('SSLCommerz unresolved payment: ' . $reason, ['payload' => $request->all()]);
+
+        return redirect()->route('home')->with(
+            'danger',
+            'We could not confirm your payment automatically. If you have been charged, please contact us with your payment details.'
+        );
     }
 
     public function fail(Request $request)

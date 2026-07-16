@@ -120,8 +120,6 @@
                     </article>
                 </div> <!-- col// -->
                 <div class="col-md-4">
-                    @if ($district)
-
                     <article class="icontext align-items-start">
                         <span class="icon icon-sm rounded-circle bg-primary-light">
                             <i class="text-primary material-icons md-place"></i>
@@ -129,14 +127,15 @@
                         <div class="text">
                             <h6 class="mb-1">Deliver to</h6>
                             <p class="mb-1">
-                                City: {{$district->name}},<br> Area: {{$postOffice->postOffice}} <br>
-                                {{$order->customer->billing_address}}
-
+                                @if ($district)
+                                    City: {{$district->name}},<br> Area: {{$postOffice?->postOffice}} <br>
+                                @endif
+                                Zone: {{$order->deliveryZoneLabel()}} <br>
+                                {{-- This order's address, not the customer's current profile. --}}
+                                {{$order->deliveryDetails()->address}}
                             </p>
-                            <a href="#">View profile</a>
                         </div>
                     </article>
-                        @endif
                 </div> <!-- col// -->
             </div> <!-- row // -->
             <div class="row">

@@ -46,15 +46,4 @@ class BillingAreaComponent extends Component
         $this->selectedPostOffices = null;
     }
 
-    public function updateDeliveryCharge()
-    {
-        if ($this->selectedPostOffices) {
-            $postOffice = Postcode::find($this->selectedPostOffices);
-            if ($postOffice) {
-                // $this->dispatch('postOfficeChanged', $postOffice->zone_charge);
-                $this->dispatch('postOfficeChanged', $postOffice->zone_charge)->to(CheckoutComponent::class);
-            }
-        }
-    }
-
 }

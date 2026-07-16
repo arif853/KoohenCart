@@ -9,7 +9,7 @@ class shipping extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'first_name', 'last_name', 's_phone','s_email', 'shipping_add','division','district','area'];
+    protected $fillable = ['customer_id', 'order_id', 'first_name', 'last_name', 's_phone','s_email', 'shipping_add','division','district','area'];
 
     public function order()
     {

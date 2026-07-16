@@ -27,7 +27,7 @@ class QuickViewComponent extends Component
         // $item_price = $product->regular_price;
         $item_slug = $product->slug;
         $item_image = Product_image::where('product_id',$id)->select('product_image')->first();
-        Cart::add($id,$item_name,1,$item_price, ['image' => $item_image,'slug' => $item_slug]);
+        Cart::instance('cart')->add($id,$item_name,1,$item_price, ['image' => $item_image,'slug' => $item_slug]);
 
         Session::flash('success','Product added To cart.');
         $this->dispatch('cartRefresh')->to('cart-icon-component');
@@ -56,7 +56,7 @@ class QuickViewComponent extends Component
         $item_slug = $product->slug;
         $item_image = Product_image::where('product_id', $this->productId)->select('product_image')->first();
 
-        $item_data = Cart::add($item_id,$item_name,$item_qty,$item_price,
+        $item_data = Cart::instance('cart')->add($item_id,$item_name,$item_qty,$item_price,
         ['image' => $item_image,
         'slug' => $item_slug,
         'size' => $item_size,

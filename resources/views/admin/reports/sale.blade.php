@@ -115,8 +115,8 @@
                                     <td class="text-center">
                                         <a href="{{ url('/orders/invoice/'.$order->id) }}" target="__blank">
                                            <span>{{$order->customer->firstName}} {{$order->customer->lastName}}</span>, <br>
-                                           <span>{{$order->customer->phone}}</span>,<br>
-                                           <span>{{$order->customer->billing_address}}.</span>
+                                           <span>{{$order->deliveryDetails()->phone}}</span>,<br>
+                                           <span>{{$order->deliveryDetails()->address}}.</span>
                                         </a>
                                     </td>
                                     <td class="text-center">

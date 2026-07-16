@@ -25,37 +25,39 @@ class CartController extends Controller
 
     public function increaseQuantity($id)
     {
-        $item = Cart::get($id);
-        $qty = $item->qty + 1;
-        Cart::update($id, $qty);
+        $item = Cart::instance('cart')->get($id);
+        if ($item) {
+            Cart::instance('cart')->update($id, $item->qty + 1);
+        }
         return redirect()->back();
     }
 
     public function decreaseQuantity($id)
     {
-        $item = Cart::get($id);
+        $item = Cart::instance('cart')->get($id);
         // Never let the quantity drop below 1; use removecart to delete an item.
-        if ($item->qty <= 1) {
+        if (!$item || $item->qty <= 1) {
             return redirect()->back();
         }
-        $qty = $item->qty - 1;
-        Cart::update($id, $qty);
+        Cart::instance('cart')->update($id, $item->qty - 1);
         return redirect()->back();
     }
     public function addtocart(string $id)
     {
         $product = Products::find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found.'], 404);
+        }
         $item_name = $product->product_name;
         $item_price = $product->regular_price;
         $item_slug = $product->slug;
-        $item_image = Product_image::find($id)->select('product_image')->first();
-        $data = Cart::add($id,$item_name,1,$item_price, ['image' => $item_image,'slug' => $item_slug])->associate('\App\Models\Products');
+        $item_image = Product_image::where('product_id', $id)->select('product_image')->first();
+        $data = Cart::instance('cart')->add($id,$item_name,1,$item_price, ['image' => $item_image,'slug' => $item_slug])->associate('\App\Models\Products');
         Session::flash('success','Product added To cart.');
         return response()->json(['data'=> $data]);
-        // return redirect()->back()->with('success','Product added To cart.');
     }
     public function removecart($id){
-        Cart::remove($id);
+        Cart::instance('cart')->remove($id);
         Session::flash('success','Product removed from cart.');
         return redirect()->back();
     }

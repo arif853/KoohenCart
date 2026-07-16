@@ -24,7 +24,7 @@
     <div class="col-lg-6">
         <div class="">
             <label for="area" class="form-label">Area/ Postoffice</label>
-            <select required class="form-control mb-2" name="area" id="area" wire:change="updateDeliveryCharge" wire:model="selectedPostOffices" >
+            <select required class="form-control mb-2" name="area" id="area" wire:model="selectedPostOffices" >
                 <option value="">Select Area/ Postoffice</option>
                 @foreach($postOfficess as $postOffice)
                     <option value="{{ $postOffice->id }}">{{ $postOffice->postOffice }} - {{$postOffice->postCode}}</option>

@@ -33,11 +33,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(Cart::count() > 0)
+                                    @if(Cart::instance('cart')->count() > 0)
                                     
-                                        @foreach (Cart::content() as $item)
+                                        @foreach (Cart::instance('cart')->content() as $item)
                                         <tr>
-                                            <td class="image product-thumbnail"><img src="{{asset('storage/product_images/'.$item->options->image->product_image)}}" alt="{{$item->options->slug}}"></td>
+                                            <td class="image product-thumbnail">
+                                                @if($item->options->image)
+                                                    <img src="{{asset('storage/product_images/'.$item->options->image->product_image)}}" alt="{{$item->options->slug}}">
+                                                @endif
+                                            </td>
                                             <td class="product-des product-name">
                                                 <h4 class="product-name"><a href="product-details.php">{{$item->name}}</a></h4>
                                             </td>

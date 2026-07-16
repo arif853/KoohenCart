@@ -441,7 +441,7 @@ class OrderController extends Controller
 // order return list
     public function order_return()
     {
-        $order_return = Order::with('customer')->where('status','returned')->get();
+        $order_return = Order::with('customer', 'shipping')->where('status','returned')->get();
         return view('admin.order.order_return.index',compact('order_return'));
     }
 
@@ -716,14 +716,14 @@ class OrderController extends Controller
 
         // Prepare the order data for each selected order
         foreach ($orders as $order) {
-            $customerName = $order->customer->firstName . ' ' . $order->customer->lastName;
-            $customerAddress = $order->customer->billing_address;
+            // Ship to the address given for this order, not the customer profile.
+            $details = $order->deliveryDetails();
             $orderDataList[] = [
                 'order_id' => $order->id,
                 'invoice' => $order->invoice_no,
-                'recipient_name' => $customerName,
-                'recipient_phone' => $order->customer->phone,
-                'recipient_address' => $customerAddress,
+                'recipient_name' => $details->name,
+                'recipient_phone' => $details->phone,
+                'recipient_address' => $details->address,
                 'cod_amount' => $order->total,
                 'note' => $order->comment,
             ];
@@ -763,15 +763,15 @@ class OrderController extends Controller
             'transaction')
             ->where('id',$id)->first();
 
-        $customerName = $order->customer->firstName .' ' .$order->customer->lastName;
-        $customerAddress = $order->customer->billing_address;
+        // Ship to the address given for this order, not the customer profile.
+        $details = $order->deliveryDetails();
 
         $orderData =
         [
             'invoice' => $order->invoice_no,
-            'recipient_name' => $customerName,
-            'recipient_phone' => $order->customer->phone,
-            'recipient_address' => $customerAddress,
+            'recipient_name' => $details->name,
+            'recipient_phone' => $details->phone,
+            'recipient_address' => $details->address,
             'cod_amount' => $order->total,
             'note' => $order->comment,
         ];
