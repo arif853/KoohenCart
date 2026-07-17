@@ -29,7 +29,9 @@ class Category extends Model
     }
     public function product()
     {
-        return $this->hasMany(Products::class, 'product_id');
+        // Was hasMany(..., 'product_id') - products has no such column (it has
+        // category_id pointing here), so this relation could never match anything.
+        return $this->hasMany(Products::class, 'category_id');
     }
 
     public function subcategories()

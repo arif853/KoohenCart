@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class Products extends Model
 {
@@ -17,6 +18,7 @@ class Products extends Model
         'product_name',
         'brand_id',
         'category_id',
+        'supplier_id',
         'subcategory',
         'raw_price',
         'regular_price',
@@ -39,9 +41,20 @@ class Products extends Model
 
         static::deleting(function ($product) {
 
+            // Image/thumbnail files were never removed from disk on product delete
+            // (only their DB rows, via cascade FKs), leaking storage on every
+            // deleted product indefinitely.
+            foreach ($product->product_images as $image) {
+                Storage::disk('public')->delete('product_images/' . $image->product_image);
+            }
+            foreach ($product->product_thumbnail as $thumb) {
+                Storage::disk('public')->delete('product_images/thumbnail/' . $thumb->product_thumbnail);
+            }
+
             $product->overviews()->delete();
             $product->product_infos()->delete();
             $product->product_images()->delete();
+            $product->product_thumbnail()->delete();
             $product->product_extras()->delete();
             $product->product_price()->delete();
             $product->tags()->delete();
@@ -81,6 +94,42 @@ class Products extends Model
     public function product_price()
     {
         return $this->hasOne(Product_price::class, 'product_id');
+    }
+
+    /**
+     * The price to actually charge/display: campaign price if this product is in
+     * the currently published campaign, else the offer price if one is set, else
+     * the regular price. Centralised here because six different places (cart,
+     * wishlist, home, shop, new-products, product page) were each re-deriving this
+     * with copy-pasted logic that silently 500'd when product_price was missing.
+     */
+    public function effectivePrice(): float
+    {
+        $regular = (float) ($this->regular_price ?? 0);
+
+        $campaign = Campaign::where('status', 'Published')->first();
+        if ($campaign) {
+            $campProduct = $campaign->camp_product->firstWhere('product_id', $this->id);
+            if ($campProduct) {
+                return (float) $campProduct->camp_price;
+            }
+        }
+
+        $offer = (float) ($this->product_price->offer_price ?? 0);
+
+        return $offer > 0 ? $offer : $regular;
+    }
+
+    /**
+     * The image shown on cart/wishlist lines: the lowest-id (i.e. first uploaded)
+     * image, so it is stable across requests instead of whichever row the DB
+     * happens to return first with no ORDER BY.
+     */
+    public function primaryImage(): ?Product_image
+    {
+        return $this->relationLoaded('product_images')
+            ? $this->product_images->sortBy('id')->first()
+            : $this->product_images()->oldest('id')->first();
     }
 
     public function tags()

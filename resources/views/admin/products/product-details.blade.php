@@ -1,6 +1,3 @@
-@foreach ($products as $product)
-
-@endforeach
 @extends('layouts.admin')
 @section('title',$product->slug)
 @section('content')
@@ -64,7 +61,7 @@
                             </div>
                             <div class="clearfix product-price-cover">
                                <div class="product-price primary-color float-left">
-                                @if ($product->product_price->offer_price > 0)
+                                @if ($product->product_price?->offer_price > 0)
                                 <ins><span class="text-brand">৳{{$product->product_price->offer_price}}</span></ins>
                                 <ins><span class="old-price font-md ml-15">৳{{$product->regular_price}}</span></ins>
                                     <span class="save-price  font-md color3 ml-15">{{$product->product_price->percentage}}% Off</span>

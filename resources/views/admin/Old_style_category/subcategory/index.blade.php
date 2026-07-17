@@ -101,8 +101,8 @@
 </div>
 
 
-@include('admin.category.subcategory.edit')
-@include('admin.category.subcategory.create')
+@include('admin.Old_style_category.subcategory.edit')
+@include('admin.Old_style_category.subcategory.create')
 
 @endsection
 

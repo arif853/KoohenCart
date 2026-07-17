@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -38,12 +38,16 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'brand_name' => 'required',
+            // Uniqueness is checked here, before the image is ever written to disk.
+            // It used to be checked only after uploading, so a duplicate brand name
+            // left an orphaned image file behind on every rejected submission.
+            'brand_name' => ['required', Rule::unique('brands', 'brand_name')],
             'brand_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ];
 
         $customMessages = [
             'brand_name.required' => 'The brand name field is required.',
+            'brand_name.unique' => 'The Brand name already exists.',
             'brand_image.required' => 'The brand image field is required.',
         ];
 
@@ -54,38 +58,28 @@ class BrandController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        if ($request->hasFile('brand_image')) {
-            $image = $request->file('brand_image');
-            // create new manager instance with desired driver
-            $manager = new ImageManager(new Driver());
+        $image = $request->file('brand_image');
+        // create new manager instance with desired driver
+        $manager = new ImageManager(new Driver());
 
-            $imageName = $request->brand_name . '_' . time() . '.' . $image->getClientOriginalExtension();
+        $imageName = $request->brand_name . '_' . time() . '.' . $image->getClientOriginalExtension();
 
-            // read image from filesystem
-            $img = $manager->read($image);
-            // $img = $img->resize(120, 150);
-            // Save the original image
-            $imagePath = 'brand_image/' . $imageName;
-            Storage::disk('public')->put( $imagePath , (string)$img->encode());
-        }
+        // read image from filesystem
+        $img = $manager->read($image);
+        // $img = $img->resize(120, 150);
+        // Save the original image
+        $imagePath = 'brand_image/' . $imageName;
+        Storage::disk('public')->put( $imagePath , (string)$img->encode());
 
         $brand = new Brand;
         $brand->brand_name = $request->brand_name;
         $brand->brand_image = $imageName;
         $brand->status = $request->status ? 1 : 0;
+        $brand->save();
 
-        // Save only if color_name is unique
-        $existingBrand = Brand::where('brand_name', $brand->brand_name)->first();
-        if (!$existingBrand) {
-            $brand->save();
-            // Set success message in session
-            Session::flash('success', 'Brand added successfully.');
-        } else {
-            // Set error message in session
-            Session::flash('danger', 'The Brand name already exists.');
-        }
+        Session::flash('success', 'Brand added successfully.');
+
         return redirect()->back();
-
     }
 
     /**
@@ -113,7 +107,7 @@ class BrandController extends Controller
     public function update(Request $request)
     {
         $id = $request->brand_id;
-        $brand = Brand::find($id);
+        $brand = Brand::findOrFail($id);
 
         $rules = [
             'brand_name' => 'required',
@@ -171,15 +165,20 @@ class BrandController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
-            $brand = Brand::find($id);
-            $brand->delete();
-            Storage::delete('public/brand_image/'.$brand->brand_image);
+        $brand = Brand::findOrFail($id);
 
-            return redirect()->back()->with('danger', 'Brand deleted successfully.');
-        } catch (\Exception $e) {
-            // Log the exception or handle it in a way that makes sense for your application
-            return redirect()->back()->with('danger', 'This Brand have product.');
+        // products.brand_id cascades at the DB level, so delete() below would
+        // never throw for a brand with products - it would silently wipe every
+        // product using this brand (and, since a DB-level cascade never fires
+        // Eloquent's deleting event, without cleaning up their image files
+        // either). Block the delete explicitly instead.
+        if ($brand->products()->exists()) {
+            return redirect()->back()->with('danger', 'This brand has products and cannot be deleted.');
         }
+
+        Storage::delete('public/brand_image/'.$brand->brand_image);
+        $brand->delete();
+
+        return redirect()->back()->with('success', 'Brand deleted successfully.');
     }
 }

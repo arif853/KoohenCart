@@ -9,7 +9,6 @@ use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Products;
 use Livewire\WithPagination;
-use App\Models\Product_image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -28,8 +27,11 @@ class ShopComponent extends Component
     public function decreaseQuantity($id)
     {
         $item = Cart::instance('cart')->get($id);
-        $qty = $item->qty - 1;
-        Cart::instance('cart')->update($id,$qty);
+        // Never let the quantity drop below 1; use removecart to delete an item.
+        if (!$item || $item->qty <= 1) {
+            return;
+        }
+        Cart::instance('cart')->update($id, $item->qty - 1);
         $this->dispatch('cartRefresh')->to('cart-icon-component');
     }
     public function removecart($id){
@@ -41,91 +43,41 @@ class ShopComponent extends Component
     public function store($id)
     {
         $product = Products::find($id);
-        $item_name = $product->product_name;
-        $offer_price = $product->product_price->offer_price;
-
-        $campaign = Campaign::where('status','Published')->first();
-        $flag = 0;
-        if ($campaign) {
-            $camp_products = $campaign->camp_product;
-
-            foreach ($camp_products as $key => $camp_product) {
-                if ($product->id == $camp_product->product_id) {
-
-                    $camp_price = $camp_product->camp_price;
-                    $flag = 1;
-                }
-            }
-        }
-        if( $flag == 1)
-        {
-            $item_price = $camp_price;
-        }
-        elseif($offer_price > 0)
-        {
-            $item_price = $offer_price;
-        }
-        else{
-            $item_price = $product->regular_price;
+        if (!$product) {
+            Session::flash('danger', 'That product is no longer available.');
+            return;
         }
 
-        // $item_price = $product->regular_price;
-        // $size = $product->sizes[0]->id;
-        // if($product->colors){
-        //     $color = $product->colors[0]->id;
-        // }
-        // else{
-        //     $color = null;
-        // }
-
-        $item_slug = $product->slug;
-        $item_image = Product_image::where('product_id',$id)->select('product_image')->first();
-        Cart::instance('cart')->add($id,$item_name,1,$item_price, ['image' => $item_image,'slug' => $item_slug]);
+        $image = $product->primaryImage();
+        Cart::instance('cart')->add(
+            $id,
+            $product->product_name,
+            1,
+            $product->effectivePrice(),
+            ['image' => $image, 'slug' => $product->slug]
+        );
 
         Session::flash('success','Product added To cart.');
-        // return response()->json($data);
-        // return redirect()->route('shop.cart');
         $this->dispatch('cartRefresh')->to('cart-icon-component');
-            // print_r($offer_price);
     }
 
     public function AddToWishlist($id){
 
         $product = Products::find($id);
-
-        $item_name = $product->product_name;
-        $offer_price = $product->product_price->offer_price;
-        $campaign = Campaign::where('status','Published')->first();
-        $flag = 0;
-        if ($campaign) {
-            $camp_products = $campaign->camp_product;
-
-            foreach ($camp_products as $key => $camp_product) {
-                if ($product->id == $camp_product->product_id) {
-
-                    $camp_price = $camp_product->camp_price;
-                    $flag = 1;
-                }
-            }
+        if (!$product) {
+            Session::flash('danger', 'That product is no longer available.');
+            return;
         }
 
-        if( $flag == 1)
-        {
-            $item_price = $camp_price;
-        }
-        elseif($offer_price > 0)
-        {
-            $item_price = $offer_price;
-        }
-        else{
-            $item_price = $product->regular_price;
-        }
-        $item_slug = $product->slug;
-        $data = Cart::instance('wishlist')->add($id,$item_name,1,$item_price, ['slug' => $item_slug]);
+        Cart::instance('wishlist')->add(
+            $id,
+            $product->product_name,
+            1,
+            $product->effectivePrice(),
+            ['slug' => $product->slug]
+        );
 
         Session::flash('success','Product added To wishlist.');
-        // return redirect()->route('shop.cart');
-
         $this->dispatch('cartRefresh')->to('wishlist-icon-component');
     }
 
@@ -283,7 +235,10 @@ class ShopComponent extends Component
 
     private function getGroupedCategories()
     {
-        $parentCategories = Category::where('parent_category')->get();
+        // Top-level categories have no parent_category. where('parent_category')
+        // alone throws (Builder::where() needs a value or closure), so nothing
+        // here ever rendered.
+        $parentCategories = Category::whereNull('parent_category')->get();
         $groupedCategories = [];
 
         foreach ($parentCategories as $parentCategory) {

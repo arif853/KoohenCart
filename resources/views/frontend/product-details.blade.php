@@ -61,23 +61,14 @@
                                     <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#" wire:click.prevent="AddToWishlist({{$r_product->id}})" onclick="wishNotify()"><i class="fi-rs-heart"></i></a>
                                 </div>
                                 @php
-                                $flag = 0;
-                                $thisProduct = $r_product->id;
-                                if ($campaign) {
-                                    $camp_products = $campaign->camp_product;
-
-                                    foreach ($camp_products as $key => $camp_product) {
-                                        if ($thisProduct == $camp_product->product_id) {
-
-                                            $camp_price = $camp_product->camp_price;
-                                            $flag = 1;
-                                        }
-                                    }
-                                }
-
+                                    // effectivePrice() is the single source of truth for
+                                    // what this product actually costs (campaign > offer >
+                                    // regular).
+                                    $effectivePrice = $r_product->effectivePrice();
+                                    $onSale = $effectivePrice < (float) ($r_product->regular_price ?? 0);
                                 @endphp
                                 <div class="product-badges product-badges-position product-badges-mrg">
-                                    @if($flag == 1)
+                                    @if($onSale)
                                     <span class="sale">On Sale</span>
 
                                     @else
@@ -90,13 +81,10 @@
                                 <h2><a href="{{route('product.detail',['slug'=>$r_product->slug])}}">{{$r_product->product_name}}</a></h2>
 
                                 <div class="product-price">
-                                    @if($flag == 1)
-                                    <span>৳{{$camp_price}} </span>
+                                    @if($onSale)
+                                    <span>৳{{$effectivePrice}} </span>
                                     <span class="old-price">৳{{$r_product->regular_price}}</span>
 
-                                    @elseif ($r_product->product_price->offer_price > 0 && $flag == 0)
-                                        <span>৳{{$r_product->product_price->offer_price}} </span>
-                                        <span class="old-price">৳{{$r_product->regular_price}}</span>
                                     @else
                                     <span >৳{{$r_product->regular_price}}</span>
                                     @endif

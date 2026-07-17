@@ -87,7 +87,7 @@ class SupplierController extends Controller
     public function update(Request $request)
     {
 
-        $supplier = Supplier::find($request->supplier_id);
+        $supplier = Supplier::findOrFail($request->supplier_id);
 
         $rules = [
             'supplier_name' => 'required',
@@ -125,15 +125,19 @@ class SupplierController extends Controller
      */
     public function destroy(Request $request)
     {
-        try{
-            $supplier = Supplier::find($request->id);
-            $supplier->delete();
+        $supplier = Supplier::findOrFail($request->id);
 
-            return redirect()->back()->with('danger', 'Supplier deleted successfully.');
-        } catch (\Exception $e) {
-            // Log the exception or handle it in a way that makes sense for your application
-            return redirect()->back()->with('danger', 'This Supplier can not be deleted .');
+        // products.supplier_id cascades at the DB level even though it's
+        // nullable, so delete() below would never throw for a supplier with
+        // products - it would silently wipe every product using it. Block
+        // explicitly instead.
+        if ($supplier->product()->exists()) {
+            return redirect()->back()->with('danger', 'This supplier has products and cannot be deleted.');
         }
+
+        $supplier->delete();
+
+        return redirect()->back()->with('success', 'Supplier deleted successfully.');
     }
 
 

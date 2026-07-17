@@ -124,39 +124,20 @@
                 <div class="clearfix product-price-cover">
                     <div class="product-price primary-color float-left">
                         @php
-                            $camp_product = DB::select('select * from camp_products where product_id = ?', [$product->id]);
-                            foreach ($camp_product as $key => $value) {
-
-                                $camp_offer = DB::select('select * from campaigns where id = ?', [$value->campaign_id]);
-
-                                foreach ($camp_offer as $offer) {
-                                    // echo $offer->camp_offer;
-                                }
-                            }
+                            // effectivePrice() is the single source of truth for what
+                            // this product actually costs (campaign > offer > regular);
+                            // this page used to compute it a third, different way via
+                            // raw DB::select() queries.
+                            $effectivePrice = $product->effectivePrice();
+                            $onSale = $effectivePrice < (float) ($product->regular_price ?? 0);
                         @endphp
 
-                        @if(count($camp_product) > 0)
-                        <ins><span class="text-brand">৳{{$value->camp_price}}</span></ins>
+                        @if($onSale)
+                        <ins><span class="text-brand">৳{{$effectivePrice}}</span></ins>
                         <ins><span class="old-price font-md ml-15">৳{{$product->regular_price}}</span></ins>
-                            <!--<span class="save-price  font-md color3 ml-15">{{$offer->camp_offer}}% Off</span>-->
-                            {{-- {{$value->camp_price}} --}}
                         @else
-                            @if ($product->product_price->offer_price > 0)
-                            <ins><span
-                                    class="text-brand">৳{{$product->product_price->offer_price}}</span></ins>
-                            <ins><span
-                                    class="old-price font-md ml-15">৳{{$product->regular_price}}</span></ins>
-                            <!--<span-->
-                            <!--    class="save-price  font-md color3 ml-15">{{$product->product_price->percentage}}%-->
-                            <!--    Off</span>-->
-                            @else
-
-                            <ins><span class="text-brand">৳{{$product->regular_price}}</span></ins>
-
-                            @endif
+                        <ins><span class="text-brand">৳{{$product->regular_price}}</span></ins>
                         @endif
-
-
                     </div>
                 </div>
                 <!--<div class="bt-1 border-color-1 mt-15 mb-15"></div>-->

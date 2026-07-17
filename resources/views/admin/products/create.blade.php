@@ -164,7 +164,7 @@
                                     </div>
                                     <div class="mb-4 col-md-4" >
                                         <label for="product_size" class="form-label">Size</label>
-                                        <select class="js-select2" id="product_size " name="product_size[]" multiple="multiple">
+                                        <select class="js-select2" id="product_size" name="product_size[]" multiple="multiple">
                                             {{-- <option value="red">Select a size....</option> --}}
                                             @foreach ($sizes as $size)
                                             <option value="{{$size->id}}">{{$size->size_name}}</option>
@@ -446,108 +446,35 @@
 
 
   <script>
-    // document.getElementById('imageInput').addEventListener('change', function (event) {
-    //     const input = event.target;
-    //     const preview = document.getElementById('image-preview');
-    //     const outputImage = document.getElementById('output-image');
+    // Auto-generate a SKU for this brand-new product. Create-only: the edit
+    // page's SKU field is populated from the saved product and marked
+    // readonly, so this script is never included there (see script.js).
+    var generatedSKUs = [];
 
-    //     if (input.files && input.files[0]) {
-    //         const reader = new FileReader();
+    function generateUniqueSKU() {
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var shuffledCharacters = shuffle(characters);
 
-    //         reader.onload = function (e) {
-    //             outputImage.src = e.target.result;
-    //             preview.style.display = 'block';
-    //         };
+        do {
+            var sku = shuffledCharacters.slice(0, 8);
+        } while (generatedSKUs.includes(sku));
 
-    //         reader.readAsDataURL(input.files[0]);
-    //     }
-    // });
-    document.getElementById('imageInput2').addEventListener('change', function (event) {
-    const input = event.target;
-    const previewContainer = document.getElementById('imagePreview2');
-    previewContainer.innerHTML = ''; // Clear existing previews
-
-    if (input.files && input.files.length > 0) {
-        for (let i = 0; i < input.files.length; i++) {
-            const reader = new FileReader();
-            const imageDiv = document.createElement('div');
-            imageDiv.className = 'col-lg-3 mb-4';
-
-            const image = document.createElement('img');
-            const removeButton = document.createElement('button');
-            
-            // Set up the remove button
-            removeButton.innerHTML = '<i class="fa-solid fa-times"></i>';
-            removeButton.className = 'btn btn-danger btn-delete';
-            removeButton.addEventListener('click', function () {
-                // Remove the corresponding imageDiv when the remove button is clicked
-                previewContainer.removeChild(imageDiv);
-            });
-
-           
-            // Set up the image
-            reader.onload = function (e) {
-                image.src = e.target.result;
-            };
-
-            reader.readAsDataURL(input.files[i]);
-
-            // Append image and remove button to imageDiv
-            imageDiv.appendChild(image);
-            imageDiv.appendChild(removeButton);
-            // Append imageDiv to previewContainer
-            previewContainer.appendChild(imageDiv);
-        }
-
-        // previewContainer.style.display = 'block'; // Assuming you want a flex container
+        generatedSKUs.push(sku);
+        return sku;
     }
-});
 
-
-    document.getElementById('imageInput3').addEventListener('change', function (event) {
-        const input = event.target;
-        const previewContainer = document.getElementById('imagePreview3');
-        previewContainer.innerHTML = ''; // Clear existing previews
-
-
-        if (input.files && input.files.length > 0) {
-            for (let i = 0; i < input.files.length; i++) {
-                const reader = new FileReader();
-                const imageDiv = document.createElement('div');
-                imageDiv.className = 'col-lg-3 mb-4';
-                const image = document.createElement('img');
-
-                const removeButton = document.createElement('button');
-
-                // Set up the remove button
-                removeButton.innerHTML = '<i class="fa-solid fa-times"></i>';
-                removeButton.className = 'btn btn-danger btn-delete';
-                removeButton.addEventListener('click', function () {
-                    // Remove the corresponding imageDiv when the remove button is clicked
-                    previewContainer.removeChild(imageDiv);
-                });
-          
-                // Set up the image
-                reader.onload = function (e) {
-                    image.src = e.target.result;
-                };
-    
-              
-                reader.readAsDataURL(input.files[i]);
-
-                // Append image and remove button to imageDiv
-                imageDiv.appendChild(image);
-                imageDiv.appendChild(removeButton);
-                
-                // Append imageDiv to previewContainer
-                previewContainer.appendChild(imageDiv);
-            }
-
-            // previewContainer.style.display = 'block'; // Assuming you want a flex container
+    function shuffle(str) {
+        var array = str.split('');
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
-    });
+        return array.join('');
+    }
 
-
+    document.getElementById('product_sku').value = generateUniqueSKU();
 </script>
 <script src="{{asset('admin/assets/js/script.js')}}"></script>
 @endsection

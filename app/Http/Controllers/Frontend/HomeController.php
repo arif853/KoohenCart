@@ -137,7 +137,8 @@ class HomeController extends Controller
             'subcategory',
             'product_price',
             'product_thumbnail',
-        ])->where('slug', $slug)->first();
+            'product_stocks',
+        ])->where('slug', $slug)->where('status', 'active')->firstOrFail();
 
         $realatedProducts = Products::with([
             'overviews',

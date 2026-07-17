@@ -115,8 +115,17 @@ class ProductController extends Controller
             'info_name.*' => 'nullable|string',
             'info_value.*' => 'nullable|string',
 
+            // Field is product_thumbnail[] on the form; the "product_thumnail" rule
+            // used to validate a field that doesn't exist, so a required thumbnail
+            // was never actually enforced. The array itself also needs its own
+            // "required" rule: a wildcard rule like 'product_image.*' => 'required'
+            // only validates elements that are present - if the field is missing
+            // entirely, Laravel considers the wildcard satisfied and no images are
+            // enforced at all.
+            'product_image' => 'required|array|min:1',
             'product_image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
-            'product_thumnail.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+            'product_thumbnail' => 'required|array|min:1',
+            'product_thumbnail.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
 
             'product_size.*' => 'nullable|exists:sizes,id',
             'product_color.*' => 'nullable|exists:colors,id',
@@ -273,11 +282,14 @@ class ProductController extends Controller
             ]);
 
 
-            $tags = explode(',', $request->input('tags'));
+            // The create form ships with no tag-input JS, so 'tags' is normally ''
+            // and never null - but a blank/absent field must not create a junk
+            // empty-string tag or crash explode() on null.
+            $tags = array_filter(array_map('trim', explode(',', (string) $request->input('tags'))));
             foreach ($tags as $tagName) {
                 Product_tag::firstOrCreate([
                     'product_id' => $product->id,
-                    'tag' => trim($tagName),
+                    'tag' => $tagName,
                 ]);
             }
 
@@ -292,7 +304,11 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $products = Products::with([
+        // The view renders a single product ($product), but this used to fetch a
+        // collection via get() and pass it as $products with no matching foreach -
+        // every $product-> reference in the view was an access on an undefined
+        // variable, so the admin "Detail" link 500'd unconditionally.
+        $product = Products::with([
             'overviews',
             'product_infos',
             'product_images',
@@ -304,8 +320,9 @@ class ProductController extends Controller
             'category',
             'product_price',
             'supplier'
-        ])->where('slug', $slug)->get();
-        return view('admin.products.product-details',compact('products'));
+        ])->where('slug', $slug)->firstOrFail();
+
+        return view('admin.products.product-details', compact('product'));
     }
 
     /**
@@ -383,7 +400,7 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         else{
-            $product = Products::find($id);
+            $product = Products::findOrFail($id);
 
             // Update general product information
             $product->update([
@@ -406,91 +423,46 @@ class ProductController extends Controller
             $colors = $request->input('product_color', []);
             $product->colors()->sync($colors);
 
-            // $images = $request->file('product_image');
-
-            // Retrieve the existing images associated with the product
-            $existingImages = $product->product_images;
-
-            // Get the new set of images from the request
-            if($request->hasFile('product_image')){
-                $newImages = $request->file('product_image');
-
-                // Update or add new images
-                foreach ($newImages as $index => $newImage) {
+            // Uploads on the edit form are always ADDITIONAL images/thumbnails, never
+            // replacements: removing an existing one is a separate action, handled
+            // by the per-image delete buttons wired to image_destroy()/thumb_destroy()
+            // below. (The previous code tried to detect "the same image" by matching
+            // a freshly generated filename - which always embeds time() - against
+            // existing filenames, so that branch could never match; every edit only
+            // ever added rows/files and old ones were never cleaned up.)
+            if ($request->hasFile('product_image')) {
+                foreach ($request->file('product_image') as $index => $newImage) {
                     $manager = new ImageManager(new Driver());
 
                     $imageName = $product->slug . '_' . $index . '_' . time() . '.' . $newImage->getClientOriginalExtension();
-
                     $img = $manager->read($newImage);
-                    // $img = $img->resize(400, 600);
                     $imagePath = 'product_images/' . $imageName;
 
-                    // Check if an image with the same name already exists
-                    $existingImage = $existingImages->where('product_image', $imageName)->first();
-
-                    if ($existingImage) {
-                        // Update existing image
-                        $existingImage->update([
-                            'product_image' => $imageName,
-                        ]);
-                    } else {
-                        // Add new image
-                        Product_image::create([
-                            'product_id' => $product->id,
-                            'product_image' => $imageName,
-                        ]);
                     Storage::disk('public')->put($imagePath, (string) $img->encode());
 
-                    }
+                    Product_image::create([
+                        'product_id' => $product->id,
+                        'product_image' => $imageName,
+                    ]);
                 }
             }
 
-            $existingthumbs = $product->product_thumbnail;
-
-            if($request->hasFile('product_thumbnail')){
-                $thumbnail = $request->file('product_thumbnail');
-
-                foreach ($thumbnail as $index => $image) {
+            if ($request->hasFile('product_thumbnail')) {
+                foreach ($request->file('product_thumbnail') as $index => $image) {
                     $manager = new ImageManager(new Driver());
 
-                    $imageName = $product->slug.'_' .$index . '_' . time() . '.' . $image->getClientOriginalExtension();
-
+                    $imageName = $product->slug . '_' . $index . '_' . time() . '.' . $image->getClientOriginalExtension();
                     $img = $manager->read($image);
-                    // $encoded = $img->toWebp();
-                    // $img = $img->resize(400, 600);
-
                     $imagePath = 'product_images/thumbnail/' . $imageName;
 
-                    // Check if an image with the same name already exists
-                    $existingthumb = $existingthumbs->where('product_thumbnail', $imageName)->first();
-
-                    if ($existingthumb) {
-                        // Update existing image
-                        $existingthumb->update([
-                            'product_thumbnail' => $imageName,
-                        ]);
-                    } else {
+                    Storage::disk('public')->put($imagePath, (string) $img->encode());
 
                     Product_thumbnail::create([
                         'product_id' => $product->id,
                         'product_thumbnail' => $imageName,
                     ]);
-
-                    Storage::disk('public')->put($imagePath , (string)$img->encode());
                 }
             }
-        }
-
-            // // Delete images that were removed
-            // $removedImages = $existingImages->pluck('product_image')->diff($newImages->pluck('product_image'));
-
-            // foreach ($removedImages as $removedImage) {
-            //     // Find and delete the removed image
-            //     Product_image::where('product_id', $product->id)->where('product_image', $removedImage)->delete();
-
-            //     // Optionally, you may want to delete the actual image file from storage
-            //     Storage::disk('public')->delete('product_images/' . $removedImage);
-            // }
 
 
             // Update overview information
@@ -568,13 +540,14 @@ class ProductController extends Controller
             $product_price->save();
 
 
-            // Update tags
-            $tags = explode(',', $request->input('tags'));
+            // Replace this product's tags with whatever the form submitted. A plain
+            // updateOrCreate() loop only ever added tags and could crash on a blank/
+            // absent field (explode(',', null)); tags removed from the form were
+            // never deleted, so removed tags stuck around forever.
+            $tags = array_filter(array_map('trim', explode(',', (string) $request->input('tags'))));
+            $product->tags()->whereNotIn('tag', $tags)->delete();
             foreach ($tags as $tagName) {
-                $product->tags()->updateOrCreate(
-                    ['tag' => trim($tagName)]
-                    // additional attributes if needed
-                );
+                $product->tags()->firstOrCreate(['tag' => $tagName]);
             }
 
             Session::flash('success', 'Product has been Updated successfully.');
@@ -591,11 +564,7 @@ class ProductController extends Controller
         try {
             $product = Products::findOrFail($id);
 
-            $product_image = Product_image::where('product_id',$id);
-            // Trigger the deleting event
-            // foreach ($product->product_image as $image) {
-            //     Storage::delete('public/product_images/' . $image->product_image);
-            // }
+            // Image/thumbnail files are removed in Products::boot()'s deleting hook.
             $product->delete();
 
             return redirect()->route('products.index')->with('success', 'Product deleted successfully.');

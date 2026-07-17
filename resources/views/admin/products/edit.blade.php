@@ -199,7 +199,7 @@
                                     </div>
                                     <div class="mb-4 col-md-4" >
                                         <label for="product_size" class="form-label">Size</label>
-                                        <select class="js-select2" id="product_size " name="product_size[]" multiple="multiple">
+                                        <select class="js-select2" id="product_size" name="product_size[]" multiple="multiple">
                                             {{-- <option value="red">Select a size....</option> --}}
                                             @foreach ($sizes as $size)
                                             <option value="{{$size->id}}" {{ $products->sizes->contains('id', $size->id) ? 'selected' : '' }}>{{$size->size_name}}</option>
@@ -297,11 +297,11 @@
                                         <div class="col-lg-6">
                                             <div class="offer-price" style="display: none">
                                                 <label for="percentage" class="form-check-label me-2">Percentage(%)</label>
-                                                <input class="form-control mb-2" type="text" id="percentage" value="{{$products->product_price->percentage}}" name="percentage" rows="1" placeholder="Enter percentage value.">
+                                                <input class="form-control mb-2" type="text" id="percentage" value="{{$products->product_price->percentage ?? ''}}" name="percentage" rows="1" placeholder="Enter percentage value.">
                                             </div>
                                             <div class="offer-price-2" style="display: none">
                                                 <label for="amount" class="form-check-label me-2">In Amount</label>
-                                                <input class="form-control mb-2" type="text" id="amount" value="{{$products->product_price->amount}}" name="amount" rows="1" placeholder="Enter amount value.">
+                                                <input class="form-control mb-2" type="text" id="amount" value="{{$products->product_price->amount ?? ''}}" name="amount" rows="1" placeholder="Enter amount value.">
                                             </div>
                                         </div>
                                     </div>
@@ -382,30 +382,34 @@
                         </div>
 
                         <hr>
+                        @php
+                            // product_extras is a hasMany but every product has at most
+                            // one row; $extra used to be read straight off an empty
+                            // foreach body, so a product with no extras row fataled on
+                            // null->warranty_type the moment this page loaded.
+                            $extra = $products->product_extras->first();
+                        @endphp
                         <div class="mb-4">
                             <label class="form-label">Warranty Type</label>
-                            @foreach ($products->product_extras as $extra)
-
-                            @endforeach
-                            <input type="text" value="{{$extra->warranty_type}}" placeholder="Warranty text.." class="form-control" name="warranty">
+                            <input type="text" value="{{$extra->warranty_type ?? ''}}" placeholder="Warranty text.." class="form-control" name="warranty">
                         </div>
                         <div class="mb-4">
                             <label class="form-label">Return policy</label>
-                            <input type="text" value="{{$extra->return_policy}}" placeholder="Return policy" class="form-control" name="return_policy">
+                            <input type="text" value="{{$extra->return_policy ?? ''}}" placeholder="Return policy" class="form-control" name="return_policy">
                         </div>
                         <div class="mb-4">
                             <label class="form-label">Delivery Type</label>
                             <select name="delivery_type" id="delivery_type" class="form-select" name="delivery_type">
                                 <option value="0">Select Delivery </option>
-                                <option value="1" {{$extra->delivery_type == '1'? 'selected':''}}>Cash on delivery avilable</option>
-                                <option value="2" {{$extra->delivery_type == '2'? 'selected':''}}>Cash on delivery not avilable</option>
+                                <option value="1" {{ ($extra->delivery_type ?? null) == '1' ? 'selected' : '' }}>Cash on delivery avilable</option>
+                                <option value="2" {{ ($extra->delivery_type ?? null) == '2' ? 'selected' : '' }}>Cash on delivery not avilable</option>
                             </select>
                         </div>
                         <div class="mb-4">
                             <label class="form-label">EMI</label>
                             <select class="form-select" name="emi">
-                                <option value="Available" {{$extra->emi == 'Available'? 'selected':''}}>Available</option>
-                                <option value="Not Available" {{$extra->emi == 'Not Available'? 'selected':''}}>Not Available</option>
+                                <option value="Available" {{ ($extra->emi ?? null) == 'Available' ? 'selected' : '' }}>Available</option>
+                                <option value="Not Available" {{ ($extra->emi ?? 'Not Available') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
                             </select>
                         </div>
 
@@ -541,149 +545,6 @@
         });
     });
 
-    document.getElementById('imageInput2').addEventListener('change', function (event) {
-        const input = event.target;
-        const previewContainer = document.getElementById('imagePreview2');
-        previewContainer.innerHTML = ''; // Clear existing previews
-
-
-            if (input.files && input.files.length > 0) {
-                for (let i = 0; i < input.files.length; i++) {
-                    const reader = new FileReader();
-                    const imageDiv = document.createElement('div');
-                    imageDiv.className = 'col-lg-3 mb-4';
-                    const image = document.createElement('img');
-
-                    const removeButton = document.createElement('button');
-
-                    // Set up the remove button
-                    removeButton.innerHTML = '<i class="fal fa-times"></i>';
-                    removeButton.className = 'btn btn-danger btn-sm';
-                    removeButton.addEventListener('click', function () {
-                        // Remove the corresponding imageDiv when the remove button is clicked
-                        previewContainer.removeChild(imageDiv);
-                    });
-
-                    // Set up the image
-                    reader.onload = function (e) {
-                        image.src = e.target.result;
-                    };
-
-                    reader.readAsDataURL(input.files[i]);
-
-                    // Append image and remove button to imageDiv
-                    imageDiv.appendChild(image);
-                    imageDiv.appendChild(removeButton);
-
-                    previewContainer.appendChild(imageDiv);
-                }
-
-                // previewContainer.style.display = 'block'; // Assuming you want a flex container
-            }
-    });
-
-    document.getElementById('imageInput3').addEventListener('change', function (event) {
-        const input = event.target;
-        const previewContainer = document.getElementById('imagePreview3');
-        previewContainer.innerHTML = ''; // Clear existing previews
-
-
-            if (input.files && input.files.length > 0) {
-                for (let i = 0; i < input.files.length; i++) {
-                    const reader = new FileReader();
-                    const imageDiv = document.createElement('div');
-                    imageDiv.className = 'col-lg-3 mb-4';
-                    const image = document.createElement('img');
-
-                    const removeButton = document.createElement('button');
-
-                    // Set up the remove button
-                    removeButton.innerHTML = '<i class="fal fa-times"></i>';
-                    removeButton.className = 'btn btn-danger btn-sm';
-                    removeButton.addEventListener('click', function () {
-                        // Remove the corresponding imageDiv when the remove button is clicked
-                        previewContainer.removeChild(imageDiv);
-                    });
-
-                    // Set up the image
-                    reader.onload = function (e) {
-                        image.src = e.target.result;
-                    };
-
-                    reader.readAsDataURL(input.files[i]);
-
-                    // Append image and remove button to imageDiv
-                    imageDiv.appendChild(image);
-                    imageDiv.appendChild(removeButton);
-
-                    previewContainer.appendChild(imageDiv);
-                }
-
-                // previewContainer.style.display = 'block'; // Assuming you want a flex container
-            }
-    });
-    // create tags
-
-    const ul = document.querySelector("ul.tag-content"),
-        input = document.querySelector("input.tag-input"),
-        tagsArrayInput = document.getElementById("tagsArrayInput"),
-        tagNumb = document.querySelector(".tag-details span");
-
-    let maxTags = 10,
-        tags = [];
-
-    countTags();
-    createTag();
-
-    function countTags() {
-        input.focus();
-        tagNumb.innerText = maxTags - tags.length;
-        // Update the hidden input field with the serialized JSON of the tags array
-        tagsArrayInput.value = tags;
-    }
-
-    function createTag() {
-        ul.querySelectorAll("li").forEach((li) => li.remove());
-        tags
-            .slice()
-            .reverse()
-            .forEach((tag) => {
-                let liTag = `<li>${tag} <i class="uit uit-multiply" onclick="remove(this, '${tag}')"></i></li>`;
-                ul.insertAdjacentHTML("afterbegin", liTag);
-            });
-        countTags();
-    }
-
-    function remove(element, tag) {
-        let index = tags.indexOf(tag);
-        tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
-        element.parentElement.remove();
-        countTags();
-    }
-
-    function addTag(e) {
-        if (e.key == "Enter" || e.keyCode == 32) {
-            let tag = e.target.value.replace(/\s+/g, " ");
-            if (tag.length > 1 && !tags.includes(tag)) {
-                if (tags.length < 10) {
-                    tag.split(",").forEach((tag) => {
-                        tags.push(tag);
-                        createTag();
-                    });
-                }
-            }
-            e.target.value = "";
-        }
-    }
-
-    input.addEventListener("keyup", addTag);
-
-    const removeBtn = document.querySelector(".tag-details button");
-    removeBtn.addEventListener("click", () => {
-        tags.length = 0;
-        ul.querySelectorAll("li").forEach((li) => li.remove());
-        countTags();
-    });
-
 </script>
+<script src="{{asset('admin/assets/js/script.js')}}"></script>
 @endsection

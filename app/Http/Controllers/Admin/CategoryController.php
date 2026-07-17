@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Intervention\Image\Image;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -39,13 +38,18 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'category_name' => 'required',
+            // Uniqueness is checked here, before any image is written to disk. It
+            // used to be checked only after uploading (see the old $existingcategory
+            // lookup below the image-handling code), so a duplicate category name
+            // left orphaned image/icon files behind on every rejected submission.
+            'category_name' => ['required', Rule::unique('categories', 'category_name')],
             'category_icon' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ];
 
         $customMessages = [
             'category_name.required' => 'The category name field is required.',
+            'category_name.unique' => 'The category already exists.',
         ];
 
         $validator = Validator::make($request->all(), $rules, $customMessages);
@@ -101,16 +105,8 @@ class CategoryController extends Controller
                 $category->category_image = $imageName;
             }
 
-            // Save only if color_name is unique
-            $existingcategory = Category::where('category_name', $category->category_name)->first();
-            if (!$existingcategory) {
-                $category->save();
-                // Set success message in session
-                Session::flash('success', 'Category added successfully.');
-            } else {
-                // Set error message in session
-                Session::flash('danger', 'The category already exists.');
-            }
+            $category->save();
+            Session::flash('success', 'Category added successfully.');
         }
 
         return redirect()->back();
@@ -141,7 +137,7 @@ class CategoryController extends Controller
     public function update(Request $request)
     {
         $id = $request->category_id;
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
 
         $rules = [
             'category_name' => 'required',
@@ -223,15 +219,23 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
+
+        // products.category_id cascades at the DB level, so delete() below would
+        // never throw for a category with products - it would silently wipe every
+        // product in it (without cleaning up their image files, since a DB-level
+        // cascade never fires Eloquent's deleting event). Block explicitly.
+        if ($category->product()->exists()) {
+            return redirect()->back()->with('danger', 'This category has products and cannot be deleted.');
+        }
+        if ($category->subcategories()->exists()) {
+            return redirect()->back()->with('danger', 'This category has subcategories and cannot be deleted.');
+        }
+
         Storage::delete('public/category_image/'.$category->category_image);
         Storage::delete('public/'.$category->category_icon);
         $category->delete();
+
         return redirect()->back()->with('success', 'Category deleted successfully.');
-        } catch (\Exception $e) {
-            // Log the exception or handle it in a way that makes sense for your application
-            return redirect()->back()->with('danger', 'This Categoy have Subcategory.');
-        }
     }
 }

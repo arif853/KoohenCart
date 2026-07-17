@@ -82,7 +82,10 @@ class VarientController extends Controller
     public function size_store(Request $request)
     {
         $rules = [
-            'size_name' => ['required', Rule::unique('colors', 'color_name')],
+            // Was Rule::unique('colors', 'color_name') - checked size names for
+            // uniqueness against the colors table, so a duplicate size name only
+            // ever failed validation if a color happened to share that name.
+            'size_name' => ['required', Rule::unique('sizes', 'size_name')],
             'size_value' => 'required',
         ];
 
@@ -106,7 +109,7 @@ class VarientController extends Controller
         $sizes->status = $request->status ? 1 : 0;
 
             // Save only if size_name is unique
-            $existingSize = Size::where('size_name', $sizes->sizes_name)->first();
+            $existingSize = Size::where('size_name', $sizes->size_name)->first();
             if (!$existingSize) {
                 $sizes->save();
                 // Set success message in session
@@ -170,7 +173,7 @@ class VarientController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         else{
-            $color = Color::find($id);
+            $color = Color::findOrFail($id);
             $color->update([
                 'color_code' => $request->color_code,
                 'color_name' => $request->color_name,
@@ -208,7 +211,7 @@ class VarientController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         else{
-            $size = Size::find($id);
+            $size = Size::findOrFail($id);
             $size->update([
                 'size_name' => $request->size_name,
                 'size' => $request->size_value,
@@ -229,16 +232,18 @@ class VarientController extends Controller
      */
     public function color_destroy($id)
     {
-        try {
-            $color = Color::findOrFail($id);
+        $color = Color::findOrFail($id);
 
-            $color->delete();
-
-            return redirect()->route('varient.index')->with('danger', 'Color deleted successfully.');
-        } catch (\Exception $e) {
-            // Log the exception or handle it in a way that makes sense for your application
-            return redirect()->route('varient.index')->with('error', 'Error deleting color.');
+        // products_colors.color_id cascades at the DB level, so delete() below
+        // would never throw for a color still assigned to products - it would
+        // silently detach it from every one of them with no warning.
+        if ($color->products()->exists()) {
+            return redirect()->route('varient.index')->with('danger', 'This color is assigned to products and cannot be deleted.');
         }
+
+        $color->delete();
+
+        return redirect()->route('varient.index')->with('success', 'Color deleted successfully.');
     }
 
     /**
@@ -246,15 +251,17 @@ class VarientController extends Controller
      */
     public function size_destroy(string $id)
     {
-        try {
-            $size = Size::findOrFail($id);
+        $size = Size::findOrFail($id);
 
-            $size->delete();
-
-            return redirect()->route('varient.index')->with('danger', 'Size deleted successfully.');
-        } catch (\Exception $e) {
-            // Log the exception or handle it in a way that makes sense for your application
-            return redirect()->route('varient.index')->with('error', 'Error deleting color.');
+        // products_sizes.size_id cascades at the DB level, so delete() below
+        // would never throw for a size still assigned to products - it would
+        // silently detach it from every one of them with no warning.
+        if ($size->products()->exists()) {
+            return redirect()->route('varient.index')->with('danger', 'This size is assigned to products and cannot be deleted.');
         }
+
+        $size->delete();
+
+        return redirect()->route('varient.index')->with('success', 'Size deleted successfully.');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Session;
@@ -19,9 +20,12 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
+        // The view lives at admin.Old_style_category.subcategory.index; this used
+        // to point at admin.category.subcategory.index, which does not exist
+        // anywhere in the project, so this page 500'd unconditionally.
         $categories = Category::all();
         $subcategories = Subcategory::with('category')->get();
-        return view('admin.category.subcategory.index',['categories' => $categories,'subcategories' => $subcategories]);
+        return view('admin.Old_style_category.subcategory.index',['categories' => $categories,'subcategories' => $subcategories]);
     }
 
     /**
@@ -39,12 +43,16 @@ class SubcategoryController extends Controller
     {
         $rules = [
             'category' => 'required',
-            'subcategory_name' => 'required',
+            // Uniqueness is checked here, before the image is ever written to disk.
+            // It used to be checked only after uploading, so a duplicate subcategory
+            // name left an orphaned image file behind on every rejected submission.
+            'subcategory_name' => ['required', Rule::unique('subcategories', 'subcategory_name')],
             'subcategory_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ];
 
         $customMessages = [
             'subcategory_name.required' => 'The category name field is required.',
+            'subcategory_name.unique' => 'The subcategory name already exists.',
             'subcategory_image.required' => 'The category code field is required.',
         ];
 
@@ -68,23 +76,15 @@ class SubcategoryController extends Controller
         $imagePath = 'subcategory_image/' . $imageName;
         Storage::disk('public')->put( $imagePath , (string)$img->encode());
 
-
         $subcategory = new Subcategory;
         $subcategory->category_id = $request->category;
         $subcategory->subcategory_name = $request->subcategory_name;
         $subcategory->subcategory_image = $imageName;
         $subcategory->status = $request->status ? 1 : 0;
+        $subcategory->save();
 
-        // Save only if color_name is unique
-        $existingsubcategory = Subcategory::where('subcategory_name', $subcategory->subcategory_name)->first();
-        if (!$existingsubcategory) {
-            $subcategory->save();
-            // Set success message in session
-            Session::flash('success', 'Subcategory added successfully.');
-        } else {
-            // Set error message in session
-            Session::flash('danger', 'The subcategory name already exists.');
-        }
+        Session::flash('success', 'Subcategory added successfully.');
+
         return redirect()->back();
     }
 
@@ -119,7 +119,7 @@ class SubcategoryController extends Controller
     public function update(Request $request)
     {
         $id = $request->subcategory_id;
-        $subcategory = Subcategory::find($id);
+        $subcategory = Subcategory::findOrFail($id);
         $rules = [
             'category' => 'required',
             'subcategory_name' => 'required',
@@ -179,16 +179,11 @@ class SubcategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
-            $subcategory = Subcategory::find($id);
+        $subcategory = Subcategory::findOrFail($id);
 
-            Storage::delete('public/subcategory_image/'.$subcategory->subcategory_image);
-            $subcategory->delete();
-            return redirect()->back()->with('success', 'Subcategory deleted successfully.');
+        Storage::delete('public/subcategory_image/'.$subcategory->subcategory_image);
+        $subcategory->delete();
 
-        } catch (\Exception $e) {
-            // Log the exception or handle it in a way that makes sense for your application
-            return redirect()->back()->with('danger', 'This subcategoy can not be deleted .');
-        }
+        return redirect()->back()->with('success', 'Subcategory deleted successfully.');
     }
 }
