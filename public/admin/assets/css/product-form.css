@@ -1,0 +1,813 @@
+/* Product create/edit page — visual redesign.
+   Scoped under .product-form-page so it never leaks into other admin pages
+   that reuse the same vendor wizard/select2 classes. */
+
+.product-form-page {
+    --pf-primary: #088178;
+    --pf-primary-dark: #066a62;
+    --pf-primary-soft: rgba(8, 129, 120, 0.08);
+    --pf-primary-soft-strong: rgba(8, 129, 120, 0.14);
+    --pf-border: #e4e8ec;
+    --pf-border-strong: #d7dce1;
+    --pf-text: #1f2937;
+    --pf-text-muted: #6b7280;
+    --pf-danger: #e0344c;
+    --pf-danger-soft: rgba(224, 52, 76, 0.08);
+    --pf-radius: 12px;
+    --pf-radius-sm: 8px;
+}
+
+/* ---------- Page header ---------- */
+.product-form-page .pf-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.product-form-page .pf-page-header h2 {
+    font-family: "Spartan", sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--pf-text);
+    margin: 0;
+}
+
+.product-form-page .pf-page-header p {
+    margin: 4px 0 0;
+    color: var(--pf-text-muted);
+    font-size: 14px;
+}
+
+.product-form-page .pf-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--pf-text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color .15s ease;
+}
+
+.product-form-page .pf-back-link:hover {
+    color: var(--pf-primary);
+}
+
+/* ---------- Wizard shell ---------- */
+.product-form-page .wizard-container {
+    margin: 0;
+}
+
+.product-form-page .wizard-card {
+    border: 1px solid var(--pf-border);
+    border-radius: var(--pf-radius);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    overflow: visible;
+}
+
+.product-form-page .wizard-card .card-header {
+    background: #fff;
+    border-bottom: 1px solid var(--pf-border);
+    padding: 0;
+    border-radius: var(--pf-radius) var(--pf-radius) 0 0;
+}
+
+.product-form-page .wizard-card .card-body {
+    padding: 28px 28px 24px;
+}
+
+/* Step nav rendered as a clean numbered tab strip instead of the vendor
+   pill-with-sliding-underline look, which visually clashed with the rest
+   of the (Bootstrap-flavoured) admin theme. */
+.product-form-page .wizard-navigation {
+    padding: 0;
+}
+
+/* The wizard JS adds Bootstrap's "nav nav-pills" classes to this <ul> at init
+   (bootstrapWizard({tabClass: 'nav nav-pills'}) in gsdk-bootstrap-wizard.js).
+   .nav-pills in the vendor CSS hardcodes height: 38px, which clipped the
+   redesigned tab labels - overriding it here to a size that actually fits
+   the label + icon instead of fighting the vendor's flex layout. */
+.product-form-page .wizard-navigation ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 28px;
+    height: 58px !important;
+    align-items: stretch;
+}
+
+.product-form-page .wizard-navigation li {
+    text-align: center;
+}
+
+.product-form-page .wizard-navigation li a {
+    display: inline-flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pf-text-muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+    white-space: nowrap;
+}
+
+.product-form-page .wizard-navigation li a:hover {
+    color: var(--pf-text);
+}
+
+.product-form-page .wizard-navigation li.active a,
+.product-form-page .wizard-navigation li a.active {
+    color: var(--pf-primary);
+    border-bottom-color: var(--pf-primary);
+}
+
+.product-form-page .wizard-navigation li a .pf-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--pf-border);
+    color: var(--pf-text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    transition: background .15s ease, color .15s ease;
+}
+
+.product-form-page .wizard-navigation li.active a .pf-step-num,
+.product-form-page .wizard-navigation li a.active .pf-step-num {
+    background: var(--pf-primary);
+    color: #fff;
+}
+
+.product-form-page .moving-tab {
+    display: none !important;
+}
+
+/* ---------- Section headings inside each tab ---------- */
+.product-form-page .pf-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--pf-text);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-form-page .pf-section-title .text-danger {
+    font-size: 12px;
+}
+
+.product-form-page .pf-section {
+    padding-bottom: 26px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid var(--pf-border);
+}
+
+.product-form-page .pf-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.product-form-page .pf-hint {
+    font-size: 12.5px;
+    color: var(--pf-text-muted);
+    margin-top: 6px;
+    display: block;
+}
+
+/* ---------- Form controls ---------- */
+.product-form-page .form-label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--pf-text);
+    margin-bottom: 6px;
+}
+
+.product-form-page .form-control,
+.product-form-page .form-select,
+.product-form-page .select2-container .select2-selection--single,
+.product-form-page .select2-container .select2-selection--multiple {
+    border: 1px solid var(--pf-border-strong);
+    border-radius: var(--pf-radius-sm);
+    font-size: 14px;
+    color: var(--pf-text);
+    min-height: 44px;
+    padding: 10px 14px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.product-form-page textarea.form-control {
+    min-height: auto;
+}
+
+.product-form-page .form-control:focus,
+.product-form-page .form-select:focus,
+.product-form-page .select2-container--focus .select2-selection--single,
+.product-form-page .select2-container--focus .select2-selection--multiple {
+    border-color: var(--pf-primary);
+    box-shadow: 0 0 0 3px var(--pf-primary-soft);
+    outline: none;
+}
+
+.product-form-page .form-control.is-invalid,
+.product-form-page .form-select.is-invalid,
+.product-form-page .is-invalid + .select2-container .select2-selection {
+    border-color: var(--pf-danger);
+    background-image: none;
+}
+
+.product-form-page .form-control.is-invalid:focus,
+.product-form-page .form-select.is-invalid:focus {
+    box-shadow: 0 0 0 3px var(--pf-danger-soft);
+}
+
+.product-form-page .text-danger {
+    font-size: 12.5px;
+    font-weight: 500;
+}
+
+.product-form-page span.text-danger,
+.product-form-page div.text-danger {
+    display: inline;
+    margin-top: 6px;
+    margin-left: 8px;
+}
+
+/* The inline error style above collides with the uploader's own hint text
+   ("Use Ctrl/Cmd to select multiple files") since both sit in the same text
+   flow right after the <label>. Force block + no left margin here so an
+   image/thumbnail validation error always starts its own line. */
+.product-form-page .pf-uploader + .text-danger {
+    display: block;
+    margin-left: 0;
+}
+
+/* select2 vertical centering to match the new 44px control height */
+.product-form-page .select2-container--default .select2-selection--single {
+    display: flex;
+    align-items: center;
+}
+
+.product-form-page .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding: 0;
+    line-height: normal;
+    color: var(--pf-text);
+}
+
+.product-form-page .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 42px;
+}
+
+.product-form-page .select2-container--default .select2-selection--multiple {
+    min-height: 44px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 6px 8px;
+}
+
+.product-form-page .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: var(--pf-primary-soft-strong);
+    border: none;
+    color: var(--pf-primary-dark);
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 12.5px;
+    padding: 3px 8px;
+}
+
+.product-form-page .select2-container--default .select2-selection__choice__remove {
+    color: var(--pf-primary-dark);
+}
+
+/* ---------- Error summary banner ---------- */
+.product-form-page .pf-error-banner {
+    display: flex;
+    gap: 12px;
+    background: var(--pf-danger-soft);
+    border: 1px solid rgba(224, 52, 76, 0.25);
+    border-radius: var(--pf-radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 22px;
+}
+
+.product-form-page .pf-error-banner .pf-error-icon {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--pf-danger);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-top: 1px;
+}
+
+.product-form-page .pf-error-banner strong {
+    display: block;
+    color: #9d1f32;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.product-form-page .pf-error-banner ul {
+    margin: 0;
+    padding-left: 18px;
+    color: #9d1f32;
+    font-size: 13.5px;
+}
+
+.product-form-page .pf-error-banner li {
+    margin-bottom: 2px;
+}
+
+/* ---------- Image / thumbnail uploaders ---------- */
+.product-form-page .pf-uploader {
+    position: relative;
+    border: 1.5px dashed var(--pf-border-strong);
+    border-radius: var(--pf-radius-sm);
+    background: #fafbfc;
+    padding: 22px 16px;
+    text-align: center;
+    transition: border-color .15s ease, background .15s ease;
+}
+
+.product-form-page .pf-uploader:hover {
+    border-color: var(--pf-primary);
+    background: var(--pf-primary-soft);
+}
+
+.product-form-page .pf-uploader.is-invalid {
+    border-color: var(--pf-danger);
+    background: var(--pf-danger-soft);
+}
+
+.product-form-page .pf-uploader input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.product-form-page .pf-uploader-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--pf-primary-soft-strong);
+    color: var(--pf-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 16px;
+}
+
+.product-form-page .pf-uploader-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--pf-text);
+    margin-bottom: 2px;
+}
+
+.product-form-page .pf-uploader-sub {
+    font-size: 12px;
+    color: var(--pf-text-muted);
+}
+
+.product-form-page .pf-uploader-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.product-form-page .pf-uploader-header .form-label {
+    margin-bottom: 0;
+}
+
+.product-form-page .pf-uploader-header .pf-hint {
+    margin-top: 0;
+}
+
+/* Image preview thumbnails (both freshly-selected previews from script.js
+   and already-saved images on the edit page) share one card look. */
+.product-form-page #imagePreview2,
+.product-form-page #imagePreview3,
+.product-form-page .pf-existing-images {
+    row-gap: 12px;
+}
+
+.product-form-page .pf-thumb {
+    position: relative;
+    border: 1px solid var(--pf-border);
+    border-radius: var(--pf-radius-sm);
+    overflow: hidden;
+    background: #fff;
+    aspect-ratio: 1 / 1;
+}
+
+.product-form-page .pf-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.product-form-page #imagePreview2 img,
+.product-form-page #imagePreview3 img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--pf-radius-sm);
+    border: 1px solid var(--pf-border);
+}
+
+/* script.js's wireImagePreview() builds each preview as a plain
+   <div class="col-lg-3 mb-4"><img><button class="btn-delete">...</button></div>
+   with no positioning context of its own, so the absolutely-positioned
+   remove button escaped to the nearest positioned ancestor (the wizard
+   card) instead of sitting on its own thumbnail. Anchoring position here
+   keeps the JS untouched. */
+.product-form-page #imagePreview2 > div,
+.product-form-page #imagePreview3 > div {
+    position: relative;
+}
+
+.product-form-page .btn-delete,
+.product-form-page .pf-thumb-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(17, 24, 39, 0.65);
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    opacity: 1;
+    padding: 0;
+    line-height: 1;
+    transition: background .15s ease;
+}
+
+.product-form-page .btn-delete:hover,
+.product-form-page .pf-thumb-remove:hover {
+    background: var(--pf-danger);
+}
+
+/* ---------- Tags input ---------- */
+.product-form-page .tag-content {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+.product-form-page .tag-content li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--pf-primary-soft-strong);
+    color: var(--pf-primary-dark);
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 4px 8px 4px 10px;
+    border-radius: 999px;
+}
+
+.product-form-page .tag-content li i {
+    cursor: pointer;
+    font-size: 10px;
+    opacity: .7;
+}
+
+.product-form-page .tag-content li i:hover {
+    opacity: 1;
+}
+
+.product-form-page .tag-details {
+    margin-top: 6px;
+}
+
+.product-form-page .tag-details p {
+    font-size: 12px;
+    color: var(--pf-text-muted);
+    margin: 0;
+}
+
+.product-form-page .tag-details span {
+    color: var(--pf-primary);
+    font-weight: 600;
+}
+
+.product-form-page .tag-details button {
+    border: none;
+    background: none;
+    color: var(--pf-text-muted);
+    font-size: 12px;
+    padding: 0;
+}
+
+.product-form-page .tag-details button:hover {
+    color: var(--pf-danger);
+}
+
+/* ---------- Variant toggle / quick overview / additional info rows ---------- */
+.product-form-page .pf-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #fafbfc;
+    border: 1px solid var(--pf-border);
+    border-radius: var(--pf-radius-sm);
+    margin-bottom: 18px;
+}
+
+.product-form-page .pf-toggle-row .form-check-input {
+    width: 2.4em;
+    height: 1.3em;
+    cursor: pointer;
+}
+
+.product-form-page .pf-toggle-row .form-check-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--pf-text);
+    cursor: pointer;
+}
+
+.product-form-page #variantFields {
+    background: #fafbfc;
+    border: 1px solid var(--pf-border);
+    border-radius: var(--pf-radius-sm);
+    padding: 18px 18px 6px;
+    margin-bottom: 24px !important;
+}
+
+.product-form-page .pf-repeat-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+}
+
+.product-form-page .pf-repeat-row .col-lg-4,
+.product-form-page .pf-repeat-row .col-lg-8 {
+    padding: 0;
+}
+
+.product-form-page .action-btn {
+    display: flex;
+    gap: 8px;
+}
+
+.product-form-page .add-btn,
+.product-form-page .remove-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--pf-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 13px;
+    border: 1px solid var(--pf-border-strong);
+    color: var(--pf-text-muted);
+    background: #fff;
+    transition: all .15s ease;
+}
+
+.product-form-page .add-btn:hover {
+    border-color: var(--pf-primary);
+    color: var(--pf-primary);
+    background: var(--pf-primary-soft);
+}
+
+.product-form-page .remove-btn:hover {
+    border-color: var(--pf-danger);
+    color: var(--pf-danger);
+    background: var(--pf-danger-soft);
+}
+
+.product-form-page .input-action {
+    position: relative;
+}
+
+.product-form-page .btn-action {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.product-form-page .rm-btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--pf-text-muted);
+    border: 1px solid var(--pf-border-strong);
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.product-form-page .rm-btn:hover {
+    color: var(--pf-danger);
+    border-color: var(--pf-danger);
+}
+
+.product-form-page .card-height {
+    max-height: none;
+}
+
+/* ---------- Description editor (Summernote) ---------- */
+.product-form-page .note-editor.note-frame {
+    border: 1px solid var(--pf-border-strong);
+    border-radius: var(--pf-radius-sm);
+    overflow: hidden;
+}
+
+.product-form-page .note-editor.note-frame .note-toolbar,
+.product-form-page .note-editor.note-frame .note-statusbar {
+    background: #fafbfc;
+    border-color: var(--pf-border);
+}
+
+/* ---------- Offer price sub-section ---------- */
+.product-form-page .pf-offer-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+}
+
+.product-form-page .pf-offer-toggle-group .form-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.product-form-page .pf-offer-toggle-group .form-check-input {
+    margin: 0;
+    cursor: pointer;
+}
+
+.product-form-page .pf-offer-toggle-group .form-check-label {
+    font-size: 13.5px;
+    color: var(--pf-text);
+    cursor: pointer;
+}
+
+/* ---------- Wizard footer / action buttons ---------- */
+.product-form-page .wizard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 22px;
+    border-top: 1px solid var(--pf-border);
+}
+
+.product-form-page .wizard-footer .pull-left,
+.product-form-page .wizard-footer .pull-right {
+    float: none;
+}
+
+.product-form-page .btn-previous,
+.product-form-page .btn-next,
+.product-form-page .btn-finish {
+    border-radius: var(--pf-radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 11px 26px;
+    border: none;
+    transition: all .15s ease;
+}
+
+.product-form-page .btn-previous {
+    background: #fff;
+    border: 1px solid var(--pf-border-strong);
+    color: var(--pf-text);
+}
+
+.product-form-page .btn-previous:hover {
+    background: #f4f5f7;
+}
+
+.product-form-page .btn-next,
+.product-form-page .btn-finish {
+    background: var(--pf-primary);
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(8, 129, 120, 0.25);
+}
+
+.product-form-page .btn-next:hover,
+.product-form-page .btn-finish:hover {
+    background: var(--pf-primary-dark);
+}
+
+/* ---------- Right sidebar (status / SKU / extra info) ---------- */
+.product-form-page .product_div .card {
+    border: 1px solid var(--pf-border);
+    border-radius: var(--pf-radius);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.product-form-page .product_div .card-body {
+    padding: 22px;
+}
+
+.product-form-page .product_div hr {
+    border-color: var(--pf-border);
+    margin: 18px 0;
+}
+
+.product-form-page #product_sku[readonly] {
+    background: #f4f5f7;
+    color: var(--pf-text-muted);
+}
+
+/* ---------- Modal (Additional Info quick-add) ---------- */
+.product-form-page ~ .modal .modal-content,
+#additional_info .modal-content {
+    border-radius: var(--pf-radius);
+    border: none;
+}
+
+#additional_info .modal-header {
+    border-bottom: 1px solid var(--pf-border);
+}
+
+#additional_info .modal-footer {
+    border-top: 1px solid var(--pf-border);
+}
+
+#additional_info .btn-primary {
+    background: var(--pf-primary);
+    border-color: var(--pf-primary);
+}
+
+#additional_info .btn-primary:hover {
+    background: var(--pf-primary-dark);
+    border-color: var(--pf-primary-dark);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991px) {
+    .product-form-page .wizard-navigation ul {
+        overflow-x: auto;
+        padding-bottom: 2px;
+    }
+
+    .product-form-page .wizard-card .card-body {
+        padding: 20px 18px;
+    }
+
+    .product-form-page .wizard-footer {
+        flex-direction: column-reverse;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .product-form-page .wizard-footer .pull-left,
+    .product-form-page .wizard-footer .pull-right {
+        width: 100%;
+    }
+
+    .product-form-page .wizard-footer .btn-previous,
+    .product-form-page .wizard-footer .btn-next,
+    .product-form-page .wizard-footer .btn-finish {
+        width: 100%;
+    }
+}

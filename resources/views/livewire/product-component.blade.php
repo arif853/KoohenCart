@@ -163,12 +163,12 @@
                     <strong class="color-size mr-10">Size</strong>
                     @livewire('select-size-component', ['sizes' => $product->sizes, 'productId' => $product->id])
                     {{-- {{$product->category_id}} --}}
-                    @if ($product->is_sizechart == 1)
+                    @if (!empty($sizeChartData[$product->category_id]))
                     <a href="#" class="size-chart-btn" >Size Chart</a>
                     @endif
                 </div>
-                @if ($product->is_sizechart == 1)
-                
+                @if (!empty($sizeChartData[$product->category_id]))
+
                 <div class="floating-card" id="sizeChartCard" wire:ignore>
                     <div class="card-content">
                         <form id="sizeChartForm">

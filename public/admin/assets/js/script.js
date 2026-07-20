@@ -6,7 +6,38 @@
 // on every page load, even though the field is marked readonly (readonly only
 // blocks user typing, not `.value = ...` from script).
 
-var i = 1;
+// Brand/Category use select2 (main.js .select-nice), which hides the native
+// <select> and drives it entirely through synthetic events. jQuery Validate
+// only re-checks a field on focusin/focusout/keyup/click of the *native*
+// element, none of which fire when a Select2 option is picked - so choosing
+// a valid brand/category left the stale "This field is required." label on
+// screen even though the picked value was actually valid (the wizard's Next/
+// Publish buttons re-validate the whole form on click and were never
+// actually blocked by this - it was a display-only bug). Re-run this field's
+// own check whenever select2 reports a change.
+// Deferred to DOMContentLoaded rather than run inline: this is the first
+// jQuery call in the file, and jQuery/select2 aren't reliably ready the
+// instant this <script> tag is parsed (unrelated page-wide script ordering),
+// so a top-level $(...) call here could throw before jQuery loads at all.
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof $ === 'undefined') {
+        return;
+    }
+    $(document).on('select2:select select2:unselect select2:clear', '#product_brand, #product_category', function () {
+        var $form = $(this).closest('form');
+        if ($form.length && $form.data('validator')) {
+            $form.validate().element(this);
+        }
+    });
+});
+
+// Seeded from the hidden totinput/totinput2 fields rather than hardcoded, so
+// rows already rendered server-side (edit page's saved overviews, or a
+// create-page reload after a failed submit repopulating old() rows) don't
+// get their name="featurename[N]"/"additional_name[N]" collided with by the
+// next JS-added row reusing the same N.
+var totInputEl = document.querySelector('#totfield input[name="totinput"]');
+var i = totInputEl ? parseInt(totInputEl.value, 10) || 1 : 1;
 function addfield(){
     if (i < 5) {
         i++;
@@ -40,7 +71,8 @@ function removeField() {
 }
 
 
-var j = 5;
+var totInput2El = document.querySelector('#totfield2 input[name="totinput2"]');
+var j = totInput2El ? Math.max(5, parseInt(totInput2El.value, 10) || 5) : 5;
 function getfield(){
     var AdditionalName = document.getElementById('info_name').value;
         j++;
@@ -149,8 +181,9 @@ document.addEventListener('DOMContentLoaded', function () {
 // part already worked. What was missing: on the edit page, a product that
 // already has a saved color/size or offer price loads with those checkboxes
 // unchecked, so the fields holding its own saved data start hidden with no
-// visible cue that they exist. Pre-check the boxes and reveal the fields
-// whenever they already hold something, once on load.
+// visible cue that they exist. Reveal the fields whenever their toggle is
+// already checked (server-rendered based on saved data / old() input), once
+// on load.
 document.addEventListener('DOMContentLoaded', function () {
     var variantToggle = document.getElementById('showVariantFields');
     var variantFields = document.getElementById('variantFields');
@@ -159,19 +192,18 @@ document.addEventListener('DOMContentLoaded', function () {
         variantFields.style.display = '';
     }
 
+    // percentage_checkbox/price_checkbox are a mutually-exclusive radio group
+    // (offer_type); whichever one Blade already marked checked decides which
+    // panel to reveal - no need to re-derive it from the input values here.
     var percentageCheckbox = document.getElementById('percentage_checkbox');
-    var percentageInput = document.getElementById('percentage');
     var offerPriceDiv = document.querySelector('.offer-price');
-    if (percentageCheckbox && offerPriceDiv && percentageInput && percentageInput.value.trim()) {
-        percentageCheckbox.checked = true;
+    if (percentageCheckbox && percentageCheckbox.checked && offerPriceDiv) {
         offerPriceDiv.style.display = '';
     }
 
     var priceCheckbox = document.getElementById('price_checkbox');
-    var amountInput = document.getElementById('amount');
     var offerPriceDiv2 = document.querySelector('.offer-price-2');
-    if (priceCheckbox && offerPriceDiv2 && amountInput && amountInput.value.trim()) {
-        priceCheckbox.checked = true;
+    if (priceCheckbox && priceCheckbox.checked && offerPriceDiv2) {
         offerPriceDiv2.style.display = '';
     }
 });

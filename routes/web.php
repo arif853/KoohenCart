@@ -304,7 +304,6 @@ Route::post('reset-password-post', [ForgotPasswordController::class, 'submitRese
         Route::get('/dashboard/products/{slug}', 'show')->name('products.show');
         Route::post('/dashboard/products/filter', 'ProductFilter')->name('products.filter');
 
-        Route::get('/dashboard/products/size-chart-update/{id}', 'sizeChartUpdate')->name('product.sizechart.update');
         Route::get('/dashboard/products/product-status-update/{id}', 'productStatusUpdate')->name('product.status.update');
 
     });

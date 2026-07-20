@@ -19,7 +19,6 @@ class Products extends Model
         'brand_id',
         'category_id',
         'supplier_id',
-        'subcategory',
         'raw_price',
         'regular_price',
         'offer_price',
@@ -28,7 +27,6 @@ class Products extends Model
         'stock',
         'slug',
         'status',
-        'is_sizechart',
     ];
 
     protected static function boot()

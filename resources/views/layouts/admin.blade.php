@@ -251,12 +251,18 @@
                 }
             });
 
+            // percentage_checkbox/price_checkbox/no_offer_checkbox form a single
+            // "offer_type" radio group, so selecting one always deselects the
+            // others - only the newly-checked input reliably fires change, so
+            // each handler is responsible for showing its own panel and hiding
+            // the other(s), rather than relying on an "unchecked" branch. The
+            // hidden panel's input is cleared so switching modes can't leave a
+            // stale value behind that reappears if the admin switches back.
             $('#percentage_checkbox').change(function() {
                 if ($(this).is(':checked')) {
                     $('.offer-price').show();
                     $('.offer-price-2').hide();
-                } else {
-                    $('.offer-price').hide();
+                    $('#amount').val('');
                 }
             });
 
@@ -264,8 +270,16 @@
                 if ($(this).is(':checked')) {
                     $('.offer-price-2').show();
                     $('.offer-price').hide();
-                } else {
+                    $('#percentage').val('');
+                }
+            });
+
+            $('#no_offer_checkbox').change(function() {
+                if ($(this).is(':checked')) {
+                    $('.offer-price').hide();
                     $('.offer-price-2').hide();
+                    $('#percentage').val('');
+                    $('#amount').val('');
                 }
             });
 

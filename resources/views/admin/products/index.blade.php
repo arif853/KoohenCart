@@ -64,7 +64,6 @@
                     <th>Stock</th>
                     <th>Purchase Price</th>
                     <th>Selling Price</th>
-                    <th>Is_SizeChart</th>
                     <th>overviews</th>
                     <th>Status</th>
                     <th width=8%>Action</th>
@@ -95,13 +94,6 @@
                     <td>{{$product->balance}}</td>
                     <td>{{$product->raw_price}}</td>
                     <td>{{$product->regular_price}}</td>
-                    <td>
-                        @if ($product->is_sizechart)
-                            <a href="{{ route('product.sizechart.update', ['id' => $product->id]) }}" class="badge rounded-pill alert-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Click To Remove">Added</a>
-                        @else
-                            <a href="{{ route('product.sizechart.update', ['id' => $product->id]) }}" class="badge rounded-pill alert-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Click To Add">Not Added</a>
-                        @endif
-
                     <td>
                         @foreach ($product->overviews as $overview)
                         <span>{{$overview->overview_name}} {{$overview->overview_value}}</span><br>

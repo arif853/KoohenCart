@@ -9,7 +9,7 @@ class Product_price extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id','offer_price','percentage','amount'];
+    protected $fillable = ['product_id','offer_price','percentage','amount','offer_type'];
 
     public function product()
     {
