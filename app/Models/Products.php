@@ -95,6 +95,28 @@ class Products extends Model
     }
 
     /**
+     * The published campaign, fetched once per request rather than once per
+     * effectivePrice() call. Home/Shop grids call effectivePrice() once per
+     * product on every render, which was re-running this exact query (plus
+     * lazy-loading camp_product fresh each time) for every single product on
+     * the page - the single biggest N+1 multiplier in the app.
+     */
+    protected static ?Campaign $cachedPublishedCampaign = null;
+    protected static bool $publishedCampaignLoaded = false;
+
+    protected static function publishedCampaign(): ?Campaign
+    {
+        if (!static::$publishedCampaignLoaded) {
+            static::$cachedPublishedCampaign = Campaign::with('camp_product')
+                ->where('status', 'Published')
+                ->first();
+            static::$publishedCampaignLoaded = true;
+        }
+
+        return static::$cachedPublishedCampaign;
+    }
+
+    /**
      * The price to actually charge/display: campaign price if this product is in
      * the currently published campaign, else the offer price if one is set, else
      * the regular price. Centralised here because six different places (cart,
@@ -105,7 +127,7 @@ class Products extends Model
     {
         $regular = (float) ($this->regular_price ?? 0);
 
-        $campaign = Campaign::where('status', 'Published')->first();
+        $campaign = static::publishedCampaign();
         if ($campaign) {
             $campProduct = $campaign->camp_product->firstWhere('product_id', $this->id);
             if ($campProduct) {

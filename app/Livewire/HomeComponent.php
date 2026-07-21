@@ -66,6 +66,7 @@ class HomeComponent extends Component
             'overviews',
             'product_infos',
             'product_images',
+            'product_thumbnail',
             'product_extras',
             'tags',
             'sizes',

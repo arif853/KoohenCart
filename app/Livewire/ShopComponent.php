@@ -110,7 +110,17 @@ class ShopComponent extends Component
     public function render()
     {
 
-        $productsQuery = Products::query();
+        // Eager-load what the Blade view reads per product (product_images,
+        // product_stocks, product_price via effectivePrice()) - none of this
+        // was loaded before, so every product row on this page triggered 3
+        // separate lazy-load queries. status=active is now filtered here in
+        // SQL instead of in the Blade @foreach: filtering after ->paginate()
+        // had already sliced the page meant a page could render with fewer
+        // products than perPage (or none) whenever an inactive product fell
+        // on that page, and "$products->total()" counted inactive products
+        // that were never actually shown.
+        $productsQuery = Products::with(['product_images', 'product_stocks', 'product_price'])
+            ->where('status', 'active');
 
         //  // Apply category filter if selected
          if ($this->selectedCategory) {
@@ -135,7 +145,10 @@ class ShopComponent extends Component
         }
 
         $colors = Color::all();
-        $sizes = Size::all();
+        // withCount('products') does one aggregate query for every size's
+        // product count together, instead of $size->productCount() running a
+        // fresh COUNT query per size inside the Blade @foreach on every render.
+        $sizes = Size::withCount('products')->get();
 
         if ($this->min_value > 0 || $this->max_value < 10000) {
             $productsQuery->whereBetween('regular_price', [$this->min_value, $this->max_value]);

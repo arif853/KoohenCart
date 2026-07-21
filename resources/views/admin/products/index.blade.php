@@ -54,7 +54,16 @@
     }
 </style>
     <div class="card-body">
-        <table id="datatable" class="table table-striped table-bordered" style="width:100%">
+        {{-- id is "productsTable" (not "datatable") so the site-wide
+             $('#datatable').DataTable() init in layouts/admin.blade.php
+             doesn't pick this table up: DataTables applies its own
+             client-side pagination/search over whatever rows the server
+             sends, which would either conflict with or hide the real
+             server-side pagination below (its search box would silently
+             only cover the current page instead of the whole catalog). The
+           existing "Filter by" form above already searches server-side
+             across every product, so nothing is lost. --}}
+        <table id="productsTable" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
                     <th>#SN</th>
@@ -70,14 +79,18 @@
                 </tr>
             </thead>
             <tbody id="productBody">
-                @foreach ($products as $key=> $product)
+                @foreach ($products as $product)
                 <tr>
-                    <td>{{$key+1}}</td>
+                    <td>{{ $loop->iteration + ($products->currentPage() - 1) * $products->perPage() }}</td>
                     <td>
                         <a class="itemside" href="#">
                             <div class="left">
-
-                                <img src="{{asset('storage/product_images/thumbnail/'.$product->product_thumbnail->first()->product_thumbnail)}}" class="img-sm img-thumbnail" alt="{{$product->slug}}">
+                                @php $thumb = $product->product_thumbnail->first(); @endphp
+                                @if ($thumb)
+                                <img src="{{asset('storage/product_images/thumbnail/'.$thumb->product_thumbnail)}}" class="img-sm img-thumbnail" alt="{{$product->slug}}">
+                                @else
+                                <span class="img-sm img-thumbnail d-inline-flex align-items-center justify-content-center bg-light text-muted" style="width:40px;height:40px;font-size:10px;">N/A</span>
+                                @endif
 
                             </div>
                             <div class="info">
@@ -125,20 +138,11 @@
             </tbody>
 
         </table>
+        <div class="mt-3">
+            {{ $products->links() }}
+        </div>
     </div> <!-- card-body end// -->
 </div> <!-- card end// -->
-{{-- <div class="pagination-area mt-30 mb-50">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-start">
-            <li class="page-item active"><a class="page-link" href="#">01</a></li>
-            <li class="page-item"><a class="page-link" href="#">02</a></li>
-            <li class="page-item"><a class="page-link" href="#">03</a></li>
-            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-            <li class="page-item"><a class="page-link" href="#">16</a></li>
-            <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-        </ul>
-    </nav>
-</div> --}}
 
 @endsection
 @push('products_search')

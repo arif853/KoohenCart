@@ -128,10 +128,15 @@
                                     <div class="product_sort_info font-xs">
                                <ul class="product-meta font-xs color-grey">
                                <li class=""><strong>SKU:</strong> <a href="#">{{$product->sku}}</a></li>
-                               @foreach ($product->product_extras as $extrainfo)
-
-                               @endforeach
-                               <li class=""><strong>EMI:</strong> <span class="in-stock ml-5">{{$extrainfo->emi}}</span></li>
+                               @php
+                                   // product_extras is a hasMany but every product has at most
+                                   // one row. This used to be an empty @foreach whose only job
+                                   // was to leak $extrainfo into scope for the line below - a
+                                   // product with zero extras rows left $extrainfo undefined
+                                   // and fataled the page.
+                                   $extrainfo = $product->product_extras->first();
+                               @endphp
+                               <li class=""><strong>EMI:</strong> <span class="in-stock ml-5">{{$extrainfo->emi ?? 'Not Available'}}</span></li>
                                <li><strong>Availability:</strong><span class="in-stock ml-5">{{$product->stock}} Items In Stock</span></li>
                             </ul>
                             </div>

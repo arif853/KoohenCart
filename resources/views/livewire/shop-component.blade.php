@@ -118,7 +118,7 @@
                                         <a href="#" wire:model="selectedSizes.{{ $size->id }}"
                                             id="size_{{ $size->id }}"
                                             wire:click.prevent="applySizeFilter({{ $size->id }})">
-                                            <span>{{$size->size}} ({{ $count = $size->productCount()}})</span>
+                                            <span>{{$size->size}} ({{ $size->products_count }})</span>
                                         </a>
                                     </li>
                                     @endif
@@ -223,8 +223,13 @@
                     </div>
                     @if ($products)
                     <div class="row product-grid-4">
+                        {{-- status='active' is now filtered in the query itself
+                             (ShopComponent::render()), not here: filtering after
+                             pagination had already sliced the page could leave a
+                             page short of $perPage products (or empty) and made
+                             $products->total() count products that never actually
+                             rendered. --}}
                         @foreach ($products as $product)
-                        @if($product->status == 'active')
                         <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                             <div class="product-cart-wrap mb-25">
                                 <div class="product-img-action-wrap">
@@ -293,7 +298,6 @@
                                 </div>
                             </div>
                         </div>
-                        @endif
                         @endforeach
                     </div>
                     @else

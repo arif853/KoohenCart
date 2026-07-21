@@ -45,23 +45,26 @@ class ProductController extends Controller
      */
     public function index()
     {
-
-        // Retrieve overviews for a product
-        // $products = Products::all();
-        // $overviews = $products->overviews;
+        // Was ->get() with no LIMIT at all: every product, plus 9 eager-loaded
+        // relations for each, loaded into memory and rendered into one HTML
+        // table on every request. DataTables (applied client-side in the view)
+        // only hides rows visually - it doesn't reduce what the server has to
+        // query, hydrate, and send, so this got slower every time a product was
+        // added. Paginating server-side bounds the query and the response to
+        // one page's worth of products regardless of catalog size.
+        //
+        // product_thumbnail is now eager-loaded too: the view calls
+        // ->product_thumbnail->first() per row, which wasn't in this list and
+        // was firing one extra query per product (and would fatal-error on a
+        // product with zero thumbnails - see the null-guard added in the view).
         $products = Products::with([
             'overviews',
-            'product_infos',
+            'product_thumbnail',
             'product_images',
-            'product_extras',
-            'tags',
-            'sizes',
-            'colors',
             'brand',
             'category',
             'product_stocks',
-        ])->get();
-
+        ])->latest('id')->paginate(30);
 
         foreach($products as $product)
         {
@@ -705,7 +708,11 @@ class ProductController extends Controller
         $startDate = $request->input('created_at');
         $endDate = $request->input('updated_at');
 
-        $query = Products::query()->with(['overviews', 'product_infos', 'product_images', 'product_extras', 'tags', 'sizes', 'colors', 'brand', 'category']);
+        // Only eager-load what the AJAX row-rendering JS in index.blade.php
+        // actually reads (product_images[0], brand, category, overviews) -
+        // product_infos/product_extras/tags/sizes/colors were loaded on every
+        // search here but never used client-side.
+        $query = Products::query()->with(['overviews', 'product_images', 'brand', 'category']);
 
         $query->where(function ($query) use ($product_name, $productSku, $startDate, $endDate) {
             if ($product_name) {
@@ -726,7 +733,11 @@ class ProductController extends Controller
                 $query->whereDate('updated_at', $endDate);
             }
         });
-        $products = $query->get();
+        // Unbounded ->get() here too - a broad/empty search (e.g. clearing all
+        // fields and submitting) would return the entire catalog as one JSON
+        // payload. Cap it so the search can't accidentally re-introduce the
+        // same "load everything" problem the main list just fixed.
+        $products = $query->latest('id')->limit(200)->get();
         return response()->json(['products' => $products]);
     }
 }
